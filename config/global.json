@@ -1,0 +1,11 @@
+{
+    "applications": {
+        "Cobra Cup": {
+            "applicationId": "FtGXrt6ImrX4YMnnS0UGn7wtjBngephiPySOBMAI", 
+            "masterKey": "m0H1cAvl82KMQvaJmb7k8mE8pGFmZRLkTicMKQ5E"
+        }, 
+        "_default": {
+            "link": "Cobra Cup"
+        }
+    }
+}
