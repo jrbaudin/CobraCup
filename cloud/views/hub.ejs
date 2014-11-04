@@ -1,0 +1,54 @@
+<!-- Include the header partial -->
+<% include _header %>
+    <div id="table-wrapper">
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <% if(typeof(flashError) !== 'undefined'){ %>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                      </button>
+                      <strong>Fel!</strong> <%= flashError %>
+                    </div>  
+                <% } else if(typeof(flashWarning) !== 'undefined'){ %>
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                      </button>
+                      <strong>Observera!</strong> <%= flashWarning %>
+                    </div>  
+                <% } else if(typeof(flashInfo) !== 'undefined'){ %>
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                      </button>
+                      <strong>Klart!</strong> <%= flashInfo %>
+                    </div>  
+                <% } %>
+                <% if(typeof(flash) !== 'undefined'){ %>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                      </button>
+                      <strong>Fel!</strong> <%= flash %>.
+                    </div>  
+                <% } %>
+                <% if(typeof(teams) !== 'undefined'){
+                    var i = 1;
+                    teams.forEach(function(team) { %>
+                        <%= team.get("team_name") %>
+                    <% }) 
+                }%>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <p style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup www.cobracup.se</small></p>
+    </div>
+    <!-- /#page-wrapper -->
+<!-- Include the header partial -->
+<% include _footer %>
