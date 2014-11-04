@@ -1,4 +1,35 @@
-#table-wrapper {
+/*#table-wrapper {
   padding: 0 15px;
   background-color: #fff;
+}*/
+
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: #ecbe48;
+}
+
+/* Custom default button */
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritence from `body` */
+  background-color: #fff;
+  border: 1px solid #fff;
+}
+
+
+/*
+ * Base structure
+ */
+
+html,
+body {
+  height: 100%;
+  background-color: rgb(89,74,65);
+}
+body {
+  color: rgb(241,102,57);
 }

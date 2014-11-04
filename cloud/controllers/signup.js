@@ -1,159 +1,118 @@
 var Mailgun = require('mailgun');
 Mailgun.initialize('mg.skipool.nu', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
-// Display the homepage.
-exports.index = function(req, res) {
-  var Event = Parse.Object.extend('Event');
-  var eventQuery = new Parse.Query(Event);
-  eventQuery.equalTo('objectId', 'U8FTORaSl4');
-  eventQuery.find().then(function(theEvent) {
-    if (theEvent) {
-      var available = theEvent[0].get('available');
-      if(available > 0){
-        var worker = Parse.Object.extend('Worker');
-        var workerQuery = new Parse.Query(worker);
-        workerQuery.descending('createdAt');
-        workerQuery.find().then(function(results) {
-          res.render('signup', { 
-            workers: results
-          });
+// Display a form for creating a new instructor.
+exports.new = function(req, res) {
+  var Team = Parse.Object.extend('Team');
+  var teamQuery = new Parse.Query(Team);
+  teamQuery.count({
+    success: function(number) {
+      if(number <=14){
+        var NHLTeam = Parse.Object.extend('NHLTeam');
+        var nhlTeamQuery = new Parse.Query(NHLTeam);
+        nhlTeamQuery.descending('name');
+        nhlTeamQuery.find().then(function(nhlteams) {
+          if (nhlteams) {
+            res.render('signup', { 
+              nhlteams: nhlteams
+            });
+          } else {
+            res.render('signup', {});
+          }
         },
         function() {
-          res.send(500, 'Failed loading workers');
+          res.send(500, 'Failed finding teams');
         });
       } else {
-        var worker = Parse.Object.extend('Worker');
-        var workerQuery = new Parse.Query(worker);
-        workerQuery.descending('createdAt');
-        workerQuery.find().then(function(results) {
-          res.render('signup', { 
-            workers: results,
-            full: true
-          });
+        var Team = Parse.Object.extend('Team');
+        var teamQuery = new Parse.Query(Team);
+        teamQuery.descending('createdAt');
+        teamQuery.find().then(function(teams) {
+          if (teams) {
+            res.render('hub', { 
+              teams: teams
+            });
+          } else {
+            res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
+          }
         },
         function() {
-          res.send(500, 'Failed loading workers');
+          res.send(500, 'Failed finding teams');
         });
       }
-    } else {
-      res.render('signup', {flash: 'det var problem att ladda sidan. Kontakta admin.'});
+    },
+    error: function(error) {
+      res.send(500, 'Failed getting a count of the teams');
     }
-  },
-  function() {
-    res.send(500, 'Failed finding event to update');
   });
 };
- 
-// Create a new user with specified information.
-exports.signup = function(req, res) {
-  var Event = Parse.Object.extend('Event');
-  var eventQuery = new Parse.Query(Event);
-  eventQuery.equalTo('objectId', 'U8FTORaSl4');
-  eventQuery.find().then(function(theEvent) {
-    if (theEvent) {
-      var available = theEvent[0].get('available');
-      if(available > 0){
-        var firstname = req.body.firstname;
-        var lastname = req.body.lastname;
-        var email = req.body.email;
-        var telephone = req.body.telephone;
-        var password = "test";
 
-        var Worker = Parse.Object.extend("Worker");
-        var worker = new Worker();
 
-        //Worker information
-        worker.set('firstname', firstname);
-        worker.set('lastname', lastname);
-        worker.set('telephone', telephone);
-        worker.set('email', email);
-        worker.set('password', password);
+// Create a new team with specified information.
+exports.create = function(req, res) {
+  var captain_name = req.body.captain_name;
+  var captain_email = req.body.captain_email;
+  var captain_telephone = req.body.captain_telephone;
 
-        var Event = Parse.Object.extend('Event');
-        var event = new Event();
-        event.id = "U8FTORaSl4";
-         
-        worker.set("parent", event);
+  var lieutenant_name = req.body.lieutenant_name;
+  var lieutenant_email = req.body.lieutenant_email;
+  var lieutenant_telephone = req.body.lieutenant_telephone;
 
-        worker.save().then(function(worker) {
-          theEvent[0].set('available', available-1);
-          theEvent[0].save().then(function(theEvent) {
-            console.log('Managed to save the worker and the event... yippiee');
-            Mailgun.sendEmail({
-              to: "Admin <johanna.epettersson@gmail.com>",
-              from: "Snömässan 2014 <kontakt@mg.skipool.nu>",
-              subject: "En person har anmält sig till att jobba på Snömässan 2014",
-              html: "<html><h3>En anmälan har kommit in!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att <b>" + firstname + " " + lastname + "</b> har skrivit upp sig för att jobba på Snömässan.</p> <p>Om du vill kontakta <b>" + firstname + "</b> använd dessa uppgifter:<br>Mejladress: " + email + "<br>Telefonnummer: " + telephone + "</p><p>Tack för att du använder dig av denna sida!<br><br>Med vänlig hälsning<br>Joel<br>www.joelbaudin.com</p></html>"
-            }, {
-              success: function(httpResponse) {
-                console.log('SendEmail success response: ' + httpResponse);
-                res.redirect('/');
-              },
-              error: function(httpResponse) {
-                console.error('SendEmail error response: ' + httpResponse);
-                res.redirect('/');
-              }
-            });
+  var team_name = req.body.team_name;
 
-            if((available-1)==0){
-              Mailgun.sendEmail({
-                to: "Admin <johanna.epettersson@gmail.com>",
-                from: "Snömässan 2014 <kontakt@mg.skipool.nu>",
-                subject: "Alla platser för att jobba på Snömässan är nu bokade",
-                html: "<html><h3>Det är fullbokat!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att alla 10 platser för att jobba på Snömässan nu är bokade</p> <p>Tack för att du använder dig av denna sida!<br><br>Med vänlig hälsning<br>Joel<br>www.joelbaudin.com</p></html>"
-              }, {
-                success: function(httpResponse) {
-                  console.log('SendEmail success response: ' + httpResponse);
-                  res.redirect('/');
-                },
-                error: function(httpResponse) {
-                  console.error('SendEmail error response: ' + httpResponse);
-                  res.redirect('/');
-                }
-              });
-            }
-          }, function(error) {
-            // Show the error message and let the user try again
-            console.error('Could not save the event..');
-            console.error(error);
-            res.render('signup', {flash: error.message});
-          });
-        }, function(error) {
-          // Show the error message and let the user try again
-          console.error('FAIL! wah wah wah...');
-          console.error(error);
-          res.render('signup', {flash: error.message});
-        });
+  var nhlTeam_name = req.body.nhlTeam_name;
+  var nhlTeam_id = req.body.nhlTeam_id;
+
+  var level = req.body.level;
+
+  var comment = req.body.comment
+
+  var Team = Parse.Object.extend("Team");
+  var team = new Team();
+
+  var NHLTeam = Parse.Object.extend('NHLTeam');
+  var nhlTeam = new NHLTeam();
+  nhlTeam.id = nhlTeam_id;
+   
+  team.set("nhlTeam", nhlTeam);
+
+  team.set('captain_name', captain_name);
+  team.set('captain_email', captain_email);
+  team.set('captain_telephone', captain_telephone);
+
+  team.set('lieutenant_name', lieutenant_name);
+  team.set('lieutenant_email', lieutenant_email);
+  team.set('lieutenant_telephone', lieutenant_telephone);
+
+  team.set('team_name', team_name);
+
+  team.set('level', level);
+
+  team.set('comment', comment);
+
+  team.save().then(function(team) {
+    console.log('Managed to save the team... yippiee');
+    Mailgun.sendEmail({
+      to: captain_name + " <" + captain_email + ">",
+      from: "Cobra Cup 2015 <joel@cobracup.se>",
+      subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2015!",
+      html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p> <p>Dina uppgifter är:<br> Kapten: <b>" + captain_email + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br>Spelar med: <b>" + nhlTeam_name + "</b></p><p>Tack för att du använder dig av denna sida!<br><br>Med vänlig hälsning<br>Joel<br>www.cobracup.se</p></html>"
+    }, {
+      success: function(httpResponse) {
+        console.log('SendEmail success response: ' + httpResponse);
+        var string = encodeURIComponent(team.get("team_name") + ' är nu sparad i databasen!');
+        res.redirect('/?info=' + string);
+      },
+      error: function(httpResponse) {
+        console.error('SendEmail error response: ' + httpResponse);
+        var string = encodeURIComponent(team.get("team_name") + ' är nu sparad i databasen!');
+        res.redirect('/?info=' + string);
       }
-    }
-  },
-  function() {
-    res.send(500, 'Failed finding event to update');
+    });
+  }, function(error) {
+    // Show the error message and let the user try again
+    console.error('Error saving the new team, try again.');
+    console.error(error);
+    res.render('signup', {flash: error.message});
   });
-};
- 
-// Delete a worker corresponding to the specified id.
-exports.delete = function(req, res) {
-  var Worker = Parse.Object.extend('Worker');
-  var workerQuery = new Parse.Query(Worker);
-  workerQuery.equalTo('firstname', req.params.objectId);
-  workerQuery.find().then(function(worker) {
-    if (worker) {
-        worker[0].destroy().then(function() {
-        console.log('Managed to delete... yippiee');
-        res.redirect('/');
-      }, function(error) {
-        // Show the error message and let the user try again
-        console.error('FAIL! wah wah wah...');
-        console.error('error message' + error);
-        res.render('signup', {flash: error.message});
-      });
-    } else {
-      res.send('specified worker does not exist')
-    }
-  },
-  function() {
-    res.send(500, 'Failed finding worker to delete');
-  });
- 
 };
