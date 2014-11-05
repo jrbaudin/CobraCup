@@ -1,5 +1,41 @@
-<!-- Include the header partial -->
-<% include _header %>
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+ 
+    <title>The Hub - Cobra Cup 2015</title>
+ 
+    <!-- Latest compiled and minified CSS -->
+    <link href="dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
+
+    <!-- Optional theme -->
+    <!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
+    <link rel="stylesheet" href="dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="stylesheets/style.css">
+
+    <link rel="icon" type="image/png" src="/../img/favicon.png" />
+ 
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+ 
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+ 
+</head>
+ 
+<body>
+<div id="house">
     <nav class="navbar navbar-default" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -12,11 +48,11 @@
         <div class="collapse navbar-collapse" id="navbar-collapse-01">
             <ul class="nav navbar-nav">
                 <li><a href="/">Lag</a></li>
-                <li><a href="/results">Resultat</a></li>
-                <li><a href="/standings">Tabeller</a></li>
+                <!-- <li><a href="/results">Resultat</a></li> -->
+                <!-- <li><a href="/standings">Tabeller</a></li> -->
             </ul>
-            <button class="btn btn-primary navbar-btn btn-sm" type="button">Anmäl lag</button>
-            <form class="navbar-form navbar-right" action="#" role="search">
+            <a class="btn btn-primary navbar-btn btn-sm" href="/signup">Anmäl lag</a>
+            <!-- <form class="navbar-form navbar-right" action="#" role="search">
                 <div class="form-group">
                     <div class="input-group">
                         <input class="form-control" id="navbarInput-01" type="search" placeholder="Sök">
@@ -25,7 +61,7 @@
                         </span>
                     </div>
                 </div>
-            </form>
+            </form> -->
         </div><!-- /.navbar-collapse -->
       </div>
     </nav>
@@ -33,98 +69,116 @@
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="panel">
-                    <div class="panel-body">              
-                        <h4>Anmäl ditt lag till Cobra Cup 2015</h4>
-                        <form class="form" role="form" method="post">
-                            Kapten
-                            <div class="row">
-                                <div class="form-group col-xs-4">
-                                    <label for="pReserveName" class="control-label sr-only">Namn</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><span class="fui-user"></span></div>
-                                        <input type="text" class="form-control" id="pReserveFirstName" placeholder="Namn" name="name" required autofocus>
+                <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
+                    <div class="panel">
+                        <div class="panel-body">              
+                            <h4>Anmäl ditt lag till Cobra Cup 2015</h4>
+                            <form class="form" role="form" method="post">
+                                <label>Kapten</label>
+                                <div class="row">
+                                    <div class="form-group col-xs-4">
+                                        <label for="captain_name" class="control-label sr-only">Namn</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><span class="fui-user"></span></div>
+                                            <input type="text" class="form-control" id="captain_name" placeholder="Namn" name="captain_name" required autofocus>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <label for="captain_email" class="control-label sr-only">Epost</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                            <input type="email" class="form-control" id="captain_email" placeholder="Epost" name="captain_email" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <label for="captain_telephone" class="control-label sr-only">Telefon</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                            <input type="text" class="form-control" id="captain_telephone" placeholder="Telefon" name="captain_telephone" required>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-xs-4">
-                                    <label for="pReserveEmail" class="control-label sr-only">Epost</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
-                                        <input type="email" class="form-control" id="pReserveEmail" placeholder="Epost" name="email" required>
+                                <label>Assisterande</label>
+                                <div class="row">
+                                    <div class="form-group col-xs-4">
+                                        <label for="lieutenant_name" class="control-label sr-only">Namn</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><span class="fui-user"></span></div>
+                                            <input type="text" class="form-control" id="lieutenant_name" placeholder="Namn" name="lieutenant_name" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <label for="lieutenant_email" class="control-label sr-only">Epost</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                            <input type="email" class="form-control" id="lieutenant_email" placeholder="Epost" name="lieutenant_email" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <label for="lieutenant_telephone" class="control-label sr-only">Telefon</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                            <input type="text" class="form-control" id="lieutenant_telephone" placeholder="Telefon" name="lieutenant_telephone" required>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-xs-4">
-                                    <label for="pReserveTelephone" class="control-label sr-only">Telefon</label>
+                                <label>Laget</label>
+                                <div class="form-group">
+                                    <label for="team_name" class="control-label sr-only">Lagnamn</label>
                                     <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                                        <input type="text" class="form-control" id="pReserveTelephone" placeholder="Telefon" name="telephone" required>
+                                        <div class="input-group-addon"><i class="fa fa-flag"></i></div>
+                                        <input type="text" class="form-control" id="team_name" placeholder="Lagnamn" name="team_name" required>
                                     </div>
                                 </div>
-                            </div>
-                            Assisterande
-                            <div class="row">
-                                <div class="form-group col-xs-4">
-                                    <label for="pReserveName" class="control-label sr-only">Namn</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><span class="fui-user"></span></div>
-                                        <input type="text" class="form-control" id="pReserveFirstName" placeholder="Namn" name="name" required autofocus>
-                                    </div>
-                                </div>
-                                <div class="form-group col-xs-4">
-                                    <label for="pReserveEmail" class="control-label sr-only">Epost</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
-                                        <input type="email" class="form-control" id="pReserveEmail" placeholder="Epost" name="email" required>
-                                    </div>
-                                </div>
-                                <div class="form-group col-xs-4">
-                                    <label for="pReserveTelephone" class="control-label sr-only">Telefon</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                                        <input type="text" class="form-control" id="pReserveTelephone" placeholder="Telefon" name="telephone" required>
-                                    </div>
-                                </div>
-                            </div>
-                            Laget
-                            <div class="form-group">
-                                <label for="pReserveName" class="control-label sr-only">Lagnamn</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><span class="fui-user"></span></div>
-                                    <input type="text" class="form-control" id="pReserveFirstName" placeholder="Lagnamn" name="team_name" required autofocus>
-                                </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label for="pReserveName" class="control-label sr-only">Lagets motto</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><span class="fui-user"></span></div>
-                                    <input type="text" class="form-control" id="pReserveFirstName" placeholder="Lagets motto" name="team_motto" required autofocus>
+                                <div class="form-group">
+                                    <label for="team_motto" class="control-label sr-only">Lagets motto</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
+                                        <input type="text" class="form-control" id="team_motto" placeholder="Lagets motto" name="team_motto" required>
+                                    </div>
                                 </div>
-                            </div>
-                                
-                                <% if(typeof(nhlteams) !== 'undefined'){ %>
-                                    <select class="form-control select select-inverse select-block mbl">
-                                        <optgroup label="NHL">
-                                        <%
-                                        nhlteams.forEach(function(nhlTeam) { %>
-                                            <option value="<%= nhlTeam.get("name") %>"><%= nhlTeam.get("name") %></option>
-                                        <% }) %>
-                                        </optgroup>
-                                    </select>
-                                    <% 
-                                } else { %>
-                                    <p><em>Problem att ladda lediga lag.</em></p>
-                                <% } %>
+                                <div class="row">
+                                    <div class="form-group col-xs-6"> 
+                                    <label for="nhlTeam">Spelar som</label>
+                                    <% if(typeof(nhlteams) !== 'undefined'){ %>
+                                        <select class="form-control select select-inverse select-block mbl" id="nhlTeam" name="nhlTeam">
+                                            <optgroup label="NHL">
+                                            <%
+                                            nhlteams.forEach(function(nhlTeam) { %>
+                                                <option value="<%= nhlTeam.get("name") %>"><%= nhlTeam.get("name") %></option>
+                                            <% }) %>
+                                            </optgroup>
+                                        </select>
+                                        <% 
+                                    } else { %>
+                                        <p><em>Problem att ladda lediga lag.</em></p>
+                                    <% } %>
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label for="level">Nivå</label>
+                                        <select class="form-control select select-warning select-block mbl" id="level" name="level">
+                                            <option value="rookie">Rookie</option>
+                                            <option value="pro" selected>Pro</option>
+                                            <option value="all-star">All Star</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Kommentar</label>
+                                    <textarea class="form-control input-sm" rows="3" name="comment"></textarea>
+                                </div>
 
-                            <div class="form-group">
-                                <input type='hidden' name='_method' value='put' />
-                                <button type="submit" class="btn btn-md btn-primary"><span class="fui-star-2"></span> Anmäl</button>
-                            </div>
-                        </form>
+                                <div class="form-group">
+                                    <input type='hidden' name='_method' value='put' />
+                                    <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-trophy"></i> Anmäl</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.panel-body -->
                     </div>
-                    <!-- /.panel-body -->
+                    <!-- /.panel -->
                 </div>
-                <!-- /.panel -->
             </div>
             <!-- /.col-lg-12 -->
         </div>

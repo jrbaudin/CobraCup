@@ -50,6 +50,7 @@ exports.new = function(req, res) {
 
 // Create a new team with specified information.
 exports.create = function(req, res) {
+  console.log("Trying to create a new team...");
   var captain_name = req.body.captain_name;
   var captain_email = req.body.captain_email;
   var captain_telephone = req.body.captain_telephone;
@@ -60,11 +61,8 @@ exports.create = function(req, res) {
 
   var team_name = req.body.team_name;
   var team_motto = req.body.team_motto;
-
-  var nhlTeam_id = req.body.nhlTeam_id;
-
+  var nhlTeam = req.body.nhlTeam;
   var level = req.body.level;
-
   var comment = req.body.comment
 
   var Team = Parse.Object.extend("Team");
@@ -72,7 +70,7 @@ exports.create = function(req, res) {
 
   var NHLTeam = Parse.Object.extend('NHLTeam');
   var nhlTeam = new NHLTeam();
-  nhlTeam.id = nhlTeam_id;
+  nhlTeam.id = nhlTeam;
    
   team.set("nhlTeam", nhlTeam);
 
@@ -85,12 +83,30 @@ exports.create = function(req, res) {
   team.set('lieutenant_telephone', lieutenant_telephone);
 
   team.set('team_name', team_name);
-
+  team.set('team_motto', team_motto);
   team.set('level', level);
-
   team.set('comment', comment);
 
-  team.save().then(function(team) {
+  console.log("variables are retrieved and set... trying to save...");
+
+  team.save().then(function(saved_team) {
+    var Team = Parse.Object.extend('Team');
+    var teamQuery = new Parse.Query(Team);
+    teamQuery.descending('createdAt');
+    teamQuery.find().then(function(teams) {
+      if (teams) {
+        res.render('hub', { 
+          teams: teams
+        });
+      } else {
+        res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
+      }
+    },
+    function() {
+      res.send(500, 'Failed finding teams');
+    });
+
+    /*res.redirect('/?info=' + string);
     console.log('Managed to save the team... yippiee');
     Mailgun.sendEmail({
       to: captain_name + " <" + captain_email + ">",
@@ -108,7 +124,8 @@ exports.create = function(req, res) {
         var string = encodeURIComponent(team.get("team_name") + ' är nu sparad i databasen!');
         res.redirect('/?info=' + string);
       }
-    });
+    });*/
+
   }, function(error) {
     // Show the error message and let the user try again
     console.error('Error saving the new team, try again.');
