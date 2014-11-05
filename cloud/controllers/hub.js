@@ -1,5 +1,5 @@
 var Mailgun = require('mailgun');
-Mailgun.initialize('mg.skipool.nu', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
+Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
 // Display the homepage.
 exports.index = function(req, res) {
@@ -10,6 +10,7 @@ exports.index = function(req, res) {
   var Team = Parse.Object.extend('Team');
   var teamQuery = new Parse.Query(Team);
   teamQuery.descending('createdAt');
+  teamQuery.include('nhlTeam');
   teamQuery.find().then(function(teams) {
     if (teams) {
       res.render('hub', { 

@@ -1,135 +1,153 @@
 <!-- Include the header partial -->
 <% include _header %>
-    <div id="table-wrapper">
-        <div class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header"><i class="fa fa-users"></i> Snömässan 16 november 2014 <small>10 platser</small></h2>
-            </div>
-            <!-- /.col-lg-12 -->
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            <!-- <img alt="Cobra Cup" src="/img/cobracup_logo_xsmall.png"> -->
+            The Hub
+          </a>
         </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-01">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Lag</a></li>
+                <li><a href="/results">Resultat</a></li>
+                <li><a href="/standings">Tabeller</a></li>
+            </ul>
+            <button class="btn btn-primary navbar-btn btn-sm" type="button">Anmäl lag</button>
+            <form class="navbar-form navbar-right" action="#" role="search">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control" id="navbarInput-01" type="search" placeholder="Sök">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn"><span class="fui-search"></span></button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <div id="wrapper">
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel">
-                    <!-- <div class="panel-heading">
-                        <b>Anmälningslista</b>
-                    </div> -->
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                        <% if(typeof(full) === 'undefined'){ %>                        
-                        <div>
-                            <h4>Anmäl att du vill jobba</h4>
-                            <form class="form-inline" role="form" method="post">
-                                <div class="form-group">
-                                    <label for="pReserveName" class="control-label sr-only">Förnamn</label>
+                    <div class="panel-body">              
+                        <h4>Anmäl ditt lag till Cobra Cup 2015</h4>
+                        <form class="form" role="form" method="post">
+                            Kapten
+                            <div class="row">
+                                <div class="form-group col-xs-4">
+                                    <label for="pReserveName" class="control-label sr-only">Namn</label>
                                     <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                        <input type="text" class="form-control input-sm" id="pReserveFirstName" placeholder="Förnamn" name="firstname" required autofocus>
+                                        <div class="input-group-addon"><span class="fui-user"></span></div>
+                                        <input type="text" class="form-control" id="pReserveFirstName" placeholder="Namn" name="name" required autofocus>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="pReserveName" class="control-label sr-only">Efternamn</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                        <input type="text" class="form-control input-sm" id="pReserveLastName" placeholder="Efternamn" name="lastname" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
+                                <div class="form-group col-xs-4">
                                     <label for="pReserveEmail" class="control-label sr-only">Epost</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
-                                        <input type="email" class="form-control input-sm" id="pReserveEmail" placeholder="Epost" name="email" required>
+                                        <input type="email" class="form-control" id="pReserveEmail" placeholder="Epost" name="email" required>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group col-xs-4">
                                     <label for="pReserveTelephone" class="control-label sr-only">Telefon</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                                        <input type="text" class="form-control input-sm" id="pReserveTelephone" placeholder="Telefon" name="telephone" required>
+                                        <input type="text" class="form-control" id="pReserveTelephone" placeholder="Telefon" name="telephone" required>
                                     </div>
                                 </div>
-                                <!-- <div class="form-group">
-                                    <label for="pReservePassword" class="control-label sr-only">Lösenord</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-institution"></i></div>
-                                        <input type="password" class="form-control input-sm" id="pReservePassword" placeholder="Lösenord" name="password" required>
-                                    </div>
-                                </div> -->
-
-                                <div class="form-group">
-                                    <input type='hidden' name='_method' value='put' />
-                                    <button type="submit" class="btn btn-md btn-success"><i class="fa fa-save"></i> Spara</button>
-                                </div>
-                            </form>
-                        </div>
-                        <% } else { %>
-                            <div class="alert alert-warning alert-dismissible" role="alert">
-                              <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">&times;</span>
-                                <span class="sr-only">Close</span>
-                              </button>
-                              <strong>Fullbokat!</strong> Alla platser för att jobba på snömässan är bokade.
                             </div>
-                        <% } %>
-                        <hr>
+                            Assisterande
+                            <div class="row">
+                                <div class="form-group col-xs-4">
+                                    <label for="pReserveName" class="control-label sr-only">Namn</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><span class="fui-user"></span></div>
+                                        <input type="text" class="form-control" id="pReserveFirstName" placeholder="Namn" name="name" required autofocus>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label for="pReserveEmail" class="control-label sr-only">Epost</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                        <input type="email" class="form-control" id="pReserveEmail" placeholder="Epost" name="email" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label for="pReserveTelephone" class="control-label sr-only">Telefon</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                        <input type="text" class="form-control" id="pReserveTelephone" placeholder="Telefon" name="telephone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            Laget
+                            <div class="form-group">
+                                <label for="pReserveName" class="control-label sr-only">Lagnamn</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="fui-user"></span></div>
+                                    <input type="text" class="form-control" id="pReserveFirstName" placeholder="Lagnamn" name="team_name" required autofocus>
+                                </div>
+                            </div>
 
-                        <% if(typeof(flash) !== 'undefined'){ %>
-                            <div class="alert alert-danger alert-dismissible" role="alert">
-                              <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">&times;</span>
-                                <span class="sr-only">Close</span>
-                              </button>
-                              <strong>Fel!</strong> <%= flash %>.
-                            </div>  
-                        <% } %>
+                            <div class="form-group">
+                                <label for="pReserveName" class="control-label sr-only">Lagets motto</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="fui-user"></span></div>
+                                    <input type="text" class="form-control" id="pReserveFirstName" placeholder="Lagets motto" name="team_motto" required autofocus>
+                                </div>
+                            </div>
+                                
+                                <% if(typeof(nhlteams) !== 'undefined'){ %>
+                                    <select class="form-control select select-inverse select-block mbl">
+                                        <optgroup label="NHL">
+                                        <%
+                                        nhlteams.forEach(function(nhlTeam) { %>
+                                            <option value="<%= nhlTeam.get("name") %>"><%= nhlTeam.get("name") %></option>
+                                        <% }) %>
+                                        </optgroup>
+                                    </select>
+                                    <% 
+                                } else { %>
+                                    <p><em>Problem att ladda lediga lag.</em></p>
+                                <% } %>
 
-                        <div class="table-responsive">
-                            <table class="table table-condensed" id="workertable">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th name="firstname">Förnamn</th>
-                                        <th name="lastname">Efternamn</th>
-                                        <th name="email">Epost</th>
-                                        <th name="telephone">Telefon</th>
-                                        <!-- <th name="delete"></th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        <% if(typeof(workers) !== 'undefined'){
-                                            var i = 1;
-                                            workers.forEach(function(worker) { %>
-                                                <tr>
-                                                    <td><%= i %></td>
-                                                    <td><%= worker.get("firstname") %></td>
-                                                    <td><%= worker.get("lastname") %></td>
-                                                    <td><%= worker.get("email") %></td>
-                                                    <td><%= worker.get("telephone") %></td>
-                                                    <!-- <td><button type="button" class="btn btn-sm btn-danger" onclick="location.href = '/<%= worker.get("firstname") %>';"><i class="fa fa-trash"></i> Ta bort mig</button></td> -->
-                                                </tr>
-                                            <% i = i+1;
-                                            }) 
-                                        }%>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.table-responsive -->
+                            <div class="form-group">
+                                <input type='hidden' name='_method' value='put' />
+                                <button type="submit" class="btn btn-md btn-primary"><span class="fui-star-2"></span> Anmäl</button>
+                            </div>
+                        </form>
                     </div>
                     <!-- /.panel-body -->
-                    <p class="pull-right">Vill du ta bort din anmälan? <a href="mailto:joel.baudin88@gmail.com?Subject=Hjälp! Jag vill ta bort min anmälan&Body=%0D%0A%0D%0A------------------------------------%0D%0ADetta%20mejl%20är%20skickat%20via%20www.id.skipool.nu" target="_top">Klicka här för att få hjälp</a>.</p>
                 </div>
                 <!-- /.panel -->
             </div>
             <!-- /.col-lg-12 -->
         </div>
-        <p style="margin-top: 2.5em;"><small>&copy; 2014 Copyright joelbaudin.com</small></p>
     </div>
     <!-- /#page-wrapper -->
+    
+    <p style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
 
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/dist/js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/dist/js/flat-ui.min.js"></script>
+
+    <!-- jQuery Version 1.11.0 -->
+    <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+ 
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
     <script>
-        $(document).ready(function() {
-           
-        });
+        $("select").select2({dropdownCssClass: 'dropdown-inverse'});
     </script>
-<!-- Include the header partial -->
-<% include _footer %>
+</body>
+ 
+</html>

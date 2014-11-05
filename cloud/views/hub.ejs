@@ -1,54 +1,93 @@
 <!-- Include the header partial -->
 <% include _header %>
-    <div id="table-wrapper">
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-lg-12">
-                <% if(typeof(flashError) !== 'undefined'){ %>
-                    <div class="alert alert-danger alert-dismissible" role="alert">
-                      <button type="button" class="close" data-dismiss="alert">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                      </button>
-                      <strong>Fel!</strong> <%= flashError %>
-                    </div>  
-                <% } else if(typeof(flashWarning) !== 'undefined'){ %>
-                    <div class="alert alert-warning alert-dismissible" role="alert">
-                      <button type="button" class="close" data-dismiss="alert">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                      </button>
-                      <strong>Observera!</strong> <%= flashWarning %>
-                    </div>  
-                <% } else if(typeof(flashInfo) !== 'undefined'){ %>
-                    <div class="alert alert-success alert-dismissible" role="alert">
-                      <button type="button" class="close" data-dismiss="alert">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                      </button>
-                      <strong>Klart!</strong> <%= flashInfo %>
-                    </div>  
-                <% } %>
-                <% if(typeof(flash) !== 'undefined'){ %>
-                    <div class="alert alert-danger alert-dismissible" role="alert">
-                      <button type="button" class="close" data-dismiss="alert">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                      </button>
-                      <strong>Fel!</strong> <%= flash %>.
-                    </div>  
-                <% } %>
-                <% if(typeof(teams) !== 'undefined'){
-                    var i = 1;
-                    teams.forEach(function(team) { %>
-                        <%= team.get("team_name") %>
-                    <% }) 
-                }%>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <p style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup www.cobracup.se</small></p>
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          <!-- <img alt="Cobra Cup" src="/img/cobracup_logo_xsmall.png"> -->
+          The Hub
+        </a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbar-collapse-01">
+          <ul class="nav navbar-nav">
+              <li class="active"><a href="/">Lag</a></li>
+              <li><a href="/results">Resultat</a></li>
+              <li><a href="/standings">Tabeller</a></li>
+          </ul>
+          <a class="btn btn-primary navbar-btn btn-sm" href="/signup">Anmäl lag</a>
+          <form class="navbar-form navbar-right" action="#" role="search">
+              <div class="form-group">
+                  <div class="input-group">
+                      <input class="form-control" id="navbarInput-01" type="search" placeholder="Sök">
+                      <span class="input-group-btn">
+                          <button type="submit" class="btn"><span class="fui-search"></span></button>
+                      </span>
+                  </div>
+              </div>
+          </form>
+      </div><!-- /.navbar-collapse -->
     </div>
-    <!-- /#page-wrapper -->
-<!-- Include the header partial -->
+  </nav>
+  <div id="wrapper">
+      <!-- /.row -->
+      <div class="row">
+          <div class="col-lg-12">
+              <% if(typeof(flashError) !== 'undefined'){ %>
+                  <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                      <span aria-hidden="true">&times;</span>
+                      <span class="sr-only">Close</span>
+                    </button>
+                    <strong>Fel!</strong> <%= flashError %>
+                  </div>  
+              <% } else if(typeof(flashWarning) !== 'undefined'){ %>
+                  <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                      <span aria-hidden="true">&times;</span>
+                      <span class="sr-only">Close</span>
+                    </button>
+                    <strong>Observera!</strong> <%= flashWarning %>
+                  </div>  
+              <% } else if(typeof(flashInfo) !== 'undefined'){ %>
+                  <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                      <span aria-hidden="true">&times;</span>
+                      <span class="sr-only">Close</span>
+                    </button>
+                    <strong>Klart!</strong> <%= flashInfo %>
+                  </div>  
+              <% } %>
+              <% if(typeof(flash) !== 'undefined'){ %>
+                  <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                      <span aria-hidden="true">&times;</span>
+                      <span class="sr-only">Close</span>
+                    </button>
+                    <strong>Fel!</strong> <%= flash %>.
+                  </div>  
+              <% } %>
+              <% if(typeof(teams) !== 'undefined'){ %>
+                  <div class="row demo-tiles">
+                  <%
+                    teams.forEach(function(team) { %>
+                        <div class="col-xs-3">
+                          <div class="tile">
+                            <img src="<%= team.get("nhlTeam").get("logo").url() %>" alt="Compas" class="tile-image big-illustration">
+                            <h3 class="tile-title"><%= team.get("team_name") %></h3>
+                            <p style="margin-bottom: 0;"><%= team.get("nhlTeam").get("name") %></p>
+                            <p><%= team.get("team_motto") %></p>
+                            <a class="btn btn-primary btn-large btn-block" href="http://designmodo.com/flat">Team Corner</a>
+                          </div>
+                        </div>
+                  <% }) %>
+                  </div> <!-- /tiles -->
+                <% 
+              }%>
+          </div>
+          <!-- /.col-lg-12 -->
+      </div>
+  </div>
+  <!-- /#page-wrapper -->
+<!-- Include the footer partial -->
 <% include _footer %>

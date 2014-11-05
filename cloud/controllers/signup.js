@@ -1,5 +1,5 @@
 var Mailgun = require('mailgun');
-Mailgun.initialize('mg.skipool.nu', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
+Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
 // Display a form for creating a new instructor.
 exports.new = function(req, res) {
@@ -10,7 +10,7 @@ exports.new = function(req, res) {
       if(number <=14){
         var NHLTeam = Parse.Object.extend('NHLTeam');
         var nhlTeamQuery = new Parse.Query(NHLTeam);
-        nhlTeamQuery.descending('name');
+        nhlTeamQuery.ascending('name');
         nhlTeamQuery.find().then(function(nhlteams) {
           if (nhlteams) {
             res.render('signup', { 
@@ -59,8 +59,8 @@ exports.create = function(req, res) {
   var lieutenant_telephone = req.body.lieutenant_telephone;
 
   var team_name = req.body.team_name;
+  var team_motto = req.body.team_motto;
 
-  var nhlTeam_name = req.body.nhlTeam_name;
   var nhlTeam_id = req.body.nhlTeam_id;
 
   var level = req.body.level;
@@ -96,7 +96,7 @@ exports.create = function(req, res) {
       to: captain_name + " <" + captain_email + ">",
       from: "Cobra Cup 2015 <joel@cobracup.se>",
       subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2015!",
-      html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p> <p>Dina uppgifter är:<br> Kapten: <b>" + captain_email + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br>Spelar med: <b>" + nhlTeam_name + "</b></p><p>Tack för att du använder dig av denna sida!<br><br>Med vänlig hälsning<br>Joel<br>www.cobracup.se</p></html>"
+      html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p> <p>Dina uppgifter är:<br> Kapten: <b>" + captain_email + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b></p><p>Tack för att du använder dig av denna sida!<br><br>Med vänlig hälsning<br>Joel<br>www.cobracup.se</p></html>"
     }, {
       success: function(httpResponse) {
         console.log('SendEmail success response: ' + httpResponse);

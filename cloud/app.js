@@ -3,7 +3,7 @@ var moment = require('moment');
 var _ = require('underscore');
 
 var Mailgun = require('mailgun');
-Mailgun.initialize('mg.skipool.nu', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
+Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
  
 // Controller code in separate files.
 var hubController = require('cloud/controllers/hub.js');
@@ -29,8 +29,8 @@ app.locals.formatTime = function(time) {
  
 // Show homepage
 app.get('/', hubController.index); 
-app.get('/anmalan', singupController.new);
-app.put('/anmalan', singupController.create);
+app.get('/signup', singupController.new);
+app.put('/signup', singupController.create);
  
 // Required for initializing Express app in Cloud Code.
 app.listen();
