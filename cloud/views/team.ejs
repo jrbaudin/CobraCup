@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <% if(typeof(teamObj) !== 'undefined'){ %> 
+        <title><%= teamObj[0].get("team_name") %> - Cobra Cup 2015</title>
+    <% } else { %>
+        <title>Kunde inte hitta laget - Cobra Cup 2015</title>
+    <% } %>
+ 
+    <!-- Latest compiled and minified CSS -->
+    <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
+
+    <!-- Optional theme -->
+    <!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
+    <link rel="stylesheet" href="../dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="../stylesheets/style.css">
+
+    <link rel="icon" type="image/png" href="http://media.cobracup.se/2014/11/favicon.png" />
+ 
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+ 
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+ 
+</head>
+ 
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">
+            <!-- <img alt="Cobra Cup" src="/img/cobracup_logo_xsmall.png"> -->
+            The Hub
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-01">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Lag</a></li>
+                <!-- <li><a href="/results">Resultat</a></li> -->
+                <!-- <li><a href="/standings">Tabeller</a></li> -->
+            </ul>
+            <a class="btn btn-primary navbar-btn btn-sm" href="/signup">Anmäl lag</a>
+            <!-- <form class="navbar-form navbar-right" action="#" role="search">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control" id="navbarInput-01" type="search" placeholder="Sök">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn"><span class="fui-search"></span></button>
+                        </span>
+                    </div>
+                </div>
+            </form> -->
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <div class="container">
+        <% if(typeof(flash) !== 'undefined'){ %>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Fel!</strong> <%= flash %>.
+            </div>  
+        <% } %>
+        <% if(typeof(teamObj) !== 'undefined'){ %>
+            <div class="col-lg-3">
+                <div class="panel" style="background-color: #eff0f2;">
+                    <div class="panel-body">
+                        <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:150px;height:150px; margin: 0 auto;">   
+                        <h4 class="text-center"><%= teamObj[0].get("nhlTeam").get("name") %></h4>                     
+                        <h6 class="text-center"><%= teamObj[0].get("nhlTeam").get("city") %></h4>
+                        <a class="btn btn-primary btn-md center-block" href="<%= teamObj[0].get("nhlTeam").get("homepage") %>" target="_blank">Hemsida</a>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <div class="col-lg-6">
+                <div class="panel" style="background-color: #eff0f2;">
+                    <div class="panel-body">
+                        <h2 class="text-center"><%= teamObj[0].get("team_name") %></h2>
+                        <hr>
+                        <div class="col-md-6">            
+                            <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                            <h5 class="text-center"><%= teamObj[0].get("captain_name") %> <small style="color: rgb(0,0,0);">Kapten</small></h5> 
+                            <p class="text-center"><%= teamObj[0].get("captain_telephone") %></p>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
+                            <h5 class="text-center"><%= teamObj[0].get("lieutenant_name") %> <small style="color: rgb(0,0,0);">Assisterande</small></h5>
+                            <p class="text-center"><%= teamObj[0].get("lieutenant_telephone") %></p>
+                        </div>
+                        <hr>
+                        <div class="col-md-6 col-md-offset-3">
+                            <p class="text-center lead"><i>Lagmotto</i></p>
+                            <blockquote>
+                                <p><%= teamObj[0].get("team_motto") %></p>
+                                <small><%= teamObj[0].get("team_name") %></small>
+                            </blockquote>
+                        </div> 
+                        <div class="col-md-6 col-md-offset-3">
+                            <p class="text-center lead"><span class="fui-list"></span> Nivå <span class="fui-list"></span></p>
+                            <div class="progress" style="height: 20px;">
+                            <% if(_.isEqual(teamObj[0].get("level"), "1")) { %>
+                                <div class="progress-bar" style="width: 35%; line-height: 20px;"><i class="fa fa-child"></i> Rookie</div>
+                            <% } else if(_.isEqual(teamObj[0].get("level"), "2")) { %>
+                                <div class="progress-bar progress-bar-success" style="width: 65%; line-height: 20px;"><i class="fa fa-gamepad"></i> Pro</div>
+                            <% } else { %>
+                                <div class="progress-bar progress-bar-warning" style="width: 100%; line-height: 20px;"><i class="fa fa-trophy"></i> All Star</div>
+                            <% } %>
+                            </div>
+                        </div>                             
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        <% } else { %>
+            <p>Laget är undefined... eller nått</p>
+        <% } %>
+    </div>
+    
+    <p style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../dist/js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../dist/js/flat-ui.min.js"></script>
+
+    <!-- jQuery Version 1.11.0 -->
+    <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+ 
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+    <script>
+        
+    </script>
+</body>
+ 
+</html>

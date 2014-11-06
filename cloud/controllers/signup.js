@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var Mailgun = require('mailgun');
 Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
@@ -7,10 +8,12 @@ exports.new = function(req, res) {
   var teamQuery = new Parse.Query(Team);
   teamQuery.count({
     success: function(number) {
+      console.log("number: " + number);
       if(number <=14){
         var NHLTeam = Parse.Object.extend('NHLTeam');
         var nhlTeamQuery = new Parse.Query(NHLTeam);
         nhlTeamQuery.ascending('name');
+        nhlTeamQuery.notEqualTo("taken", true);
         nhlTeamQuery.find().then(function(nhlteams) {
           if (nhlteams) {
             res.render('signup', { 
@@ -24,13 +27,16 @@ exports.new = function(req, res) {
           res.send(500, 'Failed finding teams');
         });
       } else {
+        var passedWarningVariable = "Alla platser för Cobra Cup 2015 är bokade!";
         var Team = Parse.Object.extend('Team');
         var teamQuery = new Parse.Query(Team);
         teamQuery.descending('createdAt');
+        teamQuery.include('nhlTeam');
         teamQuery.find().then(function(teams) {
           if (teams) {
             res.render('hub', { 
-              teams: teams
+              teams: teams,
+              flashWarning: passedWarningVariable
             });
           } else {
             res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
@@ -50,7 +56,6 @@ exports.new = function(req, res) {
 
 // Create a new team with specified information.
 exports.create = function(req, res) {
-  console.log("Trying to create a new team...");
   var captain_name = req.body.captain_name;
   var captain_email = req.body.captain_email;
   var captain_telephone = req.body.captain_telephone;
@@ -68,11 +73,11 @@ exports.create = function(req, res) {
   var Team = Parse.Object.extend("Team");
   var team = new Team();
 
-  var NHLTeam = Parse.Object.extend('NHLTeam');
-  var nhlTeam = new NHLTeam();
-  nhlTeam.id = nhlTeam;
-   
-  team.set("nhlTeam", nhlTeam);
+  var NHLTeam = Parse.Object.extend("NHLTeam");
+  var nhlTeamObj = new NHLTeam();
+  nhlTeamObj.id = nhlTeam;
+
+  team.set("nhlTeam", nhlTeamObj);
 
   team.set('captain_name', captain_name);
   team.set('captain_email', captain_email);
@@ -87,45 +92,77 @@ exports.create = function(req, res) {
   team.set('level', level);
   team.set('comment', comment);
 
-  console.log("variables are retrieved and set... trying to save...");
+  var genId = Math.floor((Math.random() * 100000) + 1);
+  team.set('team_id', genId.toString());
 
   team.save().then(function(saved_team) {
-    var Team = Parse.Object.extend('Team');
-    var teamQuery = new Parse.Query(Team);
-    teamQuery.descending('createdAt');
-    teamQuery.find().then(function(teams) {
-      if (teams) {
-        res.render('hub', { 
-          teams: teams
+    var NHLTeamToSave = Parse.Object.extend('NHLTeam');
+    var nhlTeamQuery = new Parse.Query(NHLTeamToSave);
+    nhlTeamQuery.equalTo('objectId', nhlTeam);
+    nhlTeamQuery.find().then(function(nhlTeamToUpdate) {
+      if (nhlTeamToUpdate) {
+        nhlTeamToUpdate[0].set('taken', true);
+
+        nhlTeamToUpdate[0].save().then(function(saved_nhlteam) {
+          if(saved_nhlteam){
+            var passedInfoVariable = "Ditt lag är nu sparat. Lycka till!";
+            var Team = Parse.Object.extend('Team');
+            var teamQuery = new Parse.Query(Team);
+            teamQuery.descending('createdAt');
+            teamQuery.include('nhlTeam');
+            teamQuery.find().then(function(teams) {
+              if (teams) {
+                Mailgun.sendEmail({
+                  to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>",
+                  from: "Cobra Cup 2015 <joel@cobracup.se>",
+                  subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2015!",
+                  html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p><p>Dina uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b></p><p>Tack för att du använder dig av denna sida!<br><br>Med vänlig hälsning<br>Joel<br>www.cobracup.se</p></html>"
+                }, {
+                  success: function(httpResponse) {
+                    console.log('SendEmail success response: ' + httpResponse);
+                    res.render('hub', { 
+                      teams: teams,
+                      flashInfo: passedInfoVariable
+                    });
+                  },
+                  error: function(httpResponse) {
+                    console.error('SendEmail error response: ' + httpResponse);
+                    res.render('hub', { 
+                      teams: teams,
+                      flashInfo: passedInfoVariable
+                    });
+                  }
+                });
+              } else {
+                res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
+              }
+            },
+            function(error) {
+              console.error('Error find teams to send to The Hub');
+              console.error(error);
+              console.error(error.message);
+              res.render('hub', {flash: 'Problem när de anmälda lagen skulle hämtas.'});
+            });
+          } else {
+            res.send(500, 'Could not update taken status for the NHL Team');
+          }
+        }, function(error) {
+          // Show the error message and let the user try again
+          console.error('Error updating the taken status for the NHL Team, try again.');
+          console.error(error);
+          console.error(error.message);
+          res.render('signup', {flash: error.message});
         });
       } else {
-        res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
+        console.error('The NHL Team object was undefined.');
+        res.render('signup', {flash: "Det var problem på sidan. Pröva kontakta en administratör."});
       }
     },
-    function() {
-      res.send(500, 'Failed finding teams');
+    function(error) {
+      console.error('Could not find the NHL Team to update. Contact your administrator.');
+      console.error(error);
+      res.render('signup', {flash: error.message});
     });
-
-    /*res.redirect('/?info=' + string);
-    console.log('Managed to save the team... yippiee');
-    Mailgun.sendEmail({
-      to: captain_name + " <" + captain_email + ">",
-      from: "Cobra Cup 2015 <joel@cobracup.se>",
-      subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2015!",
-      html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p> <p>Dina uppgifter är:<br> Kapten: <b>" + captain_email + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b></p><p>Tack för att du använder dig av denna sida!<br><br>Med vänlig hälsning<br>Joel<br>www.cobracup.se</p></html>"
-    }, {
-      success: function(httpResponse) {
-        console.log('SendEmail success response: ' + httpResponse);
-        var string = encodeURIComponent(team.get("team_name") + ' är nu sparad i databasen!');
-        res.redirect('/?info=' + string);
-      },
-      error: function(httpResponse) {
-        console.error('SendEmail error response: ' + httpResponse);
-        var string = encodeURIComponent(team.get("team_name") + ' är nu sparad i databasen!');
-        res.redirect('/?info=' + string);
-      }
-    });*/
-
   }, function(error) {
     // Show the error message and let the user try again
     console.error('Error saving the new team, try again.');
