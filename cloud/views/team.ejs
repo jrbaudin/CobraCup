@@ -40,33 +40,25 @@
  
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">
-            <!-- <img alt="Cobra Cup" src="/img/cobracup_logo_xsmall.png"> -->
-            The Hub
-          </a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="navbar-collapse-01">
-            <ul class="nav navbar-nav">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">The Hub</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
                 <li><a href="/">Lag</a></li>
                 <!-- <li><a href="/results">Resultat</a></li> -->
                 <!-- <li><a href="/standings">Tabeller</a></li> -->
-            </ul>
-            <a class="btn btn-primary navbar-btn btn-sm" href="/signup">Anmäl lag</a>
-            <!-- <form class="navbar-form navbar-right" action="#" role="search">
-                <div class="form-group">
-                    <div class="input-group">
-                        <input class="form-control" id="navbarInput-01" type="search" placeholder="Sök">
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn"><span class="fui-search"></span></button>
-                        </span>
-                    </div>
-                </div>
-            </form> -->
-        </div><!-- /.navbar-collapse -->
-      </div>
+                <li><a href="/signup">Anmäl lag</a></li>
+              </ul>
+            </div><!--/.nav-collapse -->
+        </div>
     </nav>
     <div class="container">
         <% if(typeof(flash) !== 'undefined'){ %>
@@ -137,7 +129,7 @@
         <% } %>
     </div>
     
-    <p style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="../dist/js/vendor/jquery.min.js"></script>
