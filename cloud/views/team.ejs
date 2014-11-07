@@ -71,7 +71,7 @@
             </div>  
         <% } %>
         <% if(typeof(teamObj) !== 'undefined'){ %>
-            <div class="col-lg-3">
+            <div class="col-md-3">
                 <div class="panel" style="background-color: #eff0f2;">
                     <div class="panel-body">
                         <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:150px;height:150px; margin: 0 auto;">   
@@ -83,7 +83,7 @@
                 </div>
                 <!-- /.panel -->
             </div>
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="panel" style="background-color: #eff0f2;">
                     <div class="panel-body">
                         <h2 class="text-center"><%= teamObj[0].get("team_name") %></h2>

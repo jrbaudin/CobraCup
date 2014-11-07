@@ -34,8 +34,11 @@ exports.new = function(req, res) {
         teamQuery.include('nhlTeam');
         teamQuery.find().then(function(teams) {
           if (teams) {
+            var count = _.size(teams);
+            console.log("count: " + count);
             res.render('hub', { 
               teams: teams,
+              count: count,
               flashWarning: passedWarningVariable
             });
           } else {
@@ -116,19 +119,25 @@ exports.create = function(req, res) {
                   to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>",
                   from: "Cobra Cup 2015 <joel@cobracup.se>",
                   subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2015!",
-                  html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p><p>Dina uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b></p><p>Tack för att du använder dig av denna sida!<br><br>Med vänlig hälsning<br>Joel<br>www.cobracup.se</p></html>"
+                  html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p><p>Dina uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b></p><p>Tack för att du använder dig av denna sida och mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel<br>www.cobracup.se</p></html>"
                 }, {
                   success: function(httpResponse) {
                     console.log('SendEmail success response: ' + httpResponse);
+                    var count = _.size(teams);
+                    console.log("count: " + count);
                     res.render('hub', { 
                       teams: teams,
+                      count: count,
                       flashInfo: passedInfoVariable
                     });
                   },
                   error: function(httpResponse) {
                     console.error('SendEmail error response: ' + httpResponse);
+                    var count = _.size(teams);
+                    console.log("count: " + count);
                     res.render('hub', { 
                       teams: teams,
+                      count: count,
                       flashInfo: passedInfoVariable
                     });
                   }

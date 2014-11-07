@@ -1,6 +1,4 @@
-var Mailgun = require('mailgun');
-Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
-
+var _ = require('underscore');
 // Display the homepage.
 exports.index = function(req, res) {
   var passedErrorVariable = req.query.error;
@@ -13,14 +11,20 @@ exports.index = function(req, res) {
   teamQuery.include('nhlTeam');
   teamQuery.find().then(function(teams) {
     if (teams) {
+      var count = _.size(teams);
+      console.log("count: " + count);
       res.render('hub', { 
         teams: teams,
+        count: count,
         flashError: passedErrorVariable,
         flashWarning: passedWarningVariable,
         flashInfo: passedInfoVariable
       });
     } else {
+      var count = 0;
+      console.log("count: " + count);
       res.render('hub', {
+        count: count,
         flash: 'Inga lag är ännu registrerade.',
         flashError: passedErrorVariable,
         flashWarning: passedWarningVariable,

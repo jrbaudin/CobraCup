@@ -53,11 +53,16 @@
                 <!-- <li><a href="/standings">Tabeller</a></li> -->
                 <li><a href="/signup">Anmäl lag</a></li>
               </ul>
+              <% if(typeof(count) !== 'undefined'){ %>
+                <div class="notices pull-right">
+                  <p class="navbar-text"><b><%= count %>/15 lag</b></p>
+                </div>
+              <% } %>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-  <div id="container">
-    <div class="col-lg-12">
+  <div id="container-fluid">
+    <div class="col-md-12">
         <% if(typeof(flashError) !== 'undefined'){ %>
             <div class="alert alert-danger alert-dismissible" role="alert">
               <button type="button" class="close" data-dismiss="alert">
@@ -96,7 +101,7 @@
             <div class="row demo-tiles">
             <%
               teams.forEach(function(team) { %>
-                  <div class="col-xs-2">
+                  <div class="col-md-2">
                     <div class="tile">
                       <img src="<%= team.get("nhlTeam").get("logo").url() %>" alt="Compas" class="tile-image big-illustration img-circle">
                       <h3 class="tile-title"><%= team.get("team_name") %></h3>

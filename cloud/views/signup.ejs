@@ -57,7 +57,7 @@
         </div>
     </nav>
     <div class="container">
-        <div class="col-lg-12">
+        <div class="col-md-12">
             <% if(typeof(flash) !== 'undefined'){ %>
                 <div class="alert alert-danger alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert">
@@ -74,21 +74,21 @@
                         <form class="form" role="form" method="post">
                             <label>Kapten</label>
                             <div class="row">
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-md-4">
                                     <label for="captain_name" class="control-label sr-only">Namn</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><span class="fui-user"></span></div>
                                         <input type="text" class="form-control " id="captain_name" placeholder="Namn" name="captain_name" required autofocus>
                                     </div>
                                 </div>
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-md-4">
                                     <label for="captain_email" class="control-label sr-only">Epost</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
                                         <input type="email" class="form-control" id="captain_email" placeholder="Epost" name="captain_email" required>
                                     </div>
                                 </div>
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-md-4">
                                     <label for="captain_telephone" class="control-label sr-only">Telefon</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-phone"></i></div>
@@ -98,21 +98,21 @@
                             </div>
                             <label>Assisterande</label>
                             <div class="row">
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-md-4">
                                     <label for="lieutenant_name" class="control-label sr-only">Namn</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><span class="fui-user"></span></div>
                                         <input type="text" class="form-control" id="lieutenant_name" placeholder="Namn" name="lieutenant_name" required>
                                     </div>
                                 </div>
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-md-4">
                                     <label for="lieutenant_email" class="control-label sr-only">Epost</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
                                         <input type="email" class="form-control" id="lieutenant_email" placeholder="Epost" name="lieutenant_email" required>
                                     </div>
                                 </div>
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-md-4">
                                     <label for="lieutenant_telephone" class="control-label sr-only">Telefon</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-phone"></i></div>
@@ -137,7 +137,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-xs-6"> 
+                                <div class="form-group col-md-6"> 
                                 <label for="nhlTeam">Spelar som</label>
                                 <% if(typeof(nhlteams) !== 'undefined'){ %>
                                     <select class="form-control select select-inverse select-block mbl" id="nhlTeam" name="nhlTeam">
@@ -153,7 +153,7 @@
                                     <p><em>Problem att ladda lediga lag.</em></p>
                                 <% } %>
                                 </div>
-                                <div class="form-group col-xs-6">
+                                <div class="form-group col-md-6">
                                     <label for="level">Nivå</label>
                                     <select class="form-control select select-warning select-block mbl" id="level" name="level">
                                         <option value="1">Rookie</option>
