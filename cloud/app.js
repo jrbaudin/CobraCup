@@ -9,6 +9,9 @@ Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 var hubController = require('cloud/controllers/hub.js');
 var singupController = require('cloud/controllers/signup.js');
 var teamController = require('cloud/controllers/team.js');
+var adminController = require('cloud/controllers/admin.js');
+
+var requireUser = require('cloud/require-user');
  
 // Required for initializing Express app in Cloud Code.
 var app = express();
@@ -37,6 +40,13 @@ app.put('/signup', singupController.create);
 app.get('/team/:teamid', teamController.getTeam);
 app.put('/team/:teamid', teamController.update);
 app.del('/team/:teamid', teamController.delete);
+
+app.get('/admin/login', adminController.index);
+app.post('/admin/login', adminController.login);
+
+app.post('/admin/logout', adminController.logout);
+
+app.get('/admin/tools', requireUser, adminController.tools);
  
 // Required for initializing Express app in Cloud Code.
 app.listen();

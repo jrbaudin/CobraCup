@@ -72,16 +72,150 @@
         <% } %>
         <% if(typeof(teamObj) !== 'undefined'){ %>
             <div class="col-md-3">
-                <div class="panel" style="background-color: #eff0f2;">
-                    <div class="panel-body">
-                        <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:150px;height:150px; margin: 0 auto;">   
-                        <h4 class="text-center"><%= teamObj[0].get("nhlTeam").get("name") %></h4>                     
-                        <h6 class="text-center"><%= teamObj[0].get("nhlTeam").get("city") %></h4>
-                        <a class="btn btn-primary btn-md center-block" href="<%= teamObj[0].get("nhlTeam").get("homepage") %>" target="_blank">Hemsida</a>
+                <div class="row">
+                    <div class="panel" style="background-color: #eff0f2;">
+                        <div class="panel-body">
+                            <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:150px;height:150px; margin: 0 auto;">   
+                            <h4 class="text-center"><%= teamObj[0].get("nhlTeam").get("name") %></h4>                     
+                            <h6 class="text-center"><%= teamObj[0].get("nhlTeam").get("city") %></h4>
+                            <a class="btn btn-primary btn-md center-block" href="<%= teamObj[0].get("nhlTeam").get("homepage") %>" target="_blank">Hemsida</a>
+                        </div>
+                        <!-- /.panel-body -->
                     </div>
-                    <!-- /.panel-body -->
+                    <!-- /.panel -->
                 </div>
-                <!-- /.panel -->
+                <div class="row">
+                    <div class="panel panel-default" style="background-color: #eff0f2;">
+                        <div class="panel-heading">Senaste match</div>
+                        <div class="panel-body">
+                            <p class="text-center" style="margin-bottom: 0;">Måndag, December 22, 2014</p>
+                            <div class="col-md-4">
+                                <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                            </div>
+                            <div class="col-md-4">
+                                <p class="text-center">6-1</p>
+                            </div>  
+                            <div class="col-md-4">
+                                <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                 <!-- /.row -->
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Senaste match</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <p class="text-center" style="margin-bottom: 0;">Måndag, December 22, 2014</p>
+                                            <div class="col-md-4">
+                                                <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p class="text-center">6-1</p>
+                                            </div>  
+                                            <div class="col-md-4">
+                                                <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Nästa match</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p class="text-center" style="margin-bottom: 0;">Måndag, December 22, 2014</p>
+                                            <div class="col-md-4">
+                                                <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p class="text-center">6-1</p>
+                                            </div>  
+                                            <div class="col-md-4">
+                                                <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Kommande matcher</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <p class="text-center" style="margin-bottom: 0;">Måndag, December 22, 2014</p>
+                                                <div class="col-md-4">
+                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p class="text-center">6-1</p>
+                                                </div>  
+                                                <div class="col-md-4">
+                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <p class="text-center" style="margin-bottom: 0;">Måndag, December 22, 2014</p>
+                                                <div class="col-md-4">
+                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p class="text-center">6-1</p>
+                                                </div>  
+                                                <div class="col-md-4">
+                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <p class="text-center" style="margin-bottom: 0;">Måndag, December 22, 2014</p>
+                                                <div class="col-md-4">
+                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p class="text-center">6-1</p>
+                                                </div>  
+                                                <div class="col-md-4">
+                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <p class="text-center" style="margin-bottom: 0;">Måndag, December 22, 2014</p>
+                                                <div class="col-md-4">
+                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p class="text-center">6-1</p>
+                                                </div>  
+                                                <div class="col-md-4">
+                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- .panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.row -->
             </div>
             <div class="col-md-7">
                 <div class="panel" style="background-color: #eff0f2;">
@@ -106,8 +240,8 @@
                                 <small><%= teamObj[0].get("team_name") %></small>
                             </blockquote>
                         </div> 
-                        <div class="col-md-6 col-md-offset-3">
-                            <p class="text-center lead"><span class="fui-list"></span> Nivå <span class="fui-list"></span></p>
+                        <div class="col-md-8 col-md-offset-2">
+                            <p class="text-center lead" style="margin-bottom: 5px;"><span class="fui-list"></span> Nivå <span class="fui-list"></span></p>
                             <div class="progress" style="height: 20px;">
                             <% if(_.isEqual(teamObj[0].get("level"), "1")) { %>
                                 <div class="progress-bar" style="width: 35%; line-height: 20px;"><i class="fa fa-child"></i> Rookie</div>
@@ -120,8 +254,8 @@
                         </div>
                         <!-- <div class="clearfix"></div>
                         <div class="col-md-12">
-                            <p class="text-center"><small><span class="fui-new"></span> Redigera</small></p> 
-                        </div> -->                    
+                            <p class="text-center" style="font-size: 12px; opacity: 0.7;"><small><span class="fui-new"></span> Redigera</small></p> 
+                        </div> -->                 
                     </div>
                     <!-- /.panel-body -->
                 </div>
