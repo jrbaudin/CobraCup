@@ -85,9 +85,9 @@
                     <!-- /.panel -->
                 </div>
                 <div class="row">
-                    <div class="panel panel-default" style="border: 0; background-color: #eff0f2;">
-                        <div class="panel-heading">Matcher</div>
-                        <div class="panel-body">
+                    <div class="panel panel-default" style="border: 0; background-color: transparent; margin-bottom: 0;">
+                        <!-- <div class="panel-heading">Matcher</div> -->
+                        <div class="panel-body" style="padding: 0;">
                             <div class="panel-group" id="accordion">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -183,11 +183,110 @@
                     <!-- /.panel -->
                 </div>
                 <!-- /.row -->
+                <div class="row">
+                    <div class="panel panel-default" style="border: 0; background-color: transparent; margin-bottom: 0;">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="panel-group" id="accordionStat">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordionStat" href="#collapseOneStat"><span class="fui-triangle-down"></span> Tabell</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOneStat" class="panel-collapse collapse in">
+                                        <div class="panel-body" style="padding: 5px;">
+                                            <!-- Table -->
+                                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                                                <thead style="font-size: 13px;">
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Lag</th>
+                                                        <th></th>
+                                                        <th>GP</th>
+                                                        <th>W</th>
+                                                        <th>L</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="font-size: 12px;">
+                                                    <tr>
+                                                        <td class="text-center">1</td>
+                                                        <td><img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"> </td>
+                                                        <td><%= teamObj[0].get("team_name") %></td>
+                                                        <td class="text-center">5</td>
+                                                        <td class="text-center">4</td>
+                                                        <td class="text-center">1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">2</td>
+                                                        <td><img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"> </td>
+                                                        <td><%= teamObj[0].get("team_name") %></td>
+                                                        <td class="text-center">4</td>
+                                                        <td class="text-center">2</td>
+                                                        <td class="text-center">2</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">3</td>
+                                                        <td><img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"> </td>
+                                                        <td><%= teamObj[0].get("team_name") %></td>
+                                                        <td class="text-center">5</td>
+                                                        <td class="text-center">1</td>
+                                                        <td class="text-center">4</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordionStat" href="#collapseTwoStat"><span class="fui-triangle-down"></span> Spelarstatistik</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwoStat" class="panel-collapse collapse">
+                                        <div class="panel-body" style="padding: 5px;">
+                                            <!-- Table -->
+                                            <table class="table table-bordered table-condensed" style="margin-bottom: 0;">
+                                                <thead style="font-size: 13px;">
+                                                    <tr>
+                                                      <th>Spelare:</th>
+                                                      <th>GP</th>
+                                                      <th>G</th>
+                                                      <th>F</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="font-size: 13px;">
+                                                    <tr>
+                                                      <td><%= teamObj[0].get("captain_name") %></td>
+                                                      <td>5</td>
+                                                      <td>2</td>
+                                                      <td>5</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><%= teamObj[0].get("lieutenant_name") %></td>
+                                                      <td>5</td>
+                                                      <td>6</td>
+                                                      <td>1</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>F</strong>-Fights</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- .panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.row -->
             </div>
             <div class="col-md-7">
                 <div class="panel" style="background-color: #eff0f2;">
                     <div class="panel-body">
-                        <h2 class="text-center"><%= teamObj[0].get("team_name") %></h2>
+                        <h2 class="text-center text-uppercase"><%= teamObj[0].get("team_name") %></h2>
                         <hr>
                         <div class="col-md-6">            
                             <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
@@ -228,7 +327,7 @@
                 </div>
                 <!-- /.panel -->
             </div>
-            <!-- /.col-lg-12 -->
+            <!-- /.col-md-7 -->
         <% } else { %>
             <p>Laget är undefined... eller nått</p>
         <% } %>
