@@ -84,7 +84,6 @@
                     </div>
                     <!-- /.panel -->
                 </div>
-
                 <div class="row">
                     <div class="panel panel-default" style="border: 0; background-color: transparent; margin-bottom: 0;">
                         <div class="panel-body" style="padding: 0;">
@@ -268,6 +267,12 @@
                         </div>
                     </div>
                 </div>
+                <% if(typeof(games) !== 'undefined'){
+                    games.forEach(function(game) { %>
+                        <%= game.get("date") %>
+                        <% console.log("game date: " + game.get("date")); %>
+                    <% }) %>
+                <% } %>
             </div>
             <div class="col-md-8">
                 <div class="panel" style="background-color: #eff0f2;">
