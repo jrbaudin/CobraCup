@@ -13,7 +13,7 @@ exports.index = function(req, res) {
     if (teams) {
       var count = _.size(teams);
       console.log("count: " + count);
-      res.render('hub', { 
+      res.render('hub', {
         teams: teams,
         count: count,
         flashError: passedErrorVariable,

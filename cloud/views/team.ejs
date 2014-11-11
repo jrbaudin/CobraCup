@@ -84,6 +84,7 @@
                     </div>
                     <!-- /.panel -->
                 </div>
+
                 <div class="row">
                     <div class="panel panel-default" style="border: 0; background-color: transparent; margin-bottom: 0;">
                         <div class="panel-body" style="padding: 0;">
@@ -211,15 +212,9 @@
                                                                 <td class="text-center"><%= i %></td>
                                                                 <td><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
                                                                 <td><%= standing.get("team").get("team_name") %></td>
-                                                                <% if(typeof(statistic) !== 'undefined'){ %>
-                                                                    <td class="text-center"><%= statistic[0].get("games_played") %></td>
-                                                                    <td class="text-center"><%= statistic[0].get("wins") %></td>
-                                                                    <td class="text-center"><%= statistic[0].get("losses") %></td>
-                                                                <% } else { %>
-                                                                    <td class="text-center">-</td>
-                                                                    <td class="text-center">-</td>
-                                                                    <td class="text-center">-</td>
-                                                                <% } %>                                                                
+                                                                <td class="text-center"><%= standing.get("team").get("games_played") %></td>
+                                                                <td class="text-center"><%= standing.get("team").get("wins") %></td>
+                                                                <td class="text-center"><%= standing.get("team").get("losses") %></td>
                                                                 <td class="text-center"><%= standing.get("points") %></td>
                                                             </tr>
                                                         <% 
@@ -251,33 +246,18 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody style="font-size: 13px;">
-                                                    <% if(typeof(statistic) !== 'undefined'){ %>
-                                                        <tr>
-                                                          <td><%= teamObj[0].get("captain_name") %></td>
-                                                          <td><%= statistic[0].get("games_played") %></td>
-                                                          <td><%= statistic[0].get("captain_goals") %></td>
-                                                          <td><%= statistic[0].get("captain_fights") %></td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td><%= teamObj[0].get("lieutenant_name") %></td>
-                                                          <td><%= statistic[0].get("games_played") %></td>
-                                                          <td><%= statistic[0].get("lieutenant_goals") %></td>
-                                                          <td><%= statistic[0].get("lieutenant_fights") %></td>
-                                                        </tr>
-                                                    <% } else { %>
-                                                        <tr>
-                                                          <td><%= teamObj[0].get("captain_name") %></td>
-                                                          <td>-</td>
-                                                          <td>-</td>
-                                                          <td>-</td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td><%= teamObj[0].get("lieutenant_name") %></td>
-                                                          <td>-</td>
-                                                          <td>-</td>
-                                                          <td>-</td>
-                                                        </tr>
-                                                    <% } %>
+                                                    <tr>
+                                                      <td><%= teamObj[0].get("captain_name") %></td>
+                                                      <td><%= teamObj[0].get("games_played") %></td>
+                                                      <td><%= teamObj[0].get("captain_goals") %></td>
+                                                      <td><%= teamObj[0].get("captain_fights") %></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><%= teamObj[0].get("lieutenant_name") %></td>
+                                                      <td><%= teamObj[0].get("games_played") %></td>
+                                                      <td><%= teamObj[0].get("lieutenant_goals") %></td>
+                                                      <td><%= teamObj[0].get("lieutenant_fights") %></td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                             <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>F</strong>-Fights</small>

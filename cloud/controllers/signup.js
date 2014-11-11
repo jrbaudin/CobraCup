@@ -16,7 +16,7 @@ exports.new = function(req, res) {
         nhlTeamQuery.notEqualTo("taken", true);
         nhlTeamQuery.find().then(function(nhlteams) {
           if (nhlteams) {
-            res.render('signup', { 
+            res.render('signup', {
               nhlteams: nhlteams
             });
           } else {
@@ -36,7 +36,7 @@ exports.new = function(req, res) {
           if (teams) {
             var count = _.size(teams);
             console.log("count: " + count);
-            res.render('hub', { 
+            res.render('hub', {
               teams: teams,
               count: count,
               flashWarning: passedWarningVariable
@@ -128,7 +128,7 @@ exports.create = function(req, res) {
                     console.log('SendEmail success response: ' + httpResponse);
                     var count = _.size(teams);
                     console.log("count: " + count);
-                    res.render('hub', { 
+                    res.render('hub', {
                       teams: teams,
                       count: count,
                       flashInfo: passedInfoVariable
@@ -138,7 +138,7 @@ exports.create = function(req, res) {
                     console.error('SendEmail error response: ' + httpResponse);
                     var count = _.size(teams);
                     console.log("count: " + count);
-                    res.render('hub', { 
+                    res.render('hub', {
                       teams: teams,
                       count: count,
                       flashInfo: passedInfoVariable
