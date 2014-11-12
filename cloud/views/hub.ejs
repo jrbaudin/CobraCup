@@ -103,7 +103,14 @@
             <%
               teams.forEach(function(team) { %>
                   <div class="col-md-2">
-                    <div class="tile">
+                    <div class="tile tile-hot">
+                      <% if(team.get("level") == 1) { %>
+                        <img src="dist/img/icons/svg/ribbon_rookie.svg" alt="Rookie ribbon" class="tile-hot-ribbon">
+                      <% } else if(team.get("level") == 2) { %>
+                        <img src="dist/img/icons/svg/ribbon_pro.svg" alt="Pro ribbon" class="tile-hot-ribbon">
+                      <% } else if(team.get("level") == 3) { %>
+                        <img src="dist/img/icons/svg/ribbon_allstar.svg" alt="All Star ribbon" class="tile-hot-ribbon">
+                      <% } %>
                       <img src="<%= team.get("nhlTeam").get("logo").url() %>" alt="Compas" class="tile-image big-illustration img-circle">
                       <h3 class="tile-title"><%= team.get("team_name") %></h3>
                       <p><%= team.get("nhlTeam").get("name") %></p>
