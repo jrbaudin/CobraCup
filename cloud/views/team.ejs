@@ -268,12 +268,6 @@
                         </div>
                     </div>
                 </div>
-                <% if(typeof(games) !== 'undefined'){
-                    games.forEach(function(game) { %>
-                        <%= game.get("date") %>
-                        <% console.log("game date: " + game.get("date")); %>
-                    <% }) %>
-                <% } %>
             </div>
             <div class="col-md-8">
                 <div class="panel" style="background-color: #eff0f2;">
@@ -309,6 +303,25 @@
                                 <div class="progress-bar progress-bar-warning" style="width: 100%; line-height: 20px;"><i class="fa fa-trophy"></i> All Star</div>
                             <% } %>
                             </div>
+                            <% if(typeof(homeGames) !== 'undefined'){ %>
+                                <p>Size: <%= _.size(homeGames) %></p>
+                                <% homeGames.forEach(function(homeGame) { %>
+                                    <p>Home: <%= formatTime(homeGame.get("date")) %></p>
+                                    <p><%= teamObj[0].get("team_name") %> vs. <%= homeGame.get("away").get("team_name") %></p>
+                                <% }) %>
+                            <% } else { %>
+                                <p>No home games..</p>
+                            <% } %>
+
+                            <% if(typeof(awayGames) !== 'undefined'){ %>
+                                <p>Size: <%= _.size(awayGames) %></p>
+                                <% awayGames.forEach(function(awayGame) { %>
+                                    <p>Away: <%= formatTime(awayGame.get("date")) %></p>
+                                    <p><%= awayGame.get("home").get("team_name") %> vs. <%= teamObj[0].get("team_name") %></p>
+                                <% }) %>
+                            <% } else { %>
+                                <p>No away games..</p>
+                            <% } %>
                         </div>
                         <!-- <div class="clearfix"></div>
                         <div class="col-md-12">

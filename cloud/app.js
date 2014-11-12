@@ -28,7 +28,7 @@ app.locals.moment = moment;
 app.locals.Mailgun = Mailgun;
  
 app.locals.formatTime = function(time) {
-  return moment(time).locale('sv').format('LLLL');
+  return moment(time).format('dddd, MMMM D, YYYY');
 };
  
 // Show homepage

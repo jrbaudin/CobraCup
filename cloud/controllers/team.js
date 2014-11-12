@@ -19,26 +19,49 @@ exports.getTeam = function(req, res) {
       standingsQuery.find().then(function(standings) {
         if (standings) {
           console.log("Gotten the standings...");
+          var innerTeamQuery = new Parse.Query(Team);
+          innerTeamQuery.equalTo('objectId', theTeam[0].id);
+
           var Game = Parse.Object.extend('Game');
-          var hometeam = new Parse.Query(Game);
-          hometeam.equalTo('objectId', theTeam[0].id);
-          hometeam.include(["home.nhlTeam"]);
-          hometeam.include(["away.nhlTeam"]);
 
-          var awayteam = new Parse.Query(Game);
-          awayteam.equalTo('objectId', theTeam[0].id);
-          awayteam.include(["home.nhlTeam"]);
-          awayteam.include(["away.nhlTeam"]);
+          var homeTeamQuery = new Parse.Query(Game);
+          homeTeamQuery.matchesQuery('home', innerTeamQuery);
+          homeTeamQuery.include(["away.nhlTeam"]);
+          homeTeamQuery.ascending("date");
 
-          var gameQuery = Parse.Query.or(hometeam, awayteam);
-          gameQuery.descending("date");
-          gameQuery.find().then(function(games) {
-            if (games) {
-              console.log("Gotten the games...");
-              res.render('team', {
-                teamObj: theTeam,
-                standings: standings,
-                games: games
+          homeTeamQuery.find().then(function(homeGames) {
+            if (homeGames) {
+              console.log("Gotten the home games...");
+              //console.log("homeGames object: " + JSON.stringify(homeGames));
+              //console.log("homeGames away team object: " + JSON.stringify(homeGames[0].get("away")));
+
+              var awayTeamQuery = new Parse.Query(Game);
+              awayTeamQuery.matchesQuery('away', innerTeamQuery);
+              awayTeamQuery.include(["home.nhlTeam"]);
+              awayTeamQuery.ascending("date");
+
+              awayTeamQuery.find().then(function(awayGames) {
+                if (awayGames) {
+                  console.log("Gotten the away games...");
+                  //console.log("awayGames object: " + JSON.stringify(awayGames));
+                  //console.log("awayGames home team object: " + JSON.stringify(awayGames[0].get("home")));
+                  res.render('team', {
+                    teamObj: theTeam,
+                    standings: standings,
+                    homeGames: homeGames,
+                    awayGames: awayGames
+                  });
+                } else {
+                  res.render('team', {
+                    teamObj: theTeam,
+                    standings: standings
+                  });
+                }
+              },
+              function(error){
+                console.error('Error when trying to get team standings');
+                console.error(error);
+                res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas.'});
               });
             } else {
               res.render('team', {
