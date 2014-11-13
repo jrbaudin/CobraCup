@@ -30,7 +30,23 @@ app.locals.Mailgun = Mailgun;
 app.locals.formatTime = function(time) {
   return moment(time).format('dddd, MMMM D, YYYY');
 };
- 
+
+app.locals.justTime = function(time2) {
+  return moment(time2).format('h:mm a');
+};
+
+app.locals.getDate = function(time3) {
+  return moment(time3).format('L');
+};
+
+app.locals.getDayText = function(time4) {
+  return moment(time4).format('ddd');
+};
+
+app.locals.getDayAndDateText = function(time5) {
+  return moment(time5).format('ddd, D/MM');
+};
+
 // Show homepage
 app.get('/', hubController.index); 
 

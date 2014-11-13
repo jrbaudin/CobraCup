@@ -3,7 +3,7 @@ var Mailgun = require('mailgun');
 Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
 exports.getTeam = function(req, res) {
-  console.log("Trying to get the team..");
+  //console.log("Trying to get the team..");
   var Team = Parse.Object.extend('Team');
   var teamQuery = new Parse.Query(Team);
   teamQuery.equalTo('team_id', req.params.teamid);
@@ -18,55 +18,86 @@ exports.getTeam = function(req, res) {
       standingsQuery.limit(3);
       standingsQuery.find().then(function(standings) {
         if (standings) {
-          console.log("Gotten the standings...");
-          var innerTeamQuery = new Parse.Query(Team);
-          innerTeamQuery.equalTo('objectId', theTeam[0].id);
+          //console.log("Gotten the standings...");
 
           var Game = Parse.Object.extend('Game');
 
+          var innerTeamQuery = new Parse.Query(Team);
+          innerTeamQuery.equalTo('objectId', theTeam[0].id);
+
           var homeTeamQuery = new Parse.Query(Game);
           homeTeamQuery.matchesQuery('home', innerTeamQuery);
-          homeTeamQuery.include(["away.nhlTeam"]);
-          homeTeamQuery.ascending("date");
 
-          homeTeamQuery.find().then(function(homeGames) {
-            if (homeGames) {
-              console.log("Gotten the home games...");
-              //console.log("homeGames object: " + JSON.stringify(homeGames));
-              //console.log("homeGames away team object: " + JSON.stringify(homeGames[0].get("away")));
+          var awayTeamQuery = new Parse.Query(Game);
+          awayTeamQuery.matchesQuery('away', innerTeamQuery);
 
-              var awayTeamQuery = new Parse.Query(Game);
-              awayTeamQuery.matchesQuery('away', innerTeamQuery);
-              awayTeamQuery.include(["home.nhlTeam"]);
-              awayTeamQuery.ascending("date");
+          var gameQuery = Parse.Query.or(homeTeamQuery, awayTeamQuery);
+          gameQuery.ascending("date");
+          gameQuery.equalTo('played', false);
+          gameQuery.find().then(function(games) {
+            if (games) {
+              //console.log("Gotten the games...");
 
-              awayTeamQuery.find().then(function(awayGames) {
-                if (awayGames) {
-                  console.log("Gotten the away games...");
-                  //console.log("awayGames object: " + JSON.stringify(awayGames));
-                  //console.log("awayGames home team object: " + JSON.stringify(awayGames[0].get("home")));
-                  res.render('team', {
-                    teamObj: theTeam,
-                    standings: standings,
-                    homeGames: homeGames,
-                    awayGames: awayGames
+              var latestGameQuery = Parse.Query.or(homeTeamQuery, awayTeamQuery);
+              latestGameQuery.descending("date");
+              latestGameQuery.equalTo('played', true);
+              latestGameQuery.first().then(function(lastPlayedGame) {
+                if (lastPlayedGame) {
+                  var allTeamsQuery = new Parse.Query(Team);
+                  allTeamsQuery.descending('team_name');
+                  allTeamsQuery.include('nhlTeam');
+                  allTeamsQuery.find().then(function(teams) {
+                    if (teams) {
+                      res.render('team', {
+                        teamObj: theTeam,
+                        standings: standings,
+                        games: games,
+                        lastPlayedGame: lastPlayedGame,
+                        teams: teams
+                      });
+                    } else {
+                      res.render('team', {
+                        teamObj: theTeam,
+                        standings: standings,
+                        games: games,
+                        lastPlayedGame: lastPlayedGame,
+                        flash: 'Kunde inte hämta data för alla lagen.'
+                      });
+                    }
+                  },
+                  function(error) {
+                    console.error('Error when trying to get all teams.');
+                    console.error(error);
+                    res.render('team', {
+                      teamObj: theTeam,
+                      standings: standings,
+                      games: games,
+                      flash: 'Kunde inte hämta data för alla lagen.'
+                    });
                   });
                 } else {
                   res.render('team', {
                     teamObj: theTeam,
-                    standings: standings
+                    standings: standings,
+                    games: games,
+                    flash: 'Kunde inte hämta data för senast spelade match.'
                   });
                 }
               },
               function(error){
-                console.error('Error when trying to get team standings');
+                console.error('Error when trying to get the last played game.');
                 console.error(error);
-                res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas.'});
+                res.render('team', {
+                  teamObj: theTeam,
+                  standings: standings,
+                  flash: 'Kunde inte hämta data för senast spelade matchen.'
+                });
               });
             } else {
               res.render('team', {
                 teamObj: theTeam,
-                standings: standings
+                standings: standings,
+                flash: 'Kunde inte hämta data för matcher.'
               });
             }
           },
@@ -77,7 +108,8 @@ exports.getTeam = function(req, res) {
           });
         } else {
           res.render('team', {
-            teamObj: theTeam
+            teamObj: theTeam,
+            flash: 'Kunde inte hämta data tabellen.'
           });
         }
       },

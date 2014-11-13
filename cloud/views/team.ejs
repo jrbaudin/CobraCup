@@ -89,56 +89,105 @@
                     <div class="panel panel-default" style="border: 0; background-color: transparent; margin-bottom: 0;">
                         <div class="panel-body" style="padding: 0;">
                             <div class="panel-group" id="accordion">
+
+                                <% if((typeof(lastPlayedGame) !== 'undefined') && (typeof(teams) !== 'undefined')){ 
+                                    var hometeam = null;
+                                    var awayteam = null;
+                                    var versus = "";
+                                    teams.forEach(function(team) {
+                                        if(_.isEqual(team.id, lastPlayedGame.get("home").id)){
+                                            hometeam = team;
+                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                                versus = team.get("nhlTeam").get("nickname");
+                                            }
+                                        } else if(_.isEqual(team.id, lastPlayedGame.get("away").id)){
+                                            awayteam = team;
+                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                                versus = team.get("nhlTeam").get("nickname");
+                                            }
+                                        }
+                                    })
+                                %>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h6 class="panel-title text-uppercase">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="fui-triangle-down"></span> Senaste match VS. <%= teamObj[0].get("nhlTeam").get("nickname") %></a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="fui-triangle-down"></span> Senaste match VS. <%= versus %></a>
                                         </h6>
                                     </div>
                                     <div id="collapseOne" class="panel-collapse collapse in">
                                         <div class="panel-body">
                                             <div class="col-md-12">
-                                                <p class="text-center" style="margin-bottom: 0; font-weight: bold;">Måndag, December 22, 2014</p>
+                                                <p class="text-center" style="margin-bottom: 0; font-weight: bold;"><%= formatTime(lastPlayedGame.get("date")) %></p>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-4 col-md-4">
-                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                                    <img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
                                                 </div>
                                                 <div class="col-xs-4 col-md-4">
                                                     <p class="text-center" style="margin-bottom: 0; line-height: 1;"><small>SLUT</small></p>
-                                                    <p class="text-center" style="line-height: 1;"><b>6 - 1</b></p>
+                                                    <p class="text-center" style="line-height: 1;"><b><%= lastPlayedGame.get("home_goals") %> - <%= lastPlayedGame.get("away_goals") %></b></p>
                                                 </div>  
                                                 <div class="col-xs-4 col-md-4">
-                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                                    <img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <% } else { %>
+                                    <p>No last played game..</p>
+                                <% } %>
+
+                                <% if((typeof(games) !== 'undefined') && (typeof(teams) !== 'undefined')){ 
+                                    var nextGame = _.first(games);
+                                    var hometeam = null;
+                                    var awayteam = null;
+                                    var versus = "";
+                                    teams.forEach(function(team) {
+                                        if(_.isEqual(team.id, nextGame.get("home").id)){
+                                            hometeam = team;
+                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                                versus = team.get("nhlTeam").get("nickname");
+                                            }
+                                        } else if(_.isEqual(team.id, nextGame.get("away").id)){
+                                            awayteam = team;
+                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                                versus = team.get("nhlTeam").get("nickname");
+                                            }
+                                        }
+                                    })
+                                %>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h6 class="panel-title text-uppercase">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="fui-triangle-down"></span> Nästa match VS. <%= teamObj[0].get("nhlTeam").get("nickname") %></a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="fui-triangle-down"></span> Nästa match VS. <%= versus %></a>
                                         </h6>
                                     </div>
                                     <div id="collapseTwo" class="panel-collapse collapse">
                                         <div class="panel-body">
-                                            <p class="text-center" style="margin-bottom: 0; font-weight: bold;">Måndag, December 22, 2014</p>
-                                            <div class="row">
+                                               <div class="row">
                                                 <div class="col-xs-4 col-md-4">
-                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                                    <img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
                                                 </div>
                                                 <div class="col-xs-4 col-md-4">
-                                                    <p class="text-center" style="margin-bottom: 0; line-height: 1;"><small>SLUT</small></p>
-                                                    <p class="text-center" style="line-height: 1;"><b>6 - 1</b></p>
+                                                    <p class="text-center" style="margin-bottom: 0; line-height: 1;"><%= getDayText(nextGame.get("date")) %></p>
+                                                    <p class="text-center" style="margin-bottom: 0; line-height: 1;"><small><%= getDate(nextGame.get("date")) %></small></p>
+                                                    <p class="text-center" style="line-height: 1;"><b><%= justTime(nextGame.get("date")) %></b></p>
                                                 </div>  
                                                 <div class="col-xs-4 col-md-4">
-                                                    <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                                    <img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <% } else { %>
+                                    <p>No games or teams..</p>
+                                <% } %>      
+                                
+                                <% if((typeof(games) !== 'undefined') && (typeof(teams) !== 'undefined')){ 
+                                    var upcomingGames = _.rest(games, 1);
+                                %>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h6 class="panel-title text-uppercase">
@@ -148,34 +197,38 @@
                                     <div id="collapseThree" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <div class="row">
+                                                <% upcomingGames.forEach(function(game) { 
+                                                    var versusLogo = "";
+
+                                                    teams.forEach(function(team) {
+                                                        if(_.isEqual(team.id, game.get("home").id)){
+                                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                                                versusLogo = team.get("nhlTeam").get("logo").url();
+                                                            }
+                                                        } else if(_.isEqual(team.id, game.get("away").id)){
+                                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                                                versusLogo = team.get("nhlTeam").get("logo").url();
+                                                            }
+                                                        }
+                                                    })
+
+                                                %>
                                                 <div class="col-md-4" style="padding-left:5px; padding-right: 5px;">
                                                     <div class="tile" style="padding: 8px;">
                                                         <p style="font-size: 7px; margin-bottom: 3px; line-height: 1; font-weight:bold;">VS</p>
-                                                        <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;"> 
-                                                        <p class="tile-title" style="font-size: 12px; margin-bottom: 0; font-weight:bold; line-height: 1; margin-top: 3px;">MÅN, 22/12</p>
-                                                        <p style="font-size: 10px; margin-bottom: 0; line-height: 1;"><small>21:00</small></p>
+                                                        <img src="<%= versusLogo %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;"> 
+                                                        <p class="tile-title" style="font-size: 12px; margin-bottom: 0; font-weight:bold; line-height: 1; margin-top: 3px;"><%= getDayAndDateText(game.get("date")) %></p>
+                                                        <p style="font-size: 10px; margin-bottom: 0; line-height: 1;"><small><%= justTime(game.get("date")) %></small></p>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4" style="padding-left:5px; padding-right: 5px;">
-                                                    <div class="tile" style="padding: 8px;">
-                                                        <p style="font-size: 7px; margin-bottom: 3px; line-height: 1; font-weight:bold;">VS</p>
-                                                        <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;"> 
-                                                        <p class="tile-title" style="font-size: 12px; margin-bottom: 0; font-weight:bold; line-height: 1; margin-top: 3px;"><b>MÅN, 22/12</b></p>
-                                                        <p style="font-size: 10px; margin-bottom: 0; line-height: 1;"><small>21:00</small></p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4" style="padding-left:5px; padding-right: 5px;">
-                                                    <div class="tile" style="padding: 8px;">
-                                                        <p style="font-size: 7px; margin-bottom: 3px; line-height: 1; font-weight:bold;">VS</p>
-                                                        <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;"> 
-                                                        <p class="tile-title" style="font-size: 12px; margin-bottom: 0; font-weight:bold; line-height: 1; margin-top: 3px;"><b>MÅN, 22/12</b></p>
-                                                        <p style="font-size: 10px; margin-bottom: 0; line-height: 1;"><small>21:00</small></p>
-                                                    </div>
-                                                </div>
+                                                <% }) %>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                 <% } else { %>
+                                    <p>No games or teams..</p>
+                                <% } %>  
                             </div>
                         </div>
                     </div>
@@ -302,26 +355,7 @@
                             <% } else { %>
                                 <div class="progress-bar progress-bar-warning" style="width: 100%; line-height: 20px;"><i class="fa fa-trophy"></i> All Star</div>
                             <% } %>
-                            </div>
-                            <% if(typeof(homeGames) !== 'undefined'){ %>
-                                <p>Size: <%= _.size(homeGames) %></p>
-                                <% homeGames.forEach(function(homeGame) { %>
-                                    <p>Home: <%= formatTime(homeGame.get("date")) %></p>
-                                    <p><%= teamObj[0].get("team_name") %> vs. <%= homeGame.get("away").get("team_name") %></p>
-                                <% }) %>
-                            <% } else { %>
-                                <p>No home games..</p>
-                            <% } %>
-
-                            <% if(typeof(awayGames) !== 'undefined'){ %>
-                                <p>Size: <%= _.size(awayGames) %></p>
-                                <% awayGames.forEach(function(awayGame) { %>
-                                    <p>Away: <%= formatTime(awayGame.get("date")) %></p>
-                                    <p><%= awayGame.get("home").get("team_name") %> vs. <%= teamObj[0].get("team_name") %></p>
-                                <% }) %>
-                            <% } else { %>
-                                <p>No away games..</p>
-                            <% } %>
+                            </div>             
                         </div>
                         <!-- <div class="clearfix"></div>
                         <div class="col-md-12">

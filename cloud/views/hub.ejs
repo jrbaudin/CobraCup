@@ -111,7 +111,7 @@
                       <% } else if(team.get("level") == 3) { %>
                         <img src="dist/img/icons/svg/ribbon_allstar.svg" alt="All Star ribbon" class="tile-hot-ribbon">
                       <% } %>
-                      <img src="<%= team.get("nhlTeam").get("logo").url() %>" alt="Compas" class="tile-image big-illustration img-circle">
+                      <img src="<%= team.get("nhlTeam").get("logo").url() %>" alt="Team logo" class="tile-image big-illustration img-circle">
                       <h3 class="tile-title"><%= team.get("team_name") %></h3>
                       <p><%= team.get("nhlTeam").get("name") %></p>
                       <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>">Team Corner</a>
