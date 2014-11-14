@@ -1,5 +1,6 @@
 var express = require('express');
-var moment = require('moment');
+//var moment = require('moment');
+var momentSWE = require('cloud/tools/moment-with-locales.min.js');
 var _ = require('underscore');
 
 var Mailgun = require('mailgun');
@@ -24,27 +25,27 @@ app.use(express.methodOverride());
  
 // You can use app.locals to store helper methods so that they are accessible from templates.
 app.locals._ = _;
-app.locals.moment = moment;
+app.locals.moment = momentSWE;
 app.locals.Mailgun = Mailgun;
  
 app.locals.formatTime = function(time) {
-  return moment(time).format('dddd, MMMM D, YYYY');
+  return momentSWE(time).locale('sv').format('dddd, MMMM D, YYYY');
 };
 
 app.locals.justTime = function(time2) {
-  return moment(time2).format('h:mm a');
+  return momentSWE(time2).locale('sv').format('HH:mm');
 };
 
 app.locals.getDate = function(time3) {
-  return moment(time3).format('L');
+  return momentSWE(time3).format('L');
 };
 
 app.locals.getDayText = function(time4) {
-  return moment(time4).format('ddd');
+  return momentSWE(time4).locale('sv').format('ddd');
 };
 
 app.locals.getDayAndDateText = function(time5) {
-  return moment(time5).format('ddd, D/MM');
+  return momentSWE(time5).locale('sv').format('ddd, D/MM');
 };
 
 // Show homepage

@@ -15,7 +15,7 @@ exports.getTeam = function(req, res) {
       var standingsQuery = new Parse.Query(Standings);
       standingsQuery.descending('points');
       standingsQuery.include(["team.nhlTeam"]);
-      standingsQuery.limit(3);
+      standingsQuery.limit(5);
       standingsQuery.find().then(function(standings) {
         if (standings) {
           //console.log("Gotten the standings...");
@@ -37,7 +37,6 @@ exports.getTeam = function(req, res) {
           gameQuery.find().then(function(games) {
             if (games) {
               //console.log("Gotten the games...");
-
               var latestGameQuery = Parse.Query.or(homeTeamQuery, awayTeamQuery);
               latestGameQuery.descending("date");
               latestGameQuery.equalTo('played', true);
@@ -61,18 +60,18 @@ exports.getTeam = function(req, res) {
                         standings: standings,
                         games: games,
                         lastPlayedGame: lastPlayedGame,
-                        flash: 'Kunde inte hämta data för alla lagen.'
+                        flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                       });
                     }
                   },
                   function(error) {
-                    console.error('Error when trying to get all teams.');
+                    console.error('Error when trying to get all teams');
                     console.error(error);
                     res.render('team', {
                       teamObj: theTeam,
                       standings: standings,
                       games: games,
-                      flash: 'Kunde inte hämta data för alla lagen.'
+                      flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                     });
                   });
                 } else {
@@ -80,54 +79,54 @@ exports.getTeam = function(req, res) {
                     teamObj: theTeam,
                     standings: standings,
                     games: games,
-                    flash: 'Kunde inte hämta data för senast spelade match.'
+                    flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                   });
                 }
               },
               function(error){
-                console.error('Error when trying to get the last played game.');
+                console.error('Error when trying to get the last played game');
                 console.error(error);
                 res.render('team', {
                   teamObj: theTeam,
                   standings: standings,
-                  flash: 'Kunde inte hämta data för senast spelade matchen.'
+                  flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                 });
               });
             } else {
               res.render('team', {
                 teamObj: theTeam,
                 standings: standings,
-                flash: 'Kunde inte hämta data för matcher.'
+                flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
               });
             }
           },
           function(error){
             console.error('Error when trying to get team standings');
             console.error(error);
-            res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas.'});
+            res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas'});
           });
         } else {
           res.render('team', {
             teamObj: theTeam,
-            flash: 'Kunde inte hämta data tabellen.'
+            flashWarning: 'Information om tabellen kunde inte hämtas eller finns inte'
           });
         }
       },
       function(error){
         console.error('Error when trying to get team standings');
         console.error(error);
-        res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas.'});
+        res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas'});
       });
     } else {
       res.render('hub', {
-        flashError: "Kunde inte ladda lag. Försök igen."
+        flashError: "Kunde inte ladda lag. Försök igen"
       });
     }
   },
   function(error){
     console.error('Error when trying to find team to view');
     console.error(error);
-    res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas.'});
+    res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas'});
   });
 };
 
