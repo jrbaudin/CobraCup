@@ -11,6 +11,7 @@ var hubController = require('cloud/controllers/hub.js');
 var singupController = require('cloud/controllers/signup.js');
 var teamController = require('cloud/controllers/team.js');
 var adminController = require('cloud/controllers/admin.js');
+var statController = require('cloud/controllers/stat.js');
 
 var requireUser = require('cloud/require-user');
  
@@ -57,6 +58,10 @@ app.put('/signup', singupController.create);
 app.get('/team/:teamid', teamController.getTeam);
 app.put('/team/:teamid', teamController.update);
 app.del('/team/:teamid', teamController.delete);
+
+app.get('/stat/league', statController.showLeague);
+app.get('/stat/divisions', statController.showDivisions);
+app.get('/stat/playerstats', statController.showPlayerStats);
 
 app.get('/admin/login', adminController.index);
 app.post('/admin/login', adminController.login);
