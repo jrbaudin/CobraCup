@@ -56,7 +56,6 @@ exports.new = function(req, res) {
   });
 };
 
-
 // Create a new team with specified information.
 exports.create = function(req, res) {
   var captain_name = req.body.captain_name;
@@ -95,6 +94,18 @@ exports.create = function(req, res) {
   team.set('level', level);
   team.set('comment', comment);
 
+  team.set('group', "0");
+
+  team.set('games_played', "0");
+  team.set('wins', "0");
+  team.set('losses', "0");
+  team.set('goals_for', "0");
+  team.set('goals_against', "0");
+  team.set('captain_goals', "0");
+  team.set('captain_fights', "0");
+  team.set('lieutenant_goals', "0");
+  team.set('lieutenant_fights', "0");
+
   var pass = Math.random().toString(36).slice(-8);
   team.set('password', pass);
 
@@ -111,50 +122,61 @@ exports.create = function(req, res) {
 
         nhlTeamToUpdate[0].save().then(function(saved_nhlteam) {
           if(saved_nhlteam){
-            var passedInfoVariable = "Ditt lag är nu sparat. Lycka till!";
-            var Team = Parse.Object.extend('Team');
-            var teamQuery = new Parse.Query(Team);
-            teamQuery.descending('createdAt');
-            teamQuery.include('nhlTeam');
-            teamQuery.find().then(function(teams) {
-              if (teams) {
-                Mailgun.sendEmail({
-                  to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>",
-                  from: "Cobra Cup 2015 <joel@cobracup.se>",
-                  subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2015!",
-                  html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p><p>Dina uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ditt lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så är det i år en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>150 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 15 december 2014. <b>Obs.</b> Om denna avgift på 150 kr /person (300 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
-                }, {
-                  success: function(httpResponse) {
-                    console.log('SendEmail success response: ' + httpResponse);
-                    var count = _.size(teams);
-                    console.log("count: " + count);
-                    res.render('hub', {
-                      teams: teams,
-                      count: count,
-                      flashInfo: passedInfoVariable
-                    });
-                  },
-                  error: function(httpResponse) {
-                    console.error('SendEmail error response: ' + httpResponse);
-                    var count = _.size(teams);
-                    console.log("count: " + count);
-                    res.render('hub', {
-                      teams: teams,
-                      count: count,
-                      flashInfo: passedInfoVariable
-                    });
-                  }
-                });
-              } else {
-                res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
-              }
-            },
-            function(error) {
-              console.error('Error find teams to send to The Hub');
+            var Standing = Parse.Object.extend("Standings");
+            var standing = new Standing();
+
+            standing.set('team', saved_team);
+            standing.set('points', "0");
+            standing.save().then(function(standing) {
+              var passedInfoVariable = "Ditt lag är nu sparat. Lycka till!";
+              var Team = Parse.Object.extend('Team');
+              var teamQuery = new Parse.Query(Team);
+              teamQuery.descending('createdAt');
+              teamQuery.include('nhlTeam');
+              teamQuery.find().then(function(teams) {
+                if (teams) {
+                  Mailgun.sendEmail({
+                    to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>",
+                    from: "Cobra Cup 2015 <joel@cobracup.se>",
+                    subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2015!",
+                    html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p><p>Dina uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ditt lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så är det i år en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>150 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 15 december 2014. <b>Obs.</b> Om denna avgift på 150 kr /person (300 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+                  }, {
+                    success: function(httpResponse) {
+                      console.log('SendEmail success response: ' + httpResponse);
+                      var count = _.size(teams);
+                      console.log("count: " + count);
+                      res.render('hub', {
+                        teams: teams,
+                        count: count,
+                        flashInfo: passedInfoVariable
+                      });
+                    },
+                    error: function(httpResponse) {
+                      console.error('SendEmail error response: ' + httpResponse);
+                      var count = _.size(teams);
+                      console.log("count: " + count);
+                      res.render('hub', {
+                        teams: teams,
+                        count: count,
+                        flashInfo: passedInfoVariable
+                      });
+                    }
+                  });
+                } else {
+                  res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
+                }
+              },
+              function(error) {
+                console.error('Error find teams to send to The Hub');
+                console.error(error);
+                res.render('hub', {flash: 'Problem när de anmälda lagen skulle hämtas.'});
+              });
+            }, function(error) {
+              // Show the error message and let the user try again
+              console.error('Error adding the row in standings tabl, try again.');
               console.error(error);
-              console.error(error.message);
-              res.render('hub', {flash: 'Problem när de anmälda lagen skulle hämtas.'});
-            });
+              res.render('signup', {flash: error.message});
+            });  
           } else {
             res.send(500, 'Could not update taken status for the NHL Team');
           }
@@ -162,7 +184,6 @@ exports.create = function(req, res) {
           // Show the error message and let the user try again
           console.error('Error updating the taken status for the NHL Team, try again.');
           console.error(error);
-          console.error(error.message);
           res.render('signup', {flash: error.message});
         });
       } else {

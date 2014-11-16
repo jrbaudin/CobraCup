@@ -69,6 +69,9 @@ app.post('/admin/login', adminController.login);
 app.post('/admin/logout', adminController.logout);
 
 app.get('/admin/tools', requireUser, adminController.tools);
+
+app.get('/admin/match', adminController.loadMatchCreator);
+app.put('/admin/match', adminController.createMatch);
  
 // Required for initializing Express app in Cloud Code.
 app.listen();
