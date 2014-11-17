@@ -8,17 +8,17 @@
     <meta name="description" content="">
     <meta name="author" content="">
  
-    <title>Anmälan - Cobra Cup 2015</title>
+    <title>Spelarstatistik - Cobra Cup 2015</title>
  
     <!-- Latest compiled and minified CSS -->
-    <link href="dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
 
     <!-- Optional theme -->
     <!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
-    <link rel="stylesheet" href="dist/css/flat-ui.css">
+    <link rel="stylesheet" href="../dist/css/flat-ui.css">
 
-    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="../stylesheets/style.css">
 
     <link rel="icon" type="image/png" href="http://media.cobracup.se/2014/11/favicon.png" />
  
@@ -68,137 +68,108 @@
         </div>
     </nav>
     <div class="container">
-        <div class="col-md-12">
-            <% if(typeof(flash) !== 'undefined'){ %>
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <strong>Fel!</strong> <%= flash %>.
-                </div>  
-            <% } %>
-            <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
-                <div class="panel">
-                    <div class="panel-body">              
-                        <h4>Anmäl ditt lag till Cobra Cup 2015</h4>
-                        <form class="form" role="form" method="post">
-                            <label>Kapten</label>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="captain_name" class="control-label sr-only">Namn</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><span class="fui-user"></span></div>
-                                        <input type="text" class="form-control " id="captain_name" placeholder="Namn" name="captain_name" required autofocus>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="captain_email" class="control-label sr-only">Epost</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
-                                        <input type="email" class="form-control" id="captain_email" placeholder="Epost" name="captain_email" required>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="captain_telephone" class="control-label sr-only">Telefon</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                                        <input type="text" class="form-control" id="captain_telephone" placeholder="Telefon" name="captain_telephone" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <label>Assisterande</label>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="lieutenant_name" class="control-label sr-only">Namn</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><span class="fui-user"></span></div>
-                                        <input type="text" class="form-control" id="lieutenant_name" placeholder="Namn" name="lieutenant_name" required>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="lieutenant_email" class="control-label sr-only">Epost</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
-                                        <input type="email" class="form-control" id="lieutenant_email" placeholder="Epost" name="lieutenant_email" required>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="lieutenant_telephone" class="control-label sr-only">Telefon</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                                        <input type="text" class="form-control" id="lieutenant_telephone" placeholder="Telefon" name="lieutenant_telephone" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <label>Laget</label>
-                            <div class="form-group">
-                                <label for="team_name" class="control-label sr-only">Lagnamn</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-flag"></i></div>
-                                    <input type="text" class="form-control" id="team_name" placeholder="Lagnamn" name="team_name" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="team_motto" class="control-label sr-only">Lagets motto</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
-                                    <input type="text" class="form-control" id="team_motto" placeholder="Lagets motto" name="team_motto" required>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6"> 
-                                <label for="nhlTeam">Spelar som</label>
-                                <% if(typeof(nhlteams) !== 'undefined'){ %>
-                                    <select class="form-control select select-inverse select-block mbl" id="nhlTeam" name="nhlTeam">
-                                        <optgroup label="NHL">
-                                        <%
-                                        nhlteams.forEach(function(nhlTeam) { %>
-                                            <option value="<%= nhlTeam.id %>"><%= nhlTeam.get("name") %></option>
-                                        <% }) %>
-                                        </optgroup>
-                                    </select>
-                                    <% 
-                                } else { %>
-                                    <p><em>Problem att ladda lediga lag.</em></p>
-                                <% } %>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label id="levelLbl" for="level" data-toggle="tooltip" data-placement="right" title="" data-original-title="Välj den nivå som ert lag är på. Rookie = Nybörjare, Pro = Spelar då och då, All-Star = Spelar NHL minst en gång per vecka.">Nivå</label>
-                                    <select class="form-control select select-warning select-block mbl" id="level" name="level">
-                                        <option value="1">Rookie</option>
-                                        <option value="2" selected>Pro</option>
-                                        <option value="3">All Star</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Kommentar</label>
-                                <textarea class="form-control input-sm" rows="3" name="comment"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <input type='hidden' name='_method' value='put' />
-                                <button type="submit" class="btn btn-hg btn-primary btn-wide">Anmäl</button>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.panel-body -->
+        <% if(typeof(flash) !== 'undefined'){ %>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Fel!</strong> <%= flash %>.
+            </div>  
+        <% } %>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h6 class="panel-title text-uppercase">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-bullseye fa-stack-1x fa-inverse"></i>
+                        </span> <strong>Målligan</strong>
+                    </h6>
                 </div>
-                <!-- /.panel -->
+                <div class="panel-body">              
+                    <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                        <thead style="font-size: 13px;">
+                            <tr>
+                                <th class="text-center text-uppercase">Rank</th>
+                                <th class="text-center text-uppercase">Lag</th>
+                                <th class="text-uppercase">Namn</th>
+                                <th class="text-center bg-warning"><strong>G</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 12px;">
+                            <% if(typeof(playerGoals) !== 'undefined'){
+                                var i = 1;
+                                playerGoals.forEach(function(player) { %>
+                                    <tr>
+                                        <td class="text-center"><%= i %></td>
+                                        <td><a href="/team/<%= player.get("player_team").get("team_id") %>" target="_blank"><img src="<%= player.get("player_team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                        <td><%= player.get("player_name") %></td>
+                                        <td class="text-center"><strong><%= player.get("player_goals") %></strong></td>
+                                    </tr>
+                                    <% i = i+1; 
+                                }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                    <small style="font-size: 10px;"><strong>G</strong>-Goals</small>
+                </div>
+                <!-- /.panel-body -->
             </div>
+            <!-- /.panel -->
         </div>
-        <!-- /.col-lg-12 -->
+        <!-- /.col-md-6 -->
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h6 class="panel-title text-uppercase">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-wheelchair fa-stack-1x fa-inverse"></i>
+                        </span> <strong>Slagsmålsligan</strong>
+                    </h6>
+                </div>
+                <div class="panel-body">              
+                    <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                        <thead style="font-size: 13px;">
+                            <tr>
+                                <th class="text-center text-uppercase">Rank</th>
+                                <th class="text-center text-uppercase">Lag</th>
+                                <th class="text-uppercase">Namn</th>
+                                <th class="text-center bg-warning"><strong>F</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 12px;">
+                            <% if(typeof(playerFights) !== 'undefined'){
+                                var i = 1;
+                                playerFights.forEach(function(player) { %>
+                                    <tr>
+                                        <td class="text-center"><%= i %></td>
+                                        <td><a href="/team/<%= player.get("player_team").get("team_id") %>" target="_blank"><img src="<%= player.get("player_team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                        <td><%= player.get("player_name") %></td>
+                                        <td class="text-center"><strong><%= player.get("player_fights") %></strong></td>
+                                    </tr>
+                                    <% i = i+1; 
+                                }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                    <small style="font-size: 10px;"><strong>F</strong>-Fights</small>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-md-6 -->
     </div>
     <!-- /.container -->
 
     <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/dist/js/vendor/jquery.min.js"></script>
+    <script src="..//dist/js/vendor/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/dist/js/flat-ui.min.js"></script>
+    <script src="..//dist/js/flat-ui.min.js"></script>
 
     <!-- jQuery Version 1.11.0 -->
     <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->

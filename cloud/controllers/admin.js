@@ -41,8 +41,25 @@ exports.loadMatchCreator = function(req, res) {
   teamQuery.include('nhlTeam');
   teamQuery.find().then(function(teams) {
     if (teams) {
-      res.render('creatematch', {
-        teams: teams
+      var Game = Parse.Object.extend('Game');
+      var gameQuery = new Parse.Query(Game);
+      gameQuery.descending('date');
+      gameQuery.find().then(function(games) {
+        if (games) {
+          res.render('creatematch', {
+            teams: teams,
+            games: games
+          });
+        } else {
+          res.render('hub', {
+            flash: 'Kunde int hitta na lag.'
+          });
+        }
+      },
+      function(error) {
+        console.error("Problem när matcherna skulle hämtas...");
+        console.error(error);
+        res.send(500, 'Failed finding games');
       });
     } else {
       res.render('hub', {
@@ -68,6 +85,8 @@ exports.createMatch = function(req, res) {
   var awayteam = req.body.awayteam;
   var comment = req.body.comment;
 
+  var round = req.body.round;
+
   var Team = Parse.Object.extend("Team");
 
   var homeTeamObj = new Team();
@@ -91,6 +110,8 @@ exports.createMatch = function(req, res) {
 
   game.set("comment", comment);
 
+  game.set("round", parseInt(round));
+
   var genId = Math.floor((Math.random() * 100000) + 1);
   game.set('game_id', genId.toString());
 
@@ -103,11 +124,158 @@ exports.createMatch = function(req, res) {
       teamQuery.include('nhlTeam');
       teamQuery.find().then(function(teams) {
         if (teams) {
-          var count = _.size(teams);
-          res.render('hub', {
+          var Game = Parse.Object.extend('Game');
+          var gameQuery = new Parse.Query(Game);
+          gameQuery.descending('date');
+          gameQuery.find().then(function(games) {
+            if (games) {
+              res.render('creatematch', {
+                teams: teams,
+                games: games
+              });
+            } else {
+              res.render('hub', {
+                flash: 'Kunde int hitta na lag.'
+              });
+            }
+          },
+          function(error) {
+            console.error("Problem när matcherna skulle hämtas...");
+            console.error(error);
+            res.send(500, 'Failed finding games');
+          });
+        } else {
+          res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
+        }
+      },
+      function(error) {
+        console.error('Error find teams to send to The Hub');
+        console.error(error);
+        res.render('hub', {flash: 'Problem när de anmälda lagen skulle hämtas.'});
+      });
+    } else {
+      console.error('The Game object was undefined.');
+      res.render('creatematch', {flash: "Det var problem på sidan. Pröva kontakta en administratör."});
+    }
+  }, function(error) {
+    // Show the error message and let the user try again
+    console.error('Error saving the new game, try again.');
+    console.error(error);
+    res.render('creatematch', {flash: error.message});
+  });
+};
+
+
+exports.loadFinalCreator = function(req, res) {
+  var Team = Parse.Object.extend('Team');
+  var teamQuery = new Parse.Query(Team);
+  teamQuery.equalTo('qualified', true);
+  teamQuery.ascending('team_name');
+  teamQuery.include('nhlTeam');
+  teamQuery.find().then(function(teams) {
+    if (teams) {
+      var Finals = Parse.Object.extend('Finals');
+      var finalGameQuery = new Parse.Query(Finals);
+      finalGameQuery.descending('date');
+      finalGameQuery.find().then(function(finals) {
+        if (finals) {
+          res.render('createfinal', {
             teams: teams,
-            count: count,
-            flashInfo: passedInfoVariable
+            finals: finals
+          });
+        } else {
+          res.render('hub', {
+            flash: 'Kunde int hitta na lag.'
+          });
+        }
+      },
+      function(error) {
+        console.error("Problem när lagen skulle hämtas...");
+        console.error(error);
+        res.send(500, 'Failed finding teams');
+      });
+    } else {
+      res.render('hub', {
+        flash: 'Kunde int hitta na lag.'
+      });
+    }
+  },
+  function(error) {
+    console.error("Problem när lagen skulle hämtas...");
+    console.error(error);
+    res.send(500, 'Failed finding teams');
+  });
+};
+
+// Create a new team with specified information.
+exports.createFinal = function(req, res) {
+  var game_date = req.body.game_date;
+  var game_time = req.body.game_time;
+
+  var date = new Date(game_date + " " + game_time);
+
+  var hometeam = req.body.hometeam;
+  var awayteam = req.body.awayteam;
+  var comment = req.body.comment;
+
+  var round = req.body.round;
+
+  var Team = Parse.Object.extend("Team");
+
+  var homeTeamObj = new Team();
+  homeTeamObj.id = hometeam;
+
+  var awayTeamObj = new Team();
+  awayTeamObj.id = awayteam;
+
+  var Finals = Parse.Object.extend("Finals");
+  var finalGame = new Finals();
+
+  finalGame.set("home", homeTeamObj);
+  finalGame.set("away", awayTeamObj);
+
+  finalGame.set("home_goals", parseInt("0"));
+  finalGame.set("away_goals", parseInt("0"));
+
+  finalGame.set("played", false);
+
+  finalGame.set("date", date);
+
+  finalGame.set("comment", comment);
+
+  finalGame.set("round", parseInt(round));
+
+  var genId = Math.floor((Math.random() * 100000) + 1);
+  finalGame.set('game_id', genId.toString());
+
+  finalGame.save().then(function(saved_game) {
+    if (saved_game) {
+      var passedInfoVariable = "Matchen med id: " + saved_game.get("game_id") + " är nu sparad!";
+      var Team = Parse.Object.extend('Team');
+      var teamQuery = new Parse.Query(Team);
+      teamQuery.descending('createdAt');
+      teamQuery.include('nhlTeam');
+      teamQuery.find().then(function(teams) {
+        if (teams) {
+          var Finals = Parse.Object.extend('Finals');
+          var finalGameQuery = new Parse.Query(Finals);
+          finalGameQuery.descending('date');
+          finalGameQuery.find().then(function(finals) {
+            if (finals) {
+              res.render('createfinal', {
+                teams: teams,
+                finals: finals
+              });
+            } else {
+              res.render('hub', {
+                flash: 'Kunde int hitta na lag.'
+              });
+            }
+          },
+          function(error) {
+            console.error("Problem när lagen skulle hämtas...");
+            console.error(error);
+            res.send(500, 'Failed finding teams');
           });
         } else {
           res.render('hub', {flash: 'Inga lag är ännu registrerade.'});

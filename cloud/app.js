@@ -33,6 +33,10 @@ app.locals.formatTime = function(time) {
   return momentSWE(time).locale('sv').format('dddd, MMMM D, YYYY');
 };
 
+app.locals.formatDateAndTime = function(time6) {
+  return momentSWE(time6).locale('sv').format('dddd, MMMM D, YYYY, HH:mm');
+};
+
 app.locals.justTime = function(time2) {
   return momentSWE(time2).locale('sv').format('HH:mm');
 };
@@ -73,5 +77,8 @@ app.get('/admin/tools', requireUser, adminController.tools);
 app.get('/admin/match', adminController.loadMatchCreator);
 app.put('/admin/match', adminController.createMatch);
  
+app.get('/admin/final', adminController.loadFinalCreator);
+app.put('/admin/final', adminController.createFinal);
+
 // Required for initializing Express app in Cloud Code.
 app.listen();
