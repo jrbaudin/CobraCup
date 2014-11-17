@@ -88,58 +88,60 @@
                         </span> <strong>Cobra Cup 2015</strong>
                         </h6>
                     </div>
-                    <div class="panel-body">              
-                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                            <thead style="font-size: 13px;">
-                                <tr>
-                                    <th class="text-center text-uppercase">Rank</th>
-                                    <th class="text-center text-uppercase">Lag</th>
-                                    <th class="text-uppercase">Namn</th>
-                                    <th class="text-uppercase">Div</th>
-                                    <th class="text-center text-uppercase">GP</th>
-                                    <th class="text-center text-uppercase">W</th>
-                                    <th class="text-center text-uppercase">L</th>
-                                    <th class="text-center text-uppercase bg-warning" style="font-size: 14px;"><strong>P</strong></th>
-                                    <th class="text-center text-uppercase">+/-</th>
-                                </tr>
-                            </thead>
-                            <tbody style="font-size: 12px;">
-                                <% if(typeof(standings) !== 'undefined'){
-                                    var i = 1;
-                                    standings.forEach(function(standing) { 
-                                        var groupName = "";
-                                        if(_.isEqual(standing.get("team").get("group"), "1")){
-                                            groupName = "Atlantic";
-                                        } else if(_.isEqual(standing.get("team").get("group"), "2")){
-                                            groupName = "Metropolitan";
-                                        } else if(_.isEqual(standing.get("team").get("group"), "3")){
-                                            groupName = "Central";
-                                        } else if(_.isEqual(standing.get("team").get("group"), "4")){
-                                            groupName = "Pacific";
-                                        }
-                                        var goalsFor = parseInt(standing.get("team").get("goals_for"));
-                                        var goalsAgainst = parseInt(standing.get("team").get("goals_against"));
-                                        var difference = goalsFor-goalsAgainst;
-                                        if(!difference){
-                                            difference = "-";
-                                        }
-                                        %>
-                                        <tr>
-                                            <td class="text-center"><%= i %></td>
-                                            <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
-                                            <td><%= standing.get("team").get("team_name") %></td>
-                                            <td><%= groupName %></td>
-                                            <td class="text-center"><%= standing.get("team").get("games_played") %></td>
-                                            <td class="text-center"><%= standing.get("team").get("wins") %></td>
-                                            <td class="text-center"><%= standing.get("team").get("losses") %></td>
-                                            <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
-                                            <td class="text-center"><strong><%= difference %></strong></td>
-                                        </tr>
-                                    <% i = i+1;                                         
-                                    }) %>
-                                <% } %>
-                            </tbody>
-                        </table>
+                    <div class="panel-body">
+                        <div class="table-responsive">              
+                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                                <thead style="font-size: 13px;">
+                                    <tr>
+                                        <th class="text-center text-uppercase">Rank</th>
+                                        <th class="text-center text-uppercase">Lag</th>
+                                        <th class="text-uppercase">Namn</th>
+                                        <th class="text-uppercase">Div</th>
+                                        <th class="text-center text-uppercase">GP</th>
+                                        <th class="text-center text-uppercase">W</th>
+                                        <th class="text-center text-uppercase">L</th>
+                                        <th class="text-center text-uppercase bg-warning" style="font-size: 14px;"><strong>P</strong></th>
+                                        <th class="text-center text-uppercase">+/-</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px;">
+                                    <% if(typeof(standings) !== 'undefined'){
+                                        var i = 1;
+                                        standings.forEach(function(standing) { 
+                                            var groupName = "";
+                                            if(_.isEqual(standing.get("team").get("group"), "1")){
+                                                groupName = "Atlantic";
+                                            } else if(_.isEqual(standing.get("team").get("group"), "2")){
+                                                groupName = "Metropolitan";
+                                            } else if(_.isEqual(standing.get("team").get("group"), "3")){
+                                                groupName = "Central";
+                                            } else if(_.isEqual(standing.get("team").get("group"), "4")){
+                                                groupName = "Pacific";
+                                            }
+                                            var goalsFor = parseInt(standing.get("team").get("goals_for"));
+                                            var goalsAgainst = parseInt(standing.get("team").get("goals_against"));
+                                            var difference = goalsFor-goalsAgainst;
+                                            if(!difference){
+                                                difference = "-";
+                                            }
+                                            %>
+                                            <tr>
+                                                <td class="text-center"><%= i %></td>
+                                                <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                                <td><%= standing.get("team").get("team_name") %></td>
+                                                <td><%= groupName %></td>
+                                                <td class="text-center"><%= standing.get("team").get("games_played") %></td>
+                                                <td class="text-center"><%= standing.get("team").get("wins") %></td>
+                                                <td class="text-center"><%= standing.get("team").get("losses") %></td>
+                                                <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
+                                                <td class="text-center"><strong><%= difference %></strong></td>
+                                            </tr>
+                                        <% i = i+1;                                         
+                                        }) %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
                         <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>P</strong>-Points</small>
                     </div>
                     <!-- /.panel-body -->
