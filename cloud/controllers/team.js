@@ -15,7 +15,7 @@ exports.getTeam = function(req, res) {
       var standingsQuery = new Parse.Query(Standings);
       standingsQuery.descending('points');
       standingsQuery.include(["team.nhlTeam"]);
-      standingsQuery.limit(5);
+      //standingsQuery.limit(5);
       standingsQuery.find().then(function(standings) {
         if (standings) {
           //console.log("Gotten the standings...");
