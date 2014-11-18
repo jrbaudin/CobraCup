@@ -10,3 +10,10 @@ body {
   color: rgb(241,102,57);
   padding-top: 70px;
 }
+
+.tile .tile-hot-trophy {
+  position: absolute;
+  display: block;
+  width: 41px;
+  }
+  
