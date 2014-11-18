@@ -128,6 +128,37 @@ exports.create = function(req, res) {
             standing.set('team', saved_team);
             standing.set('points', "0");
             standing.save().then(function(standing) {
+              var captain_name = saved_team.get("captain_name");
+              var lieutenant_name = saved_team.get("lieutenant_name");
+
+              var PlayerStats = Parse.Object.extend("PlayerStats");
+
+              var playerStatCaptain = new PlayerStats();
+
+              playerStatCaptain.set('player_name', captain_name);
+              playerStatCaptain.set('player_team', saved_team);
+              playerStatCaptain.set('player_goals', "0");
+              playerStatCaptain.set('player_fights', "0");
+              playerStatCaptain.save().then(function(playerStat) {
+                console.log("Successfully saved CAPTAIN player stat object");
+              }, function(error) {
+                console.error("Failed saving CAPTAIN player stat object");
+                console.error(error);
+              });
+
+              var playerStatLieutenant = new PlayerStats();
+
+              playerStatLieutenant.set('player_name', lieutenant_name);
+              playerStatLieutenant.set('player_team', saved_team);
+              playerStatLieutenant.set('player_goals', "0");
+              playerStatLieutenant.set('player_fights', "0");
+              playerStatLieutenant.save().then(function(playerStat) {
+                console.log("Successfully saved LIEUTENANT player stat object");
+              }, function(error) {
+                console.error("Failed saving LIEUTENANT player stat object");
+                console.error(error);
+              });
+
               var passedInfoVariable = "Ditt lag är nu sparat. Lycka till!";
               var Team = Parse.Object.extend('Team');
               var teamQuery = new Parse.Query(Team);
