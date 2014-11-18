@@ -3894,6 +3894,13 @@ fieldset[disabled] .input-group-btn .btn-default.active {
   display: block;
   width: 82px;
   }
+
+.tile .tile-hot-trophy {
+  position: absolute;
+  display: block;
+  width: 41px;
+  }
+
 .tile p {
   margin-bottom: 33px;
   font-size: 15px;
