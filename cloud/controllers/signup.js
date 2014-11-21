@@ -62,10 +62,12 @@ exports.create = function(req, res) {
   var captain_name = req.body.captain_name;
   var captain_email = req.body.captain_email;
   var captain_telephone = req.body.captain_telephone;
+  var captain_gamertag = req.body.captain_gamertag;
 
   var lieutenant_name = req.body.lieutenant_name;
   var lieutenant_email = req.body.lieutenant_email;
   var lieutenant_telephone = req.body.lieutenant_telephone;
+  var lieutenant_gamertag = req.body.lieutenant_gamertag;
 
   var team_name = req.body.team_name;
   var team_motto = req.body.team_motto;
@@ -89,6 +91,12 @@ exports.create = function(req, res) {
   team.set('lieutenant_name', lieutenant_name);
   team.set('lieutenant_email', lieutenant_email);
   team.set('lieutenant_telephone', lieutenant_telephone);
+
+  if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
+  if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
+
+  team.set('captain_gamertag', captain_gamertag);
+  team.set('lieutenant_gamertag', lieutenant_gamertag);
 
   team.set('team_name', team_name);
   team.set('team_motto', team_motto);
