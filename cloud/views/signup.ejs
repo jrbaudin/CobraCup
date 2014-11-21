@@ -66,7 +66,7 @@
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-md-12">
             <% if(typeof(flash) !== 'undefined'){ %>
                 <div class="alert alert-danger alert-dismissible" role="alert">
@@ -87,22 +87,29 @@
                                 <div class="form-group col-md-4">
                                     <label for="captain_name" class="control-label sr-only">Namn</label>
                                     <div class="input-group">
-                                        <div class="input-group-addon"><span class="fui-user"></span></div>
-                                        <input type="text" class="form-control " id="captain_name" placeholder="Namn" name="captain_name" required autofocus>
+                                        <div class="input-group-addon"><span class="fui-user fa-fw"></span></div>
+                                        <input type="text" class="form-control" id="captain_name" placeholder="Namn" name="captain_name" required autofocus>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="captain_email" class="control-label sr-only">Epost</label>
                                     <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                        <div class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></div>
                                         <input type="email" class="form-control" id="captain_email" placeholder="Epost" name="captain_email" required>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="captain_telephone" class="control-label sr-only">Telefon</label>
                                     <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                        <div class="input-group-addon"><i class="fa fa-phone fa-fw"></i></div>
                                         <input type="text" class="form-control" id="captain_telephone" placeholder="Telefon" name="captain_telephone" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="captain_gamertag" class="control-label sr-only">Xbox Live Gamertag</label>
+                                    <div class="input-group" title="Ej obligatorisk">
+                                        <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
+                                        <input type="text" class="form-control" id="captain_gamertag" placeholder="Xbox Gamertag" name="captain_gamertag">
                                     </div>
                                 </div>
                             </div>
@@ -111,22 +118,29 @@
                                 <div class="form-group col-md-4">
                                     <label for="lieutenant_name" class="control-label sr-only">Namn</label>
                                     <div class="input-group">
-                                        <div class="input-group-addon"><span class="fui-user"></span></div>
+                                        <div class="input-group-addon"><span class="fui-user fa-fw"></span></div>
                                         <input type="text" class="form-control" id="lieutenant_name" placeholder="Namn" name="lieutenant_name" required>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="lieutenant_email" class="control-label sr-only">Epost</label>
                                     <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                        <div class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></div>
                                         <input type="email" class="form-control" id="lieutenant_email" placeholder="Epost" name="lieutenant_email" required>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="lieutenant_telephone" class="control-label sr-only">Telefon</label>
                                     <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                        <div class="input-group-addon"><i class="fa fa-phone fa-fw"></i></div>
                                         <input type="text" class="form-control" id="lieutenant_telephone" placeholder="Telefon" name="lieutenant_telephone" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="lieutenant_gamertag" class="control-label sr-only">Xbox Live Gamertag</label>
+                                    <div class="input-group" title="Ej obligatorisk">
+                                        <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
+                                        <input type="text" class="form-control" id="lieutenant_gamertag" placeholder="Xbox Gamertag" name="lieutenant_gamertag">
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +148,7 @@
                             <div class="form-group">
                                 <label for="team_name" class="control-label sr-only">Lagnamn</label>
                                 <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-flag"></i></div>
+                                    <div class="input-group-addon"><i class="fa fa-flag fa-fw"></i></div>
                                     <input type="text" class="form-control" id="team_name" placeholder="Lagnamn" name="team_name" required>
                                 </div>
                             </div>
@@ -142,7 +156,7 @@
                             <div class="form-group">
                                 <label for="team_motto" class="control-label sr-only">Lagets motto</label>
                                 <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
+                                    <div class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></div>
                                     <input type="text" class="form-control" id="team_motto" placeholder="Lagets motto" name="team_motto" required>
                                 </div>
                             </div>
