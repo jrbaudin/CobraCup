@@ -30,6 +30,31 @@ app.locals.Mailgun = Mailgun;
 app.locals.formatTime = function(time) {
   return moment(time).locale('sv').format('LLLL');
 };
+
+app.locals.formatDateAndTime = function(time6) {
+  return momentSWE(time6).locale('sv').format('dddd, MMMM D, YYYY, HH:mm');
+};
+
+app.locals.justTime = function(time2) {
+  return momentSWE(time2).locale('sv').format('HH:mm');
+};
+
+app.locals.getDate = function(time3) {
+  return momentSWE(time3).format('L');
+};
+
+app.locals.getDayText = function(time4) {
+  return momentSWE(time4).locale('sv').format('ddd');
+};
+
+app.locals.getDayAndDateText = function(time5) {
+  return momentSWE(time5).locale('sv').format('ddd, D/MM');
+};
+
+app.locals.getFirstname = function(fullname) {
+	var aName = fullname.split(' ');
+	return _.first(aName);
+};
  
 // Show homepage
 app.get('/', hubController.index); 
