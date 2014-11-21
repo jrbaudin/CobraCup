@@ -53,6 +53,11 @@ app.locals.getDayAndDateText = function(time5) {
   return momentSWE(time5).locale('sv').format('ddd, D/MM');
 };
 
+app.locals.getFirstname = function(fullname) {
+	var aName = fullname.split(' ');
+	return _.first(aName);
+};
+
 // Show homepage
 app.get('/', hubController.index); 
 
