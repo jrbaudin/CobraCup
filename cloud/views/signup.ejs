@@ -80,9 +80,9 @@
             <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
                 <div class="panel">
                     <div class="panel-body">              
-                        <h4>Anmäl ditt lag till Cobra Cup 2015</h4>
+                        <h4>Anmäl ditt lag till Cobra Cup 2015 <small><i class="fa fa-asterisk"></i> = obligatoriskt</small></h4>
                         <form class="form" role="form" method="post">
-                            <label>Kapten</label>
+                            <label><small><i class="fa fa-asterisk"></i></small> Kapten</label>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="captain_name" class="control-label sr-only">Namn</label>
@@ -98,22 +98,15 @@
                                         <input type="email" class="form-control" id="captain_email" placeholder="Epost" name="captain_email" required>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-4">
                                     <label for="captain_telephone" class="control-label sr-only">Telefon</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-phone fa-fw"></i></div>
                                         <input type="text" class="form-control" id="captain_telephone" placeholder="Telefon" name="captain_telephone" required>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label for="captain_gamertag" class="control-label sr-only">Xbox Live Gamertag</label>
-                                    <div class="input-group" title="Ej obligatorisk">
-                                        <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
-                                        <input type="text" class="form-control" id="captain_gamertag" placeholder="Xbox Gamertag" name="captain_gamertag">
-                                    </div>
-                                </div>
                             </div>
-                            <label>Assisterande</label>
+                            <label><small><i class="fa fa-asterisk"></i></small> Assisterande</label>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="lieutenant_name" class="control-label sr-only">Namn</label>
@@ -129,22 +122,15 @@
                                         <input type="email" class="form-control" id="lieutenant_email" placeholder="Epost" name="lieutenant_email" required>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-4">
                                     <label for="lieutenant_telephone" class="control-label sr-only">Telefon</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-phone fa-fw"></i></div>
                                         <input type="text" class="form-control" id="lieutenant_telephone" placeholder="Telefon" name="lieutenant_telephone" required>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label for="lieutenant_gamertag" class="control-label sr-only">Xbox Live Gamertag</label>
-                                    <div class="input-group" title="Ej obligatorisk">
-                                        <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
-                                        <input type="text" class="form-control" id="lieutenant_gamertag" placeholder="Xbox Gamertag" name="lieutenant_gamertag">
-                                    </div>
-                                </div>
                             </div>
-                            <label>Laget</label>
+                            <label><small><i class="fa fa-asterisk"></i></small> Laget</label>
                             <div class="form-group">
                                 <label for="team_name" class="control-label sr-only">Lagnamn</label>
                                 <div class="input-group">
@@ -162,7 +148,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6"> 
-                                <label for="nhlTeam">Spelar som</label>
+                                <label for="nhlTeam"><small><i class="fa fa-asterisk"></i></small> Spelar som</label>
                                 <% if(typeof(nhlteams) !== 'undefined'){ %>
                                     <select class="form-control select select-inverse select-block mbl" id="nhlTeam" name="nhlTeam">
                                         <optgroup label="NHL">
@@ -178,7 +164,7 @@
                                 <% } %>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label id="levelLbl" for="level" data-toggle="tooltip" data-placement="right" title="" data-original-title="Välj den nivå som ert lag är på. Rookie = Nybörjare, Pro = Spelar då och då, All-Star = Spelar NHL minst en gång per vecka.">Nivå</label>
+                                    <label id="levelLbl" for="level" data-toggle="tooltip" data-placement="right" title="" data-original-title="Välj den nivå som ert lag är på. Rookie = Nybörjare, Pro = Spelar då och då, All-Star = Spelar NHL minst en gång per vecka."><small><i class="fa fa-asterisk"></i></small> Nivå</label>
                                     <select class="form-control select select-warning select-block mbl" id="level" name="level">
                                         <option value="1">Rookie</option>
                                         <option value="2" selected>Pro</option>
@@ -189,6 +175,22 @@
                             <div class="form-group">
                                 <label>Kommentar</label>
                                 <textarea class="form-control input-sm" rows="3" name="comment"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label for="captain_gamertag" class="control-label"><strong>Kapten</strong> <span style="color: rgb(16,124,16);">Xbox Live Gamertag</span></label>
+                                    <div class="input-group" title="Ej obligatorisk">
+                                        <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
+                                        <input type="text" class="form-control" id="captain_gamertag" placeholder="Gamertag" name="captain_gamertag">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="lieutenant_gamertag" class="control-label"><strong>Assisterande</strong> <span style="color: rgb(16,124,16);">Xbox Live Gamertag</span></label>
+                                    <div class="input-group" title="Ej obligatorisk">
+                                        <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
+                                        <input type="text" class="form-control" id="lieutenant_gamertag" placeholder="Gamertag" name="lieutenant_gamertag">
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="form-group">
