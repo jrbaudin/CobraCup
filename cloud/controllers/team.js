@@ -37,16 +37,16 @@ exports.getTeam = function(req, res) {
           gameQuery.find().then(function(games) {
             if (games) {
               //console.log("Gotten the games...");
-              var latestGameQuery = Parse.Query.or(homeTeamQuery, awayTeamQuery);
-              latestGameQuery.descending("date");
-              latestGameQuery.equalTo('played', true);
-              latestGameQuery.first().then(function(lastPlayedGame) {
-                if (lastPlayedGame) {
-                  var allTeamsQuery = new Parse.Query(Team);
-                  allTeamsQuery.descending('team_name');
-                  allTeamsQuery.include('nhlTeam');
-                  allTeamsQuery.find().then(function(teams) {
-                    if (teams) {
+              var allTeamsQuery = new Parse.Query(Team);
+              allTeamsQuery.descending('team_name');
+              allTeamsQuery.include('nhlTeam');
+              allTeamsQuery.find().then(function(teams) {
+                if (teams) {
+                  var latestGameQuery = Parse.Query.or(homeTeamQuery, awayTeamQuery);
+                  latestGameQuery.descending("date");
+                  latestGameQuery.equalTo('played', true);
+                  latestGameQuery.first().then(function(lastPlayedGame) {
+                    if (lastPlayedGame) {
                       res.render('team', {
                         teamObj: theTeam,
                         standings: standings,
@@ -59,18 +59,17 @@ exports.getTeam = function(req, res) {
                         teamObj: theTeam,
                         standings: standings,
                         games: games,
-                        lastPlayedGame: lastPlayedGame,
+                        teams: teams,
                         flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                       });
                     }
                   },
-                  function(error) {
-                    console.error('Error when trying to get all teams');
+                  function(error){
+                    console.error('Error when trying to get the last played game');
                     console.error(error);
                     res.render('team', {
                       teamObj: theTeam,
                       standings: standings,
-                      games: games,
                       flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                     });
                   });
@@ -83,12 +82,13 @@ exports.getTeam = function(req, res) {
                   });
                 }
               },
-              function(error){
-                console.error('Error when trying to get the last played game');
+              function(error) {
+                console.error('Error when trying to get all teams');
                 console.error(error);
                 res.render('team', {
                   teamObj: theTeam,
                   standings: standings,
+                  games: games,
                   flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                 });
               });

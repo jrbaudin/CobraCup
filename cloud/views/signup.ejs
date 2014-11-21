@@ -66,7 +66,7 @@
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-    <div class="container-fluid">
+    <div class="container">
         <div class="col-md-12">
             <% if(typeof(flash) !== 'undefined'){ %>
                 <div class="alert alert-danger alert-dismissible" role="alert">
@@ -80,9 +80,9 @@
             <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
                 <div class="panel">
                     <div class="panel-body">              
-                        <h4>Anmäl ditt lag till Cobra Cup 2015 <small><i class="fa fa-asterisk"></i> = obligatoriskt</small></h4>
+                        <h4>Anmäl ditt lag till Cobra Cup 2015 <small><i class="fa fa-beer"></i> = obligatoriskt</small></h4>
                         <form class="form" role="form" method="post">
-                            <label><small><i class="fa fa-asterisk"></i></small> Kapten</label>
+                            <label><small><i class="fa fa-beer"></i></small> Kapten</label>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="captain_name" class="control-label sr-only">Namn</label>
@@ -106,7 +106,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <label><small><i class="fa fa-asterisk"></i></small> Assisterande</label>
+                            <label><small><i class="fa fa-beer"></i></small> Assisterande</label>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="lieutenant_name" class="control-label sr-only">Namn</label>
@@ -130,7 +130,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <label><small><i class="fa fa-asterisk"></i></small> Laget</label>
+                            <label><small><i class="fa fa-beer"></i></small> Laget</label>
                             <div class="form-group">
                                 <label for="team_name" class="control-label sr-only">Lagnamn</label>
                                 <div class="input-group">
@@ -148,7 +148,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6"> 
-                                <label for="nhlTeam"><small><i class="fa fa-asterisk"></i></small> Spelar som</label>
+                                <label for="nhlTeam"><small><i class="fa fa-beer"></i></small> Spelar som</label>
                                 <% if(typeof(nhlteams) !== 'undefined'){ %>
                                     <select class="form-control select select-inverse select-block mbl" id="nhlTeam" name="nhlTeam">
                                         <optgroup label="NHL">
@@ -164,7 +164,7 @@
                                 <% } %>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label id="levelLbl" for="level" data-toggle="tooltip" data-placement="right" title="" data-original-title="Välj den nivå som ert lag är på. Rookie = Nybörjare, Pro = Spelar då och då, All-Star = Spelar NHL minst en gång per vecka."><small><i class="fa fa-asterisk"></i></small> Nivå</label>
+                                    <label id="levelLbl" for="level" data-toggle="tooltip" data-placement="right" title="" data-original-title="Välj den nivå som ert lag är på. Rookie = Nybörjare, Pro = Spelar då och då, All-Star = Spelar NHL minst en gång per vecka."><small><i class="fa fa-beer"></i></small> Nivå</label>
                                     <select class="form-control select select-warning select-block mbl" id="level" name="level">
                                         <option value="1">Rookie</option>
                                         <option value="2" selected>Pro</option>

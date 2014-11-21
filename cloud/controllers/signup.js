@@ -114,6 +114,9 @@ exports.create = function(req, res) {
   team.set('lieutenant_goals', "0");
   team.set('lieutenant_fights', "0");
 
+  team.set('qualified', false);
+  team.set('champion', false);
+
   var pass = Math.random().toString(36).slice(-8);
   team.set('password', pass);
 

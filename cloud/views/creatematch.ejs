@@ -93,12 +93,12 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-4"> 
+                                <div class="form-group col-md-5"> 
                                     <label for="hometeam" class="sr-only">Hemma</label>
                                     <% if(typeof(teams) !== 'undefined'){ %>
                                         <select class="form-control select select-inverse select-block mbl" id="hometeam" name="hometeam">
                                             <% teams.forEach(function(team) { %>
-                                                <option value="<%= team.id %>"><%= team.get("team_name") %></option>
+                                                <option value="<%= team.id %>"><%= team.get("team_name") %> (Group: <%= team.get("group") %>)</option>
                                             <% }) %>
                                         </select>
                                         <% 
@@ -106,15 +106,15 @@
                                         <p><em>Problem att ladda lediga lag.</em></p>
                                     <% } %>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <p class="lead text-center">.VS</p>
                                 </div>
-                                <div class="form-group col-md-4"> 
+                                <div class="form-group col-md-5"> 
                                     <label for="awayteam" class="sr-only">Borta</label>
                                     <% if(typeof(teams) !== 'undefined'){ %>
                                         <select class="form-control select select-inverse select-block mbl" id="awayteam" name="awayteam">
                                             <% teams.forEach(function(team) { %>
-                                                <option value="<%= team.id %>"><%= team.get("team_name") %></option>
+                                                <option value="<%= team.id %>"><%= team.get("team_name") %> (Group: <%= team.get("group") %>)</option>
                                             <% }) %>
                                         </select>
                                         <% 
@@ -122,7 +122,9 @@
                                         <p><em>Problem att ladda lediga lag.</em></p>
                                     <% } %>
                                 </div>
-                                <div class="form-group col-md-3"> 
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6"> 
                                     <label for="round" class="sr-only">Runda</label>
                                     <select class="form-control select select-primary select-block mbl" id="round" name="round">
                                         <option value="1">Runda 1</option>
@@ -139,11 +141,20 @@
                                         <option value="12">Runda 12</option>
                                     </select>
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label for="group" class="sr-only">Grupp</label>
+                                    <select class="form-control select select-primary select-block mbl" id="group" name="group">
+                                        <option value="1">Atlantic (1)</option>
+                                        <option value="2">Metropolitan (2)</option>
+                                        <option value="3">Central (3)</option>
+                                        <option value="4">Pacific (4)</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label>Kommentar</label>
-                                    <textarea class="form-control input-sm" rows="3" name="comment"></textarea>
+                                    <textarea class="form-control input-sm" rows="3" name="comment" required></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -169,6 +180,7 @@
                                 <tr>
                                     <th class="text-center text-uppercase"></th>
                                     <th class="text-uppercase">Id</th>
+                                    <th class="text-uppercase">Grupp</th>
                                     <th class="text-uppercase">Runda</th>
                                     <th class="text-uppercase">Spelad</th>
                                     <th class="text-uppercase">Datum</th>
@@ -188,6 +200,7 @@
                                         <tr>
                                             <td class="text-center"><%= i %></td>
                                             <td><%= game.get("game_id") %></td>
+                                            <td><%= game.get("group") %></td>
                                             <td><%= game.get("round") %></td>
                                             <td><%= played %></td>
                                             <td class="text-capitalize"><%= formatDateAndTime(game.get("date")) %></td>

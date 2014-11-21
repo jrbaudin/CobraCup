@@ -43,7 +43,7 @@ exports.loadMatchCreator = function(req, res) {
     if (teams) {
       var Game = Parse.Object.extend('Game');
       var gameQuery = new Parse.Query(Game);
-      gameQuery.descending('date');
+      gameQuery.ascending('round');
       gameQuery.find().then(function(games) {
         if (games) {
           res.render('creatematch', {
@@ -86,6 +86,7 @@ exports.createMatch = function(req, res) {
   var comment = req.body.comment;
 
   var round = req.body.round;
+  var group = req.body.group;
 
   var Team = Parse.Object.extend("Team");
 
@@ -105,12 +106,14 @@ exports.createMatch = function(req, res) {
   game.set("away_goals", "0");
 
   game.set("played", false);
+  game.set("result_submitted", false);
 
   game.set("date", date);
 
   game.set("comment", comment);
 
   game.set("round", parseInt(round));
+  game.set("group", parseInt(group));
 
   var genId = Math.floor((Math.random() * 100000) + 1);
   game.set('game_id', genId.toString());
@@ -126,7 +129,7 @@ exports.createMatch = function(req, res) {
         if (teams) {
           var Game = Parse.Object.extend('Game');
           var gameQuery = new Parse.Query(Game);
-          gameQuery.descending('date');
+          gameQuery.ascending('round');
           gameQuery.find().then(function(games) {
             if (games) {
               res.render('creatematch', {
