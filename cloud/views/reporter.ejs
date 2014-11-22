@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+ 
+    <title>Rapportera - Cobra Cup 2015</title>
+ 
+    <!-- Latest compiled and minified CSS -->
+    <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
+
+    <!-- Optional theme -->
+    <!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
+    <link rel="stylesheet" href="../dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="../stylesheets/style.css">
+
+    <link rel="icon" type="image/png" href="http://media.cobracup.se/2014/11/favicon.png" />
+ 
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+ 
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+ 
+</head>
+ 
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">The Hub</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="/">Lag</a></li>
+                <li><a href="/signup">Anmäl lag</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="/stat/league">Ligan</a></li>
+                    <li><a href="/stat/divisions">Divisioner</a></li>                  
+                    <li><a href="/stat/playerstats">Spelarstatistik</a></li>
+                  </ul>
+                </li>
+                <li><a href="http://cobracup.se" target="_blank">cobracup.se</a></li>
+              </ul>
+              <% if(typeof(count) !== 'undefined'){ %>
+                <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
+              <% } %>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    <div class="container">
+        <div class="col-md-12">
+            <% if(typeof(flash) !== 'undefined'){ %>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <strong>Fel!</strong> <%= flash %>.
+                </div>  
+            <% } %>
+            <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
+                <div class="panel">
+                    <div class="panel-body">              
+                        <h4 class="text-center text-uppercase">Skapa match</h4>
+                        <form class="form" role="form" method="post">
+                            <div class="row col-md-6 col-md-offset-3">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label" for="game_date">Matchdatum</label>
+                                    <input class="form-control input-sm" type="date" name="game_date" id="game_date" value="2014-12-22" title="Grafisk datumväljare stöds inte i denna browser (Firefox eller Internet Explorer). Använd Chrome eller annan browser med stöd för dessa HTML5-funktioner eller skriv manuellt in med följande format: yyyy-mm-dd t.ex. 2014-12-22">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label" for="game_time">Matchtid</label>
+                                    <input class="form-control input-sm" type="time" name="game_time" id="game_time" value="16:00" title="Grafisk tidväljaare stöds inte i denna browser (Firefox eller Internet Explorer). Använd Chrome eller annan browser med stöd för dessa HTML5-funktioner eller skriv manuellt in med följande format: hh:mm t.ex. 07:10">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-5"> 
+                                    <label for="hometeam" class="sr-only">Hemma</label>
+                                    <% if(typeof(teams) !== 'undefined'){ %>
+                                        <select class="form-control select select-inverse select-block mbl" id="hometeam" name="hometeam">
+                                            <% teams.forEach(function(team) { %>
+                                                <option value="<%= team.id %>"><%= team.get("team_name") %> (Group: <%= team.get("group") %>)</option>
+                                            <% }) %>
+                                        </select>
+                                        <% 
+                                    } else { %>
+                                        <p><em>Problem att ladda lediga lag.</em></p>
+                                    <% } %>
+                                </div>
+                                <div class="col-md-2">
+                                    <p class="lead text-center">.VS</p>
+                                </div>
+                                <div class="form-group col-md-5"> 
+                                    <label for="awayteam" class="sr-only">Borta</label>
+                                    <% if(typeof(teams) !== 'undefined'){ %>
+                                        <select class="form-control select select-inverse select-block mbl" id="awayteam" name="awayteam">
+                                            <% teams.forEach(function(team) { %>
+                                                <option value="<%= team.id %>"><%= team.get("team_name") %> (Group: <%= team.get("group") %>)</option>
+                                            <% }) %>
+                                        </select>
+                                        <% 
+                                    } else { %>
+                                        <p><em>Problem att ladda lediga lag.</em></p>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6"> 
+                                    <label for="round" class="sr-only">Runda</label>
+                                    <select class="form-control select select-primary select-block mbl" id="round" name="round">
+                                        <option value="1">Runda 1</option>
+                                        <option value="2">Runda 2</option>
+                                        <option value="3">Runda 3</option>
+                                        <option value="4">Runda 4</option>
+                                        <option value="5">Runda 5</option>
+                                        <option value="6">Runda 6</option>
+                                        <option value="7">Runda 7</option>
+                                        <option value="8">Runda 8</option>
+                                        <option value="9">Runda 9</option>
+                                        <option value="10">Runda 10</option>
+                                        <option value="11">Runda 11</option>
+                                        <option value="12">Runda 12</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="group" class="sr-only">Grupp</label>
+                                    <select class="form-control select select-primary select-block mbl" id="group" name="group">
+                                        <option value="1">Atlantic (1)</option>
+                                        <option value="2">Metropolitan (2)</option>
+                                        <option value="3">Central (3)</option>
+                                        <option value="4">Pacific (4)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <label>Kommentar</label>
+                                    <textarea class="form-control input-sm" rows="3" name="comment" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type='hidden' name='_method' value='put' />
+                                <button type="submit" class="btn btn-hg btn-primary btn-wide btn-block text-uppercase">Skapa match</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <strong>Gruppmatcher</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">              
+                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th class="text-center text-uppercase"></th>
+                                    <th class="text-uppercase">Id</th>
+                                    <th class="text-uppercase">Grupp</th>
+                                    <th class="text-uppercase">Runda</th>
+                                    <th class="text-uppercase">Spelad</th>
+                                    <th class="text-uppercase">Datum</th>
+                                    <th class="text-uppercase">Kommentar</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if(typeof(games) !== 'undefined'){
+                                    var i = 1;
+                                    games.forEach(function(game) { 
+                                        var played = "Nej";
+                                        if(game.get("played")){
+                                            played = "Ja";
+                                        }
+
+                                        %>
+                                        <tr>
+                                            <td class="text-center"><%= i %></td>
+                                            <td><%= game.get("game_id") %></td>
+                                            <td><%= game.get("group") %></td>
+                                            <td><%= game.get("round") %></td>
+                                            <td><%= played %></td>
+                                            <td class="text-capitalize"><%= formatDateAndTime(game.get("date")) %></td>
+                                            <td><%= game.get("comment") %></td>
+                                        </tr>
+                                    <% i = i+1;                                         
+                                    }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.container -->
+
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../dist/js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../dist/js/flat-ui.min.js"></script>
+
+    <!-- jQuery Version 1.11.0 -->
+    <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+    <script>
+        $("select").select2({dropdownCssClass: 'dropdown-inverse'});
+    </script>
+</body>
+ 
+</html>
