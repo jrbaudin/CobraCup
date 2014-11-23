@@ -72,8 +72,8 @@ app.get('/stat/league', statController.showLeague);
 app.get('/stat/divisions', statController.showDivisions);
 app.get('/stat/playerstats', statController.showPlayerStats);
 
-app.get('/stat/match/:gameid', statController.loadMatchReporter);
-app.put('/stat/match/:gameid', statController.saveMatchResult);
+app.get('/stat/game/:gameid', statController.loadMatchReporter);
+app.put('/stat/game/:gameid', statController.saveMatchResult);
 
 app.get('/admin/login', adminController.index);
 app.post('/admin/login', adminController.login);

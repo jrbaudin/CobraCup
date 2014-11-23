@@ -93,10 +93,11 @@ exports.loadMatchReporter = function(req, res) {
   var Game = Parse.Object.extend('Game');
   var gameQuery = new Parse.Query(Game);
   gameQuery.equalTo('game_id', req.params.gameid);
-  gameQuery.include('nhlTeam');
+  gameQuery.include('result');
   gameQuery.find().then(function(game) {
     if (game) {
       console.log("Gotten the game...");
+      var Team = Parse.Object.extend('Team');
       var allTeamsQuery = new Parse.Query(Team);
       allTeamsQuery.descending('team_name');
       allTeamsQuery.include('nhlTeam');
