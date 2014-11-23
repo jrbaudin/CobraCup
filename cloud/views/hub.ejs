@@ -102,7 +102,7 @@
             <div class="row demo-tiles">
             <%
               teams.forEach(function(team) { %>
-                  <div class="col-md-3 col-lg-2">
+                  <div class="col-md-3 col-lg-3">
                     <div class="tile tile-hot">
                       <% if(team.get("champion")) { %>
                         <img id="championIcon" name="championIcon" src="img/trophy.png" alt="Trophy" class="tile-hot-trophy" title="Vinnare Cobra Cup 2014">
@@ -115,7 +115,7 @@
                         <img src="dist/img/icons/svg/ribbon_allstar.svg" alt="All Star ribbon" class="tile-hot-ribbon">
                       <% } %>
                       <img src="<%= team.get("nhlTeam").get("logo").url() %>" alt="Team logo" class="tile-image big-illustration img-circle">
-                      <h3 class="tile-title"><%= team.get("team_name") %></h3>
+                      <h3 class="tile-title text-uppercase"><%= team.get("team_name") %></h3>
                       <p><%= team.get("nhlTeam").get("name") %></p>
                       <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>">Team Corner</a>
                     </div>
