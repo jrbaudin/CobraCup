@@ -87,9 +87,15 @@ exports.create = function(req, res) {
   team.set('captain_email', captain_email);
   team.set('captain_telephone', captain_telephone);
 
+  var capId = Math.floor((Math.random() * 100000) + 1);
+  team.set('captain_id', capId.toString());
+
   team.set('lieutenant_name', lieutenant_name);
   team.set('lieutenant_email', lieutenant_email);
   team.set('lieutenant_telephone', lieutenant_telephone);
+
+  var lieuId = Math.floor((Math.random() * 100000) + 1);
+  team.set('lieutenant_id', lieuId.toString());
 
   if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
   if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
@@ -137,7 +143,7 @@ exports.create = function(req, res) {
             var standing = new Standing();
 
             standing.set('team', saved_team);
-            standing.set('points', "0");
+            standing.set('points', 0);
             standing.save().then(function(standing) {
               var captain_name = saved_team.get("captain_name");
               var lieutenant_name = saved_team.get("lieutenant_name");
@@ -147,6 +153,7 @@ exports.create = function(req, res) {
               var playerStatCaptain = new PlayerStats();
 
               playerStatCaptain.set('player_name', captain_name);
+              playerStatCaptain.set('player_id', capId.toString());
               playerStatCaptain.set('player_team', saved_team);
               playerStatCaptain.set('player_goals', "0");
               playerStatCaptain.set('player_fights', "0");
@@ -160,6 +167,7 @@ exports.create = function(req, res) {
               var playerStatLieutenant = new PlayerStats();
 
               playerStatLieutenant.set('player_name', lieutenant_name);
+              playerStatLieutenant.set('player_id', lieuId.toString());
               playerStatLieutenant.set('player_team', saved_team);
               playerStatLieutenant.set('player_goals', "0");
               playerStatLieutenant.set('player_fights', "0");

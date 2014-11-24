@@ -89,22 +89,22 @@
             })
             %>
             <div class="col-md-12">
-                <h2 class="text-center text-uppercase"><%= hometeam.get("team_name") %> vs. <%= awayteam.get("team_name") %></h2>
+                <h2 class="text-center text-uppercase"><%= hometeam.get("team_name") %> <span style="color: #F39C12;">vs.</span> <%= awayteam.get("team_name") %></h2>
             </div>
             <div class="col-md-8 col-md-offset-2">
-                <p class="text-center"><small>Runda #<%= game[0].get("round") %> Grupp #<%= game[0].get("group") %></small></p>
+                <p class="text-center"><small>Runda #<strong><%= game[0].get("round") %></strong> Grupp #<strong><%= game[0].get("group") %></strong></small></p>
                 <form class="form" role="form" method="post">
                     <div class="panel">
                         <div class="panel-body" style="margin-bottom: 0;">              
                             <div class="col-md-6 col-md-offset-3" style="margin-bottom: 0;">
-                                <div class="form-group col-md-5" style="margin-bottom: 0;">
-                                    <input type="text" class="form-control text-center" id="home_goals" placeholder="Hemma" value="<%= game[0].get("result").get("home_goals") %>">
+                                <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
+                                    <input type="text" class="form-control text-center" id="home_goals" name="home_goals" placeholder="Hemma" value="<%= game[0].get("result").get("home_goals") %>" style="font-weight: bold;">
                                 </div>
-                                <div class="col-md-2" style="margin-bottom: 0;">
+                                <div class="col-md-2 col-xs-2" style="margin-bottom: 0;">
                                     <p class="lead text-uppercase text-center">-</p>
                                 </div>
-                                <div class="form-group col-md-5" style="margin-bottom: 0;">
-                                    <input type="text" class="form-control text-center" id="away_goals" placeholder="Borta" value="<%= game[0].get("result").get("away_goals") %>">
+                                <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
+                                    <input type="text" class="form-control text-center" id="away_goals" name="away_goals" placeholder="Borta" value="<%= game[0].get("result").get("away_goals") %>" style="font-weight: bold;">
                                 </div>
                             </div>
                         </div>
@@ -114,13 +114,13 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-5"> 
+                                <div class="col-md-5 col-xs-6"> 
                                     <p style="margin-bottom: 0;"><small><strong>Spelare</strong></small></p>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 col-xs-3">
                                     <p class="text-center" style="margin-bottom: 0;"><small><strong>Mål</strong></small></p>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 col-xs-3">
                                     <p class="text-center" style="margin-bottom: 0;"><small><strong>Fajter</strong></small></p>
                                 </div>
                             </div>
@@ -131,50 +131,50 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5"> 
-                                    <p>Kapten Efternamn</p>
+                                <div class="col-md-5 col-xs-6"> 
+                                    <p><%= hometeam.get("captain_name") %></p>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control text-center" id="home_captain_goals" placeholder="Mål" value="<%= game[0].get("result").get("home_captain_goals") %>">
+                                <div class="form-group col-md-2 col-xs-3">
+                                    <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="Mål" value="<%= game[0].get("result").get("home_captain_goals") %>">
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control text-center" id="home_captain_fights" placeholder="Fajter" value="<%= game[0].get("result").get("home_captain_fights") %>">
+                                <div class="form-group col-md-2 col-xs-3">
+                                    <input type="text" class="form-control text-center" id="home_captain_fights" name="home_captain_fights" placeholder="Fajter" value="<%= game[0].get("result").get("home_captain_fights") %>">
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5"> 
-                                    <p>Assisterande Efternamn</p>
+                                <div class="col-md-5 col-xs-6"> 
+                                    <p><%= hometeam.get("lieutenant_name") %></p>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control text-center" id="home_lieutenant_goals" placeholder="Mål" value="<%= game[0].get("result").get("home_lieutenant_goals") %>">
+                                <div class="form-group col-md-2 col-xs-3">
+                                    <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="Mål" value="<%= game[0].get("result").get("home_lieutenant_goals") %>">
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control text-center" id="home_lieutenant_fights" placeholder="Fajter" value="<%= game[0].get("result").get("home_lieutenant_fights") %>">
+                                <div class="form-group col-md-2 col-xs-3">
+                                    <input type="text" class="form-control text-center" id="home_lieutenant_fights" name="home_lieutenant_fights" placeholder="Fajter" value="<%= game[0].get("result").get("home_lieutenant_fights") %>">
                                 </div>
                             </div>
                             <div class="row col-md-12">
                                 <h6 class="text-uppercase"><strong>Bortalaget</strong></h6>
                             </div>
                             <div class="row">
-                                <div class="col-md-5"> 
-                                    <p>Kapten Efternamn</p>
+                                <div class="col-md-5 col-xs-6"> 
+                                    <p><%= awayteam.get("captain_name") %></p>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control text-center" id="away_captain_goals" placeholder="Mål" value="<%= game[0].get("result").get("away_captain_goals") %>">
+                                <div class="form-group col-md-2 col-xs-3">
+                                    <input type="text" class="form-control text-center" id="away_captain_goals" name="away_captain_goals" placeholder="Mål" value="<%= game[0].get("result").get("away_captain_goals") %>">
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control text-center" id="away_captain_fights" placeholder="Fajter" value="<%= game[0].get("result").get("away_captain_fights") %>">
+                                <div class="form-group col-md-2 col-xs-3">
+                                    <input type="text" class="form-control text-center" id="away_captain_fights" name="away_captain_fights" placeholder="Fajter" value="<%= game[0].get("result").get("away_captain_fights") %>">
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5"> 
-                                    <p>Assisterande Efternamn</p>
+                                <div class="col-md-5 col-xs-6"> 
+                                    <p><%= awayteam.get("lieutenant_name") %></p>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control text-center" id="away_lieutenant_goals" placeholder="Mål" value="<%= game[0].get("result").get("away_lieutenant_goals") %>">
+                                <div class="form-group col-md-2 col-xs-3">
+                                    <input type="text" class="form-control text-center" id="away_lieutenant_goals" name="away_lieutenant_goals" placeholder="Mål" value="<%= game[0].get("result").get("away_lieutenant_goals") %>">
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control text-center" id="away_lieutenant_fights" placeholder="Fajter" value="<%= game[0].get("result").get("away_lieutenant_fights") %>">
+                                <div class="form-group col-md-2 col-xs-3">
+                                    <input type="text" class="form-control text-center" id="away_lieutenant_fights" name="away_lieutenant_fights" placeholder="Fajter" value="<%= game[0].get("result").get("away_lieutenant_fights") %>">
                                 </div>
                             </div>
                         </div>
@@ -186,9 +186,13 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <p class="text-center">
-                                        Resultat för denna match uppdaterades
-                                        <br>
-                                        <span class="text-capitalize"><strong><%= formatDateAndTime(game[0].get("updatedAt")) %></strong></span>
+                                        <% if(game[0].get("result_submitted")) { %>
+                                            Resultat för denna match uppdaterades
+                                            <br>
+                                            <span class="text-capitalize"><strong><%= formatDateAndTime(game[0].get("updatedAt")) %></strong></span>
+                                        <% } else { %>
+                                            Denna match har inte rapporterats ännu
+                                        <% } %>
                                     </p>
                                 </div>
                             </div>
@@ -198,8 +202,17 @@
                     <div class="panel">
                         <div class="panel-body">              
                             <div class="form-group" style="margin-bottom: 0;">
+                                <input type='hidden' name='home_captain_id' id='home_captain_id' value='<%= hometeam.get("captain_id") %>' />
+                                <input type='hidden' name='home_lieutenant_id' id='home_lieutenant_id' value='<%= hometeam.get("lieutenant_id") %>' />
+                                <input type='hidden' name='away_captain_id' id='away_captain_id' value='<%= awayteam.get("captain_id") %>' />
+                                <input type='hidden' name='away_lieutenant_id' id='away_lieutenant_id' value='<%= awayteam.get("lieutenant_id") %>' />
+
                                 <input type='hidden' name='_method' value='put' />
-                                <button type="submit" class="btn btn-hg btn-primary btn-wide btn-block text-uppercase">Rapportera match</button>
+                                <% if(game[0].get("result_submitted")) { %>
+                                    <button type="submit" class="btn btn-hg btn-warning btn-wide btn-block text-uppercase">Uppdatera resultat</button>
+                                <% } else { %>
+                                    <button type="submit" class="btn btn-hg btn-primary btn-wide btn-block text-uppercase">Rapportera match</button>
+                                <% } %>
                             </div>
                         </div>
                         <!-- /.panel-body -->
@@ -224,9 +237,6 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
-    <script>
-        $("select").select2({dropdownCssClass: 'dropdown-inverse'});
-    </script>
 </body>
  
 </html>
