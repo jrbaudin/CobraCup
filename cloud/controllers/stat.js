@@ -229,9 +229,9 @@ exports.saveMatchResult = function(req, res) {
                 var away_points_for_update = 0;
 
                 if(home_goals_old > away_goals_old){
-                  home_points_for_update = home_points_for_update+3;
+                  home_points_for_update = home_points_for_update+2;
                 } else if (away_goals_old > home_goals_old) {
-                  away_points_for_update = away_points_for_update+3;
+                  away_points_for_update = away_points_for_update+2;
                 } else {
                   home_points_for_update = home_points_for_update+1;
                   away_points_for_update = away_points_for_update+1;
@@ -305,7 +305,7 @@ exports.saveMatchResult = function(req, res) {
                               }
                             },
                             function(error){
-                              console.error('Error when trying to update home lieutenant player stats');
+                              console.error('Error when trying to update home lieutenant player stats');standingsQuery
                               console.error(error);
                             });
                             
@@ -405,6 +405,14 @@ exports.saveMatchResult = function(req, res) {
                   if (standingHomeTeam) {
                     //console.log("Found the home team standing to save...");
                     var h_points_current = standingHomeTeam[0].get("points");
+
+                    var h_goals_for_current = standingHomeTeam[0].get("goals_for");
+                    var h_goals_against_current = standingHomeTeam[0].get("goals_against");
+                    var h_wins_current = standingHomeTeam[0].get("wins");
+                    var h_losses_current = standingHomeTeam[0].get("losses");
+                    var h_games_played_current = standingHomeTeam[0].get("games_played");
+
+                    standingHomeTeam[0].set('points', h_points_current+home_points);
                     standingHomeTeam[0].set('points', h_points_current+home_points);
                     standingHomeTeam[0].save().then(function(gStandingSaved) {
                       //console.log("Managed to save the result...");

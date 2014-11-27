@@ -34,6 +34,7 @@ exports.getTeam = function(req, res) {
           var gameQuery = Parse.Query.or(homeTeamQuery, awayTeamQuery);
           gameQuery.ascending("date");
           gameQuery.equalTo('played', false);
+          gameQuery.include("result");
           gameQuery.find().then(function(games) {
             if (games) {
               //console.log("Gotten the games...");
@@ -45,14 +46,15 @@ exports.getTeam = function(req, res) {
                   var latestGameQuery = Parse.Query.or(homeTeamQuery, awayTeamQuery);
                   latestGameQuery.descending("date");
                   latestGameQuery.equalTo('played', true);
+                  latestGameQuery.include("result");
                   latestGameQuery.first().then(function(lastPlayedGame) {
                     if (lastPlayedGame) {
                       res.render('team', {
                         teamObj: theTeam,
                         standings: standings,
                         games: games,
-                        lastPlayedGame: lastPlayedGame,
-                        teams: teams
+                        teams: teams,
+                        lastPlayedGame: lastPlayedGame
                       });
                     } else {
                       res.render('team', {
@@ -70,6 +72,8 @@ exports.getTeam = function(req, res) {
                     res.render('team', {
                       teamObj: theTeam,
                       standings: standings,
+                      games: games,
+                      teams: teams,
                       flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                     });
                   });
@@ -77,7 +81,6 @@ exports.getTeam = function(req, res) {
                   res.render('team', {
                     teamObj: theTeam,
                     standings: standings,
-                    games: games,
                     flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                   });
                 }
@@ -88,7 +91,6 @@ exports.getTeam = function(req, res) {
                 res.render('team', {
                   teamObj: theTeam,
                   standings: standings,
-                  games: games,
                   flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
                 });
               });
@@ -101,9 +103,11 @@ exports.getTeam = function(req, res) {
             }
           },
           function(error){
-            console.error('Error when trying to get team standings');
-            console.error(error);
-            res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas'});
+            res.render('team', {
+              teamObj: theTeam,
+              standings: standings,
+              flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
+            });
           });
         } else {
           res.render('team', {
