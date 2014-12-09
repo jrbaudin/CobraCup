@@ -95,16 +95,16 @@
                 <p class="text-center"><small>Runda #<strong><%= game[0].get("round") %></strong> Grupp #<strong><%= game[0].get("group") %></strong></small></p>
                 <form class="form" role="form" method="post">
                     <div class="panel">
-                        <div class="panel-body" style="margin-bottom: 0;">              
+                        <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0;">              
                             <div class="col-md-6 col-md-offset-3" style="margin-bottom: 0;">
                                 <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
-                                    <input type="text" class="form-control text-center" id="home_goals" name="home_goals" placeholder="Hemma" value="<%= game[0].get("result").get("home_goals") %>" style="font-weight: bold;">
+                                    <input type="text" class="form-control text-center input-hg" id="home_goals" name="home_goals" placeholder="Hemma" value="<%= game[0].get("result").get("home_goals") %>" style="font-weight: bold;">
                                 </div>
                                 <div class="col-md-2 col-xs-2" style="margin-bottom: 0;">
                                     <p class="lead text-uppercase text-center">-</p>
                                 </div>
                                 <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
-                                    <input type="text" class="form-control text-center" id="away_goals" name="away_goals" placeholder="Borta" value="<%= game[0].get("result").get("away_goals") %>" style="font-weight: bold;">
+                                    <input type="text" class="form-control text-center input-hg" id="away_goals" name="away_goals" placeholder="Borta" value="<%= game[0].get("result").get("away_goals") %>" style="font-weight: bold;">
                                 </div>
                             </div>
                         </div>
@@ -127,7 +127,7 @@
                             <hr style="margin-bottom: 10px; margin-top: 10px;">              
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h6 class="text-uppercase"><strong>Hemmalaget</strong></h6>
+                                    <h6 class="text-uppercase"><img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Hemmalaget</strong></span></h6>
                                 </div>
                             </div>
                             <div class="row">
@@ -153,7 +153,7 @@
                                 </div>
                             </div>
                             <div class="row col-md-12">
-                                <h6 class="text-uppercase"><strong>Bortalaget</strong></h6>
+                                <h6 class="text-uppercase"><img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Bortalaget</strong></span></h6>
                             </div>
                             <div class="row">
                                 <div class="col-md-5 col-xs-6"> 

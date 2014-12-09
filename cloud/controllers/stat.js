@@ -603,3 +603,53 @@ exports.saveMatchResult = function(req, res) {
     res.redirect('/?error=' + string);
   });
 };
+
+exports.loadGames = function(req, res) {
+  res.render('games', {});
+};
+
+exports.loadGroupGames = function(req, res) {
+  var Game = Parse.Object.extend('Game');
+  var gameQuery = new Parse.Query(Game);
+  console.log("group id: " + req.params.groupid);
+  gameQuery.equalTo('group', parseInt(req.params.groupid));
+  gameQuery.ascending('round');
+  gameQuery.include('result');
+  gameQuery.find().then(function(games) {
+    if (games) {
+      console.log("Gotten the games...");
+      var Team = Parse.Object.extend('Team');
+      var allTeamsQuery = new Parse.Query(Team);
+      allTeamsQuery.descending('team_name');
+      allTeamsQuery.include('nhlTeam');
+      allTeamsQuery.find().then(function(teams) {
+        if (teams) {
+          res.render('group_games', {
+            games: games,
+            teams: teams
+          });
+        } else {
+          res.render('group_games', {
+            flashError: "Kunde inte ladda match. Försök igen"
+          });
+        }
+      },
+      function(error) {
+        console.error('Error when trying to get all teams');
+        console.error(error);
+        res.render('group_games', {
+          flashError: "Kunde inte ladda match. Försök igen"
+        });
+      });
+    } else {
+      res.render('group_games', {
+        flashError: "Kunde inte ladda match. Försök igen"
+      });
+    }
+  },
+  function(error){
+    console.error('Error when trying to find game to report');
+    console.error(error);
+    res.render('group_games', {flashError: 'Problem när den önskade matchen skulle hämtas'});
+  });
+};
