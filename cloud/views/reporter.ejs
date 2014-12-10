@@ -58,6 +58,7 @@
                     <li><a href="/stat/playerstats">Spelarstatistik</a></li>
                   </ul>
                 </li>
+                <li><a href="/games">Matcher</a></li>
                 <li><a href="http://cobracup.se" target="_blank">cobracup.se</a></li>
               </ul>
               <% if(typeof(count) !== 'undefined'){ %>
@@ -209,7 +210,8 @@
 
                                 <input type='hidden' name='_method' value='put' />
                                 <% if(game[0].get("result_submitted")) { %>
-                                    <button type="submit" class="btn btn-hg btn-warning btn-wide btn-block text-uppercase">Uppdatera resultat</button>
+                                    <button type="submit" class="btn btn-hg btn-warning btn-wide btn-block text-uppercase" disabled><i class="fa fa-lock"></i> Matchresulat rapporterat</button>
+                                    <p class="text-center" style="margin-bottom:0;"><small><em><strong>Kontakta admin för att uppdatera resultat</strong></em></small></p>
                                 <% } else { %>
                                     <button type="submit" class="btn btn-hg btn-primary btn-wide btn-block text-uppercase">Rapportera match</button>
                                 <% } %>

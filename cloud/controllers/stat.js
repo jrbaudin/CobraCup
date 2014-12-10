@@ -611,8 +611,9 @@ exports.loadGames = function(req, res) {
 exports.loadGroupGames = function(req, res) {
   var Game = Parse.Object.extend('Game');
   var gameQuery = new Parse.Query(Game);
+  var groupIdentity = parseInt(req.params.groupid);
   console.log("group id: " + req.params.groupid);
-  gameQuery.equalTo('group', parseInt(req.params.groupid));
+  gameQuery.equalTo('group', groupIdentity);
   gameQuery.ascending('round');
   gameQuery.include('result');
   gameQuery.find().then(function(games) {
@@ -624,9 +625,23 @@ exports.loadGroupGames = function(req, res) {
       allTeamsQuery.include('nhlTeam');
       allTeamsQuery.find().then(function(teams) {
         if (teams) {
+          var groupName = "Unknown";
+
+          if (_.isEqual(groupIdentity, 1)) {
+            groupName = "Atlantic";
+          } else if (_.isEqual(groupIdentity, 2)) {
+            groupName = "Metropolitan";
+          } else if (_.isEqual(groupIdentity, 3)) {
+            groupName = "Central";
+          } else if (_.isEqual(groupIdentity, 4)) {
+            groupName = "Pacific";
+          }
+
           res.render('group_games', {
             games: games,
-            teams: teams
+            teams: teams,
+            groupName: groupName,
+            groupIdentity: req.params.groupid
           });
         } else {
           res.render('group_games', {

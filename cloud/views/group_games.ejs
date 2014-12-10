@@ -8,7 +8,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
  
-    <title>Grupper - Cobra Cup 2015</title>
+    <% if(typeof(groupName) !== 'undefined'){ %>
+        <title><%= groupName %> - Cobra Cup 2015</title>
+    <% } else { %>
+        <title>Gruppmatcher - Cobra Cup 2015</title>
+    <% } %>
  
     <!-- Latest compiled and minified CSS -->
     <link href="../../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
@@ -58,6 +62,7 @@
                     <li><a href="/stat/playerstats">Spelarstatistik</a></li>
                   </ul>
                 </li>
+                <li class="active"><a href="/games">Matcher</a></li>
                 <li><a href="http://cobracup.se" target="_blank">cobracup.se</a></li>
               </ul>
               <% if(typeof(count) !== 'undefined'){ %>
@@ -76,22 +81,50 @@
                 <strong>Fel!</strong> <%= flash %>.
             </div>  
         <% } %>
+
         <div class="col-md-3">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h6 class="panel-title text-uppercase">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-tint fa-stack-1x fa-inverse"></i>
-                        </span> <strong>Atlantic Division</strong>
-                    </h6>
+            <% if(typeof(groupName) !== 'undefined'){ 
+                var icon = "fa-question";
+                var paneltype = "panel-default";
+                if (_.isEqual(groupName, "Atlantic")) {
+                  icon = "fa-tint";
+                  paneltype = "panel-info";
+                } else if (_.isEqual(groupName, "Metropolitan")) {
+                  icon = "fa-building";
+                  paneltype = "panel-danger";
+                } else if (_.isEqual(groupName, "Central")) {
+                  icon = "fa-bolt";
+                  paneltype = "panel-success";
+                } else if (_.isEqual(groupName, "Pacific")) {
+                  icon = "fa-sun-o";
+                  paneltype = "panel-warning";
+                }
+                %>
+                <div class="panel <%= paneltype %>">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa <%= icon %> fa-stack-1x fa-inverse"></i>
+                            </span> <strong><%= groupName %> Division</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <% if(typeof(teams) !== 'undefined'){ 
+                            teams.forEach(function(team) {
+                                if(_.isEqual(team.get("group"), groupIdentity)){ %>
+                                    <div class="row">
+                                        <div class="col-md-2"><img src="<%= team.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;"></div>
+                                        <div class="col-md-10"><p class="text-uppercase"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p></div>
+                                    </div>
+                                <% }
+                            })
+                        } %>
+                    </div>
+                    <!-- /.panel-body -->
                 </div>
-                <div class="panel-body">
-                    <button  onclick="window.location.href='/games/group/1'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Gå till grupp</button>
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
+                <!-- /.panel -->
+            <% } %>
         </div>
         <!-- /.col-md-3 -->
         <div class="col-md-9">
@@ -102,18 +135,19 @@
                     </h6>
                 </div>
                 <div class="panel-body">              
-                    <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                    <table class="table table-bordered table-striped" style="margin-bottom: 0;">
                         <thead style="font-size: 13px;">
                             <tr>
-                                <th class="text-uppercase">Runda</th>
+                                <th class="text-uppercase text-center">Runda</th>
                                 <th class="text-uppercase"></th>
                                 <th class="text-uppercase">Hemma</th>
                                 <th class="text-uppercase"></th>
                                 <th class="text-uppercase">Borta</th>
-                                <th class="text-uppercase">Spelad</th>
-                                <th class="text-uppercase">Tid</th>
+                                <th class="text-uppercase text-center">Spelad</th>
+                                <th class="text-uppercase text-center">Tid</th>
                                 <th class="text-uppercase">Kommentar</th>
-                                <th class="text-uppercase">Rapportera</th>
+                                <th class="text-uppercase text-center">Rapportera</th>
+                                <th class="text-uppercase text-center">Resultat</th>
                             </tr>
                         </thead>
                         <tbody style="font-size: 12px;">
@@ -139,18 +173,24 @@
 
                                     %>
                                     <tr>
-                                        <td><%= game.get("round") %></td>
+                                        <td class="text-center"><%= game.get("round") %></td>
                                         <td><img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
-                                        <td><%= hometeam.get("team_name") %></td>
+                                        <td><strong><%= hometeam.get("team_name") %></strong></td>
                                         <td><img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
-                                        <td><%= awayteam.get("team_name") %></td>
-                                        <td><%= played %></td>
-                                        <td class="text-capitalize"><%= justTime(game.get("date")) %></td>
+                                        <td><strong><%= awayteam.get("team_name") %></strong></td>
+                                        <td class="text-center"><%= played %></td>
+                                        <td class="text-capitalize text-center"><%= justTime(game.get("date")) %></td>
                                         <td><%= game.get("comment") %></td>
                                         <td><% if(game.get("result_submitted")) { %> 
-                                                <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning btn-wide btn-block text-uppercase">Uppdatera</button>
+                                                <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning btn-wide btn-block text-uppercase"><i class="fa fa-lock"></i> Se matchrapport</button>
                                             <% } else { %>
                                                 <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success btn-wide btn-block text-uppercase">Rapportera</button>
+                                            <% } %>
+                                        </td>
+                                        <td class="text-center"><% if(game.get("result_submitted")) { %> 
+                                                <%= game.get("result").get("home_goals") %> - <%= game.get("result").get("away_goals") %>
+                                            <% } else { %>
+                                                -
                                             <% } %>
                                         </td>   
                                     </tr>
