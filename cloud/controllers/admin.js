@@ -76,93 +76,119 @@ exports.loadMatchCreator = function(req, res) {
 
 // Create a new team with specified information.
 exports.createMatch = function(req, res) {
-  var game_date = req.body.game_date;
-  var game_time = req.body.game_time;
-
-  var date = new Date(game_date + " " + game_time);
-
-  var hometeam = req.body.hometeam;
-  var awayteam = req.body.awayteam;
-  var comment = req.body.comment;
-
-  var round = req.body.round;
-  var group = req.body.group;
-
-  var Team = Parse.Object.extend("Team");
-
-  var homeTeamObj = new Team();
-  homeTeamObj.id = hometeam;
-
-  var awayTeamObj = new Team();
-  awayTeamObj.id = awayteam;
-
-  var Game = Parse.Object.extend("Game");
-  var game = new Game();
-
-  game.set("home", homeTeamObj);
-  game.set("away", awayTeamObj);
-
-  game.set("home_goals", "0");
-  game.set("away_goals", "0");
-
-  game.set("played", false);
-  game.set("result_submitted", false);
-
-  game.set("date", date);
-
-  game.set("comment", comment);
-
-  game.set("round", parseInt(round));
-  game.set("group", parseInt(group));
-
   var genId = Math.floor((Math.random() * 100000) + 1);
-  game.set('game_id', genId.toString());
+  
+  var GameResult = Parse.Object.extend("GameResult");
+  var gameResult = new GameResult();
 
-  game.save().then(function(saved_game) {
-    if (saved_game) {
-      var passedInfoVariable = "Matchen med id: " + saved_game.get("game_id") + " är nu sparad!";
-      var Team = Parse.Object.extend('Team');
-      var teamQuery = new Parse.Query(Team);
-      teamQuery.descending('createdAt');
-      teamQuery.include('nhlTeam');
-      teamQuery.find().then(function(teams) {
-        if (teams) {
-          var Game = Parse.Object.extend('Game');
-          var gameQuery = new Parse.Query(Game);
-          gameQuery.ascending('round');
-          gameQuery.find().then(function(games) {
-            if (games) {
-              res.render('creatematch', {
-                teams: teams,
-                games: games
-              });
-            } else {
-              res.render('hub', {
-                flash: 'Kunde int hitta na lag.'
-              });
-            }
-          },
-          function(error) {
-            console.error("Problem när matcherna skulle hämtas...");
-            console.error(error);
-            res.send(500, 'Failed finding games');
-          });
-        } else {
-          res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
-        }
-      },
-      function(error) {
-        console.error('Error find teams to send to The Hub');
-        console.error(error);
-        res.render('hub', {flash: 'Problem när de anmälda lagen skulle hämtas.'});
-      });
-    } else {
-      console.error('The Game object was undefined.');
-      res.render('creatematch', {flash: "Det var problem på sidan. Pröva kontakta en administratör."});
-    }
+  gameResult.set('game_id', genId.toString());
+
+  gameResult.set('home_goals', 0);
+  gameResult.set('away_goals', 0);
+
+  gameResult.set('home_captain_goals', 0);
+  gameResult.set('home_captain_fights', 0);
+  gameResult.set('home_lieutenant_goals', 0);
+  gameResult.set('home_lieutenant_fights', 0);
+
+  gameResult.set('away_captain_goals', 0);
+  gameResult.set('away_captain_fights', 0);
+  gameResult.set('away_lieutenant_goals', 0);
+  gameResult.set('away_lieutenant_fights', 0);
+  gameResult.save().then(function(saved_game_result) {
+    var game_date = req.body.game_date;
+    var game_time = req.body.game_time;
+
+    var date = new Date(game_date + " " + game_time);
+
+    var hometeam = req.body.hometeam;
+    var awayteam = req.body.awayteam;
+    var comment = req.body.comment;
+
+    var round = req.body.round;
+    var group = req.body.group;
+
+    var Team = Parse.Object.extend("Team");
+
+    var homeTeamObj = new Team();
+    homeTeamObj.id = hometeam;
+
+    var awayTeamObj = new Team();
+    awayTeamObj.id = awayteam;
+
+    var Game = Parse.Object.extend("Game");
+    var game = new Game();
+
+    game.set("result", saved_game_result);
+
+    game.set("home", homeTeamObj);
+    game.set("away", awayTeamObj);
+
+    //game.set("home_goals", "0");
+    //game.set("away_goals", "0");
+
+    game.set("played", false);
+    game.set("result_submitted", false);
+
+    game.set("date", date);
+
+    game.set("comment", comment);
+
+    game.set("round", parseInt(round));
+    game.set("group", parseInt(group));
+
+    game.set('game_id', genId.toString());
+    game.save().then(function(saved_game) {
+      if (saved_game) {
+        var passedInfoVariable = "Matchen med id: " + saved_game.get("game_id") + " är nu sparad!";
+        var Team = Parse.Object.extend('Team');
+        var teamQuery = new Parse.Query(Team);
+        teamQuery.descending('createdAt');
+        teamQuery.include('nhlTeam');
+        teamQuery.find().then(function(teams) {
+          if (teams) {
+            var Game = Parse.Object.extend('Game');
+            var gameQuery = new Parse.Query(Game);
+            gameQuery.ascending('round');
+            gameQuery.find().then(function(games) {
+              if (games) {
+                res.render('creatematch', {
+                  teams: teams,
+                  games: games
+                });
+              } else {
+                res.render('hub', {
+                  flash: 'Kunde int hitta na lag.'
+                });
+              }
+            },
+            function(error) {
+              console.error("Problem när matcherna skulle hämtas...");
+              console.error(error);
+              res.send(500, 'Failed finding games');
+            });
+          } else {
+            res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
+          }
+        },
+        function(error) {
+          console.error('Error find teams to send to The Hub');
+          console.error(error);
+          res.render('hub', {flash: 'Problem när de anmälda lagen skulle hämtas.'});
+        });
+      } else {
+        console.error('The Game object was undefined.');
+        res.render('creatematch', {flash: "Det var problem på sidan. Pröva kontakta en administratör."});
+      }
+    }, function(error) {
+      // Show the error message and let the user try again
+      console.error('Error saving the new game, try again.');
+      console.error(error);
+      res.render('creatematch', {flash: error.message});
+    });
   }, function(error) {
     // Show the error message and let the user try again
-    console.error('Error saving the new game, try again.');
+    console.error('Error saving the empty game result, try again.');
     console.error(error);
     res.render('creatematch', {flash: error.message});
   });

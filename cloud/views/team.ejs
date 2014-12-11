@@ -327,10 +327,11 @@
                                                         <th></th>
                                                         <th class="text-center">LAG</th>
                                                         <th></th>
-                                                        <th class="text-center">GP</th>
-                                                        <th class="text-center">W</th>
-                                                        <th class="text-center">L</th>
-                                                        <th class="text-center bg-warning"><strong>P</strong></th>
+                                                        <th class="text-center" title="Games Played">GP</th>
+                                                        <th class="text-center" title="Wins">W</th>
+                                                        <th class="text-center" title="Ties">T</th>
+                                                        <th class="text-center" title="Losses">L</th>
+                                                        <th class="text-center bg-warning" title="Points"><strong>P</strong></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody style="font-size: 12px;">
@@ -342,9 +343,10 @@
                                                                     <td class="text-center"><%= i %></td>
                                                                     <td><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
                                                                     <td><%= standing.get("team").get("team_name") %></td>
-                                                                    <td class="text-center"><%= standing.get("team").get("games_played") %></td>
-                                                                    <td class="text-center"><%= standing.get("team").get("wins") %></td>
-                                                                    <td class="text-center"><%= standing.get("team").get("losses") %></td>
+                                                                    <td class="text-center"><%= standing.get("games_played") %></td>
+                                                                    <td class="text-center"><%= standing.get("wins") %></td>
+                                                                    <td class="text-center"><%= standing.get("tie") %></td>
+                                                                    <td class="text-center"><%= standing.get("losses") %></td>
                                                                     <td class="text-center"><strong><%= standing.get("points") %></strong></td>
                                                                 </tr>
                                                             <% i = i+1; 
@@ -366,31 +368,54 @@
                                     </div>
                                     <div id="collapseTwoStat" class="panel-collapse collapse">
                                         <div class="panel-body" style="padding: 5px;">
+                                            <% if((typeof(playerStats) !== 'undefined') && (typeof(standings) !== 'undefined')){
+                                            var captain = null;
+                                            var lieutenant = null;
+                                            var teamStanding = null;
+
+                                            playerStats.forEach(function(player) {
+                                                if(_.isEqual(player.get("player_id"), teamObj[0].get("captain_id"))){
+                                                    captain = player;
+                                                } else if(_.isEqual(player.get("player_id"), teamObj[0].get("lieutenant_id"))){
+                                                    lieutenant = player;
+                                                }
+                                            })
+
+                                            standings.forEach(function(standing) {
+                                                if(_.isEqual(standing.get("team").id, teamObj[0].id)){
+                                                    teamStanding = standing;
+                                                }
+                                            })
+                                            %>
                                             <table class="table table-bordered table-condensed" style="margin-bottom: 0;">
                                                 <thead style="font-size: 13px;">
                                                     <tr>
                                                       <th>Spelare:</th>
-                                                      <th>GP</th>
-                                                      <th>G</th>
-                                                      <th>F</th>
+                                                      <th></th>
+                                                      <th class="text-center" title="Games Played">GP</th>
+                                                      <th class="text-center" title="Goals">G</th>
+                                                      <th class="text-center" title="Fights">F</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody style="font-size: 13px;">
                                                     <tr>
                                                       <td><%= teamObj[0].get("captain_name") %></td>
-                                                      <td><%= teamObj[0].get("games_played") %></td>
-                                                      <td><%= teamObj[0].get("captain_goals") %></td>
-                                                      <td><%= teamObj[0].get("captain_fights") %></td>
+                                                      <td class="text-center" title="Kapten"><strong>C</strong></td>
+                                                      <td class="text-center"><%= teamStanding.get("games_played") %></td>
+                                                      <td class="text-center"><%= captain.get("player_goals") %></td>
+                                                      <td class="text-center"><%= captain.get("player_fights") %></td>
                                                     </tr>
                                                     <tr>
                                                       <td><%= teamObj[0].get("lieutenant_name") %></td>
-                                                      <td><%= teamObj[0].get("games_played") %></td>
-                                                      <td><%= teamObj[0].get("lieutenant_goals") %></td>
-                                                      <td><%= teamObj[0].get("lieutenant_fights") %></td>
+                                                      <td class="text-center" title="Assisterande"><strong>A</strong></td>
+                                                      <td class="text-center"><%= teamStanding.get("games_played") %></td>
+                                                      <td class="text-center"><%= lieutenant.get("player_goals") %></td>
+                                                      <td class="text-center"><%= lieutenant.get("player_fights") %></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>F</strong>-Fights</small>
+                                            <% } %>
                                         </div>
                                     </div>
                                 </div>

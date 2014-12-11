@@ -110,16 +110,6 @@ exports.create = function(req, res) {
 
   team.set('group', "0");
 
-  team.set('games_played', "0");
-  team.set('wins', "0");
-  team.set('losses', "0");
-  team.set('goals_for', "0");
-  team.set('goals_against', "0");
-  team.set('captain_goals', "0");
-  team.set('captain_fights', "0");
-  team.set('lieutenant_goals', "0");
-  team.set('lieutenant_fights', "0");
-
   team.set('qualified', false);
   team.set('champion', false);
 
@@ -144,6 +134,12 @@ exports.create = function(req, res) {
 
             standing.set('team', saved_team);
             standing.set('points', 0);
+            standing.set('games_played', 0);
+            standing.set('wins', 0);
+            standing.set('tie', 0);
+            standing.set('losses', 0);
+            standing.set('goals_for', 0);
+            standing.set('goals_against', 0);
             standing.save().then(function(standing) {
               var captain_name = saved_team.get("captain_name");
               var lieutenant_name = saved_team.get("lieutenant_name");
@@ -155,8 +151,8 @@ exports.create = function(req, res) {
               playerStatCaptain.set('player_name', captain_name);
               playerStatCaptain.set('player_id', capId.toString());
               playerStatCaptain.set('player_team', saved_team);
-              playerStatCaptain.set('player_goals', "0");
-              playerStatCaptain.set('player_fights', "0");
+              playerStatCaptain.set('player_goals', 0);
+              playerStatCaptain.set('player_fights', 0);
               playerStatCaptain.save().then(function(playerStat) {
                 console.log("Successfully saved CAPTAIN player stat object");
               }, function(error) {
@@ -169,8 +165,8 @@ exports.create = function(req, res) {
               playerStatLieutenant.set('player_name', lieutenant_name);
               playerStatLieutenant.set('player_id', lieuId.toString());
               playerStatLieutenant.set('player_team', saved_team);
-              playerStatLieutenant.set('player_goals', "0");
-              playerStatLieutenant.set('player_fights', "0");
+              playerStatLieutenant.set('player_goals', 0);
+              playerStatLieutenant.set('player_fights', 0);
               playerStatLieutenant.save().then(function(playerStat) {
                 console.log("Successfully saved LIEUTENANT player stat object");
               }, function(error) {

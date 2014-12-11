@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
  
-    <title>Grupper - Cobra Cup 2015</title>
+    <title>Divisioner - Cobra Cup 2015</title>
  
     <!-- Latest compiled and minified CSS -->
     <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
@@ -77,247 +77,266 @@
                 <strong>Fel!</strong> <%= flash %>.
             </div>  
         <% } %>
-        <div class="col-md-3">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h6 class="panel-title text-uppercase">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-tint fa-stack-1x fa-inverse"></i>
-                        </span> <strong>Atlantic Division</strong>
-                    </h6>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">               
-                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                            <thead style="font-size: 13px;">
-                                <tr>
-                                    <th></th>
-                                    <th class="text-center text-uppercase">Lag</th>
-                                    <th class="text-uppercase">Namn</th>
-                                    <th class="text-center text-uppercase">GP</th>
-                                    <th class="text-center text-uppercase">W</th>
-                                    <th class="text-center text-uppercase">L</th>
-                                    <th class="text-center text-uppercase bg-warning" style="font-size: 14px;"><strong>P</strong></th>
-                                    <th class="text-center text-uppercase">+/-</th>
-                                </tr>
-                            </thead>
-                            <tbody style="font-size: 12px;">
-                                <% if(typeof(standings) !== 'undefined'){
-                                    var i = 1;
-                                    standings.forEach(function(standing) { %>
-                                        <% if(_.isEqual("1", standing.get("team").get("group"))){ 
-                                            var goalsFor = parseInt(standing.get("team").get("goals_for"));
-                                            var goalsAgainst = parseInt(standing.get("team").get("goals_against"));
-                                            var difference = goalsFor-goalsAgainst;
-                                            if(!difference){
-                                                difference = "-";
-                                            }%>
-                                            <tr>
-                                                <td class="text-center"><%= i %></td>
-                                                <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
-                                                <td><%= standing.get("team").get("team_name") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("games_played") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("wins") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("losses") %></td>
-                                                <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
-                                                <td class="text-center"><strong><%= difference %></strong></td>
-                                            </tr>
-                                        <% i = i+1; 
-                                        } 
-                                    }) %>
-                                <% } %>
-                            </tbody>
-                        </table>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-tint fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Atlantic Division <small style="padding-left: 10px;"><a href="/games/group/1"><i class="fa fa-calendar" style="color: rgb(241,102,57);"></i> Matcher & Resultat</a></small></strong>
+                        </h6>
                     </div>
-                    <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>P</strong>-Points</small>
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
-        </div>
-        <!-- /.col-md-3 -->
-        <div class="col-md-3">
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    <h6 class="panel-title text-uppercase">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-building fa-stack-1x fa-inverse"></i>
-                        </span> <strong>Metropolitan Division</strong>
-                    </h6>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">               
-                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                            <thead style="font-size: 13px;">
-                                <tr>
-                                    <th></th>
-                                    <th class="text-center text-uppercase">Lag</th>
-                                    <th class="text-uppercase">Namn</th>
-                                    <th class="text-center text-uppercase">GP</th>
-                                    <th class="text-center text-uppercase">W</th>
-                                    <th class="text-center text-uppercase">L</th>
-                                    <th class="text-center text-uppercase bg-warning" style="font-size: 14px;"><strong>P</strong></th>
-                                    <th class="text-center text-uppercase">+/-</th>
-                                </tr>
-                            </thead>
-                            <tbody style="font-size: 12px;">
-                                <% if(typeof(standings) !== 'undefined'){
-                                    var i = 1;
-                                    standings.forEach(function(standing) { %>
-                                        <% if(_.isEqual("2", standing.get("team").get("group"))){ 
-                                            var goalsFor = parseInt(standing.get("team").get("goals_for"));
-                                            var goalsAgainst = parseInt(standing.get("team").get("goals_against"));
-                                            var difference = goalsFor-goalsAgainst;
-                                            if(!difference){
-                                                difference = "-";
-                                            }%>
-                                            <tr>
-                                                <td class="text-center"><%= i %></td>
-                                                <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
-                                                <td><%= standing.get("team").get("team_name") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("games_played") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("wins") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("losses") %></td>
-                                                <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
-                                                <td class="text-center"><strong><%= difference %></strong></td>
-                                            </tr>
-                                        <% i = i+1; 
-                                        } 
-                                    }) %>
-                                <% } %>
-                            </tbody>
-                        </table>
+                    <div class="panel-body">
+                        <div class="table-responsive">               
+                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                                <thead style="font-size: 13px;">
+                                    <tr>
+                                        <th></th>
+                                        <th class="text-center text-uppercase">Lag</th>
+                                        <th class="text-uppercase">Namn</th>
+                                        <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                        <th class="text-center text-uppercase" title="Wins">W</th>
+                                        <th class="text-center text-uppercase" title="Ties">T</th>
+                                        <th class="text-center text-uppercase" title="Losses">L</th>
+                                        <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
+                                        <th class="text-center text-uppercase" title="Goals For">GF</th>
+                                        <th class="text-center text-uppercase" title="Goals Against">GA</th>
+                                        <th class="text-center text-uppercase">+/-</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px;">
+                                    <% if(typeof(standings) !== 'undefined'){
+                                        var i = 1;
+                                        standings.forEach(function(standing) { %>
+                                            <% if(_.isEqual("1", standing.get("team").get("group"))){ 
+                                                var goalsFor = parseInt(standing.get("goals_for"));
+                                                var goalsAgainst = parseInt(standing.get("goals_against"));
+                                                var difference = goalsFor-goalsAgainst;
+                                                %>
+                                                <tr>
+                                                    <td class="text-center"><%= i %></td>
+                                                    <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                                    <td><%= standing.get("team").get("team_name") %></td>
+                                                    <td class="text-center"><%= standing.get("games_played") %></td>
+                                                    <td class="text-center"><%= standing.get("wins") %></td>
+                                                    <td class="text-center"><%= standing.get("tie") %></td>
+                                                    <td class="text-center"><%= standing.get("losses") %></td>
+                                                    <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
+                                                    <td class="text-center"><%= standing.get("goals_for") %></td>
+                                                    <td class="text-center"><%= standing.get("goals_against") %></td>
+                                                    <td class="text-center"><strong><%= difference %></strong></td>
+                                                </tr>
+                                            <% i = i+1; 
+                                            } 
+                                        }) %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>T</strong>-Ties, <strong>L</strong>-Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
                     </div>
-                    <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>P</strong>-Points</small>
+                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel-body -->
+                <!-- /.panel -->
             </div>
-            <!-- /.panel -->
-        </div>
-        <!-- /.col-md-3 -->
-        <div class="col-md-3">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h6 class="panel-title text-uppercase">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-bolt fa-stack-1x fa-inverse"></i>
-                        </span> <strong>Central Division</strong>
-                    </h6>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">               
-                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                            <thead style="font-size: 13px;">
-                                <tr>
-                                    <th></th>
-                                    <th class="text-center text-uppercase">Lag</th>
-                                    <th class="text-uppercase">Namn</th>
-                                    <th class="text-center text-uppercase">GP</th>
-                                    <th class="text-center text-uppercase">W</th>
-                                    <th class="text-center text-uppercase">L</th>
-                                    <th class="text-center text-uppercase bg-warning" style="font-size: 14px;"><strong>P</strong></th>
-                                    <th class="text-center text-uppercase">+/-</th>
-                                </tr>
-                            </thead>
-                            <tbody style="font-size: 12px;">
-                                <% if(typeof(standings) !== 'undefined'){
-                                    var i = 1;
-                                    standings.forEach(function(standing) { %>
-                                        <% if(_.isEqual("3", standing.get("team").get("group"))){ 
-                                            var goalsFor = parseInt(standing.get("team").get("goals_for"));
-                                            var goalsAgainst = parseInt(standing.get("team").get("goals_against"));
-                                            var difference = goalsFor-goalsAgainst;
-                                            if(!difference){
-                                                difference = "-";
-                                            }
-                                            %>
-                                            <tr>
-                                                <td class="text-center"><%= i %></td>
-                                                <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
-                                                <td><%= standing.get("team").get("team_name") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("games_played") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("wins") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("losses") %></td>
-                                                <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
-                                                <td class="text-center"><strong><%= difference %></strong></td>
-                                            </tr>
-                                        <% i = i+1; 
-                                        } 
-                                    }) %>
-                                <% } %>
-                            </tbody>
-                        </table>
+            <!-- /.col-md-6 -->
+            <div class="col-md-6">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-building fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Metropolitan Division <small style="padding-left: 10px;"><a href="/games/group/2"><i class="fa fa-calendar" style="color: rgb(241,102,57);"></i> Matcher & Resultat</a></small></strong>
+                        </h6>
                     </div>
-                    <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>P</strong>-Points</small>
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
-        </div>
-        <!-- /.col-md-3 -->
-        <div class="col-md-3">
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <h6 class="panel-title text-uppercase">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-sun-o fa-stack-1x fa-inverse"></i>
-                        </span> <strong>Pacific Division</strong>
-                    </h6>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">             
-                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                            <thead style="font-size: 13px;">
-                                <tr>
-                                    <th></th>
-                                    <th class="text-center text-uppercase">Lag</th>
-                                    <th class="text-uppercase">Namn</th>
-                                    <th class="text-center text-uppercase">GP</th>
-                                    <th class="text-center text-uppercase">W</th>
-                                    <th class="text-center text-uppercase">L</th>
-                                    <th class="text-center text-uppercase bg-warning" style="font-size: 14px;"><strong>P</strong></th>
-                                    <th class="text-center text-uppercase">+/-</th>
-                                </tr>
-                            </thead>
-                            <tbody style="font-size: 12px;">
-                                <% if(typeof(standings) !== 'undefined'){
-                                    var i = 1;
-                                    standings.forEach(function(standing) { %>
-                                        <% if(_.isEqual("4", standing.get("team").get("group"))){ 
-                                            var goalsFor = parseInt(standing.get("team").get("goals_for"));
-                                            var goalsAgainst = parseInt(standing.get("team").get("goals_against"));
-                                            var difference = goalsFor-goalsAgainst;
-                                            if(!difference){
-                                                difference = "-";
-                                            }%>
-                                            <tr>
-                                                <td class="text-center"><%= i %></td>
-                                                <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
-                                                <td><%= standing.get("team").get("team_name") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("games_played") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("wins") %></td>
-                                                <td class="text-center"><%= standing.get("team").get("losses") %></td>
-                                                <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
-                                                <td class="text-center"><strong><%= difference %></strong></td>
-                                            </tr>
-                                        <% i = i+1; 
-                                        } 
-                                    }) %>
-                                <% } %>
-                            </tbody>
-                        </table>
+                    <div class="panel-body">
+                        <div class="table-responsive">               
+                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                                <thead style="font-size: 13px;">
+                                    <tr>
+                                        <th></th>
+                                        <th class="text-center text-uppercase">Lag</th>
+                                        <th class="text-uppercase">Namn</th>
+                                        <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                        <th class="text-center text-uppercase" title="Wins">W</th>
+                                        <th class="text-center text-uppercase" title="Ties">T</th>
+                                        <th class="text-center text-uppercase" title="Losses">L</th>
+                                        <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
+                                        <th class="text-center text-uppercase" title="Goals For">GF</th>
+                                        <th class="text-center text-uppercase" title="Goals Against">GA</th>
+                                        <th class="text-center text-uppercase">+/-</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px;">
+                                    <% if(typeof(standings) !== 'undefined'){
+                                        var i = 1;
+                                        standings.forEach(function(standing) { %>
+                                            <% if(_.isEqual("2", standing.get("team").get("group"))){ 
+                                                var goalsFor = parseInt(standing.get("goals_for"));
+                                                var goalsAgainst = parseInt(standing.get("goals_against"));
+                                                var difference = goalsFor-goalsAgainst;
+                                                %>
+                                                <tr>
+                                                    <td class="text-center"><%= i %></td>
+                                                    <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                                    <td><%= standing.get("team").get("team_name") %></td>
+                                                    <td class="text-center"><%= standing.get("games_played") %></td>
+                                                    <td class="text-center"><%= standing.get("wins") %></td>
+                                                    <td class="text-center"><%= standing.get("tie") %></td>
+                                                    <td class="text-center"><%= standing.get("losses") %></td>
+                                                    <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
+                                                    <td class="text-center"><%= standing.get("goals_for") %></td>
+                                                    <td class="text-center"><%= standing.get("goals_against") %></td>
+                                                    <td class="text-center"><strong><%= difference %></strong></td>
+                                                </tr>
+                                            <% i = i+1; 
+                                            } 
+                                        }) %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>T</strong>-Ties, <strong>L</strong>-Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
                     </div>
-                    <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>P</strong>-Points</small>
+                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel-body -->
+                <!-- /.panel -->
             </div>
-            <!-- /.panel -->
+            <!-- /.col-md-6 -->
         </div>
-        <!-- /.col-md-3 -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-bolt fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Central Division <small style="padding-left: 10px;"><a href="/games/group/3"><i class="fa fa-calendar" style="color: rgb(241,102,57);"></i> Matcher & Resultat</a></small></strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">               
+                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                                <thead style="font-size: 13px;">
+                                    <tr>
+                                        <th></th>
+                                        <th class="text-center text-uppercase">Lag</th>
+                                        <th class="text-uppercase">Namn</th>
+                                        <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                        <th class="text-center text-uppercase" title="Wins">W</th>
+                                        <th class="text-center text-uppercase" title="Ties">T</th>
+                                        <th class="text-center text-uppercase" title="Losses">L</th>
+                                        <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
+                                        <th class="text-center text-uppercase" title="Goals For">GF</th>
+                                        <th class="text-center text-uppercase" title="Goals Against">GA</th>
+                                        <th class="text-center text-uppercase">+/-</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px;">
+                                    <% if(typeof(standings) !== 'undefined'){
+                                        var i = 1;
+                                        standings.forEach(function(standing) { %>
+                                            <% if(_.isEqual("3", standing.get("team").get("group"))){ 
+                                                var goalsFor = parseInt(standing.get("goals_for"));
+                                                var goalsAgainst = parseInt(standing.get("goals_against"));
+                                                var difference = goalsFor-goalsAgainst;
+                                                %>
+                                                <tr>
+                                                    <td class="text-center"><%= i %></td>
+                                                    <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                                    <td><%= standing.get("team").get("team_name") %></td>
+                                                    <td class="text-center"><%= standing.get("games_played") %></td>
+                                                    <td class="text-center"><%= standing.get("wins") %></td>
+                                                    <td class="text-center"><%= standing.get("tie") %></td>
+                                                    <td class="text-center"><%= standing.get("losses") %></td>
+                                                    <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
+                                                    <td class="text-center"><%= standing.get("goals_for") %></td>
+                                                    <td class="text-center"><%= standing.get("goals_against") %></td>
+                                                    <td class="text-center"><strong><%= difference %></strong></td>
+                                                </tr>
+                                            <% i = i+1; 
+                                            } 
+                                        }) %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>T</strong>-Ties, <strong>L</strong>-Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-md-6 -->
+            <div class="col-md-6">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-sun-o fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Pacific Division <small style="padding-left: 10px;"><a href="/games/group/4"><i class="fa fa-calendar" style="color: rgb(241,102,57);"></i> Matcher & Resultat</a></small></strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">             
+                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                                <thead style="font-size: 13px;">
+                                    <tr>
+                                        <th></th>
+                                        <th class="text-center text-uppercase">Lag</th>
+                                        <th class="text-uppercase">Namn</th>
+                                        <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                        <th class="text-center text-uppercase" title="Wins">W</th>
+                                        <th class="text-center text-uppercase" title="Ties">T</th>
+                                        <th class="text-center text-uppercase" title="Losses">L</th>
+                                        <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
+                                        <th class="text-center text-uppercase" title="Goals For">GF</th>
+                                        <th class="text-center text-uppercase" title="Goals Against">GA</th>
+                                        <th class="text-center text-uppercase">+/-</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px;">
+                                    <% if(typeof(standings) !== 'undefined'){
+                                        var i = 1;
+                                        standings.forEach(function(standing) { %>
+                                            <% if(_.isEqual("4", standing.get("team").get("group"))){ 
+                                                var goalsFor = parseInt(standing.get("goals_for"));
+                                                var goalsAgainst = parseInt(standing.get("goals_against"));
+                                                var difference = goalsFor-goalsAgainst;
+                                                %>
+                                                <tr>
+                                                    <td class="text-center"><%= i %></td>
+                                                    <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                                    <td><%= standing.get("team").get("team_name") %></td>
+                                                    <td class="text-center"><%= standing.get("games_played") %></td>
+                                                    <td class="text-center"><%= standing.get("wins") %></td>
+                                                    <td class="text-center"><%= standing.get("tie") %></td>
+                                                    <td class="text-center"><%= standing.get("losses") %></td>
+                                                    <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
+                                                    <td class="text-center"><%= standing.get("goals_for") %></td>
+                                                    <td class="text-center"><%= standing.get("goals_against") %></td>
+                                                    <td class="text-center"><strong><%= difference %></strong></td>
+                                                </tr>
+                                            <% i = i+1; 
+                                            } 
+                                        }) %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>T</strong>-Ties, <strong>L</strong>-Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-md-6 -->
+        </div>
     </div>
     <!-- /.container -->
 
@@ -333,10 +352,6 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
-    <script>
-        $("select").select2({dropdownCssClass: 'dropdown-inverse'});
-        $('#levelLbl').tooltip('hide');
-    </script>
 </body>
  
 </html>
