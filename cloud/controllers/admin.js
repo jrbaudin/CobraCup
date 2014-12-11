@@ -37,7 +37,7 @@ exports.tools = function(req, res) {
 exports.loadMatchCreator = function(req, res) {
   var Team = Parse.Object.extend('Team');
   var teamQuery = new Parse.Query(Team);
-  teamQuery.ascending('team_name');
+  teamQuery.ascending('group');
   teamQuery.include('nhlTeam');
   teamQuery.find().then(function(teams) {
     if (teams) {

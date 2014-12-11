@@ -468,7 +468,25 @@ exports.saveMatchResult = function(req, res) {
 };
 
 exports.loadGames = function(req, res) {
-  res.render('games', {});
+  var Team = Parse.Object.extend('Team');
+  var teamQuery = new Parse.Query(Team);
+  teamQuery.ascending('group');
+  teamQuery.include('nhlTeam');
+  teamQuery.find().then(function(teams) {
+    if (teams) {
+      res.render('games', {
+        teams: teams
+      });
+    } else {
+      log.error("Couldn't load teams. Rendering Games page anyway.");
+      res.render('games', {});
+    }
+  },
+  function(error) {
+    log.error("Couldn't load teams. Rendering Games page anyway.");
+    log.error(error);
+    res.render('games', {});
+  });
 };
 
 exports.loadGroupGames = function(req, res) {

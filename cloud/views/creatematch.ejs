@@ -180,10 +180,14 @@
                             <thead style="font-size: 13px;">
                                 <tr>
                                     <th class="text-center text-uppercase"></th>
-                                    <th class="text-uppercase">Id</th>
-                                    <th class="text-uppercase">Grupp</th>
-                                    <th class="text-uppercase">Runda</th>
-                                    <th class="text-uppercase">Spelad</th>
+                                    <th class="text-center text-uppercase">Id</th>
+                                    <th class="text-center text-uppercase">Grupp</th>
+                                    <th class="text-center text-uppercase">Runda</th>
+                                    <th class="text-uppercase"></th>
+                                    <th class="text-uppercase">Hemma</th>
+                                    <th class="text-uppercase"></th>
+                                    <th class="text-uppercase">Borta</th>
+                                    <th class="text-center text-uppercase">Spelad</th>
                                     <th class="text-uppercase">Datum</th>
                                     <th class="text-uppercase">Kommentar</th>
                                 </tr>
@@ -197,13 +201,28 @@
                                             played = "Ja";
                                         }
 
+                                        var hometeam = null;
+                                        var awayteam = null;
+
+                                        teams.forEach(function(team) {
+                                            if(_.isEqual(team.id, game.get("home").id)){
+                                                hometeam = team;
+                                            } else if(_.isEqual(team.id, game.get("away").id)){
+                                                awayteam = team;
+                                            }
+                                        })
+
                                         %>
                                         <tr>
                                             <td class="text-center"><%= i %></td>
-                                            <td><%= game.get("game_id") %></td>
-                                            <td><%= game.get("group") %></td>
-                                            <td><%= game.get("round") %></td>
-                                            <td><%= played %></td>
+                                            <td class="text-center"><%= game.get("game_id") %></td>
+                                            <td class="text-center"><%= game.get("group") %></td>
+                                            <td class="text-center"><%= game.get("round") %></td>
+                                            <td><img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
+                                            <td><strong><%= hometeam.get("team_name") %></strong></td>
+                                            <td><img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
+                                            <td><strong><%= awayteam.get("team_name") %></strong></td>
+                                            <td class="text-center"><%= played %></td>
                                             <td class="text-capitalize"><%= formatDateAndTime(game.get("date")) %></td>
                                             <td><%= game.get("comment") %></td>
                                         </tr>

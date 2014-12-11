@@ -89,6 +89,16 @@
                 </div>
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/1'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
+                    <hr>
+                    <% if(typeof(teams) !== 'undefined'){ 
+                        teams.forEach(function(team) {
+                            if(_.isEqual(team.get("group"), "1")){ %>
+                                <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
+                            <% }
+                        })
+                    %>
+
+                    <% } %>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -107,6 +117,16 @@
                 </div>
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/2'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
+                    <hr>
+                    <% if(typeof(teams) !== 'undefined'){ 
+                        teams.forEach(function(team) {
+                            if(_.isEqual(team.get("group"), "2")){ %>
+                                <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
+                            <% }
+                        })
+                    %>
+
+                    <% } %>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -125,6 +145,16 @@
                 </div>
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/3'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
+                    <hr>
+                    <% if(typeof(teams) !== 'undefined'){ 
+                        teams.forEach(function(team) {
+                            if(_.isEqual(team.get("group"), "3")){ %>
+                                <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
+                            <% }
+                        })
+                    %>
+
+                    <% } %>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -143,6 +173,16 @@
                 </div>
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/4'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
+                    <hr>
+                    <% if(typeof(teams) !== 'undefined'){ 
+                        teams.forEach(function(team) {
+                            if(_.isEqual(team.get("group"), "4")){ %>
+                                <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
+                            <% }
+                        })
+                    %>
+
+                    <% } %>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -164,10 +204,6 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
-    <script>
-        $("select").select2({dropdownCssClass: 'dropdown-inverse'});
-        $('#levelLbl').tooltip('hide');
-    </script>
 </body>
  
 </html>
