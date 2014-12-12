@@ -72,16 +72,6 @@
         </div>
     </nav>
     <div class="container-fluid">
-        <% if(typeof(flashError) !== 'undefined'){ %>
-            <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert">
-                    <span aria-hidden="true">&times;</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                <strong>Fel!</strong> <%= flash %>.
-            </div>  
-        <% } %>
-
         <div class="col-md-3">
             <% if(typeof(groupName) !== 'undefined'){ 
                 var icon = "fa-question";
@@ -114,8 +104,8 @@
                             teams.forEach(function(team) {
                                 if(_.isEqual(team.get("group"), groupIdentity)){ %>
                                     <div class="row">
-                                        <div class="col-md-2"><img src="<%= team.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;"></div>
-                                        <div class="col-md-10"><p class="text-uppercase"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p></div>
+                                        <div class="col-md-2 col-xs-2"><img src="<%= team.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;"></div>
+                                        <div class="col-md-10 col-xs-10"><p class="text-uppercase"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p></div>
                                     </div>
                                 <% }
                             })
@@ -128,75 +118,98 @@
         </div>
         <!-- /.col-md-3 -->
         <div class="col-md-9">
+            <% if(typeof(flashError) !== 'undefined'){ %>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <strong>Fel!</strong> <%= flash %>.
+                </div>  
+            <% } else if(typeof(flashInfo) !== 'undefined'){ %>
+                <div class="alert alert-success alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                  </button>
+                  <% if(typeof(flashGameId) !== 'undefined'){ %>
+                    <strong>Klart!</strong> <%= flashInfo %> <a href="/stat/game/<%= flashGameId %>" class="alert-link"><%= flashGameId %></a> sparat med lyckat resultat.
+                  <% } else { %>
+                    <strong>Klart!</strong> <%= flashInfo %>
+                  <% } %>
+                </div>  
+            <% } %>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h6 class="panel-title text-uppercase">
                         <strong>Gruppmatcher</strong>
                     </h6>
                 </div>
-                <div class="panel-body">              
-                    <table class="table table-bordered table-striped" style="margin-bottom: 0;">
-                        <thead style="font-size: 13px;">
-                            <tr>
-                                <th class="text-uppercase text-center">Runda</th>
-                                <th class="text-uppercase"></th>
-                                <th class="text-uppercase">Hemma</th>
-                                <th class="text-uppercase"></th>
-                                <th class="text-uppercase">Borta</th>
-                                <th class="text-uppercase text-center">Spelad</th>
-                                <th class="text-uppercase text-center">Tid</th>
-                                <th class="text-uppercase">Kommentar</th>
-                                <th class="text-uppercase text-center">Rapportera</th>
-                                <th class="text-uppercase text-center">Resultat</th>
-                            </tr>
-                        </thead>
-                        <tbody style="font-size: 12px;">
-                            <% if((typeof(games) !== 'undefined') && (typeof(teams) !== 'undefined')){
-                                games.forEach(function(game) {
+                <div class="panel-body">
+                    <div class="table-responsive">               
+                        <table class="table table-bordered table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th class="text-uppercase text-center">Runda</th>
+                                    <th class="text-uppercase"></th>
+                                    <th class="text-uppercase">Hemma</th>
+                                    <th class="text-uppercase"></th>
+                                    <th class="text-uppercase">Borta</th>
+                                    <th class="text-uppercase text-center">Spelad</th>
+                                    <th class="text-uppercase text-center">Tid</th>
+                                    <th class="text-uppercase">Kommentar</th>
+                                    <th class="text-uppercase text-center">Rapportera</th>
+                                    <th class="text-uppercase text-center">Resultat</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if((typeof(games) !== 'undefined') && (typeof(teams) !== 'undefined')){
+                                    games.forEach(function(game) {
 
-                                    var hometeam = null;
-                                    var awayteam = null;
+                                        var hometeam = null;
+                                        var awayteam = null;
 
-                                    teams.forEach(function(team) {
-                                        if(_.isEqual(team.id, game.get("home").id)){
-                                            hometeam = team;
-                                        } else if(_.isEqual(team.id, game.get("away").id)){
-                                            awayteam = team;
+                                        teams.forEach(function(team) {
+                                            if(_.isEqual(team.id, game.get("home").id)){
+                                                hometeam = team;
+                                            } else if(_.isEqual(team.id, game.get("away").id)){
+                                                awayteam = team;
+                                            }
+                                        })
+
+                                        var played = "Nej";
+                                        if(game.get("played")){
+                                            played = "Ja";
                                         }
-                                    })
 
-                                    var played = "Nej";
-                                    if(game.get("played")){
-                                        played = "Ja";
-                                    }
-
-                                    %>
-                                    <tr>
-                                        <td class="text-center"><%= game.get("round") %></td>
-                                        <td><img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
-                                        <td><strong><%= hometeam.get("team_name") %></strong></td>
-                                        <td><img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
-                                        <td><strong><%= awayteam.get("team_name") %></strong></td>
-                                        <td class="text-center"><%= played %></td>
-                                        <td class="text-capitalize text-center"><%= justTime(game.get("date")) %></td>
-                                        <td><%= game.get("comment") %></td>
-                                        <td><% if(game.get("result_submitted")) { %> 
-                                                <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning btn-wide btn-block text-uppercase"><i class="fa fa-lock"></i> Se matchrapport</button>
-                                            <% } else { %>
-                                                <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success btn-wide btn-block text-uppercase">Rapportera</button>
-                                            <% } %>
-                                        </td>
-                                        <td class="text-center"><% if(game.get("result_submitted")) { %> 
-                                                <%= game.get("result").get("home_goals") %> - <%= game.get("result").get("away_goals") %>
-                                            <% } else { %>
-                                                -
-                                            <% } %>
-                                        </td>   
-                                    </tr>
-                                <% }) %>
-                            <% } %>
-                        </tbody>
-                    </table>
+                                        %>
+                                        <tr>
+                                            <td class="text-center"><%= game.get("round") %></td>
+                                            <td><img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
+                                            <td><strong><%= hometeam.get("team_name") %></strong></td>
+                                            <td><img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
+                                            <td><strong><%= awayteam.get("team_name") %></strong></td>
+                                            <td class="text-center"><%= played %></td>
+                                            <td class="text-capitalize text-center"><%= justTime(game.get("date")) %></td>
+                                            <td><%= game.get("comment") %></td>
+                                            <td><% if(game.get("result_submitted")) { %> 
+                                                    <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning btn-wide btn-block text-uppercase"><i class="fa fa-lock"></i> Se matchrapport</button>
+                                                <% } else { %>
+                                                    <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success btn-wide btn-block text-uppercase">Rapportera</button>
+                                                <% } %>
+                                            </td>
+                                            <td class="text-center"><% if(game.get("result_submitted")) { %> 
+                                                    <%= game.get("result").get("home_goals") %> - <%= game.get("result").get("away_goals") %>
+                                                <% } else { %>
+                                                    -
+                                                <% } %>
+                                            </td>   
+                                        </tr>
+                                    <% }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- /.panel-body -->
             </div>

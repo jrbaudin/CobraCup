@@ -324,7 +324,8 @@ exports.saveMatchResult = function(req, res) {
                                                   console.log("Managed to update the away captain stats...");
                                                   var string = encodeURIComponent('Resultat för match med id ');
                                                   var gameIdToSend = encodeURIComponent(req.params.gameid);
-                                                  res.redirect('/?info=' + string + '&id=' + gameIdToSend);
+                                                  var groupId = encodeURIComponent(game[0].get("group"));
+                                                  res.redirect('/games/group/' + groupId + '?info=' + string + '&id=' + gameIdToSend);
                                                 }, function(error) {
                                                   console.error('Error when trying to update away captain player stat');
                                                   console.error(error);
@@ -490,6 +491,9 @@ exports.loadGames = function(req, res) {
 };
 
 exports.loadGroupGames = function(req, res) {
+  var passedInfoVariable = req.query.info;
+  var passedIdVariable = req.query.id;
+
   var Game = Parse.Object.extend('Game');
   var gameQuery = new Parse.Query(Game);
   var groupIdentity = parseInt(req.params.groupid);
@@ -522,7 +526,9 @@ exports.loadGroupGames = function(req, res) {
             games: games,
             teams: teams,
             groupName: groupName,
-            groupIdentity: req.params.groupid
+            groupIdentity: req.params.groupid,
+            flashInfo: passedInfoVariable,
+            flashGameId: passedIdVariable
           });
         } else {
           res.render('group_games', {
