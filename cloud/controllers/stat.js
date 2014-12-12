@@ -188,273 +188,281 @@ exports.saveMatchResult = function(req, res) {
   gameQuery.include('result');
   gameQuery.find().then(function(game) {
     if (game) {
-      result_already_submitted = game[0].get("result_submitted");
-      //console.log("Found the game to save...");
-      var GameResult = Parse.Object.extend('GameResult');
-      var gameResultQuery = new Parse.Query(GameResult);
-      gameResultQuery.equalTo('game_id', game[0].get("game_id"));
-      gameResultQuery.find().then(function(gResult) {
-        if (gResult) {
-          //console.log("Found the game result to save...");
-          gResult[0].set('home_goals', parseInt(home_goals));
-          gResult[0].set('away_goals', parseInt(away_goals));
-          gResult[0].set('home_captain_goals', parseInt(home_captain_goals));
-          gResult[0].set('home_captain_fights', parseInt(home_captain_fights));
-          gResult[0].set('home_lieutenant_goals', parseInt(home_lieutenant_goals));
-          gResult[0].set('home_lieutenant_fights', parseInt(home_lieutenant_fights));
-          gResult[0].set('away_captain_goals', parseInt(away_captain_goals));
-          gResult[0].set('away_captain_fights', parseInt(away_captain_fights));
-          gResult[0].set('away_lieutenant_goals', parseInt(away_lieutenant_goals));
-          gResult[0].set('away_lieutenant_fights', parseInt(away_lieutenant_fights));
+      if((_.isEmpty(home_goals)) || (_.isEmpty(away_goals)) || (_.isEmpty(home_captain_id)) || (_.isEmpty(home_captain_goals)) || (_.isEmpty(home_captain_fights)) || (_.isEmpty(home_lieutenant_id)) || (_.isEmpty(home_lieutenant_goals)) || (_.isEmpty(home_lieutenant_fights)) || (_.isEmpty(away_captain_id)) || (_.isEmpty(away_captain_goals)) || (_.isEmpty(away_captain_fights)) || (_.isEmpty(away_lieutenant_id)) || (_.isEmpty(away_lieutenant_goals)) || (_.isEmpty(away_lieutenant_fights))){
+        console.error("Some mandatory fields were missing. Canceling!");
+        var stringErr = encodeURIComponent('Värden för fält saknades när match med id ');
+        var gameIdToSendErr = encodeURIComponent(req.params.gameid);
+        var groupIdErr = encodeURIComponent(game[0].get("group"));
+        res.redirect('/games/group/' + groupIdErr + '?error=' + stringErr + '&idError=' + gameIdToSendErr);
+      } else {
+        result_already_submitted = game[0].get("result_submitted");
+        //console.log("Found the game to save...");
+        var GameResult = Parse.Object.extend('GameResult');
+        var gameResultQuery = new Parse.Query(GameResult);
+        gameResultQuery.equalTo('game_id', game[0].get("game_id"));
+        gameResultQuery.find().then(function(gResult) {
+          if (gResult) {
+            //console.log("Found the game result to save...");
+            gResult[0].set('home_goals', parseInt(home_goals));
+            gResult[0].set('away_goals', parseInt(away_goals));
+            gResult[0].set('home_captain_goals', parseInt(home_captain_goals));
+            gResult[0].set('home_captain_fights', parseInt(home_captain_fights));
+            gResult[0].set('home_lieutenant_goals', parseInt(home_lieutenant_goals));
+            gResult[0].set('home_lieutenant_fights', parseInt(home_lieutenant_fights));
+            gResult[0].set('away_captain_goals', parseInt(away_captain_goals));
+            gResult[0].set('away_captain_fights', parseInt(away_captain_fights));
+            gResult[0].set('away_lieutenant_goals', parseInt(away_lieutenant_goals));
+            gResult[0].set('away_lieutenant_fights', parseInt(away_lieutenant_fights));
 
-          gResult[0].save().then(function(gResSaved) {
-            //console.log("Managed to save the result...");
-            game[0].set('result_submitted', true);
-            game[0].set('played', true);
-            game[0].save().then(function(savedGame) {
-              //console.log("Managed to save the game...");
-              var Team = Parse.Object.extend('Team');
+            gResult[0].save().then(function(gResSaved) {
+              //console.log("Managed to save the result...");
+              game[0].set('result_submitted', true);
+              game[0].set('played', true);
+              game[0].save().then(function(savedGame) {
+                //console.log("Managed to save the game...");
+                var Team = Parse.Object.extend('Team');
 
-              var innerHomeTeamQuery = new Parse.Query(Team);
-              innerHomeTeamQuery.equalTo('objectId', game[0].get("home").id);
+                var innerHomeTeamQuery = new Parse.Query(Team);
+                innerHomeTeamQuery.equalTo('objectId', game[0].get("home").id);
 
-              var innerAwayTeamQuery = new Parse.Query(Team);
-              innerAwayTeamQuery.equalTo('objectId', game[0].get("away").id);
+                var innerAwayTeamQuery = new Parse.Query(Team);
+                innerAwayTeamQuery.equalTo('objectId', game[0].get("away").id);
 
-              var Standings = Parse.Object.extend('Standings');
-              var standingsQuery = new Parse.Query(Standings);
-              standingsQuery.matchesQuery('team', innerHomeTeamQuery);
-              standingsQuery.find().then(function(standingHomeTeam) {
-                if (standingHomeTeam) {
-                  //console.log("Found the home team standing to save...");
-                  var h_points_current = standingHomeTeam[0].get("points");
+                var Standings = Parse.Object.extend('Standings');
+                var standingsQuery = new Parse.Query(Standings);
+                standingsQuery.matchesQuery('team', innerHomeTeamQuery);
+                standingsQuery.find().then(function(standingHomeTeam) {
+                  if (standingHomeTeam) {
+                    //console.log("Found the home team standing to save...");
+                    var h_points_current = standingHomeTeam[0].get("points");
 
-                  var h_goals_for_current = standingHomeTeam[0].get("goals_for");
-                  var h_goals_against_current = standingHomeTeam[0].get("goals_against");
-                  var h_wins_current = standingHomeTeam[0].get("wins");
-                  var h_losses_current = standingHomeTeam[0].get("losses");
-                  var h_ties_current = standingHomeTeam[0].get("tie");
-                  var h_games_played_current = standingHomeTeam[0].get("games_played");
+                    var h_goals_for_current = standingHomeTeam[0].get("goals_for");
+                    var h_goals_against_current = standingHomeTeam[0].get("goals_against");
+                    var h_wins_current = standingHomeTeam[0].get("wins");
+                    var h_losses_current = standingHomeTeam[0].get("losses");
+                    var h_ties_current = standingHomeTeam[0].get("tie");
+                    var h_games_played_current = standingHomeTeam[0].get("games_played");
 
-                  standingHomeTeam[0].set('points', h_points_current+home_points);
+                    standingHomeTeam[0].set('points', h_points_current+home_points);
 
-                  standingHomeTeam[0].set('games_played', h_games_played_current+1);
-                  standingHomeTeam[0].set('goals_for', h_goals_for_current+parseInt(home_goals));
-                  standingHomeTeam[0].set('goals_against', h_goals_against_current+parseInt(away_goals));
-                  standingHomeTeam[0].set('losses', h_losses_current+home_loss);
-                  standingHomeTeam[0].set('wins', h_wins_current+home_win);
-                  standingHomeTeam[0].set('tie', h_ties_current+home_tie);
+                    standingHomeTeam[0].set('games_played', h_games_played_current+1);
+                    standingHomeTeam[0].set('goals_for', h_goals_for_current+parseInt(home_goals));
+                    standingHomeTeam[0].set('goals_against', h_goals_against_current+parseInt(away_goals));
+                    standingHomeTeam[0].set('losses', h_losses_current+home_loss);
+                    standingHomeTeam[0].set('wins', h_wins_current+home_win);
+                    standingHomeTeam[0].set('tie', h_ties_current+home_tie);
 
-                  standingHomeTeam[0].save().then(function(gStandingSaved) {
-                    //console.log("Managed to save the result...");
-                    var standingsAwayQuery = new Parse.Query(Standings);
-                    standingsAwayQuery.matchesQuery('team', innerAwayTeamQuery);
-                    standingsAwayQuery.find().then(function(standingAwayTeam) {
-                      if (standingAwayTeam) {
-                        var a_points_current = standingAwayTeam[0].get("points");
+                    standingHomeTeam[0].save().then(function(gStandingSaved) {
+                      //console.log("Managed to save the result...");
+                      var standingsAwayQuery = new Parse.Query(Standings);
+                      standingsAwayQuery.matchesQuery('team', innerAwayTeamQuery);
+                      standingsAwayQuery.find().then(function(standingAwayTeam) {
+                        if (standingAwayTeam) {
+                          var a_points_current = standingAwayTeam[0].get("points");
 
-                        var a_goals_for_current = standingAwayTeam[0].get("goals_for");
-                        var a_goals_against_current = standingAwayTeam[0].get("goals_against");
-                        var a_wins_current = standingAwayTeam[0].get("wins");
-                        var a_losses_current = standingAwayTeam[0].get("losses");
-                        var a_ties_current = standingAwayTeam[0].get("tie");
-                        var a_games_played_current = standingAwayTeam[0].get("games_played");
+                          var a_goals_for_current = standingAwayTeam[0].get("goals_for");
+                          var a_goals_against_current = standingAwayTeam[0].get("goals_against");
+                          var a_wins_current = standingAwayTeam[0].get("wins");
+                          var a_losses_current = standingAwayTeam[0].get("losses");
+                          var a_ties_current = standingAwayTeam[0].get("tie");
+                          var a_games_played_current = standingAwayTeam[0].get("games_played");
 
-                        standingAwayTeam[0].set('points', a_points_current+away_points);
+                          standingAwayTeam[0].set('points', a_points_current+away_points);
 
-                        standingAwayTeam[0].set('games_played', a_games_played_current+1);
-                        standingAwayTeam[0].set('goals_for', a_goals_for_current+parseInt(away_goals));
-                        standingAwayTeam[0].set('goals_against', a_goals_against_current+parseInt(home_goals));
-                        standingAwayTeam[0].set('losses', a_losses_current+away_loss);
-                        standingAwayTeam[0].set('wins', a_wins_current+away_win);
-                        standingAwayTeam[0].set('tie', a_ties_current+away_tie);
+                          standingAwayTeam[0].set('games_played', a_games_played_current+1);
+                          standingAwayTeam[0].set('goals_for', a_goals_for_current+parseInt(away_goals));
+                          standingAwayTeam[0].set('goals_against', a_goals_against_current+parseInt(home_goals));
+                          standingAwayTeam[0].set('losses', a_losses_current+away_loss);
+                          standingAwayTeam[0].set('wins', a_wins_current+away_win);
+                          standingAwayTeam[0].set('tie', a_ties_current+away_tie);
 
-                        standingAwayTeam[0].save().then(function(gStandingAwaySaved) {
-                          console.log("Managed to save the result... trying to save player stats");
-                          
-                          var PlayerStats = Parse.Object.extend('PlayerStats');
+                          standingAwayTeam[0].save().then(function(gStandingAwaySaved) {
+                            console.log("Managed to save the result... trying to save player stats");
+                            
+                            var PlayerStats = Parse.Object.extend('PlayerStats');
 
-                          //Save home captain player stats (goals and fights)
-                          var HomeCapQuery = new Parse.Query(PlayerStats);
-                          HomeCapQuery.equalTo('player_id', home_captain_id);
-                          HomeCapQuery.find().then(function(homeCap) {
-                            if (homeCap) {
-                              //console.log("Found the home captain...");
-                              var home_cap_goals_current = parseInt(homeCap[0].get("player_goals"));
-                              var home_cap_fights_current = parseInt(homeCap[0].get("player_fights"));
-                              homeCap[0].set('player_goals', (home_cap_goals_current+parseInt(home_captain_goals)));
-                              homeCap[0].set('player_fights', (home_cap_fights_current+parseInt(home_captain_fights)));
-                              homeCap[0].save().then(function(homeCapSaved) {
-                                console.log("Managed to update the home captain stats...");
-                                //Save home lieutenant player stats (goals and fights)
-                                var HomeLieuQuery = new Parse.Query(PlayerStats);
-                                HomeLieuQuery.equalTo('player_id', home_lieutenant_id);
-                                HomeLieuQuery.find().then(function(homeLieu) {
-                                  if (homeLieu) {
-                                    //console.log("Found the home lieutenant...");
-                                    var home_lieu_goals_current = homeLieu[0].get("player_goals");
-                                    var home_lieu_fights_current = homeLieu[0].get("player_fights");
-                                    homeLieu[0].set('player_goals', (home_lieu_goals_current+parseInt(home_lieutenant_goals)));
-                                    homeLieu[0].set('player_fights', (home_lieu_fights_current+parseInt(home_lieutenant_fights)));
-                                    homeLieu[0].save().then(function(homeLieuSaved) {
-                                      console.log("Managed to update the home lieutenant stats...");
-                                      //Save away captain player stats (goals and fights)
-                                      var awayCapQuery = new Parse.Query(PlayerStats);
-                                      awayCapQuery.equalTo('player_id', away_captain_id);
-                                      awayCapQuery.find().then(function(awayCap) {
-                                        if (awayCap) {
-                                          //console.log("Found the away captain...");
-                                          var away_cap_goals_current = awayCap[0].get("player_goals");
-                                          var away_cap_fights_current = awayCap[0].get("player_fights");
-                                          awayCap[0].set('player_goals', (away_cap_goals_current+parseInt(away_captain_goals)));
-                                          awayCap[0].set('player_fights', (away_cap_fights_current+parseInt(away_captain_fights)));
-                                          awayCap[0].save().then(function(awayCapSaved) {
-                                            console.log("Managed to update the away captain stats...");
-                                            //Save away lieutenant player stats (goals and fights)
-                                            var awayLieuQuery = new Parse.Query(PlayerStats);
-                                            awayLieuQuery.equalTo('player_id', away_lieutenant_id);
-                                            awayLieuQuery.find().then(function(awayLieu) {
-                                              if (awayLieu) {
-                                                //console.log("Found the away lieutenant...");
-                                                var away_lieu_goals_current = awayLieu[0].get("player_goals");
-                                                var away_lieu_fights_current = awayLieu[0].get("player_fights");
-                                                awayLieu[0].set('player_goals', (away_lieu_goals_current+parseInt(away_lieutenant_goals)));
-                                                awayLieu[0].set('player_fights', (away_lieu_fights_current+parseInt(away_lieutenant_fights)));
-                                                awayLieu[0].save().then(function(awayLieuSaved) {
-                                                  console.log("Managed to update the away captain stats...");
-                                                  var string = encodeURIComponent('Resultat för match med id ');
-                                                  var gameIdToSend = encodeURIComponent(req.params.gameid);
-                                                  var groupId = encodeURIComponent(game[0].get("group"));
-                                                  res.redirect('/games/group/' + groupId + '?info=' + string + '&id=' + gameIdToSend);
-                                                }, function(error) {
+                            //Save home captain player stats (goals and fights)
+                            var HomeCapQuery = new Parse.Query(PlayerStats);
+                            HomeCapQuery.equalTo('player_id', home_captain_id);
+                            HomeCapQuery.find().then(function(homeCap) {
+                              if (homeCap) {
+                                //console.log("Found the home captain...");
+                                var home_cap_goals_current = parseInt(homeCap[0].get("player_goals"));
+                                var home_cap_fights_current = parseInt(homeCap[0].get("player_fights"));
+                                homeCap[0].set('player_goals', (home_cap_goals_current+parseInt(home_captain_goals)));
+                                homeCap[0].set('player_fights', (home_cap_fights_current+parseInt(home_captain_fights)));
+                                homeCap[0].save().then(function(homeCapSaved) {
+                                  console.log("Managed to update the home captain stats...");
+                                  //Save home lieutenant player stats (goals and fights)
+                                  var HomeLieuQuery = new Parse.Query(PlayerStats);
+                                  HomeLieuQuery.equalTo('player_id', home_lieutenant_id);
+                                  HomeLieuQuery.find().then(function(homeLieu) {
+                                    if (homeLieu) {
+                                      //console.log("Found the home lieutenant...");
+                                      var home_lieu_goals_current = homeLieu[0].get("player_goals");
+                                      var home_lieu_fights_current = homeLieu[0].get("player_fights");
+                                      homeLieu[0].set('player_goals', (home_lieu_goals_current+parseInt(home_lieutenant_goals)));
+                                      homeLieu[0].set('player_fights', (home_lieu_fights_current+parseInt(home_lieutenant_fights)));
+                                      homeLieu[0].save().then(function(homeLieuSaved) {
+                                        console.log("Managed to update the home lieutenant stats...");
+                                        //Save away captain player stats (goals and fights)
+                                        var awayCapQuery = new Parse.Query(PlayerStats);
+                                        awayCapQuery.equalTo('player_id', away_captain_id);
+                                        awayCapQuery.find().then(function(awayCap) {
+                                          if (awayCap) {
+                                            //console.log("Found the away captain...");
+                                            var away_cap_goals_current = awayCap[0].get("player_goals");
+                                            var away_cap_fights_current = awayCap[0].get("player_fights");
+                                            awayCap[0].set('player_goals', (away_cap_goals_current+parseInt(away_captain_goals)));
+                                            awayCap[0].set('player_fights', (away_cap_fights_current+parseInt(away_captain_fights)));
+                                            awayCap[0].save().then(function(awayCapSaved) {
+                                              console.log("Managed to update the away captain stats...");
+                                              //Save away lieutenant player stats (goals and fights)
+                                              var awayLieuQuery = new Parse.Query(PlayerStats);
+                                              awayLieuQuery.equalTo('player_id', away_lieutenant_id);
+                                              awayLieuQuery.find().then(function(awayLieu) {
+                                                if (awayLieu) {
+                                                  //console.log("Found the away lieutenant...");
+                                                  var away_lieu_goals_current = awayLieu[0].get("player_goals");
+                                                  var away_lieu_fights_current = awayLieu[0].get("player_fights");
+                                                  awayLieu[0].set('player_goals', (away_lieu_goals_current+parseInt(away_lieutenant_goals)));
+                                                  awayLieu[0].set('player_fights', (away_lieu_fights_current+parseInt(away_lieutenant_fights)));
+                                                  awayLieu[0].save().then(function(awayLieuSaved) {
+                                                    console.log("Managed to update the away captain stats...");
+                                                    var string = encodeURIComponent('Resultat för match med id ');
+                                                    var gameIdToSend = encodeURIComponent(req.params.gameid);
+                                                    var groupId = encodeURIComponent(game[0].get("group"));
+                                                    res.redirect('/games/group/' + groupId + '?info=' + string + '&id=' + gameIdToSend);
+                                                  }, function(error) {
+                                                    console.error('Error when trying to update away captain player stat');
+                                                    console.error(error);
+                                                    var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
+                                                    res.redirect('/?error=' + string);
+                                                  });
+                                                } else {
                                                   console.error('Error when trying to update away captain player stat');
-                                                  console.error(error);
                                                   var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
                                                   res.redirect('/?error=' + string);
-                                                });
-                                              } else {
-                                                console.error('Error when trying to update away captain player stat');
+                                                }
+                                              },
+                                              function(error){
+                                                console.error('Error when trying to update away captain player stats');
+                                                console.error(error);
                                                 var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
                                                 res.redirect('/?error=' + string);
-                                              }
-                                            },
-                                            function(error){
-                                              console.error('Error when trying to update away captain player stats');
+                                              });
+                                            }, function(error) {
+                                              console.error('Error when trying to update away captain player stat');
                                               console.error(error);
                                               var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
                                               res.redirect('/?error=' + string);
                                             });
-                                          }, function(error) {
-                                            console.error('Error when trying to update away captain player stat');
-                                            console.error(error);
+                                          } else {
+                                            console.error('Error when trying to find away captain player stat');
                                             var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
                                             res.redirect('/?error=' + string);
-                                          });
-                                        } else {
-                                          console.error('Error when trying to find away captain player stat');
+                                          }
+                                        },
+                                        function(error){
+                                          console.error('Error when trying to update away captain player stats');
+                                          console.error(error);
                                           var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
                                           res.redirect('/?error=' + string);
-                                        }
-                                      },
-                                      function(error){
-                                        console.error('Error when trying to update away captain player stats');
+                                        });
+                                      }, function(error) {
+                                        console.error('Error when trying to update home lieutenant player stat');
                                         console.error(error);
-                                        var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
-                                        res.redirect('/?error=' + string);
                                       });
-                                    }, function(error) {
+                                    } else {
                                       console.error('Error when trying to update home lieutenant player stat');
-                                      console.error(error);
-                                    });
-                                  } else {
-                                    console.error('Error when trying to update home lieutenant player stat');
+                                      var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
+                                      res.redirect('/?error=' + string);
+                                    }
+                                  },
+                                  function(error){
+                                    console.error('Error when trying to update home lieutenant player stats');
+                                    console.error(error);
                                     var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
                                     res.redirect('/?error=' + string);
-                                  }
-                                },
-                                function(error){
-                                  console.error('Error when trying to update home lieutenant player stats');
+                                  });
+
+                                }, function(error) {
+                                  console.error('Error when trying to update home captain player stat');
                                   console.error(error);
                                   var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
                                   res.redirect('/?error=' + string);
                                 });
-
-                              }, function(error) {
+                              } else {
                                 console.error('Error when trying to update home captain player stat');
-                                console.error(error);
                                 var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
                                 res.redirect('/?error=' + string);
-                              });
-                            } else {
-                              console.error('Error when trying to update home captain player stat');
+                              }
+                            },
+                            function(error){
+                              console.error('Error when trying to update home captain player stats');
+                              console.error(error);
                               var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
                               res.redirect('/?error=' + string);
-                            }
-                          },
-                          function(error){
-                            console.error('Error when trying to update home captain player stats');
+                            });
+                          }, function(error) {
+                            console.error('Error when trying to save game result');
                             console.error(error);
-                            var string = encodeURIComponent('Matchresultat sparat med vissa problem, kontakta admin');
+                            var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G8');
                             res.redirect('/?error=' + string);
                           });
-                        }, function(error) {
-                          console.error('Error when trying to save game result');
-                          console.error(error);
-                          var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G8');
+                        } else {
+                          var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G9');
                           res.redirect('/?error=' + string);
-                        });
-                      } else {
-                        var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G9');
+                        }
+                      },
+                      function(error){
+                        console.error('Error when trying to find game result to save');
+                        console.error(error);
+                        var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G10');
                         res.redirect('/?error=' + string);
-                      }
-                    },
-                    function(error){
-                      console.error('Error when trying to find game result to save');
+                      });
+
+                    }, function(error) {
+                      console.error('Error when trying to save game result');
                       console.error(error);
-                      var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G10');
+                      var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G11');
                       res.redirect('/?error=' + string);
                     });
-
-                  }, function(error) {
-                    console.error('Error when trying to save game result');
-                    console.error(error);
-                    var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G11');
+                  } else {
+                    var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G12');
                     res.redirect('/?error=' + string);
-                  });
-                } else {
-                  var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G12');
+                  }
+                },
+                function(error){
+                  console.error('Error when trying to find game result to save');
+                  console.error(error);
+                  var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G13');
                   res.redirect('/?error=' + string);
-                }
-              },
-              function(error){
-                console.error('Error when trying to find game result to save');
+                });
+              }, function(error) {
+                console.error('Error when trying to save game');
                 console.error(error);
-                var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G13');
+                var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G1');
                 res.redirect('/?error=' + string);
               });
             }, function(error) {
-              console.error('Error when trying to save game');
+              console.error('Error when trying to save game result');
               console.error(error);
-              var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G1');
+              var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G2');
               res.redirect('/?error=' + string);
             });
-          }, function(error) {
-            console.error('Error when trying to save game result');
-            console.error(error);
-            var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G2');
+          } else {
+            var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G3');
             res.redirect('/?error=' + string);
-          });
-        } else {
-          var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G3');
+          }
+        },
+        function(error){
+          console.error('Error when trying to find game result to save');
+          console.error(error);
+          var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G4');
           res.redirect('/?error=' + string);
-        }
-      },
-      function(error){
-        console.error('Error when trying to find game result to save');
-        console.error(error);
-        var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G4');
-        res.redirect('/?error=' + string);
-      });
+        });
+      }
     } else {
       var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G5');
       res.redirect('/?error=' + string);
@@ -491,6 +499,9 @@ exports.loadGames = function(req, res) {
 };
 
 exports.loadGroupGames = function(req, res) {
+  var passedErrorVariable = req.query.error;
+  var passedErrorGameIdVariable = req.query.idError;
+  //console.log("TEST: passedErrorVariable = " + passedErrorVariable + " & passedErrorGameIdVariable = " + passedErrorGameIdVariable);
   var passedInfoVariable = req.query.info;
   var passedIdVariable = req.query.id;
 
@@ -528,7 +539,9 @@ exports.loadGroupGames = function(req, res) {
             groupName: groupName,
             groupIdentity: req.params.groupid,
             flashInfo: passedInfoVariable,
-            flashGameId: passedIdVariable
+            flashGameId: passedIdVariable,
+            flashErrorGame: passedErrorVariable,
+            flashErrorGameId: passedErrorGameIdVariable
           });
         } else {
           res.render('group_games', {
