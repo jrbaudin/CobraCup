@@ -53,18 +53,41 @@ exports.showPlayerStats = function(req, res) {
   playerStatGoalQuery.include("player_team.nhlTeam");
   playerStatGoalQuery.find().then(function(playerGoalStats) {
     if (playerGoalStats) {
-      console.log("Gotten the playerGoalStats...");
+      //console.log("Gotten the playerGoalStats...");
       //console.log("playerStats: " + JSON.stringify(playerStats));
       var playerStatFightQuery = new Parse.Query(PlayerStats);
       playerStatFightQuery.descending('player_fights');
       playerStatFightQuery.include("player_team.nhlTeam");
       playerStatFightQuery.find().then(function(playerFightStats) {
         if (playerFightStats) {
-          console.log("Gotten the playerFightStats...");
+          //console.log("Gotten the playerFightStats...");
           //console.log("playerStats: " + JSON.stringify(playerStats));
-          res.render('playerstats', {
-            playerGoals: playerGoalStats,
-            playerFights: playerFightStats
+          var Standings = Parse.Object.extend('Standings');
+          var standingsQuery = new Parse.Query(Standings);
+          standingsQuery.find().then(function(standings) {
+            if (standings) {
+              res.render('playerstats', {
+                playerGoals: playerGoalStats,
+                playerFights: playerFightStats,
+                standings: standings
+              });
+            } else {
+              console.error('Problem when trying to get player stats, could not get any');
+              res.render('playerstats', {
+                flashError: 'Problem när den önskade tabellen skulle hämtas',
+                playerGoals: playerGoalStats,
+                playerFights: playerFightStats
+              });
+            }
+          },
+          function(error){
+            console.error('Error when trying to get team standings');
+            console.error(error);
+            res.render('playerstats', {
+              flashError: ('Problem när den önskade tabellen skulle hämtas: ' + error.message),
+              playerGoals: playerGoalStats,
+              playerFights: playerFightStats
+            });
           });
         } else {
           console.error('Problem when trying to get player stats, could not get any');
