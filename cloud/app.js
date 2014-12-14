@@ -91,5 +91,7 @@ app.put('/admin/match', adminController.createMatch);
 app.get('/admin/final', adminController.loadFinalCreator);
 app.put('/admin/final', adminController.createFinal);
 
+app.get('/feed', statController.loadFeed);
+
 // Required for initializing Express app in Cloud Code.
 app.listen();

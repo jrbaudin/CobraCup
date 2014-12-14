@@ -628,3 +628,25 @@ exports.loadGroupGames = function(req, res) {
     res.render('group_games', {flashError: 'Problem när den önskade matchen skulle hämtas'});
   });
 };
+
+exports.loadFeed = function(req, res) {
+  var Notification = Parse.Object.extend('Notification');
+  var notifcationQuery = new Parse.Query(Notification);
+  notifcationQuery.descending('createdAt');
+  notifcationQuery.find().then(function(notes) {
+    if (notes) {
+      console.log("Gotten the Notes...");
+      res.render('feed', {
+        notifications: notes
+      });
+    } else {
+      console.error('Problem when trying to get the notes.');
+      res.render('hub', {flashError: 'Problem när livefeeden skulle hämtas.'});
+    }
+  },
+  function(error){
+    console.error('Error when trying to get the live feed');
+    console.error(error);
+    res.render('hub', {flashError: ('Problem när livefeeden skulle hämtas: ' + error.message)});
+  });
+};
