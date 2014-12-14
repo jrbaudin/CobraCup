@@ -91,7 +91,7 @@
                 <% notifications.forEach(function(note) { %>
                     <div class="panel">
                         <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0;">              
-                            <h3><%= note.get("header") %></h3>
+                            <h6><%= note.get("header") %> <small><%= getFromNow(note.get("createdAt")) %></small></h6>
                             <p><%= note.get("message") %></p>
                         </div>
                         <!-- /.panel-body -->

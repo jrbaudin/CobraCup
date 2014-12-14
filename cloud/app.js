@@ -58,6 +58,10 @@ app.locals.getFirstname = function(fullname) {
 	return _.first(aName);
 };
 
+app.locals.getFromNow = function(timestamp1) {
+	return momentSWE(timestamp1).locale('sv').fromNow();
+};
+
 // Show homepage
 app.get('/', hubController.index); 
 
