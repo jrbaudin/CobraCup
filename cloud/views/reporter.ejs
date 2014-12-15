@@ -59,7 +59,8 @@
                   </ul>
                 </li>
                 <li><a href="/games">Matcher</a></li>
-                <li><a href="http://cobracup.se" target="_blank">cobracup.se</a></li>
+                <li><a href="/feed"><mark>Live</mark></a></li>
+                <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
               </ul>
               <% if(typeof(count) !== 'undefined'){ %>
                 <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
@@ -131,13 +132,13 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-5 col-xs-6"> 
+                                <div class="col-md-5 col-xs-4"> 
                                     <p style="margin-bottom: 0;"><small><strong>Spelare</strong></small></p>
                                 </div>
-                                <div class="col-md-2 col-xs-3">
+                                <div class="col-md-2 col-xs-4">
                                     <p class="text-center" style="margin-bottom: 0;"><small><strong>Mål</strong></small></p>
                                 </div>
-                                <div class="col-md-2 col-xs-3">
+                                <div class="col-md-2 col-xs-4">
                                     <p class="text-center" style="margin-bottom: 0;"><small><strong>Fajter</strong></small></p>
                                 </div>
                             </div>
@@ -148,17 +149,17 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-6"> 
-                                    <p><%= hometeam.get("captain_name") %></p>
+                                <div class="col-md-5 col-xs-4"> 
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(hometeam.get("captain_name")) %></p>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-3">
+                                <div class="form-group col-md-2 col-xs-4">
                                     <% if(!(typeof(game[0].get("result").get("home_captain_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_captain_goals"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="0" value="<%= game[0].get("result").get("home_captain_goals") %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="0" required>
                                     <% } %> 
                                 </div>
-                                <div class="form-group col-md-2 col-xs-3">
+                                <div class="form-group col-md-2 col-xs-4">
                                     <% if(!(typeof(game[0].get("result").get("home_captain_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_captain_fights"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="home_captain_fights" name="home_captain_fights" placeholder="0" value="<%= game[0].get("result").get("home_captain_fights") %>" required>
                                     <% } else { %>
@@ -167,17 +168,17 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-6"> 
-                                    <p><%= hometeam.get("lieutenant_name") %></p>
+                                <div class="col-md-5 col-xs-4"> 
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(hometeam.get("lieutenant_name")) %></p>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-3">
+                                <div class="form-group col-md-2 col-xs-4">
                                     <% if(!(typeof(game[0].get("result").get("home_lieutenant_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_lieutenant_goals"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="0" value="<%= game[0].get("result").get("home_lieutenant_goals") %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="0" required>
                                     <% } %> 
                                 </div>
-                                <div class="form-group col-md-2 col-xs-3">                                    
+                                <div class="form-group col-md-2 col-xs-4">                                    
                                     <% if(!(typeof(game[0].get("result").get("home_lieutenant_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_lieutenant_fights"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="home_lieutenant_fights" name="home_lieutenant_fights" placeholder="0" value="<%= game[0].get("result").get("home_lieutenant_fights") %>" required>
                                     <% } else { %>
@@ -189,17 +190,17 @@
                                 <h6 class="text-uppercase"><img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Bortalaget</strong></span></h6>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-6"> 
-                                    <p><%= awayteam.get("captain_name") %></p>
+                                <div class="col-md-5 col-xs-4"> 
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(awayteam.get("captain_name")) %></p>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-3">
+                                <div class="form-group col-md-2 col-xs-4">
                                     <% if(!(typeof(game[0].get("result").get("away_captain_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_captain_goals"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="away_captain_goals" name="away_captain_goals" placeholder="0" value="<%= game[0].get("result").get("away_captain_goals") %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="away_captain_goals" name="away_captain_goals" placeholder="0" required>
                                     <% } %>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-3">                                    
+                                <div class="form-group col-md-2 col-xs-4">                                    
                                     <% if(!(typeof(game[0].get("result").get("away_captain_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_captain_fights"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="away_captain_fights" name="away_captain_fights" placeholder="0" value="<%= game[0].get("result").get("away_captain_fights") %>" required>
                                     <% } else { %>
@@ -208,17 +209,17 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-6"> 
-                                    <p><%= awayteam.get("lieutenant_name") %></p>
+                                <div class="col-md-5 col-xs-4"> 
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(awayteam.get("lieutenant_name")) %></p>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-3">                                    
+                                <div class="form-group col-md-2 col-xs-4">                                    
                                     <% if(!(typeof(game[0].get("result").get("away_lieutenant_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_lieutenant_goals"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="away_lieutenant_goals" name="away_lieutenant_goals" placeholder="0" value="<%= game[0].get("result").get("away_lieutenant_goals") %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="away_lieutenant_goals" name="away_lieutenant_goals" placeholder="0" required>
                                     <% } %>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-3">
+                                <div class="form-group col-md-2 col-xs-4">
                                     <% if(!(typeof(game[0].get("result").get("away_lieutenant_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_lieutenant_fights"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="away_lieutenant_fights" name="away_lieutenant_fights" placeholder="0" value="<%= game[0].get("result").get("away_lieutenant_fights") %>" required>
                                     <% } else { %>

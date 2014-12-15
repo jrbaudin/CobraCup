@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
  
-    <title>Rapportera - Cobra Cup 2015</title>
+    <title>Live - Cobra Cup 2015</title>
  
     <!-- Latest compiled and minified CSS -->
     <link href="dist/css/vendor/bootstrap.min.css" rel="stylesheet">
@@ -60,7 +60,7 @@
                 </li>
                 <li><a href="/games">Matcher</a></li>
                 <li class="active"><a href="/feed"><mark>Live</mark></a></li>
-                <li><a href="http://cobracup.se" target="_blank">cobracup.se</a></li>
+                <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
               </ul>
               <% if(typeof(count) !== 'undefined'){ %>
                 <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
@@ -68,7 +68,7 @@
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-    <div class="container-fluid">
+    <div class="container">
         <% if(typeof(flashError) !== 'undefined'){ %>
             <div class="alert alert-danger alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert">
@@ -86,29 +86,41 @@
               <strong>Fel!</strong> <%= flashErrorGame %>
             </div>  
         <% } %>
-        <% if(typeof(notifications) !== 'undefined'){ %>
-            <div class="col-md-12">
+        <div class="col-md-3 hidden-xs">
+            <div class="row">
+                <div class="panel" style="background-color: #eff0f2;">
+                    <div class="panel-body">
+                        <p class="text-uppercase lead text-center"  style="margin-bottom:0;">Cobra Cup 2015</p>
+                        <p class="text-uppercase text-center lead"><strong><%= getFromNowStripped("2014-12-22 13:00:00") %></strong></p>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        </div>
+        <div class="col-md-9 col-xs-12">
+            <% if(typeof(notifications) !== 'undefined'){ %>
                 <% notifications.forEach(function(note) { %>
-                    <div class="panel">
-                        <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0;">              
-                            <h6><%= note.get("header") %> <small><%= getFromNow(note.get("createdAt")) %></small></h6>
-                            <p><%= note.get("message") %></p>
+                    <div class="panel" style="background-color: #eff0f2;">
+                        <div class="panel-body" style="margin-bottom: 0; padding-bottom: 5px; padding-top: 5px;">              
+                            <p style="margin-bottom:0;"><a href="<%= note.get("link") %>" style="color: rgb(241,102,57);"><strong><%= note.get("header") %></strong></a> <small style="color: #E74C3C; margin-left: 10px;"><%= getFromNow(note.get("published")) %></small></p>
+                            <p style="margin-bottom:0;"><%= note.get("message") %></p>
                         </div>
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
                 <% }) %>
-            </div>
-        <% } else { %>
-            <div class="panel">
-                <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0;">              
-                    <p>Kunde inte ladda live feeden! Försök att ladda om sidan.</p>
+            <% } else { %>
+                <div class="panel" style="background-color: #eff0f2;">
+                    <div class="panel-body" style="margin-bottom: 0; padding-bottom: 5px; padding-top: 5px;">              
+                        <p>Kunde inte ladda live feeden! Försök att ladda om sidan.</p>
+                    </div>
+                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
-        <% } %>
-        <!-- /.col-lg-12 -->
+                <!-- /.panel -->
+            <% } %>
+        </div>
+        <!-- /.col-md-8 -->
     </div>
     <!-- /.container -->
 
