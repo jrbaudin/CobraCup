@@ -109,30 +109,106 @@
             </div>  
         <% } %>
         <% if(typeof(teams) !== 'undefined'){ %>
-            <div class="row demo-tiles">
-            <%
-              teams.forEach(function(team) { %>
-                  <div class="col-md-3 col-lg-3">
-                    <div class="tile tile-hot">
-                      <% if(team.get("champion")) { %>
-                        <img src="img/trophy.png" alt="Rookie ribbon" class="tile-hot-trophy">
-                      <% } %>
-                      
-                      <% if(team.get("level") == 1) { %>
-                        <img src="dist/img/icons/svg/ribbon_rookie.svg" alt="Rookie ribbon" class="tile-hot-ribbon">
-                      <% } else if(team.get("level") == 2) { %>
-                        <img src="dist/img/icons/svg/ribbon_pro.svg" alt="Pro ribbon" class="tile-hot-ribbon">
-                      <% } else if(team.get("level") == 3) { %>
-                        <img src="dist/img/icons/svg/ribbon_allstar.svg" alt="All Star ribbon" class="tile-hot-ribbon">
-                      <% } %>
-                      <img src="<%= team.get("nhlTeam").get("logo").url() %>" alt="Team logo" class="tile-image big-illustration img-circle">
-                      <h3 class="tile-title text-uppercase"><%= team.get("team_name") %></h3>
-                      <p><%= team.get("nhlTeam").get("name") %></p>
-                      <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>">Team Corner</a>
-                    </div>
+            <div class="row hidden-xs">
+              <div class="col-md-12" style="padding-bottom: 10px;">
+                <button class="btn btn-xs btn-embossed btn-primary" id="viewTiles" title="Visa lagen som ett rutnät">
+                  <i class="fa fa-th"></i> Rutnät
+                </button>
+                <button class="btn btn-xs btn-embossed btn-primary" id="viewList" title="Visa lagen som en lista">
+                  <i class="fa fa-list"></i> Lista
+                </button>
+              </div>
+            </div>
+            
+            <div class="row demo-tiles" id="tilesView">
+              <% teams.forEach(function(team) { %>
+                <div class="col-md-3 col-lg-3">
+                  <div class="tile tile-hot">
+                    <% if(team.get("champion")) { %>
+                      <img src="img/trophy.png" alt="Rookie ribbon" class="tile-hot-trophy">
+                    <% } %>
+                    
+                    <% if(team.get("level") == 1) { %>
+                      <img src="dist/img/icons/svg/ribbon_rookie.svg" alt="Rookie ribbon" class="tile-hot-ribbon">
+                    <% } else if(team.get("level") == 2) { %>
+                      <img src="dist/img/icons/svg/ribbon_pro.svg" alt="Pro ribbon" class="tile-hot-ribbon">
+                    <% } else if(team.get("level") == 3) { %>
+                      <img src="dist/img/icons/svg/ribbon_allstar.svg" alt="All Star ribbon" class="tile-hot-ribbon">
+                    <% } %>
+                    <img src="<%= team.get("nhlTeam").get("logo").url() %>" alt="Team logo" class="tile-image big-illustration img-circle">
+                    <h3 class="tile-title text-uppercase"><%= team.get("team_name") %></h3>
+                    <p><%= team.get("nhlTeam").get("name") %></p>
+                    <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>">Team Corner</a>
                   </div>
-            <% }) %>
-            </div> <!-- /tiles -->
+                </div>
+              <% }) %>
+            </div> 
+            <!-- /tiles -->
+            <div class="row" id="listView">
+              <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-globe fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Anmälda lag</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                      <div class="table-responsive">              
+                          <table class="table table-bordered table-striped table-condensed">
+                              <thead>
+                                  <tr>
+                                      <th class="text-center">#</th>
+                                      <th class="text-center text-uppercase"></th>
+                                      <th class="text-uppercase">Lag</th>
+                                      <th class="text-uppercase">Namn</th>
+                                      <th class="text-center text-uppercase">Nivå</th>
+                                      <th class="text-center text-uppercase">Mästare</th>
+                                      <th></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <% 
+                                  var i = 1;
+                                  teams.forEach(function(team) { 
+                                      
+                                      var champion = "";
+                                      var level = "Oklart";
+                                      if(team.get("champion")) { 
+                                        champion = "2014";
+                                      }
+
+                                      if(team.get("level") == 1) {
+                                        level = "Rookie";
+                                      } else if(team.get("level") == 2) {
+                                        level = "Pro";
+                                      } else if(team.get("level") == 3) {
+                                        level = "All Star";
+                                      }
+                                    %>
+                                      <tr>
+                                          <td class="text-center"><%= i %></td>
+                                          <td><a href="/team/<%= team.get("team_id") %>" target="_blank"><img src="<%= team.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;"></a></td>
+                                          <td><%= team.get("nhlTeam").get("name") %></td>
+                                          <td><strong><%= team.get("team_name") %></strong></td>
+                                          <td class="text-center"><%= level %></td>
+                                          <td class="text-center"><%= champion %></td>
+                                          <td><button  onclick="window.location.href='/team/<%= team.get("team_id") %>'" class="btn btn-xs btn-primary btn-wide btn-block text-uppercase"><i class="fa fa-home"></i> Team Corner</button></td>
+                                      </tr>
+                                  <% 
+                                  i = i+1;
+                                  }) %>
+                              </tbody>
+                          </table>
+                      </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+              </div>
+            </div>
           <% } %>
     </div>
     <!-- /.col-lg-12 -->
@@ -150,6 +226,23 @@
 
   <!-- Latest compiled and minified JavaScript -->
   <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+
+  <script>
+      $('#listView').hide();
+
+      $('#viewList, #viewTiles').click(function () {
+          if (this.id == 'viewList') {
+            console.log("Klickade på LIST");
+            $('#listView').show();
+            $('#tilesView').hide();
+          }
+          else if (this.id == 'viewTiles') {
+            console.log("Klickade på TILES");
+            $('#tilesView').show();
+            $('#listView').hide();
+          }
+      });
+  </script>
 </body>
  
 </html>
