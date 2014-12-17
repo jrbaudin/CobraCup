@@ -125,7 +125,7 @@
                 <div class="col-md-3 col-lg-3">
                   <div class="tile tile-hot">
                     <% if(team.get("champion")) { %>
-                      <img src="img/trophy.png" alt="Rookie ribbon" class="tile-hot-trophy">
+                      <img src="img/trophy.png" alt="Rookie ribbon" class="tile-hot-trophy" title="<%= team.get("champion_comment") %>">
                     <% } %>
                     
                     <% if(team.get("level") == 1) { %>
@@ -148,12 +148,12 @@
               <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h6 class="panel-title text-uppercase">
+                        <h2 class="panel-title text-uppercase">
                             <span class="fa-stack fa-lg">
                             <i class="fa fa-circle fa-stack-2x"></i>
-                            <i class="fa fa-globe fa-stack-1x fa-inverse"></i>
+                            <i class="fa fa-group fa-stack-1x fa-inverse"></i>
                             </span> <strong>Anmälda lag</strong>
-                        </h6>
+                        </h2>
                     </div>
                     <div class="panel-body">
                       <div class="table-responsive">              
@@ -177,7 +177,7 @@
                                       var champion = "";
                                       var level = "Oklart";
                                       if(team.get("champion")) { 
-                                        champion = "2014";
+                                        champion = team.get("champion_comment");
                                       }
 
                                       if(team.get("level") == 1) {

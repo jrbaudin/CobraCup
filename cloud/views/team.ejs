@@ -336,7 +336,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody style="font-size: 12px;">
-                                                    <% if(typeof(standings) !== 'undefined'){
+                                                    <% if((typeof(standings) !== 'undefined') && (!_.isEqual(group, "0"))){
                                                         var i = 1;
                                                         standings.forEach(function(standing) { %>
                                                             <% if(_.isEqual(group, standing.get("team").get("group"))){ %>
