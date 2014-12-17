@@ -100,6 +100,9 @@ app.get('/admin/tools', requireUser, adminController.tools);
 
 app.get('/admin/match', adminController.loadMatchCreator);
 app.put('/admin/match', adminController.createMatch);
+
+app.get('/admin/push', adminController.loadPushCreator);
+app.put('/admin/push', adminController.createPush);
  
 app.get('/admin/final', adminController.loadFinalCreator);
 app.put('/admin/final', adminController.createFinal);
