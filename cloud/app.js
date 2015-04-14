@@ -1,6 +1,7 @@
 var express = require('express');
-//var moment = require('moment');
+//var momentDefault = require('moment');
 var momentSWE = require('cloud/tools/moment-with-locales.min.js');
+var momentTwitter = require('cloud/tools/moment-twitter.js');
 var _ = require('underscore');
 
 var Mailgun = require('mailgun');
@@ -59,7 +60,15 @@ app.locals.getFirstname = function(fullname) {
 };
 
 app.locals.getFromNow = function(timestamp1) {
-	return momentSWE(timestamp1).locale('sv').fromNow();
+	var currentTime = momentSWE().locale('sv').zone('+0100');
+	var published = momentSWE(timestamp1).locale('sv').zone('+0100');
+	return published.from(currentTime);
+};
+
+app.locals.getFromNowStripped = function(timestamp2) {
+	var currentTime = momentSWE().locale('sv').zone('+0100');
+	var published = momentSWE(timestamp2).locale('sv').zone('+0100');
+	return published.from(currentTime, true);
 };
 
 // Show homepage
@@ -91,6 +100,9 @@ app.get('/admin/tools', requireUser, adminController.tools);
 
 app.get('/admin/match', adminController.loadMatchCreator);
 app.put('/admin/match', adminController.createMatch);
+
+app.get('/admin/push', adminController.loadPushCreator);
+app.put('/admin/push', adminController.createPush);
  
 app.get('/admin/final', adminController.loadFinalCreator);
 app.put('/admin/final', adminController.createFinal);

@@ -63,7 +63,8 @@
                  </ul>
                </li>
                <li><a href="/games">Matcher</a></li>
-               <li><a href="http://cobracup.se" target="_blank">cobracup.se</a></li>
+               <li><a href="/feed"><mark>Live</mark></a></li>
+               <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
              </ul>
              <% if(typeof(count) !== 'undefined'){ %>
                <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
@@ -335,7 +336,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody style="font-size: 12px;">
-                                                    <% if(typeof(standings) !== 'undefined'){
+                                                    <% if((typeof(standings) !== 'undefined') && (!_.isEqual(group, "0"))){
                                                         var i = 1;
                                                         standings.forEach(function(standing) { %>
                                                             <% if(_.isEqual(group, standing.get("team").get("group"))){ %>

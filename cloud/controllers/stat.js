@@ -1,10 +1,6 @@
-//var Pushover = require('cloud/modules/node-pushover/pushover.js');
-/*var push = new Pushover({
-  token: "a4j1uMb3bDcULTGQ5pff6QfVQuQZi4",
-  user: "u3GvsRzcVrAWcAZAJta4myhNEaF6au"
-});*/
-
 var _ = require('underscore');
+var moment = require('moment');
+var momentSWE = require('cloud/tools/moment-with-locales.min.js');
 
 exports.showLeague = function(req, res) {
   var Standings = Parse.Object.extend('Standings');
@@ -222,7 +218,7 @@ exports.saveMatchResult = function(req, res) {
     if (game) {
       if((_.isEmpty(home_goals)) || (_.isEmpty(away_goals)) || (_.isEmpty(home_captain_id)) || (_.isEmpty(home_captain_goals)) || (_.isEmpty(home_captain_fights)) || (_.isEmpty(home_lieutenant_id)) || (_.isEmpty(home_lieutenant_goals)) || (_.isEmpty(home_lieutenant_fights)) || (_.isEmpty(away_captain_id)) || (_.isEmpty(away_captain_goals)) || (_.isEmpty(away_captain_fights)) || (_.isEmpty(away_lieutenant_id)) || (_.isEmpty(away_lieutenant_goals)) || (_.isEmpty(away_lieutenant_fights))){
         console.error("Some mandatory fields were missing. Canceling!");
-        var stringErr = encodeURIComponent('Värden för fält saknades när match med id ');
+        var stringErr = encodeURIComponent('Värden för obligatoriska fält saknades. Se till att fylla i alla fält och försök igen. ');
         var gameIdToSendErr = encodeURIComponent(req.params.gameid);
         var groupIdErr = encodeURIComponent(game[0].get("group"));
         res.redirect('/stat/game/' + req.params.gameid + '?error=' + stringErr + '&idError=' + gameIdToSendErr);
@@ -371,10 +367,16 @@ exports.saveMatchResult = function(req, res) {
 
                                                       var strMessage = "Slut! " + home_goals + " - " + away_goals + " " + standingHomeTeam[0].get("team").get("team_name") + " - " + standingAwayTeam[0].get("team").get("team_name");
 
+                                                      var currentTime = momentSWE(new Date()).locale('sv').format('YYYY-MM-DD HH:mm:ss');
+                                                      var published = new Date(currentTime);
+                                                      var link = ("/stat/game/" + req.params.gameid);
+
                                                       var Notification = Parse.Object.extend("Notification");
                                                       var note = new Notification();
                                                       note.set('header', "Matchresultat");
                                                       note.set('message', strMessage);
+                                                      note.set('published', published);
+                                                      note.set('link', link);
                                                       note.save().then(function(saved_note) {
                                                         console.log("Successfully saved new Notification");
                                                       }, function(error) {
@@ -382,7 +384,6 @@ exports.saveMatchResult = function(req, res) {
                                                         console.error(error);
                                                       });
 
-                                                      //push.send("Cobra Cup 2015", "Matchresultat sparat");
                                                       var string = encodeURIComponent('Resultat för match med id ');
                                                       var gameIdToSend = encodeURIComponent(req.params.gameid);
                                                       var groupId = encodeURIComponent(game[0].get("group"));

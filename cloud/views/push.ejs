@@ -8,17 +8,17 @@
     <meta name="description" content="">
     <meta name="author" content="">
  
-    <title>Live - Cobra Cup 2015</title>
+    <title>Skapa Push (admin) - Cobra Cup 2015</title>
  
     <!-- Latest compiled and minified CSS -->
-    <link href="dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
 
     <!-- Optional theme -->
     <!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
-    <link rel="stylesheet" href="dist/css/flat-ui.css">
+    <link rel="stylesheet" href="../dist/css/flat-ui.css">
 
-    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="../stylesheets/style.css">
 
     <link rel="icon" type="image/png" href="http://media.cobracup.se/2014/11/favicon.png" />
  
@@ -59,7 +59,7 @@
                   </ul>
                 </li>
                 <li><a href="/games">Matcher</a></li>
-                <li class="active"><a href="/feed"><mark>Live</mark></a></li>
+                <li><a href="/feed"><mark>Live</mark></a></li>
                 <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
               </ul>
               <% if(typeof(count) !== 'undefined'){ %>
@@ -69,68 +69,54 @@
         </div>
     </nav>
     <div class="container">
-        <% if(typeof(flashError) !== 'undefined'){ %>
-            <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert">
-                    <span aria-hidden="true">&times;</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                <strong>Fel!</strong> <%= flashError %>.
-            </div>  
-        <% } else if(typeof(flashErrorGame) !== 'undefined'){ %>
-            <div class="alert alert-danger alert-dismissible" role="alert">
-              <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-              </button>
-              <strong>Fel!</strong> <%= flashErrorGame %>
-            </div>  
-        <% } %>
-        <div class="col-md-3 hidden-xs">
-            <div class="row">
-                <div class="panel" style="background-color: #eff0f2;">
-                    <div class="panel-body">
-                        <p class="text-uppercase lead text-center"  style="margin-bottom:0; padding-bottom: 0;">Cobra Cup 2015</p>
-                        <p class="text-uppercase text-center"  style="margin-bottom:0; margin-top: 0; padding-top:0;"><small style="color: #C0392B;">nedsläpp om</small></p>
-                        <p class="text-uppercase text-center lead"><strong><%= getFromNowStripped("2014-12-22 13:00:00") %></strong></p>
+        <div class="col-md-12">
+            <% if(typeof(flash) !== 'undefined'){ %>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <strong>Fel!</strong> <%= flash %>.
+                </div>  
+            <% } %>
+            <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
+                <div class="panel">
+                    <div class="panel-body">              
+                        <h4 class="text-center text-uppercase">Skapa Push</h4>
+                        <form class="form" role="form" method="post">
+                            <div class="form-group">
+                                <label for="captain_name">Rubrik</label>
+                                <input type="text" class="form-control" id="push_header" placeholder="Rubrik" name="push_header" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="captain_name">Meddelande</label>
+                                <input type="text" class="form-control" id="push_message" placeholder="Meddelande" name="push_message" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="captain_name">Länk</label>
+                                <input type="text" class="form-control" id="push_link" placeholder="Länk ex. /stat/game/12345" name="push_link">
+                            </div>    
+                            <div class="form-group">
+                                <input type='hidden' name='_method' value='put' />
+                                <button type="submit" class="btn btn-hg btn-primary btn-wide btn-block text-uppercase">Skicka Meddelande</button>
+                            </div>
+                        </form>
                     </div>
                     <!-- /.panel-body -->
                 </div>
                 <!-- /.panel -->
             </div>
         </div>
-        <div class="col-md-9 col-xs-12">
-            <% if(typeof(notifications) !== 'undefined'){ %>
-                <% notifications.forEach(function(note) { %>
-                    <div class="panel" style="background-color: #eff0f2;">
-                        <div class="panel-body" style="margin-bottom: 0; padding-bottom: 5px; padding-top: 5px;">              
-                            <p style="margin-bottom:0;"><a href="<%= note.get("link") %>" style="color: rgb(241,102,57);"><strong><%= note.get("header") %></strong></a> <small style="color: #E74C3C; margin-left: 10px;"><%= getFromNow(note.get("published")) %></small></p>
-                            <p style="margin-bottom:0;"><%= note.get("message") %></p>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                <% }) %>
-            <% } else { %>
-                <div class="panel" style="background-color: #eff0f2;">
-                    <div class="panel-body" style="margin-bottom: 0; padding-bottom: 5px; padding-top: 5px;">              
-                        <p>Kunde inte ladda live feeden! Försök att ladda om sidan.</p>
-                    </div>
-                    <!-- /.panel-body -->
-                </div>
-                <!-- /.panel -->
-            <% } %>
-        </div>
-        <!-- /.col-md-8 -->
+        <!-- /.col-lg-12 -->
     </div>
     <!-- /.container -->
 
     <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="dist/js/vendor/jquery.min.js"></script>
+    <script src="../dist/js/vendor/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="dist/js/flat-ui.min.js"></script>
+    <script src="../dist/js/flat-ui.min.js"></script>
 
     <!-- jQuery Version 1.11.0 -->
     <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->

@@ -1,6 +1,9 @@
 var _ = require('underscore');
 var Mailgun = require('mailgun');
 Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
+
+var moment = require('moment');
+var momentSWE = require('cloud/tools/moment-with-locales.min.js');
  
 exports.index = function(req, res) {
   res.render('login');
@@ -324,5 +327,47 @@ exports.createFinal = function(req, res) {
     console.error('Error saving the new game, try again.');
     console.error(error);
     res.render('creatematch', {flash: error.message});
+  });
+};
+
+exports.loadPushCreator = function(req, res) {
+  res.render('push', {});
+};
+
+// Create a new team with specified information.
+exports.createPush = function(req, res) {
+  var push_header = req.body.push_header;
+  var push_message = req.body.push_message;
+  var push_link = req.body.push_link;
+
+  if (_.isEmpty(push_link)) {
+    push_link = "#"
+  }
+
+  var currentTime = momentSWE(new Date()).locale('sv').format('YYYY-MM-DD HH:mm:ss');
+  var published = new Date(currentTime);
+
+  var Notification = Parse.Object.extend("Notification");
+  var note = new Notification();
+  note.set('header', push_header);
+  note.set('message', push_message);
+  note.set('published', published);
+  note.set('link', push_link);
+  note.save().then(function(saved_note) {
+    if (saved_note) {
+      console.log("Successfully saved new Notification");
+      res.redirect('/feed');
+    } else {
+      console.error("Failed saving Notification");
+      res.render('push', {
+        flash: "Failed saving Notification"
+      });
+    }    
+  }, function(error) {
+    console.error("Failed saving Notification");
+    console.error(error);
+    res.render('push', {
+      flash: error.message
+    });
   });
 };
