@@ -9,7 +9,7 @@ var _ = require('underscore');
 exports.showLeague = function(req, res) {
   var Standings = Parse.Object.extend('Standings');
   var standingsQuery = new Parse.Query(Standings);
-  standingsQuery.descending('points');
+  standingsQuery.descending('points,difference,goals_for');
   standingsQuery.include(["team.nhlTeam"]);
   standingsQuery.find().then(function(standings) {
     if (standings) {
@@ -32,7 +32,7 @@ exports.showLeague = function(req, res) {
 exports.showDivisions = function(req, res) {
   var Standings = Parse.Object.extend('Standings');
   var standingsQuery = new Parse.Query(Standings);
-  standingsQuery.descending('points');
+  standingsQuery.descending('points,difference,goals_for');
   standingsQuery.include(["team.nhlTeam"]);
   standingsQuery.find().then(function(standings) {
     if (standings) {
