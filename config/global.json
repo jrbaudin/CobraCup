@@ -1,18 +1,18 @@
 {
-    "applications": {
-        "Cobra Cup 2016": {
-            "applicationId": "lzVMAOtdESjHQfrz3lO0QR4Z6iDbmRQCr6h78rwv", 
-            "masterKey": "TbBOS7TqID88jUNt9xjiJPGo65hoD1Lv3p74B12M"
-        }, 
-        "Cobra Cup 2016 Develop": {
-            "applicationId": "9uEAdLQFoOwc4NcJms0fHzo5ScSmHV8C0Wrv8XI5", 
-            "masterKey": "3aZWvGIOSoxgLj470daIap7T7Au8ZGjrA7iLfsw9"
-        }, 
-        "_default": {
-            "link": "Cobra Cup 2016"
-        }
-    }, 
-    "global": {
-        "parseVersion": "1.4.2"
+  "global": {
+    "parseVersion": "1.4.2"
+  },
+  "applications": {
+    "Cobra Cup 2016": {
+      "applicationId": "lzVMAOtdESjHQfrz3lO0QR4Z6iDbmRQCr6h78rwv",
+      "masterKey": "TbBOS7TqID88jUNt9xjiJPGo65hoD1Lv3p74B12M"
+    },
+    "Cobra Cup 2016 Develop": {
+      "applicationId": "9uEAdLQFoOwc4NcJms0fHzo5ScSmHV8C0Wrv8XI5",
+      "masterKey": "3aZWvGIOSoxgLj470daIap7T7Au8ZGjrA7iLfsw9"
+    },
+    "_default": {
+      "link": "Cobra Cup 2016"
     }
+  }
 }
