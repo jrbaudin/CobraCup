@@ -4,9 +4,17 @@
 
 html,
 body {
-  background-color: rgb(89,74,65);
+  background-color: rgb(231,76,60);
 }
 body {
-  color: rgb(241,102,57);
+  color: #34495E;
   padding-top: 70px;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #F1C40F;
+}
+
+a:focus {
+  color: #F1C40F;
 }
