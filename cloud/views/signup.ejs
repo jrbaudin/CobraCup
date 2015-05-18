@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
-    <!-- Include header section which holds imports for shared elements -->  
+    <!-- Include header section which holds imports for shared elements -->
     <% include _header %>
- 
+
     <title>Anmälan - Cobra Cup 2016</title>
- 
+
     <!-- Latest compiled and minified CSS -->
     <link href="dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 
@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="stylesheets/style.css">
 </head>
- 
+
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -59,11 +59,11 @@
                         <span class="sr-only">Close</span>
                     </button>
                     <strong>Fel!</strong> <%= flash %>.
-                </div>  
+                </div>
             <% } %>
             <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
                 <div class="panel">
-                    <div class="panel-body">              
+                    <div class="panel-body">
                         <h4>Anmäl ditt lag till Cobra Cup 2016 <small><i class="fa fa-beer"></i> = obligatoriskt</small></h4>
                         <form class="form" role="form" method="post">
                             <label><small><i class="fa fa-beer"></i></small> Kapten</label>
@@ -131,7 +131,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-6"> 
+                                <div class="form-group col-md-6">
                                 <label for="nhlTeam"><small><i class="fa fa-beer"></i></small> Spelar som</label>
                                 <% if(typeof(nhlteams) !== 'undefined'){ %>
                                     <select class="form-control select select-inverse select-block mbl" id="nhlTeam" name="nhlTeam">
@@ -142,7 +142,7 @@
                                         <% }) %>
                                         </optgroup>
                                     </select>
-                                    <% 
+                                    <%
                                 } else { %>
                                     <p><em>Problem att ladda lediga lag.</em></p>
                                 <% } %>
@@ -176,7 +176,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p><strong>Obs.</strong> vid årets Cobra Cup gäller en anmälningsavgift på <strong>150 kronor</strong> per spelare. Läs mer <a href="http://cobracup.se/anmalningsavgift/" target="_blank">här</a></p>
+                            <p><strong>Obs.</strong> vid årets Cobra Cup gäller en anmälningsavgift på <strong>200 kronor</strong> per spelare. Läs mer <a href="http://cobracup.se/anmalningsavgift/" target="_blank">här</a></p>
                             <div class="form-group">
                                 <input type='hidden' name='_method' value='put' />
                                 <button type="submit" class="btn btn-hg btn-primary btn-wide">Anmäl</button>
@@ -209,5 +209,5 @@
         $('#levelLbl').tooltip('hide');
     </script>
 </body>
- 
+
 </html>
