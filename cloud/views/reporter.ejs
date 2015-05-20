@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
-    <!-- Include header section which holds imports for shared elements -->  
+    <!-- Include header section which holds imports for shared elements -->
     <% include _header %>
- 
-    <title>Rapportera - Cobra Cup 2015</title>
- 
+
+    <title>Rapportera - Cobra Cup 2016</title>
+
     <!-- Latest compiled and minified CSS -->
     <link href="../../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="../../dist/css/flat-ui.css">
 
-    <link rel="stylesheet" href="../../stylesheets/style.css"> 
+    <link rel="stylesheet" href="../../stylesheets/style.css">
 </head>
- 
+
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -36,7 +36,7 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="/stat/league">Ligan</a></li>
-                    <li><a href="/stat/divisions">Divisioner</a></li>                  
+                    <li><a href="/stat/divisions">Divisioner</a></li>
                     <li><a href="/stat/playerstats">Spelarstatistik</a></li>
                   </ul>
                 </li>
@@ -47,6 +47,10 @@
               <% if(typeof(count) !== 'undefined'){ %>
                 <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
               <% } %>
+              <p class="navbar-text navbar-right">
+                  <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              </p>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
@@ -58,7 +62,7 @@
                     <span class="sr-only">Close</span>
                 </button>
                 <strong>Fel!</strong> <%= flashError %>.
-            </div>  
+            </div>
         <% } else if(typeof(flashErrorGame) !== 'undefined'){ %>
             <div class="alert alert-danger alert-dismissible" role="alert">
               <button type="button" class="close" data-dismiss="alert">
@@ -66,9 +70,9 @@
                 <span class="sr-only">Close</span>
               </button>
               <strong>Fel!</strong> <%= flashErrorGame %>
-            </div>  
+            </div>
         <% } %>
-        <% if((typeof(game) !== 'undefined') && (typeof(teams) !== 'undefined')){ 
+        <% if((typeof(game) !== 'undefined') && (typeof(teams) !== 'undefined')){
             var hometeam = null;
             var awayteam = null;
 
@@ -87,9 +91,9 @@
                 <p class="text-center"><small>Runda #<strong><%= game[0].get("round") %></strong> Grupp #<strong><%= game[0].get("group") %></strong></small></p>
                 <form class="form" role="form" method="post">
                     <div class="panel">
-                        <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0;">              
+                        <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0;">
                             <div class="col-md-6 col-md-offset-3" style="margin-bottom: 0;">
-                                <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">                                    
+                                <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
                                     <% if(!(typeof(game[0].get("result").get("home_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_goals"), 0))){ %>
                                         <input type="text" class="form-control text-center input-hg" id="home_goals" name="home_goals" placeholder="0" value="<%= game[0].get("result").get("home_goals") %>" style="font-weight: bold;" required>
                                     <% } else { %>
@@ -99,7 +103,7 @@
                                 <div class="col-md-2 col-xs-2" style="margin-bottom: 0;">
                                     <p class="lead text-uppercase text-center">-</p>
                                 </div>
-                                <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">                                    
+                                <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
                                     <% if(!(typeof(game[0].get("result").get("away_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_goals"), 0))){ %>
                                         <input type="text" class="form-control text-center input-hg" id="away_goals" name="away_goals" placeholder="0" value="<%= game[0].get("result").get("away_goals") %>" style="font-weight: bold;" required>
                                     <% } else { %>
@@ -114,7 +118,7 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-5 col-xs-4"> 
+                                <div class="col-md-5 col-xs-4">
                                     <p style="margin-bottom: 0;"><small><strong>Spelare</strong></small></p>
                                 </div>
                                 <div class="col-md-2 col-xs-4">
@@ -124,14 +128,14 @@
                                     <p class="text-center" style="margin-bottom: 0;"><small><strong>Fajter</strong></small></p>
                                 </div>
                             </div>
-                            <hr style="margin-bottom: 10px; margin-top: 10px;">              
+                            <hr style="margin-bottom: 10px; margin-top: 10px;">
                             <div class="row">
                                 <div class="col-md-12">
                                     <h6 class="text-uppercase"><img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Hemmalaget</strong></span></h6>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-4"> 
+                                <div class="col-md-5 col-xs-4">
                                     <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(hometeam.get("captain_name")) %></p>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
@@ -139,18 +143,18 @@
                                         <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="0" value="<%= game[0].get("result").get("home_captain_goals") %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="0" required>
-                                    <% } %> 
+                                    <% } %>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
                                     <% if(!(typeof(game[0].get("result").get("home_captain_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_captain_fights"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="home_captain_fights" name="home_captain_fights" placeholder="0" value="<%= game[0].get("result").get("home_captain_fights") %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="home_captain_fights" name="home_captain_fights" placeholder="0" required>
-                                    <% } %> 
+                                    <% } %>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-4"> 
+                                <div class="col-md-5 col-xs-4">
                                     <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(hometeam.get("lieutenant_name")) %></p>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
@@ -158,9 +162,9 @@
                                         <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="0" value="<%= game[0].get("result").get("home_lieutenant_goals") %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="0" required>
-                                    <% } %> 
+                                    <% } %>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">                                    
+                                <div class="form-group col-md-2 col-xs-4">
                                     <% if(!(typeof(game[0].get("result").get("home_lieutenant_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_lieutenant_fights"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="home_lieutenant_fights" name="home_lieutenant_fights" placeholder="0" value="<%= game[0].get("result").get("home_lieutenant_fights") %>" required>
                                     <% } else { %>
@@ -172,7 +176,7 @@
                                 <h6 class="text-uppercase"><img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Bortalaget</strong></span></h6>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-4"> 
+                                <div class="col-md-5 col-xs-4">
                                     <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(awayteam.get("captain_name")) %></p>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
@@ -182,7 +186,7 @@
                                         <input type="text" class="form-control text-center" id="away_captain_goals" name="away_captain_goals" placeholder="0" required>
                                     <% } %>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">                                    
+                                <div class="form-group col-md-2 col-xs-4">
                                     <% if(!(typeof(game[0].get("result").get("away_captain_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_captain_fights"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="away_captain_fights" name="away_captain_fights" placeholder="0" value="<%= game[0].get("result").get("away_captain_fights") %>" required>
                                     <% } else { %>
@@ -191,10 +195,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-4"> 
+                                <div class="col-md-5 col-xs-4">
                                     <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(awayteam.get("lieutenant_name")) %></p>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">                                    
+                                <div class="form-group col-md-2 col-xs-4">
                                     <% if(!(typeof(game[0].get("result").get("away_lieutenant_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_lieutenant_goals"), 0))){ %>
                                         <input type="text" class="form-control text-center" id="away_lieutenant_goals" name="away_lieutenant_goals" placeholder="0" value="<%= game[0].get("result").get("away_lieutenant_goals") %>" required>
                                     <% } else { %>
@@ -214,7 +218,7 @@
                     </div>
                     <!-- /.panel -->
                     <div class="panel">
-                        <div class="panel-body">              
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
                                     <p class="text-center">
@@ -232,7 +236,7 @@
                         <!-- /.panel-body -->
                     </div>
                     <div class="panel">
-                        <div class="panel-body">              
+                        <div class="panel-body">
                             <div class="form-group" style="margin-bottom: 0;">
                                 <input type='hidden' name='home_captain_id' id='home_captain_id' value='<%= hometeam.get("captain_id") %>' />
                                 <input type='hidden' name='home_lieutenant_id' id='home_lieutenant_id' value='<%= hometeam.get("lieutenant_id") %>' />
@@ -258,7 +262,7 @@
     </div>
     <!-- /.container -->
 
-    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="../../dist/js/vendor/jquery.min.js"></script>
@@ -271,5 +275,5 @@
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
 </body>
- 
+
 </html>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
-    <!-- Include header section which holds imports for shared elements -->  
+    <!-- Include header section which holds imports for shared elements -->
     <% include _header %>
- 
-    <title>Spelarstatistik - Cobra Cup 2015</title>
- 
+
+    <title>Spelarstatistik - Cobra Cup 2016</title>
+
     <!-- Latest compiled and minified CSS -->
     <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 
@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="../stylesheets/style.css">
 </head>
- 
+
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -47,6 +47,10 @@
               <% if(typeof(count) !== 'undefined'){ %>
                 <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
               <% } %>
+              <p class="navbar-text navbar-right">
+                  <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              </p>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
@@ -58,7 +62,7 @@
                     <span class="sr-only">Close</span>
                 </button>
                 <strong>Fel!</strong> <%= flash %>.
-            </div>  
+            </div>
         <% } %>
         <div class="col-md-6">
             <div class="panel panel-default">
@@ -70,7 +74,7 @@
                         </span> <strong>Målligan</strong>
                     </h6>
                 </div>
-                <div class="panel-body">              
+                <div class="panel-body">
                     <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
                         <thead style="font-size: 13px;">
                             <tr>
@@ -85,7 +89,7 @@
                             <% if(typeof(playerGoals) !== 'undefined'){
                                 var i = 1;
 
-                                playerGoals.forEach(function(player) { 
+                                playerGoals.forEach(function(player) {
                                     var standing_team = null;
                                     if(typeof(standings) !== 'undefined'){
                                         standings.forEach(function(standing) {
@@ -108,7 +112,7 @@
                                         <% } %>
                                         <td class="text-center"><strong><%= player.get("player_goals") %></strong></td>
                                     </tr>
-                                    <% i = i+1; 
+                                    <% i = i+1;
                                 }) %>
                             <% } %>
                         </tbody>
@@ -130,7 +134,7 @@
                         </span> <strong>Slagsmålsligan</strong>
                     </h6>
                 </div>
-                <div class="panel-body">              
+                <div class="panel-body">
                     <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
                         <thead style="font-size: 13px;">
                             <tr>
@@ -144,7 +148,7 @@
                         <tbody style="font-size: 12px;">
                             <% if(typeof(playerFights) !== 'undefined'){
                                 var i = 1;
-                                playerFights.forEach(function(player) { 
+                                playerFights.forEach(function(player) {
                                     var f_standing_team = null;
                                     if(typeof(standings) !== 'undefined'){
                                         standings.forEach(function(standing) {
@@ -167,7 +171,7 @@
                                         <% } %>
                                         <td class="text-center"><strong><%= player.get("player_fights") %></strong></td>
                                     </tr>
-                                    <% i = i+1; 
+                                    <% i = i+1;
                                 }) %>
                             <% } %>
                         </tbody>
@@ -182,7 +186,7 @@
     </div>
     <!-- /.container -->
 
-    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="..//dist/js/vendor/jquery.min.js"></script>
@@ -199,5 +203,5 @@
         $('#levelLbl').tooltip('hide');
     </script>
 </body>
- 
+
 </html>

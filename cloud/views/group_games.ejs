@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
-    <!-- Include header section which holds imports for shared elements -->  
+    <!-- Include header section which holds imports for shared elements -->
     <% include _header %>
- 
+
     <% if(typeof(groupName) !== 'undefined'){ %>
-        <title><%= groupName %> - Cobra Cup 2015</title>
+        <title><%= groupName %> - Cobra Cup 2016</title>
     <% } else { %>
-        <title>Gruppmatcher - Cobra Cup 2015</title>
+        <title>Gruppmatcher - Cobra Cup 2016</title>
     <% } %>
- 
+
     <!-- Latest compiled and minified CSS -->
     <link href="../../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 
@@ -19,7 +19,7 @@
 
     <link rel="stylesheet" href="../../stylesheets/style.css">
 </head>
- 
+
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -40,7 +40,7 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="/stat/league">Ligan</a></li>
-                    <li class="active"><a href="/stat/divisions">Divisioner</a></li>                  
+                    <li class="active"><a href="/stat/divisions">Divisioner</a></li>
                     <li><a href="/stat/playerstats">Spelarstatistik</a></li>
                   </ul>
                 </li>
@@ -51,12 +51,16 @@
               <% if(typeof(count) !== 'undefined'){ %>
                 <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
               <% } %>
+              <p class="navbar-text navbar-right">
+                  <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              </p>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
     <div class="container-fluid">
         <div class="col-md-3">
-            <% if(typeof(groupName) !== 'undefined'){ 
+            <% if(typeof(groupName) !== 'undefined'){
                 var icon = "fa-question";
                 var paneltype = "panel-default";
                 if (_.isEqual(groupName, "Atlantic")) {
@@ -83,7 +87,7 @@
                         </h6>
                     </div>
                     <div class="panel-body">
-                        <% if(typeof(teams) !== 'undefined'){ 
+                        <% if(typeof(teams) !== 'undefined'){
                             teams.forEach(function(team) {
                                 if(_.isEqual(team.get("group"), groupIdentity)){ %>
                                     <div class="row">
@@ -108,7 +112,7 @@
                         <span class="sr-only">Close</span>
                     </button>
                     <strong>Fel!</strong> <%= flash %>.
-                </div>  
+                </div>
             <% } else if(typeof(flashInfo) !== 'undefined'){ %>
                 <div class="alert alert-success alert-dismissible" role="alert">
                   <button type="button" class="close" data-dismiss="alert">
@@ -120,7 +124,7 @@
                   <% } else { %>
                     <strong>Klart!</strong> <%= flashInfo %>
                   <% } %>
-                </div>  
+                </div>
             <% } else if((typeof(flashErrorGame) !== 'undefined') && (typeof(flashErrorGameId) !== 'undefined')){ %>
                 <div class="alert alert-danger alert-dismissible" role="alert">
                   <button type="button" class="close" data-dismiss="alert">
@@ -128,7 +132,7 @@
                     <span class="sr-only">Close</span>
                   </button>
                   <strong>Fel!</strong> <%= flashErrorGame %> <strong><%= flashErrorGameId %></strong> skulle sparas. Pröva igen och kom ihåg att fylla i <strong>alla</strong> fält.
-                </div>  
+                </div>
             <% } %>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -137,7 +141,7 @@
                     </h6>
                 </div>
                 <div class="panel-body">
-                    <div class="table-responsive">               
+                    <div class="table-responsive">
                         <table class="table table-bordered table-striped" style="margin-bottom: 0;">
                             <thead style="font-size: 13px;">
                                 <tr>
@@ -183,18 +187,18 @@
                                             <td class="text-center"><%= played %></td>
                                             <td class="text-capitalize text-center"><%= justTime(game.get("date")) %></td>
                                             <td class="hidden-xs"><%= game.get("comment") %></td>
-                                            <td><% if(game.get("result_submitted")) { %> 
+                                            <td><% if(game.get("result_submitted")) { %>
                                                     <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning btn-wide btn-block text-uppercase"><i class="fa fa-lock"></i> Se matchrapport</button>
                                                 <% } else { %>
                                                     <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success btn-wide btn-block text-uppercase">Rapportera</button>
                                                 <% } %>
                                             </td>
-                                            <td class="text-center"><% if(game.get("result_submitted")) { %> 
+                                            <td class="text-center"><% if(game.get("result_submitted")) { %>
                                                     <%= game.get("result").get("home_goals") %> - <%= game.get("result").get("away_goals") %>
                                                 <% } else { %>
                                                     -
                                                 <% } %>
-                                            </td>   
+                                            </td>
                                         </tr>
                                     <% }) %>
                                 <% } %>
@@ -210,12 +214,12 @@
     </div>
     <!-- /.container -->
 
-    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="../..//dist/js/vendor/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="../..//dist/js/flat-ui.min.js"></script>
 </body>
- 
+
 </html>

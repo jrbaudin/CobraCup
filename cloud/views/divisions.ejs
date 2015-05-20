@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
-    <!-- Include header section which holds imports for shared elements -->  
+    <!-- Include header section which holds imports for shared elements -->
     <% include _header %>
- 
-    <title>Divisioner - Cobra Cup 2015</title>
- 
+
+    <title>Divisioner - Cobra Cup 2016</title>
+
     <!-- Latest compiled and minified CSS -->
     <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 
@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="../stylesheets/style.css">
 </head>
- 
+
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -36,7 +36,7 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="/stat/league">Ligan</a></li>
-                    <li class="active"><a href="/stat/divisions">Divisioner</a></li>                  
+                    <li class="active"><a href="/stat/divisions">Divisioner</a></li>
                     <li><a href="/stat/playerstats">Spelarstatistik</a></li>
                   </ul>
                 </li>
@@ -47,6 +47,10 @@
               <% if(typeof(count) !== 'undefined'){ %>
                 <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
               <% } %>
+              <p class="navbar-text navbar-right">
+                  <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              </p>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
@@ -58,7 +62,7 @@
                     <span class="sr-only">Close</span>
                 </button>
                 <strong>Fel!</strong> <%= flash %>.
-            </div>  
+            </div>
         <% } %>
         <div class="row">
             <div class="col-md-6">
@@ -72,7 +76,7 @@
                         </h6>
                     </div>
                     <div class="panel-body">
-                        <div class="table-responsive">               
+                        <div class="table-responsive">
                             <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
                                 <thead style="font-size: 13px;">
                                     <tr>
@@ -93,7 +97,7 @@
                                     <% if(typeof(standings) !== 'undefined'){
                                         var i = 1;
                                         standings.forEach(function(standing) { %>
-                                            <% if(_.isEqual("1", standing.get("team").get("group"))){ 
+                                            <% if(_.isEqual("1", standing.get("team").get("group"))){
                                                 var goalsFor = parseInt(standing.get("goals_for"));
                                                 var goalsAgainst = parseInt(standing.get("goals_against"));
                                                 var difference = goalsFor-goalsAgainst;
@@ -111,8 +115,8 @@
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
                                                     <td class="text-center"><strong><%= difference %></strong></td>
                                                 </tr>
-                                            <% i = i+1; 
-                                            } 
+                                            <% i = i+1;
+                                            }
                                         }) %>
                                     <% } %>
                                 </tbody>
@@ -136,7 +140,7 @@
                         </h6>
                     </div>
                     <div class="panel-body">
-                        <div class="table-responsive">               
+                        <div class="table-responsive">
                             <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
                                 <thead style="font-size: 13px;">
                                     <tr>
@@ -157,7 +161,7 @@
                                     <% if(typeof(standings) !== 'undefined'){
                                         var i = 1;
                                         standings.forEach(function(standing) { %>
-                                            <% if(_.isEqual("2", standing.get("team").get("group"))){ 
+                                            <% if(_.isEqual("2", standing.get("team").get("group"))){
                                                 var goalsFor = parseInt(standing.get("goals_for"));
                                                 var goalsAgainst = parseInt(standing.get("goals_against"));
                                                 var difference = goalsFor-goalsAgainst;
@@ -175,8 +179,8 @@
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
                                                     <td class="text-center"><strong><%= difference %></strong></td>
                                                 </tr>
-                                            <% i = i+1; 
-                                            } 
+                                            <% i = i+1;
+                                            }
                                         }) %>
                                     <% } %>
                                 </tbody>
@@ -202,7 +206,7 @@
                         </h6>
                     </div>
                     <div class="panel-body">
-                        <div class="table-responsive">               
+                        <div class="table-responsive">
                             <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
                                 <thead style="font-size: 13px;">
                                     <tr>
@@ -223,7 +227,7 @@
                                     <% if(typeof(standings) !== 'undefined'){
                                         var i = 1;
                                         standings.forEach(function(standing) { %>
-                                            <% if(_.isEqual("3", standing.get("team").get("group"))){ 
+                                            <% if(_.isEqual("3", standing.get("team").get("group"))){
                                                 var goalsFor = parseInt(standing.get("goals_for"));
                                                 var goalsAgainst = parseInt(standing.get("goals_against"));
                                                 var difference = goalsFor-goalsAgainst;
@@ -241,8 +245,8 @@
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
                                                     <td class="text-center"><strong><%= difference %></strong></td>
                                                 </tr>
-                                            <% i = i+1; 
-                                            } 
+                                            <% i = i+1;
+                                            }
                                         }) %>
                                     <% } %>
                                 </tbody>
@@ -266,7 +270,7 @@
                         </h6>
                     </div>
                     <div class="panel-body">
-                        <div class="table-responsive">             
+                        <div class="table-responsive">
                             <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
                                 <thead style="font-size: 13px;">
                                     <tr>
@@ -287,7 +291,7 @@
                                     <% if(typeof(standings) !== 'undefined'){
                                         var i = 1;
                                         standings.forEach(function(standing) { %>
-                                            <% if(_.isEqual("4", standing.get("team").get("group"))){ 
+                                            <% if(_.isEqual("4", standing.get("team").get("group"))){
                                                 var goalsFor = parseInt(standing.get("goals_for"));
                                                 var goalsAgainst = parseInt(standing.get("goals_against"));
                                                 var difference = goalsFor-goalsAgainst;
@@ -305,8 +309,8 @@
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
                                                     <td class="text-center"><strong><%= difference %></strong></td>
                                                 </tr>
-                                            <% i = i+1; 
-                                            } 
+                                            <% i = i+1;
+                                            }
                                         }) %>
                                     <% } %>
                                 </tbody>
@@ -323,7 +327,7 @@
     </div>
     <!-- /.container -->
 
-    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="..//dist/js/vendor/jquery.min.js"></script>
@@ -336,5 +340,5 @@
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
 </body>
- 
+
 </html>

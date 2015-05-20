@@ -27,7 +27,7 @@ exports.new = function(req, res) {
           res.send(500, 'Failed finding teams');
         });
       } else {
-        var passedWarningVariable = "Alla platser för Cobra Cup 2015 är bokade!";
+        var passedWarningVariable = "Alla platser för Cobra Cup 2016 är bokade!";
         var Team = Parse.Object.extend('Team');
         var teamQuery = new Parse.Query(Team);
         teamQuery.descending('createdAt');
@@ -74,6 +74,8 @@ exports.create = function(req, res) {
   var level = req.body.level;
   var comment = req.body.comment
 
+  var legend = ["-","-","-"];
+
   var Team = Parse.Object.extend("Team");
   var team = new Team();
 
@@ -82,6 +84,8 @@ exports.create = function(req, res) {
   nhlTeamObj.id = nhlTeam;
 
   team.set("nhlTeam", nhlTeamObj);
+
+  team.set("legend", legend);
 
   team.set('captain_name', captain_name);
   team.set('captain_email', captain_email);
@@ -182,10 +186,10 @@ exports.create = function(req, res) {
               teamQuery.find().then(function(teams) {
                 if (teams) {
                   Mailgun.sendEmail({
-                    to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>",
-                    from: "Cobra Cup 2015 <joel@cobracup.se>",
-                    subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2015!",
-                    html: "<html><h3>Din anmälan till Cobra Cup 2015 är klar!</h3> <p>Det här är ett automatiskt genererat mail för att meddela dig att din anmälan har gått igenom.</p><p>Dina uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ditt lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så är det i år en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>150 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 15 december 2014. <b>Obs.</b> Om denna avgift på 150 kr /person (300 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+                    to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
+                    from: "Cobra Cup 2016 <joel@cobracup.se>",
+                    subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2016!",
+                    html: "<html><h3>Er anmälan till Cobra Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
                   }, {
                     success: function(httpResponse) {
                       console.log('SendEmail success response: ' + httpResponse);
@@ -222,7 +226,7 @@ exports.create = function(req, res) {
               console.error('Error adding the row in standings tabl, try again.');
               console.error(error);
               res.render('signup', {flash: error.message});
-            });  
+            });
           } else {
             res.send(500, 'Could not update taken status for the NHL Team');
           }

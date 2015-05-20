@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
-    <!-- Include header section which holds imports for shared elements -->  
-    <% include _header %>   
-    
+    <!-- Include header section which holds imports for shared elements -->
+    <% include _header %>
+
     <!-- Latest compiled and minified CSS -->
     <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 
@@ -13,13 +13,13 @@
 
     <link rel="stylesheet" href="../stylesheets/style.css">
 
-    <% if(typeof(teamObj) !== 'undefined'){ %> 
-        <title><%= teamObj[0].get("team_name") %> - Cobra Cup 2015</title>
+    <% if(typeof(teamObj) !== 'undefined'){ %>
+        <title><%= teamObj[0].get("team_name") %> - Cobra Cup 2016</title>
     <% } else { %>
-        <title>Kunde inte hitta laget - Cobra Cup 2015</title>
+        <title>Kunde inte hitta laget - Cobra Cup 2016</title>
     <% } %>
 </head>
- 
+
 <body>
    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
        <div class="container">
@@ -40,7 +40,7 @@
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
                  <ul class="dropdown-menu" role="menu">
                    <li><a href="/stat/league">Ligan</a></li>
-                   <li><a href="/stat/divisions">Divisioner</a></li>                  
+                   <li><a href="/stat/divisions">Divisioner</a></li>
                    <li><a href="/stat/playerstats">Spelarstatistik</a></li>
                  </ul>
                </li>
@@ -51,6 +51,10 @@
              <% if(typeof(count) !== 'undefined'){ %>
                <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
              <% } %>
+             <p class="navbar-text navbar-right">
+                 <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+             </p>
            </div><!--/.nav-collapse -->
        </div>
    </nav>
@@ -62,15 +66,15 @@
                     <span class="sr-only">Close</span>
                 </button>
                 <strong>Problem!</strong> <%= flash %>.
-            </div>  
+            </div>
         <% } %>
         <% if(typeof(teamObj) !== 'undefined'){ %>
             <div class="col-md-4">
                 <div class="row">
                     <div class="panel" style="background-color: #eff0f2;">
                         <div class="panel-body">
-                            <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:150px;height:150px; margin: 0 auto;">   
-                            <h4 class="text-center"><%= teamObj[0].get("nhlTeam").get("name") %></h4>                     
+                            <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:150px;height:150px; margin: 0 auto;">
+                            <h4 class="text-center"><%= teamObj[0].get("nhlTeam").get("name") %></h4>
                             <h6 class="text-center"><%= teamObj[0].get("nhlTeam").get("city") %></h4>
                             <a class="btn btn-primary btn-md center-block" href="<%= teamObj[0].get("nhlTeam").get("homepage") %>" target="_blank">Hemsida</a>
                         </div>
@@ -83,7 +87,7 @@
                         <div class="panel-body" style="padding: 0;">
                             <div class="panel-group" id="accordion">
 
-                                <% if((typeof(lastPlayedGame) !== 'undefined') && (typeof(teams) !== 'undefined')){ 
+                                <% if((typeof(lastPlayedGame) !== 'undefined') && (typeof(teams) !== 'undefined')){
                                     var hometeam = null;
                                     var awayteam = null;
                                     var versus = "";
@@ -114,14 +118,14 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-4 col-md-4">
-                                                    <img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                                    <img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
                                                 </div>
                                                 <div class="col-xs-4 col-md-4">
                                                     <p class="text-center" style="margin-bottom: 0; line-height: 1;"><small>SLUT</small></p>
                                                     <p class="text-center" style="line-height: 1;"><b><%= lastPlayedGame.get("result").get("home_goals") %> - <%= lastPlayedGame.get("result").get("away_goals") %></b></p>
-                                                </div>  
+                                                </div>
                                                 <div class="col-xs-4 col-md-4">
-                                                    <img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                                    <img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
                                                 </div>
                                             </div>
                                         </div>
@@ -139,7 +143,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <p class="text-center" style="margin-bottom: 0; line-height: 1;">Problem att ladda senaste match eller så har detta lag inte spelat några matcher.</p>
-                                                    </div>  
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -176,7 +180,7 @@
                                             <div class="panel-body">
                                                    <div class="row">
                                                     <div class="col-xs-4 col-md-4">
-                                                        <img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">    
+                                                        <img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
                                                     </div>
                                                     <div class="col-xs-4 col-md-4">
                                                         <a href="/stat/game/<%= nextGame.get("game_id") %>" style="color: rgb(241,102,57);">
@@ -184,15 +188,15 @@
                                                             <p class="text-center" style="margin-bottom: 0; line-height: 1;"><small><%= getDate(nextGame.get("date")) %></small></p>
                                                             <p class="text-center" style="line-height: 1;"><b><%= justTime(nextGame.get("date")) %></b></p>
                                                         </a>
-                                                    </div>  
+                                                    </div>
                                                     <div class="col-xs-4 col-md-4">
-                                                        <img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">   
+                                                        <img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <% 
+                                    <%
                                 } else { %>
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
@@ -205,14 +209,14 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <p class="text-center" style="margin-bottom: 0; line-height: 1;">Problem att ladda nästa match eller så har detta lag inte någon kommande match.</p>
-                                                    </div>  
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                <% } %>      
-                                
-                                <% if((typeof(games) !== 'undefined') && (typeof(teams) !== 'undefined')){ 
+                                <% } %>
+
+                                <% if((typeof(games) !== 'undefined') && (typeof(teams) !== 'undefined')){
                                     var upcomingGames = _.rest(games, 1);
                                 }
                                 if(typeof(upcomingGames) !== 'undefined'){ %>
@@ -225,7 +229,7 @@
                                         <div id="collapseThree" class="panel-collapse collapse">
                                             <div class="panel-body">
                                                 <div class="row">
-                                                    <% upcomingGames.forEach(function(game) { 
+                                                    <% upcomingGames.forEach(function(game) {
                                                         var versusLogo = "";
 
                                                         teams.forEach(function(team) {
@@ -244,7 +248,7 @@
                                                     <div class="col-md-4" style="padding-left:5px; padding-right: 5px;">
                                                         <div class="tile" style="padding: 8px;">
                                                             <p style="font-size: 7px; margin-bottom: 3px; line-height: 1; font-weight:bold;">VS</p>
-                                                            <img src="<%= versusLogo %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;"> 
+                                                            <img src="<%= versusLogo %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; margin: 0 auto;">
                                                             <a href="/stat/game/<%= game.get("game_id") %>" style="color: rgb(241,102,57);">
                                                                 <p class="tile-title text-uppercase" style="font-size: 12px; margin-bottom: 0; font-weight:bold; line-height: 1; margin-top: 3px;"><%= getDayAndDateText(game.get("date")) %></p>
                                                                 <p style="font-size: 10px; margin-bottom: 0; line-height: 1;"><small><%= justTime(game.get("date")) %></small></p>
@@ -268,12 +272,12 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <p class="text-center" style="margin-bottom: 0; line-height: 1;">Problem att ladda kommande match eller så har detta lag inte några kommande matcher.</p>
-                                                    </div>  
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                <% } %>  
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -284,8 +288,8 @@
                             <div class="panel-group" id="accordionStat">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <% 
-                                            var group = teamObj[0].get("group"); 
+                                        <%
+                                            var group = teamObj[0].get("group");
                                             var groupName = "-";
                                             if(_.isEqual(group, "1")){
                                                 groupName = "Atlantic";
@@ -332,8 +336,8 @@
                                                                     <td class="text-center"><%= standing.get("losses") %></td>
                                                                     <td class="text-center"><strong><%= standing.get("points") %></strong></td>
                                                                 </tr>
-                                                            <% i = i+1; 
-                                                            } 
+                                                            <% i = i+1;
+                                                            }
                                                         }) %>
                                                     <% } %>
                                                 </tbody>
@@ -342,7 +346,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h6 class="panel-title text-uppercase">
@@ -412,7 +416,7 @@
                     <div class="panel-body">
                         <h2 class="text-center text-uppercase" style="word-wrap: break-word;"><%= teamObj[0].get("team_name") %></h2>
                         <hr>
-                        <div class="col-md-6">            
+                        <div class="col-md-6">
                             <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
                             <h5 class="text-center" title="<%= teamObj[0].get("captain_name") %>"><%= getFirstname(teamObj[0].get("captain_name")) %> <small style="color: rgb(0,0,0);">Kapten</small></h5>
                             <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj[0].get("captain_telephone") %></p>
@@ -431,7 +435,7 @@
                                 <p><!-- <i class="fa fa-quote-left fa-2x pull-left fa-border"></i> --> <%= teamObj[0].get("team_motto") %></p>
                                 <small><%= teamObj[0].get("team_name") %></small>
                             </blockquote>
-                        </div> 
+                        </div>
                         <div class="col-md-8 col-md-offset-2">
                             <p class="text-center lead" style="margin-bottom: 5px;"><span class="fui-list"></span> Nivå <span class="fui-list"></span></p>
                             <div class="progress" style="height: 20px;">
@@ -442,12 +446,20 @@
                             <% } else { %>
                                 <div class="progress-bar progress-bar-warning" style="width: 100%; line-height: 20px;"><i class="fa fa-trophy"></i> All Star</div>
                             <% } %>
-                            </div>             
+                            </div>
                         </div>
+                        <% if (typeof teamObj[0].get("legend") !== 'undefined') { %>
+                          <div class="col-md-8 col-md-offset-2">
+                            <p class="text-center lead" style="margin-bottom: 5px;"><i class="fa fa-trophy"></i> <i>Placeringar i Cobra Cup</i></p>
+                            <p class="text-center" style="line-height: 2; margin: 0;"><strong>2015</strong> - <%= teamObj[0].get("legend")[2] %></p>
+                            <p class="text-center" style="line-height: 2; margin: 0;"><strong>2014</strong> - <%= teamObj[0].get("legend")[1] %></p>
+                            <p class="text-center" style="line-height: 2; margin: 0;"><strong>2010</strong> - <%= teamObj[0].get("legend")[0] %></p>
+                          </div>
+                        <% } %>
                         <!-- <div class="clearfix"></div>
                         <div class="col-md-12">
-                            <p class="text-center" style="font-size: 12px; opacity: 0.7;"><small><span class="fui-new"></span> Redigera</small></p> 
-                        </div> -->                 
+                            <p class="text-center" style="font-size: 12px; opacity: 0.7;"><small><span class="fui-new"></span> Redigera</small></p>
+                        </div> -->
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -458,8 +470,8 @@
             <p>Laget är undefined... eller nått</p>
         <% } %>
     </div>
-    
-    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
+
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="../dist/js/vendor/jquery.min.js"></script>
@@ -468,12 +480,12 @@
 
     <!-- jQuery Version 1.11.0 -->
     <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
- 
+
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
     <script>
-        
+
     </script>
 </body>
- 
+
 </html>

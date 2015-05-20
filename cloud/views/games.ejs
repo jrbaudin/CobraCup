@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
-    <!-- Include header section which holds imports for shared elements -->  
+    <!-- Include header section which holds imports for shared elements -->
     <% include _header %>
- 
-    <title>Grupper - Cobra Cup 2015</title>
- 
+
+    <title>Grupper - Cobra Cup 2016</title>
+
     <!-- Latest compiled and minified CSS -->
     <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 
@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="../stylesheets/style.css">
 </head>
- 
+
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -36,7 +36,7 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="/stat/league">Ligan</a></li>
-                    <li class="active"><a href="/stat/divisions">Divisioner</a></li>                  
+                    <li class="active"><a href="/stat/divisions">Divisioner</a></li>
                     <li><a href="/stat/playerstats">Spelarstatistik</a></li>
                   </ul>
                 </li>
@@ -47,6 +47,10 @@
               <% if(typeof(count) !== 'undefined'){ %>
                 <p class="navbar-text navbar-right"><strong><%= count %>/15 lag</strong></p>
               <% } %>
+              <p class="navbar-text navbar-right">
+                  <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              </p>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
@@ -58,7 +62,7 @@
                     <span class="sr-only">Close</span>
                 </button>
                 <strong>Fel!</strong> <%= flash %>.
-            </div>  
+            </div>
         <% } %>
         <div class="col-md-3">
             <div class="panel panel-info">
@@ -73,7 +77,7 @@
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/1'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
                     <hr>
-                    <% if(typeof(teams) !== 'undefined'){ 
+                    <% if(typeof(teams) !== 'undefined'){
                         teams.forEach(function(team) {
                             if(_.isEqual(team.get("group"), "1")){ %>
                                 <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
@@ -101,7 +105,7 @@
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/2'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
                     <hr>
-                    <% if(typeof(teams) !== 'undefined'){ 
+                    <% if(typeof(teams) !== 'undefined'){
                         teams.forEach(function(team) {
                             if(_.isEqual(team.get("group"), "2")){ %>
                                 <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
@@ -129,7 +133,7 @@
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/3'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
                     <hr>
-                    <% if(typeof(teams) !== 'undefined'){ 
+                    <% if(typeof(teams) !== 'undefined'){
                         teams.forEach(function(team) {
                             if(_.isEqual(team.get("group"), "3")){ %>
                                 <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
@@ -157,7 +161,7 @@
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/4'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
                     <hr>
-                    <% if(typeof(teams) !== 'undefined'){ 
+                    <% if(typeof(teams) !== 'undefined'){
                         teams.forEach(function(team) {
                             if(_.isEqual(team.get("group"), "4")){ %>
                                 <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
@@ -175,7 +179,7 @@
     </div>
     <!-- /.container -->
 
-    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2014 Copyright The Cobra Cup</small></p>
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="..//dist/js/vendor/jquery.min.js"></script>
@@ -188,5 +192,5 @@
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
 </body>
- 
+
 </html>
