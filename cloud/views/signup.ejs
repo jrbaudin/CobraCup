@@ -153,12 +153,31 @@
                                 <% } %>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label id="levelLbl" for="level" data-toggle="tooltip" data-placement="right" title="" data-original-title="Välj den nivå som ert lag är på. Rookie = Nybörjare, Pro = Spelar då och då, All-Star = Spelar NHL minst en gång per vecka."><small><i class="fa fa-beer"></i></small> Nivå</label>
+                                    <label id="levelLbl" for="level" data-toggle="tooltip" data-placement="right" title="" data-original-title="Välj den nivå som ert lag är på. Rookie = Nybörjare, Pro = Spelar då och då, All-Star = Spelar NHL minst en gång per vecka."><small><i class="fa fa-beer"></i></small> Nivå</label> <span class="pull-right"><small><a href="#" id="toggle">Visa mer information</a></small></span>
                                     <select class="form-control select select-warning select-block mbl" id="level" name="level">
                                         <option value="1">Rookie</option>
                                         <option value="2" selected>Pro</option>
                                         <option value="3">All Star</option>
                                     </select>
+                                    <div id="ranking-info">
+                                      <ul>
+                                          <li>
+                                            <small>
+                                              <strong>All-Star</strong> = Båda spelarna eller en av dem spelar regelbundet mycket NHL (flera gånger i veckan) och/eller har koll på hur spelet går till efter ha spelat tidigare versioner av NHL.
+                                            </small>
+                                          </li>
+                                          <li>
+                                            <small>
+                                              <strong>Pro</strong> = Båda spelarna i laget har sporadiskt spelat NHL under sin karriär. Alternativt har en av spelarna spelat mycket NHL tidigare. De har hyfsad koll på hur spelet går till och spelar ibland.
+                                            </small>
+                                          </li>
+                                          <li>
+                                            <small>
+                                              <strong>Rookie</strong> = Båda spelarna i laget har aldrig spelat moderna NHL-spel eller möjligtvis någon enstaka gång.
+                                            </small>
+                                          </li>
+                                      </ul>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -212,6 +231,12 @@
     <script>
         $("select").select2({dropdownCssClass: 'dropdown-inverse'});
         $('#levelLbl').tooltip('hide');
+        $(document).ready(function(){
+            $('#toggle').click(function(ev) {
+              $('#ranking-info').toggle();
+              this.html(($('#toggle').text() == 'Visa mer information') ? 'Dölj mer information' : 'Visa mer information');
+           })
+        });
     </script>
 </body>
 

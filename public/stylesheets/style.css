@@ -18,3 +18,5 @@ body {
 a:focus {
   color: #F1C40F;
 }
+
+#ranking-info { display: none; }
