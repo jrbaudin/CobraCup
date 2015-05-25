@@ -234,7 +234,7 @@
         $(document).ready(function(){
             $('#toggle').click(function(ev) {
               $('#ranking-info').toggle();
-              this.html(($('#toggle').text() == 'Visa mer information') ? 'Dölj mer information' : 'Visa mer information');
+              $(this).html(($('#toggle').text() == 'Visa mer information') ? 'Dölj mer information' : 'Visa mer information');
            })
         });
     </script>
