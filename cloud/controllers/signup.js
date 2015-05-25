@@ -75,6 +75,7 @@ exports.create = function(req, res) {
   var comment = req.body.comment
 
   var legend = ["-","-","-"];
+  var marathon = ["-","-","-"];
 
   var Team = Parse.Object.extend("Team");
   var team = new Team();
@@ -86,6 +87,7 @@ exports.create = function(req, res) {
   team.set("nhlTeam", nhlTeamObj);
 
   team.set("legend", legend);
+  team.set("marathon", marathon);
 
   team.set('captain_name', captain_name);
   team.set('captain_email', captain_email);

@@ -454,6 +454,9 @@
                             <p class="text-center" style="line-height: 2; margin: 0;"><strong>2015</strong> - <%= teamObj[0].get("legend")[2] %></p>
                             <p class="text-center" style="line-height: 2; margin: 0;"><strong>2014</strong> - <%= teamObj[0].get("legend")[1] %></p>
                             <p class="text-center" style="line-height: 2; margin: 0;"><strong>2010</strong> - <%= teamObj[0].get("legend")[0] %></p>
+                            <% if (typeof teamObj[0].get("marathon") !== 'undefined') { %>
+                              <p class="text-center" title="Legend för lagen. Baserat på matcher spelade 2014 & 2015" style="line-height: 2; margin: 0;"><small>W:<strong><%= teamObj[0].get("marathon")[0] %></strong> - T:<strong><%= teamObj[0].get("marathon")[1] %></strong> - L:<strong><%= teamObj[0].get("marathon")[2] %></strong></small></p>
+                            <% } %>
                           </div>
                         <% } %>
                         <!-- <div class="clearfix"></div>
