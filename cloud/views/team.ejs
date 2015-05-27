@@ -455,7 +455,10 @@
                             <p class="text-center" style="line-height: 2; margin: 0;"><strong>2014</strong> - <%= teamObj[0].get("legend")[1] %></p>
                             <p class="text-center" style="line-height: 2; margin: 0;"><strong>2010</strong> - <%= teamObj[0].get("legend")[0] %></p>
                             <% if (typeof teamObj[0].get("marathon") !== 'undefined') { %>
-                              <p class="text-center" title="Legend för lagen. Baserat på matcher spelade 2014 & 2015" style="line-height: 2; margin: 0;"><small>W:<strong><%= teamObj[0].get("marathon")[0] %></strong> - T:<strong><%= teamObj[0].get("marathon")[1] %></strong> - L:<strong><%= teamObj[0].get("marathon")[2] %></strong></small></p>
+                              <p class="text-center" title="Legend för lagen. Baserat på matcher spelade 2014 & 2015" style="line-height: 2; margin: 0;">
+                                <small>W:<strong><%= teamObj[0].get("marathon")[0] %></strong> - T:<strong><%= teamObj[0].get("marathon")[1] %></strong> - L:<strong><%= teamObj[0].get("marathon")[2] %></strong></small>
+                                <a href="#" style="margin-left: 15px;"data-toggle="tooltip" title="" data-original-title="Baserat på matcher spelade i gruppspel 2014 & 2015." data-placement="right"><i class="fa fa-info-circle"></i></a>
+                              </p>
                             <% } %>
                           </div>
                         <% } %>
@@ -487,7 +490,9 @@
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
     <script>
-
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
     </script>
 </body>
 
