@@ -168,6 +168,9 @@ exports.saveMatchResult = function(req, res) {
   var home_goals = req.body.home_goals;
   var away_goals = req.body.away_goals;
 
+  var home_shots = req.body.home_shots;
+  var away_shots = req.body.away_shots;
+
   var home_points = 0;
   var away_points = 0;
 
@@ -252,7 +255,9 @@ exports.saveMatchResult = function(req, res) {
             if (gResult) {
               //console.log("Found the game result to save...");
               gResult[0].set('home_goals', parseInt(home_goals));
+              gResult[0].set('home_shots', parseInt(home_shots));
               gResult[0].set('away_goals', parseInt(away_goals));
+              gResult[0].set('away_shots', parseInt(away_shots));
               gResult[0].set('home_captain_goals', parseInt(home_captain_goals));
               gResult[0].set('home_captain_fights', parseInt(home_captain_fights));
               gResult[0].set('home_lieutenant_goals', parseInt(home_lieutenant_goals));
@@ -288,6 +293,7 @@ exports.saveMatchResult = function(req, res) {
 
                       var h_goals_for_current = standingHomeTeam[0].get("goals_for");
                       var h_goals_against_current = standingHomeTeam[0].get("goals_against");
+                      var h_shots_current = standingHomeTeam[0].get("shots");
                       var h_wins_current = standingHomeTeam[0].get("wins");
                       var h_losses_current = standingHomeTeam[0].get("losses");
                       var h_ties_current = standingHomeTeam[0].get("tie");
@@ -299,6 +305,7 @@ exports.saveMatchResult = function(req, res) {
                       standingHomeTeam[0].set('games_played', h_games_played_current+1);
                       standingHomeTeam[0].set('goals_for', h_goals_for_current+parseInt(home_goals));
                       standingHomeTeam[0].set('goals_against', h_goals_against_current+parseInt(away_goals));
+                      standingHomeTeam[0].set('shots', h_shots_current+parseInt(home_shots));
                       standingHomeTeam[0].set('losses', h_losses_current+home_loss);
                       standingHomeTeam[0].set('wins', h_wins_current+home_win);
                       standingHomeTeam[0].set('tie', h_ties_current+home_tie);
@@ -315,6 +322,7 @@ exports.saveMatchResult = function(req, res) {
 
                             var a_goals_for_current = standingAwayTeam[0].get("goals_for");
                             var a_goals_against_current = standingAwayTeam[0].get("goals_against");
+                            var a_shots_current = standingAwayTeam[0].get("shots");
                             var a_wins_current = standingAwayTeam[0].get("wins");
                             var a_losses_current = standingAwayTeam[0].get("losses");
                             var a_ties_current = standingAwayTeam[0].get("tie");
@@ -326,6 +334,7 @@ exports.saveMatchResult = function(req, res) {
                             standingAwayTeam[0].set('games_played', a_games_played_current+1);
                             standingAwayTeam[0].set('goals_for', a_goals_for_current+parseInt(away_goals));
                             standingAwayTeam[0].set('goals_against', a_goals_against_current+parseInt(home_goals));
+                            standingAwayTeam[0].set('shots', a_shots_current+parseInt(away_shots));
                             standingAwayTeam[0].set('losses', a_losses_current+away_loss);
                             standingAwayTeam[0].set('wins', a_wins_current+away_win);
                             standingAwayTeam[0].set('tie', a_ties_current+away_tie);

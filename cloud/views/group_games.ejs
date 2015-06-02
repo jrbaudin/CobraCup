@@ -151,8 +151,8 @@
                                     <th class="text-uppercase hidden-xs"></th>
                                     <th class="text-uppercase">Borta</th>
                                     <th class="text-uppercase text-center">Spelad</th>
-                                    <th class="text-uppercase text-center">Tid</th>
-                                    <th class="text-uppercase hidden-xs">Kommentar</th>
+                                    <!-- <th class="text-uppercase text-center">Tid</th> -->
+                                    <!-- <th class="text-uppercase hidden-xs">Kommentar</th> -->
                                     <th class="text-uppercase text-center">Rapportera</th>
                                     <th class="text-uppercase text-center">Resultat</th>
                                 </tr>
@@ -185,16 +185,21 @@
                                             <td class="hidden-xs"><img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></td>
                                             <td><strong><%= awayteam.get("team_name") %></strong></td>
                                             <td class="text-center"><%= played %></td>
-                                            <td class="text-capitalize text-center"><%= justTime(game.get("date")) %></td>
-                                            <td class="hidden-xs"><%= game.get("comment") %></td>
+                                            <!-- <td class="text-capitalize text-center"><%= justTime(game.get("date")) %></td> -->
+                                            <!-- <td class="hidden-xs"><%= game.get("comment") %></td> -->
                                             <td><% if(game.get("result_submitted")) { %>
                                                     <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning btn-wide btn-block text-uppercase"><i class="fa fa-lock"></i> Se matchrapport</button>
                                                 <% } else { %>
                                                     <button  onclick="window.location.href='/stat/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success btn-wide btn-block text-uppercase">Rapportera</button>
                                                 <% } %>
                                             </td>
-                                            <td class="text-center"><% if(game.get("result_submitted")) { %>
-                                                    <%= game.get("result").get("home_goals") %> - <%= game.get("result").get("away_goals") %>
+                                            <td class="text-center">
+                                                <% if(game.get("result_submitted")) { %>
+                                                    <% if((typeof(game.get("result").get("overtime")) !== 'undefined') && (_.isEqual(game.get("result").get("overtime"), true))) { %>
+                                                        <%= game.get("result").get("home_goals") %> - <%= game.get("result").get("away_goals") %> OT
+                                                    <% } else { %>
+                                                        <%= game.get("result").get("home_goals") %> - <%= game.get("result").get("away_goals") %>
+                                                    <% } %>
                                                 <% } else { %>
                                                     -
                                                 <% } %>

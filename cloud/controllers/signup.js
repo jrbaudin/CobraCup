@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var momentSWE = require('cloud/tools/moment-with-locales.min.js');
 var Mailgun = require('mailgun');
 Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
@@ -140,13 +141,35 @@ exports.create = function(req, res) {
 
             standing.set('team', saved_team);
             standing.set('points', 0);
+            standing.set('difference', 0);
             standing.set('games_played', 0);
             standing.set('wins', 0);
             standing.set('tie', 0);
+            standing.set('ot_losses', 0);
             standing.set('losses', 0);
             standing.set('goals_for', 0);
             standing.set('goals_against', 0);
             standing.save().then(function(standing) {
+
+              var strMessage = "Nytt lag! " + team_name + " har nyss anmält sig till Cobra Cup. Välkommen! Klicka här ovan för att komma till deras Team Corner.";
+
+              var currentTime = momentSWE(new Date()).locale('sv').format('YYYY-MM-DD HH:mm:ss');
+              var published = new Date(currentTime);
+              var link = ("/team/" + genId.toString());
+
+              var Notification = Parse.Object.extend("Notification");
+              var note = new Notification();
+              note.set('header', "Laganmälan");
+              note.set('message', strMessage);
+              note.set('published', published);
+              note.set('link', link);
+              note.save().then(function(saved_note) {
+                console.log("Successfully saved new Notification");
+              }, function(error) {
+                console.error("Failed saving Notification");
+                console.error(error);
+              });
+
               var captain_name = saved_team.get("captain_name");
               var lieutenant_name = saved_team.get("lieutenant_name");
 
@@ -189,8 +212,8 @@ exports.create = function(req, res) {
                 if (teams) {
                   Mailgun.sendEmail({
                     to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
-                    from: "Cobra Cup 2016 <joel@cobracup.se>",
-                    subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2016!",
+                    from: "(Test) Cobra Cup 2016 <joel@cobracup.se>",
+                    subject: "(Test) Ditt lag " + team_name + " är nu anmält till Cobra Cup 2016!",
                     html: "<html><h3>Er anmälan till Cobra Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
                   }, {
                     success: function(httpResponse) {
