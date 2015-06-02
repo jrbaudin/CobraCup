@@ -85,8 +85,8 @@
                                         <th class="text-uppercase">Namn</th>
                                         <th class="text-center text-uppercase" title="Games Played">GP</th>
                                         <th class="text-center text-uppercase" title="Wins">W</th>
-                                        <th class="text-center text-uppercase" title="Ties">T</th>
                                         <th class="text-center text-uppercase" title="Losses">L</th>
+                                        <th class="text-center text-uppercase" title="Overtime Losses">OT</th>
                                         <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
                                         <th class="text-center text-uppercase" title="Goals For">GF</th>
                                         <th class="text-center text-uppercase" title="Goals Against">GA</th>
@@ -108,8 +108,8 @@
                                                     <td><%= standing.get("team").get("team_name") %></td>
                                                     <td class="text-center"><%= standing.get("games_played") %></td>
                                                     <td class="text-center"><%= standing.get("wins") %></td>
-                                                    <td class="text-center"><%= standing.get("tie") %></td>
                                                     <td class="text-center"><%= standing.get("losses") %></td>
+                                                    <td class="text-center"><%= standing.get("ot_losses") %></td>
                                                     <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
                                                     <td class="text-center"><%= standing.get("goals_for") %></td>
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
@@ -122,7 +122,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>T</strong>-Ties, <strong>L</strong>-Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -149,8 +149,8 @@
                                         <th class="text-uppercase">Namn</th>
                                         <th class="text-center text-uppercase" title="Games Played">GP</th>
                                         <th class="text-center text-uppercase" title="Wins">W</th>
-                                        <th class="text-center text-uppercase" title="Ties">T</th>
                                         <th class="text-center text-uppercase" title="Losses">L</th>
+                                        <th class="text-center text-uppercase" title="Overtime Losses">OT</th>
                                         <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
                                         <th class="text-center text-uppercase" title="Goals For">GF</th>
                                         <th class="text-center text-uppercase" title="Goals Against">GA</th>
@@ -172,8 +172,8 @@
                                                     <td><%= standing.get("team").get("team_name") %></td>
                                                     <td class="text-center"><%= standing.get("games_played") %></td>
                                                     <td class="text-center"><%= standing.get("wins") %></td>
-                                                    <td class="text-center"><%= standing.get("tie") %></td>
                                                     <td class="text-center"><%= standing.get("losses") %></td>
+                                                    <td class="text-center"><%= standing.get("ot_losses") %></td>
                                                     <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
                                                     <td class="text-center"><%= standing.get("goals_for") %></td>
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
@@ -186,7 +186,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>T</strong>-Ties, <strong>L</strong>-Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -215,8 +215,8 @@
                                         <th class="text-uppercase">Namn</th>
                                         <th class="text-center text-uppercase" title="Games Played">GP</th>
                                         <th class="text-center text-uppercase" title="Wins">W</th>
-                                        <th class="text-center text-uppercase" title="Ties">T</th>
                                         <th class="text-center text-uppercase" title="Losses">L</th>
+                                        <th class="text-center text-uppercase" title="Overtime Losses">OT</th>
                                         <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
                                         <th class="text-center text-uppercase" title="Goals For">GF</th>
                                         <th class="text-center text-uppercase" title="Goals Against">GA</th>
@@ -238,8 +238,8 @@
                                                     <td><%= standing.get("team").get("team_name") %></td>
                                                     <td class="text-center"><%= standing.get("games_played") %></td>
                                                     <td class="text-center"><%= standing.get("wins") %></td>
-                                                    <td class="text-center"><%= standing.get("tie") %></td>
                                                     <td class="text-center"><%= standing.get("losses") %></td>
+                                                    <td class="text-center"><%= standing.get("ot_losses") %></td>
                                                     <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
                                                     <td class="text-center"><%= standing.get("goals_for") %></td>
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
@@ -252,7 +252,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>T</strong>-Ties, <strong>L</strong>-Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -279,8 +279,8 @@
                                         <th class="text-uppercase">Namn</th>
                                         <th class="text-center text-uppercase" title="Games Played">GP</th>
                                         <th class="text-center text-uppercase" title="Wins">W</th>
-                                        <th class="text-center text-uppercase" title="Ties">T</th>
                                         <th class="text-center text-uppercase" title="Losses">L</th>
+                                        <th class="text-center text-uppercase" title="Overtime Losses">OT</th>
                                         <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
                                         <th class="text-center text-uppercase" title="Goals For">GF</th>
                                         <th class="text-center text-uppercase" title="Goals Against">GA</th>
@@ -302,8 +302,8 @@
                                                     <td><%= standing.get("team").get("team_name") %></td>
                                                     <td class="text-center"><%= standing.get("games_played") %></td>
                                                     <td class="text-center"><%= standing.get("wins") %></td>
-                                                    <td class="text-center"><%= standing.get("tie") %></td>
                                                     <td class="text-center"><%= standing.get("losses") %></td>
+                                                    <td class="text-center"><%= standing.get("ot_losses") %></td>
                                                     <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
                                                     <td class="text-center"><%= standing.get("goals_for") %></td>
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
@@ -316,7 +316,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>T</strong>-Ties, <strong>L</strong>-Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
                     </div>
                     <!-- /.panel-body -->
                 </div>

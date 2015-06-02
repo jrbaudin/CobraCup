@@ -114,6 +114,30 @@
                         </div>
                         <!-- /.panel-body -->
                     </div>
+                    <div class="panel">
+                        <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0; padding-top: 0;">
+                            <div class="col-md-10 col-md-offset-1" style="margin-bottom: 0;">
+                                <div class="form-group col-md-12 col-xs-12" style="margin-bottom: 0; margin-top: 0;">
+                                    <% if(game[0].get("result_submitted")) { %>
+                                        <% if((typeof(game[0].get("result").get("overtime")) !== 'undefined') && (_.isEqual(game[0].get("result").get("overtime"), true))){ %>
+                                            <label class="checkbox" for="overtime_checkbox">
+                                                <input type="checkbox" checked="checked" value="true" name="overtime_checkbox" id="overtime_checkbox" data-toggle="checkbox" disabled="" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span> Denna match gick till övertid
+                                            </label>
+                                        <% } else { %>
+                                            <label class="checkbox" for="overtime_checkbox">
+                                                <input type="checkbox" value="false" name="overtime_checkbox" id="overtime_checkbox" data-toggle="checkbox" disabled="" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span> Denna match gick ej till övertid
+                                            </label>
+                                        <% } %>
+                                    <% } else { %>
+                                        <label class="checkbox" for="overtime_checkbox">
+                                            <input type="checkbox" value="true" name="overtime_checkbox" id="overtime_checkbox" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span> Gick denna match till övertid? Klicka i boxen
+                                        </label>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
                     <!-- /.panel -->
                     <div class="panel">
                         <div class="panel-body">

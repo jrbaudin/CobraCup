@@ -316,8 +316,8 @@
                                                         <th></th>
                                                         <th class="text-center" title="Games Played">GP</th>
                                                         <th class="text-center" title="Wins">W</th>
-                                                        <th class="text-center" title="Ties">T</th>
                                                         <th class="text-center" title="Losses">L</th>
+                                                        <th class="text-center" title="Overtime Losses">OT</th>
                                                         <th class="text-center bg-warning" title="Points"><strong>P</strong></th>
                                                     </tr>
                                                 </thead>
@@ -332,8 +332,8 @@
                                                                     <td><%= standing.get("team").get("team_name") %></td>
                                                                     <td class="text-center"><%= standing.get("games_played") %></td>
                                                                     <td class="text-center"><%= standing.get("wins") %></td>
-                                                                    <td class="text-center"><%= standing.get("tie") %></td>
                                                                     <td class="text-center"><%= standing.get("losses") %></td>
+                                                                    <td class="text-center"><%= standing.get("ot_losses") %></td>
                                                                     <td class="text-center"><strong><%= standing.get("points") %></strong></td>
                                                                 </tr>
                                                             <% i = i+1;
@@ -342,7 +342,7 @@
                                                     <% } %>
                                                 </tbody>
                                             </table>
-                                            <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>P</strong>-Points</small>
+                                            <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses <strong>P</strong>-Points</small>
                                         </div>
                                     </div>
                                 </div>

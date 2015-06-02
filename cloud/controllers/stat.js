@@ -5,7 +5,7 @@ var momentSWE = require('cloud/tools/moment-with-locales.min.js');
 exports.showLeague = function(req, res) {
   var Standings = Parse.Object.extend('Standings');
   var standingsQuery = new Parse.Query(Standings);
-  standingsQuery.descending('points,difference,goals_for');
+  standingsQuery.descending('points,difference,goals_for,games_played');
   standingsQuery.include(["team.nhlTeam"]);
   standingsQuery.find().then(function(standings) {
     if (standings) {
@@ -174,33 +174,48 @@ exports.saveMatchResult = function(req, res) {
   var home_win = 0;
   var home_loss = 0;
   var home_tie = 0;
+  var home_ot_loss = 0;
 
   var away_win = 0;
   var away_loss = 0;
   var away_tie = 0;
+  var away_ot_loss = 0;
 
-  if(home_goals > away_goals){
+  var overtime_checkbox = req.body.overtime_checkbox;
+  //console.log(">>> overtime_checkbox: " + overtime_checkbox);
+  var overtime_game = false;
+
+  if(overtime_checkbox === "true"){
+    overtime_game = true;
+  }
+
+  if((home_goals > away_goals) && !overtime_game){
     home_points = home_points+2;
     home_win = home_win+1;
     away_loss = away_loss+1;
-  } else if (away_goals > home_goals) {
+  } else if ((away_goals > home_goals) && !overtime_game) {
     away_points = away_points+2;
     away_win = away_win+1;
     home_loss = home_loss+1;
-  } else {
-    home_points = home_points+1;
+  } else if ((home_goals > away_goals) && overtime_game){
+    home_points = home_points+2;
     away_points = away_points+1;
-    home_tie = home_tie+1;
-    away_tie = away_tie+1;
+    home_win = home_win+1;
+    away_ot_loss = away_ot_loss+1;
+  } else if ((away_goals > home_goals) && overtime_game){
+    home_points = home_points+1;
+    away_points = away_points+2;
+    home_ot_loss = home_ot_loss+1;
+    away_win = away_win+1;
   }
-  
+
   var home_captain_id = req.body.home_captain_id;
   var home_lieutenant_id = req.body.home_lieutenant_id;
   var away_captain_id = req.body.away_captain_id;
   var away_lieutenant_id = req.body.away_lieutenant_id;
 
   //console.log("home_captain_id: " + home_captain_id + " home_lieutenant_id: " + home_lieutenant_id + " away_captain_id: " + away_captain_id + " away_lieutenant_id: " + away_lieutenant_id);
-  
+
   var home_captain_goals = req.body.home_captain_goals;
   var home_captain_fights = req.body.home_captain_fights;
   var home_lieutenant_goals = req.body.home_lieutenant_goals;
@@ -246,6 +261,7 @@ exports.saveMatchResult = function(req, res) {
               gResult[0].set('away_captain_fights', parseInt(away_captain_fights));
               gResult[0].set('away_lieutenant_goals', parseInt(away_lieutenant_goals));
               gResult[0].set('away_lieutenant_fights', parseInt(away_lieutenant_fights));
+              gResult[0].set('overtime', overtime_game);
 
               gResult[0].save().then(function(gResSaved) {
                 //console.log("Managed to save the result...");
@@ -267,7 +283,7 @@ exports.saveMatchResult = function(req, res) {
                   standingsQuery.include('team');
                   standingsQuery.find().then(function(standingHomeTeam) {
                     if (standingHomeTeam) {
-                      //console.log("Found the home team standing to save...");
+                      console.log("Found the home team standing to save...");
                       var h_points_current = standingHomeTeam[0].get("points");
 
                       var h_goals_for_current = standingHomeTeam[0].get("goals_for");
@@ -275,6 +291,7 @@ exports.saveMatchResult = function(req, res) {
                       var h_wins_current = standingHomeTeam[0].get("wins");
                       var h_losses_current = standingHomeTeam[0].get("losses");
                       var h_ties_current = standingHomeTeam[0].get("tie");
+                      var h_ot_loss_current = standingHomeTeam[0].get("ot_losses");
                       var h_games_played_current = standingHomeTeam[0].get("games_played");
 
                       standingHomeTeam[0].set('points', h_points_current+home_points);
@@ -285,6 +302,7 @@ exports.saveMatchResult = function(req, res) {
                       standingHomeTeam[0].set('losses', h_losses_current+home_loss);
                       standingHomeTeam[0].set('wins', h_wins_current+home_win);
                       standingHomeTeam[0].set('tie', h_ties_current+home_tie);
+                      standingHomeTeam[0].set('ot_losses', h_ot_loss_current+home_ot_loss);
 
                       standingHomeTeam[0].save().then(function(gStandingSaved) {
                         //console.log("Managed to save the result...");
@@ -300,6 +318,7 @@ exports.saveMatchResult = function(req, res) {
                             var a_wins_current = standingAwayTeam[0].get("wins");
                             var a_losses_current = standingAwayTeam[0].get("losses");
                             var a_ties_current = standingAwayTeam[0].get("tie");
+                            var a_ot_loss_current = standingAwayTeam[0].get("ot_losses");
                             var a_games_played_current = standingAwayTeam[0].get("games_played");
 
                             standingAwayTeam[0].set('points', a_points_current+away_points);
@@ -310,10 +329,11 @@ exports.saveMatchResult = function(req, res) {
                             standingAwayTeam[0].set('losses', a_losses_current+away_loss);
                             standingAwayTeam[0].set('wins', a_wins_current+away_win);
                             standingAwayTeam[0].set('tie', a_ties_current+away_tie);
+                            standingAwayTeam[0].set('ot_losses', a_ot_loss_current+away_ot_loss);
 
                             standingAwayTeam[0].save().then(function(gStandingAwaySaved) {
                               console.log("Managed to save the result... trying to save player stats");
-                              
+
                               var PlayerStats = Parse.Object.extend('PlayerStats');
 
                               //Save home captain player stats (goals and fights)
@@ -517,7 +537,7 @@ exports.saveMatchResult = function(req, res) {
             var string = encodeURIComponent('Matchresultat kunde inte sparas! err-id: G4');
             res.redirect('/?error=' + string);
           });
-      
+
         } else {
           console.error("The amount of goals per player did not equal the amount of goals for the team. Canceling!");
           var stringErr2 = encodeURIComponent('Summan av mängden mål per spelare matchade inte den totala målsumman för lagen. Försök igen.');
