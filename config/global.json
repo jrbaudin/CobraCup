@@ -1,12 +1,12 @@
 {
     "applications": {
         "Cobra Cup": {
-            "applicationId": "FtGXrt6ImrX4YMnnS0UGn7wtjBngephiPySOBMAI", 
-            "masterKey": "m0H1cAvl82KMQvaJmb7k8mE8pGFmZRLkTicMKQ5E"
+            "applicationId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", 
+            "masterKey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         }, 
         "Cobra-Cup-Development": {
-            "applicationId": "Ug0N5pHeqaFuYfOswNTdwguPv5ZBTz9EFfcmsR1U", 
-            "masterKey": "js2PFKk0WmeViaYQPkNk7xoayTXvdFllc9Z403jb"
+            "applicationId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", 
+            "masterKey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         }, 
         "_default": {
             "link": "Cobra Cup"
