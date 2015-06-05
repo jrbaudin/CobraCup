@@ -2,23 +2,22 @@ env:
   matrix:
   - GOPATH=$TRAVIS_BUILD_DIR/gosrc
   global:
-  - secure: g9R/BW+1XntQCVjtJyi0pPRiYMqbv3NyH2hfMWj8OBnreGwogYG/JlzZoRc9qWOMjXSTFdku8oRCAwmKR/kulG5awcYagDCgil5Leqvrl1zHbP5/biE2ht/iQBMneiC3M0S5qvJqw+useCVraxUxjL61ssdyfacvexAlzjeN1l4TmssQvKWUDJD2UirWlF9o4iwEtJtVnIQoelTqc2nAB9o3Letu9v8qANDClxwAc7WTXpyjG2OTTcvygisndzqoTwZNkMWMZehqUGa54ag7goeQ+R/cRbvDor5YX0oxdjc2afITIBPof4VBeu3KJOVcKJrsUwxzzBG9bL5jKJqjUJ7bjItyy+N4fVvXg5+/zJucsQ/NsfVr5ACUEkcl1B4Ppy9FnYpAfY8RyHkRzuntxk509pjSGFBNZIJPWQs3TFVStdE9ZGwkcZpumf3htQrXiC1MQOOIhwqIQbxow8xZFf03P/HTa7d8N+/u4EhI0NOb6xdr+6W63TW96Tuz7Fc/ffXe3RDtFSLesX2yzxfw/Um88qzoAXPTxVcfcaRVNeOSFnWp0VWaHuD1RCAw6EcONJSXINsOONKa/uU3aELcbvn+S3EsUvwUvj1d2atIiViIS7lFpWzzE8PIRgm+B7mV48HnbL4C6dIv0b9lZ1Zidcc0K6r+nbExvdkocpRf9Oc=
-  - secure: LcDRrJEXOuyX9Kb6D1dqDiYcfhAn/ZvFLMdyNXAaPczawanAkqOqqIzKDQd4i3/cVuQ9R09tHrozchAFKU0qepm+IW/t+UrSkP2lhaspStRt5atZoSE1HRdF+r27UgGxrPT5tTHgKi3+MOiFYNezKsOx7bX10C4mp5y9myhXObHBxQ0yS79kQOsFGxxl+qYNhIOPUw7lTAo1/DkqNmEPKHd6IDJSsOSi/4sYxB0RpbTz4tKEuSF8VHDjTxfLkX9OJeo2shXbEyUCULmybEsxTk8lZo+dqL0BB8/o3J6EJ4T+rqc9HiENxeAsugyQ2vMMdD/siBHo/IyTZN3PHBGgZKt/pL9B4wluzQPLvMtRoHDsw2UiEaBlZNmkEJukdvnnwB2Z1AFSi1keJiEZ64ABVWuh4wlFijlT5TyCcRV+7EhYaXj8hpmNNv7DU4aKdH3gq+shEpPtAj2s9uaLyrCFH+oAhZOC5M6Qdp57fUDB8M1N4V6Ki3/TQh4PvvKl06H6m0VKlHWoK08eiefYnwX9sZHgnhHCJL7IiRncYAEPyDD5kL83K2Fyd6vCN8iMa4OZBCb2YmR5bI7QzYrxLIKob6fz8gLUM+U7+KFdNdBKpGGsHt2gtXR67u/0Y3lkvsdAWWvh6bEhSpNnIby23RsMx9xUc7V3d+LUNH4VIfp8tLc=
-install:
-- mkdir -p "$TRAVIS_BUILD_DIR/gosrc"
-- mkdir -p "$TRAVIS_BUILD_DIR/static"
-- curl -s https://www.parse.com/downloads/cloud_code/installer.sh | sudo /bin/bash
-- go get -v github.com/jrbaudin/CobraCup
-script: ./scripts/build_all.sh
+  - secure: KTDVJhfoD23nunhzdsQLy/flle/pQzW1RqqomAsGCAQwOzU+5402TJWc6LK3zbgHg5t5ivrceZP5mjmPav5vr3LIIQrcsuo0ZtHz96i8iZZq+SjxDkjeMzvoe8g+WMDGvhwcL7JlG35DXqcc5f63jDYTqTIfMEI7S6X8ARkqPf7MBN1UcW/DAf7Zmx93KnoCDbsheZSp0HCDyN59qEZ6cVGSxxWu3z7T0s4/uNGoHsdSsMmqTnIBhKeJBTfg6/GTkcs//2ZjjR2hlF5AhWxP6q6INnaiWvRbc/B04KxzkRsswemAv/+Yl/jxtSE3QKQGnnswKtwcFak3ANk/pni9T1rz3XPaGfTsxO3UhcfsUchUOHgoVfkpsdNnp0UN1S4CGsWlwx4qBhYRRQ5Lq4SHChf0KmFUlDtjSCbGQGbAFnDCpFw52RXWG5lOjZOaRWJOio14Z7vmjxkxsBoGHEXC5iGe7EYoalTcdX0sw5rFnFLkcryWYXdNNYDyORQ9NJVF/kSsUntcVvwId5hFicDaeR9G5Ua7ZeZ/8BUSRNdwbdkc21uVcS7uDk4vATRm649x55LEKc9/8ej6h32bPo7v0C0kM7DdAnkX6wtBT4GWo9FHbmhjPLe71nneLzQIHB2iePA6DCaDdkEumBAGbV9e5lf+rWqURFVTG8hd3kPlvmU=
+  - secure: RjEttDJhq+U4ojgM1tnh2hH9WspcGtW8h2w2GJyvw/wxNwOLTE2FAfJ1ut8HmlRDoCDp3zLyNpLujUcbiznoNHWTmsbGLl2qon5VVgvk4Q2mul4fO6+YmAwrnnYwD5E+KLvoYu/qGyQBSXkgE6C4DX4aIHiKiBV7XSlcydqGUnGlj+rXl0/kD9MaJz1Ab+U5FWzDBx3C6O6toXuk8omVDheahZGn3RliwdNzVeHukMQZTEmFBUpOcPSBYr3X4+aGDliVsOZGyw2eHCIDhMVdHIfwhiFDtRwltshvu1lb/hHup4B1SD987+pVKXqCKIWC7lWD2BVbtRFg6SdX9UgA5bvrnGRp+9hIwXb3CmFHID0P8R9cCe6QTRLr+yOeYagr1vjc7W8RmpueZSi9Q15MjrAhdaGMHRQZ66B21f2fAnQVwHUQkcIcrQv+WZxb4J3VFXl0C8zVyL0GwK7ay0OlLiHTBTIXVQ8KDtx7z73Ee5yx8Leaqb4czKnGC1ooQFtqWv8yneKfma7UgpJKQRYgM+0V1chU/hh8nEATwOieaOyYdr++Y79HGG0AzZS1enjdbsutvPc4fX/5jeoAIHDQ3IcBxzlpXqePz7WU0xbfk13eBidF/lmTS3s3WtC5IDHaZUNdroXeDiG2SXxZi0Btc/uKPf1vpZtb2mGlwdBFhj4=
 # blacklist
 branches:
   except:
     - develop
     - production
     - develop-workcup
-
 # whitelist
 branches:
   only:
     - develop-cobra-cup-2016-production
     - develop-cobra-cup-2016-development
+install:
+- mkdir -p "$TRAVIS_BUILD_DIR/gosrc"
+- mkdir -p "$TRAVIS_BUILD_DIR/static"
+- curl -s https://www.parse.com/downloads/cloud_code/installer.sh | sudo /bin/bash
+- go get -v github.com/jrbaudin/CobraCup
+script: ./scripts/build_all.sh
