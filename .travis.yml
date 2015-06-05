@@ -10,3 +10,15 @@ install:
 - curl -s https://www.parse.com/downloads/cloud_code/installer.sh | sudo /bin/bash
 - go get -v github.com/jrbaudin/CobraCup
 script: ./scripts/build_all.sh
+# blacklist
+branches:
+  except:
+    - develop
+    - production
+    - develop-workcup
+
+# whitelist
+branches:
+  only:
+    - develop-cobra-cup-2016-production
+    - develop-cobra-cup-2016-development
