@@ -22,11 +22,16 @@ exports.index = function(req, res) {
       console.log("*******");
       console.log(countData);
       console.log("*******");
+      console.log("€€€€€€€");
+      console.log(_.isArray(countData));
+      console.log(_.isObject(countData));
+      console.log("€€€€€€€");
+      console.log(countData["1"]);
 
-      //console.log("count: " + count);
       res.render('hub', {
         teams: teams,
         count: count,
+        teamCount: countData,
         flashError: passedErrorVariable,
         flashWarning: passedWarningVariable,
         flashInfo: passedInfoVariable,
@@ -34,7 +39,6 @@ exports.index = function(req, res) {
       });
     } else {
       var count = 0;
-      //console.log("count: " + count);
       res.render('hub', {
         count: count,
         flash: 'Inga lag är ännu registrerade.',
