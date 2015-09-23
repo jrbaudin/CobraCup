@@ -15,6 +15,14 @@ body {
   color: #F1C40F;
 }
 
+.fullybooked{
+	color: #E74C3C !important;
+}
+
+.stillopen{
+	color: #2ECC71 !important;
+}
+
 a:focus {
   color: #F1C40F;
 }

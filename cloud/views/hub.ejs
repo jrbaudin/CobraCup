@@ -16,6 +16,14 @@
     <link rel="stylesheet" href="/dist/css/flat-ui.css">
 
     <link rel="stylesheet" href="/stylesheets/style.css">
+    <script>
+     !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+     arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+     d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+     insertBefore(d,q)}(window,document,'script','_gs');
+
+     _gs('GSN-270173-J');
+    </script>
 </head>
 
 <body>
@@ -55,8 +63,8 @@
               <li><a href="/feed"><mark>Live</mark></a></li>
               <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
             </ul>
-            <p class="navbar-text navbar-right"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
-            <p class="navbar-text navbar-right"><strong>CC <%= cobracup_count %>/12</strong></p>        
+            <p class="navbar-text navbar-right stillopen"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
+            <p class="navbar-text navbar-right fullybooked"><strong style="color=#FAFFFC;">CC <%= cobracup_count %>/12</strong></p>        
           </div><!--/.nav-collapse -->
       </div>
   </nav>
@@ -128,7 +136,7 @@
                         <!-- Add the team information -->
                         <h3 class="tile-title text-uppercase"><%= team.get("team_name") %></h3>
                         <p><%= team.get("nhlTeam").get("name") %></p>
-                        <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>">Team Corner</a>
+                        <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>" onclick="_gs('event', 'Clicked like button')">Team Corner</a>
                       </div>
                     </div>
                   <% } %>
@@ -145,7 +153,7 @@
                     </a>
                     <h3 class="tile-title text-uppercase"><%= team.get("team_name") %></h3>
                     <p><%= team.get("nhlTeam").get("name") %></p>
-                    <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>">Team Corner</a>
+                    <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>" onclick="_gs('event', 'Clicked like button')">Team Corner</a>
                   </div>
                 </div>
               <% }) %>

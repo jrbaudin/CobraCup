@@ -18,6 +18,14 @@
     <% } else { %>
         <title>Kunde inte hitta laget - Cobra Cup 2016</title>
     <% } %>
+    <script>
+     !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+     arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+     d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+     insertBefore(d,q)}(window,document,'script','_gs');
+
+     _gs('GSN-270173-J');
+    </script>
 </head>
 
 <body>
@@ -51,10 +59,6 @@
              <% if(typeof(count) !== 'undefined'){ %>
                <p class="navbar-text navbar-right"><strong><%= count %>/16 lag</strong></p>
              <% } %>
-             <p class="navbar-text navbar-right">
-                 <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
-                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-             </p>
            </div><!--/.nav-collapse -->
        </div>
    </nav>
@@ -76,7 +80,7 @@
                             <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:150px;height:150px; margin: 0 auto;">
                             <h4 class="text-center"><%= teamObj[0].get("nhlTeam").get("name") %></h4>
                             <h6 class="text-center"><%= teamObj[0].get("nhlTeam").get("city") %></h4>
-                            <a class="btn btn-primary btn-md center-block" href="<%= teamObj[0].get("nhlTeam").get("homepage") %>" target="_blank">Hemsida</a>
+                            <a class="btn btn-primary btn-md center-block" href="<%= teamObj[0].get("nhlTeam").get("homepage") %>" target="_blank" onclick="_gs('event', 'Clicked like button')">Hemsida</a>
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -478,6 +482,10 @@
     </div>
 
     <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
+    <p class="text-center">
+        <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="../dist/js/vendor/jquery.min.js"></script>
