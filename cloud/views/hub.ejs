@@ -136,7 +136,7 @@
                         <!-- Add the team information -->
                         <h3 class="tile-title text-uppercase"><%= team.get("team_name") %></h3>
                         <p><%= team.get("nhlTeam").get("name") %></p>
-                        <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>" onclick="_gs('event', 'Clicked like button')">Team Corner</a>
+                        <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>" onclick="_gs('event', 'Clicked to go to the Team Corner')">Team Corner</a>
                       </div>
                     </div>
                   <% } %>
@@ -153,7 +153,7 @@
                     </a>
                     <h3 class="tile-title text-uppercase"><%= team.get("team_name") %></h3>
                     <p><%= team.get("nhlTeam").get("name") %></p>
-                    <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>" onclick="_gs('event', 'Clicked like button')">Team Corner</a>
+                    <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>" onclick="_gs('event', 'Clicked to go to the Team Corner')">Team Corner</a>
                   </div>
                 </div>
               <% }) %>
