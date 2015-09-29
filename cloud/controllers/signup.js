@@ -9,7 +9,7 @@ exports.new = function(req, res) {
   teamQuery.count({
     success: function(number) {
       console.log("number: " + number);
-      if(number <=15){
+      if(number <=19){
         var NHLTeam = Parse.Object.extend('NHLTeam');
         var nhlTeamQuery = new Parse.Query(NHLTeam);
         nhlTeamQuery.ascending('name');

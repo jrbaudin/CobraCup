@@ -64,7 +64,7 @@
               <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
             </ul>
             <p class="navbar-text navbar-right stillopen"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
-            <p class="navbar-text navbar-right fullybooked"><strong style="color=#FAFFFC;">CC <%= cobracup_count %>/12</strong></p>        
+            <p class="navbar-text navbar-right stillopen"><strong style="color=#FAFFFC;">CC <%= cobracup_count %>/16</strong></p>        
           </div><!--/.nav-collapse -->
       </div>
   </nav>
@@ -111,7 +111,7 @@
         <% if(typeof(teams) !== 'undefined'){ 
             var rookies = [];
           %>
-          <h4 style="color:#eff0f2;">Cobra Cup 2016 <i class="fa fa-hand-spock-o"></i> <%= cobracup_count %>/12 lag</h4>
+          <h4 style="color:#eff0f2;">Cobra Cup 2016 <i class="fa fa-hand-spock-o"></i> <%= cobracup_count %>/16 lag</h4>
           <div class="row demo-tiles">
               <% teams.forEach(function(team) { %>
                  <% if(team.get("level") == 1) { 
