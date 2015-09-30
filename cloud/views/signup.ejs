@@ -70,6 +70,7 @@
                 </div>
             <% } %>
             <!-- Show an alert that Cobra Cup is fully booked -->
+            <!--
             <div class="alert alert-warning alert-dismissible" role="alert">
               <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
@@ -77,6 +78,7 @@
               </button>
               <strong>Observera!</strong> Cobra Cup 2016 är fullbokat men det finns fortfarande platser till rookieturneringen Hot Rod Cup. Om ni dock känner att ni <strong>verkligen</strong> skulle vilja delta i Cobra Cup så försöker vi såklart lösa det! Skicka ett mail till joel@cobracup.se eller ring 070-566 64 21 så gör vi vårt bästa.
             </div>
+            -->
             <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
                 <div class="panel">
                     <div class="panel-body">
@@ -154,9 +156,13 @@
                                 <% if(typeof(nhlteams) !== 'undefined'){ %>
                                     <select class="form-control select select-inverse select-block mbl" id="nhlTeam" name="nhlTeam">
                                         <optgroup label="NHL">
-                                        <%
-                                        nhlteams.forEach(function(nhlTeam) { %>
-                                            <option value="<%= nhlTeam.id %>"><%= nhlTeam.get("name") %></option>
+                                        <% nhlteams.forEach(function(nhlTeam) { %>
+                                            <% if (nhlTeam.get("taken") == false) { %>
+                                                <option id="nhlTeamDropdownList" value="<%= nhlTeam.id %>"><%= nhlTeam.get("name") %></option>
+                                            <% } else { %>
+
+                                            <% } %>
+                                            
                                         <% }) %>
                                         </optgroup>
                                     </select>

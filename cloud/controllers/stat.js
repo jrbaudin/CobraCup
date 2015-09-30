@@ -385,7 +385,7 @@ exports.saveMatchResult = function(req, res) {
                                                     awayLieu[0].save().then(function(awayLieuSaved) {
                                                       //console.log("Managed to update the away captain stats...");
 
-                                                      var strMessage = "Slut! " + home_goals + " - " + away_goals + " " + standingHomeTeam[0].get("team").get("team_name") + " - " + standingAwayTeam[0].get("team").get("team_name");
+                                                      var strMessage = "Match slut i grupp " + game[0].get("group") + " :: " + home_goals + " - " + away_goals + " " + standingHomeTeam[0].get("team").get("team_name") + " vs. " + standingAwayTeam[0].get("team").get("team_name") + " #CobraCup";
 
                                                       var currentTime = momentSWE(new Date()).locale('sv').format('YYYY-MM-DD HH:mm:ss');
                                                       var published = new Date(currentTime);
@@ -402,6 +402,15 @@ exports.saveMatchResult = function(req, res) {
                                                       }, function(error) {
                                                         console.error("Failed saving Notification");
                                                         console.error(error);
+                                                      });
+
+                                                      Parse.Cloud.run('sendTweet', { "status": strMessage}, {
+                                                        success: function(success) {
+                                                          alert(success);
+                                                        },
+                                                        error: function(error) {
+                                                          alert(error);
+                                                        }
                                                       });
 
                                                       var string = encodeURIComponent('Resultat för match med id ');

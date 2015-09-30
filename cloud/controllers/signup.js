@@ -13,7 +13,7 @@ exports.new = function(req, res) {
         var NHLTeam = Parse.Object.extend('NHLTeam');
         var nhlTeamQuery = new Parse.Query(NHLTeam);
         nhlTeamQuery.ascending('name');
-        nhlTeamQuery.notEqualTo("taken", true);
+        //nhlTeamQuery.notEqualTo("taken", true);
         nhlTeamQuery.find().then(function(nhlteams) {
           if (nhlteams) {
             res.render('signup', {
