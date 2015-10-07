@@ -45,10 +45,15 @@ Parse.Cloud.define("getPlayer", function(request, response) {
   	playerQuery.equalTo('player_id', request.params.player_id);
     playerQuery.include('team');
   	playerQuery.find().then(function(result) {
-  		console.log("Found player with id = " + result.id);
-  		response.success(result);
+      if(typeof(result[0].id) !== 'undefined'){
+        console.log("main.js.getPlayer(): Found player with objectId = " + result[0].id);
+        response.success(result);
+      } else {
+        console.log("main.js.getPlayer(): No Player with id " + request.params.player_id + " was found");
+        response.error("No Player with id " + request.params.player_id + " was found");
+      }
   	}, function(error) {
-  		console.log("Player retrieval failed with error.code " + error.code + " error.message " + error.message);
+  		console.log("main.js.getPlayer(): Player retrieval failed with error.code " + error.code + " error.message " + error.message);
     	response.error("Player retrieval failed with error.code " + error.code + " error.message " + error.message);
   	});
 });

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include header section which holds imports for shared elements -->
+    <% include _header %>
+
+    <title>Anmälan - Cobra Cup 2016</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="../dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="../stylesheets/style.css">
+    <script>
+     !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+     arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+     d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+     insertBefore(d,q)}(window,document,'script','_gs');
+
+     _gs('GSN-270173-J');
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/"><i class="fa fa-cube"></i> Hub <span style="font-family: 'Kaushan Script', cursive;">2016</span></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="/">Lag</a></li>
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Anmäl lag <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/signup">Cobra Cup</a></li>
+                        <li><a href="/signup/rookie">Hot Rod Cup</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="/stat/league">Ligan</a></li>
+                    <li><a href="/stat/divisions">Divisioner</a></li>
+                    <li><a href="/stat/playerstats">Spelarstatistik</a></li>
+                  </ul>
+                </li>
+                <li><a href="/games">Matcher</a></li>
+                <li><a href="/feed"><mark>Live</mark></a></li>
+                <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
+              </ul>
+              <% if(typeof(count) !== 'undefined'){ %>
+                <p class="navbar-text navbar-right"><strong><%= count %>/16 lag</strong></p>
+              <% } %>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    <div class="container">
+        <div class="col-md-12">
+            <% if(typeof(flash) !== 'undefined'){ %>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <strong>Fel!</strong> <%= flash %>.
+                </div>
+            <% } %>
+            <!-- Show an alert that Cobra Cup is fully booked -->
+            <!--
+            <div class="alert alert-warning alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <strong>Observera!</strong> Cobra Cup 2016 är fullbokat men det finns fortfarande platser till rookieturneringen Hot Rod Cup. Om ni dock känner att ni <strong>verkligen</strong> skulle vilja delta i Cobra Cup så försöker vi såklart lösa det! Skicka ett mail till joel@cobracup.se eller ring 070-566 64 21 så gör vi vårt bästa.
+            </div>
+            -->
+            <div style="padding-right: 0; padding-left: 0;" class="container-fluid">
+                <div class="panel">
+                    <div class="panel-body">
+                        <h4>Anmäl ditt lag till Hot Rod Cup 2016 <small><i class="fa fa-beer"></i> = obligatoriskt</small></h4>
+                        <h6><i class="fa fa-calendar"></i> 19 december 2015, Varvsberget, Örnsköldsvik</h6>
+                        <form class="form" role="form" method="post">
+                            <label><small><i class="fa fa-beer"></i></small> Kapten</label>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="captain_name" class="control-label sr-only">Namn</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><span class="fui-user fa-fw"></span></div>
+                                        <input type="text" class="form-control" id="captain_name" placeholder="Namn" name="captain_name" required autofocus>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="captain_email" class="control-label sr-only">Epost</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></div>
+                                        <input type="email" class="form-control" id="captain_email" placeholder="Epost" name="captain_email" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="captain_telephone" class="control-label sr-only">Telefon</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-phone fa-fw"></i></div>
+                                        <input type="text" class="form-control" id="captain_telephone" placeholder="Telefon" name="captain_telephone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <label><small><i class="fa fa-beer"></i></small> Assisterande</label>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="lieutenant_name" class="control-label sr-only">Namn</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><span class="fui-user fa-fw"></span></div>
+                                        <input type="text" class="form-control" id="lieutenant_name" placeholder="Namn" name="lieutenant_name" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="lieutenant_email" class="control-label sr-only">Epost</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></div>
+                                        <input type="email" class="form-control" id="lieutenant_email" placeholder="Epost" name="lieutenant_email" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="lieutenant_telephone" class="control-label sr-only">Telefon</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-phone fa-fw"></i></div>
+                                        <input type="text" class="form-control" id="lieutenant_telephone" placeholder="Telefon" name="lieutenant_telephone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <label><small><i class="fa fa-beer"></i></small> Laget</label>
+                            <div class="form-group">
+                                <label for="team_name" class="control-label sr-only">Lagnamn</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-flag fa-fw"></i></div>
+                                    <input type="text" class="form-control" id="team_name" placeholder="Lagnamn" name="team_name" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="team_motto" class="control-label sr-only">Lagets motto</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></div>
+                                    <input type="text" class="form-control" id="team_motto" placeholder="Lagets motto" name="team_motto" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                <label for="nhlTeam"><small><i class="fa fa-beer"></i></small> Spelar som</label>
+                                <% if(typeof(nhlteams) !== 'undefined'){ %>
+                                    <select class="form-control select select-inverse select-block mbl" id="nhlTeam" name="nhlTeam">
+                                        <optgroup label="NHL">
+                                        <% nhlteams.forEach(function(nhlTeam) { %>
+                                            <% if (nhlTeam.get("taken_rookie") == false) { %>
+                                                <option id="nhlTeamDropdownList" value="<%= nhlTeam.id %>"><%= nhlTeam.get("name") %></option>
+                                            <% } else { %>
+
+                                            <% } %>
+                                            
+                                        <% }) %>
+                                        </optgroup>
+                                    </select>
+                                    <%
+                                } else { %>
+                                    <p><em>Problem att ladda lediga lag.</em></p>
+                                <% } %>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label id="levelLbl" for="level" data-toggle="tooltip" data-placement="right" title="" data-original-title="Välj den nivå som ert lag är på. Rookie = Nybörjare, Pro = Spelar då och då, All-Star = Spelar NHL minst en gång per vecka."><small><i class="fa fa-beer"></i></small> Nivå</label> <span class="pull-right"><small><a href="#" id="toggle">Visa mer information om nivåerna</a></small></span>
+                                    <select class="form-control select select-warning select-block mbl" id="level" name="level">
+                                        <option value="1" selected>Rookie</option>
+                                    </select>
+                                    <div id="ranking-info">
+                                      <ul>
+                                          <li>
+                                            <small>
+                                              <strong>All-Star</strong> = Båda spelarna eller en av dem spelar regelbundet mycket NHL (flera gånger i veckan) och/eller har koll på hur spelet går till efter ha spelat tidigare versioner av NHL.
+                                            </small>
+                                          </li>
+                                          <li>
+                                            <small>
+                                              <strong>Pro</strong> = Båda spelarna i laget har sporadiskt spelat NHL under sin karriär. Alternativt har en av spelarna spelat mycket NHL tidigare. De har hyfsad koll på hur spelet går till och spelar ibland.
+                                            </small>
+                                          </li>
+                                          <li>
+                                            <small>
+                                              <strong>Rookie</strong> = Båda spelarna i laget har aldrig spelat moderna NHL-spel eller möjligtvis någon enstaka gång.
+                                            </small>
+                                          </li>
+                                      </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Kommentar</label>
+                                <textarea class="form-control input-sm" rows="3" name="comment"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label for="captain_gamertag" class="control-label"><strong>Kapten</strong> <span style="color: rgb(16,124,16);">Xbox Live Gamertag</span></label>
+                                    <div class="input-group" title="Ej obligatorisk">
+                                        <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
+                                        <input type="text" class="form-control" id="captain_gamertag" placeholder="Gamertag" name="captain_gamertag">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="lieutenant_gamertag" class="control-label"><strong>Assisterande</strong> <span style="color: rgb(16,124,16);">Xbox Live Gamertag</span></label>
+                                    <div class="input-group" title="Ej obligatorisk">
+                                        <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
+                                        <input type="text" class="form-control" id="lieutenant_gamertag" placeholder="Gamertag" name="lieutenant_gamertag">
+                                    </div>
+                                </div>
+                            </div>
+                            <p><strong>Obs.</strong> vid årets Cobra Cup gäller en anmälningsavgift på <strong>200 kronor</strong> per spelare. Läs mer <a href="http://cobracup.se/anmalningsavgift/" target="_blank">här</a></p>
+                            <div class="form-group">
+                                <input type='hidden' name='_method' value='put' />
+                                <button type="submit" class="btn btn-hg btn-primary btn-wide" onclick="_gs('event', 'Clicked to signup team')">Anmäl</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.container -->
+
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
+    <p class="text-center">
+        <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/dist/js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/dist/js/flat-ui.min.js"></script>
+
+    <!-- jQuery Version 1.11.0 -->
+    <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+    <script>
+        $("select").select2({dropdownCssClass: 'dropdown-inverse'});
+        $('#levelLbl').tooltip('hide');
+        $(document).ready(function(){
+            $('#toggle').click(function(ev) {
+              $('#ranking-info').toggle();
+              $(this).html(($('#toggle').text() == 'Visa mer information om nivåerna') ? 'Dölj mer information om nivåerna' : 'Visa mer information om nivåerna');
+           })
+        });
+    </script>
+</body>
+
+</html>
