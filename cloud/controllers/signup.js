@@ -2,7 +2,7 @@ var _ = require('underscore');
 var Mailgun = require('mailgun');
 Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
-// Display a form for creating a new instructor.
+// Display a form for signing up a new team.
 exports.new = function(req, res) {
   var Team = Parse.Object.extend('Team');
   var teamQuery = new Parse.Query(Team);
@@ -56,6 +56,61 @@ exports.new = function(req, res) {
   });
 };
 
+// Display a form for signing up a new team.
+exports.rookie = function(req, res) {
+  var Team = Parse.Object.extend('Team');
+  var teamQuery = new Parse.Query(Team);
+  teamQuery.equalTo('level', "1");
+  teamQuery.count({
+    success: function(number) {
+      if(number <=3){
+        var NHLTeam = Parse.Object.extend('NHLTeam');
+        var nhlTeamQuery = new Parse.Query(NHLTeam);
+        nhlTeamQuery.ascending('name');
+        nhlTeamQuery.equalTo("taken_rookie", false);
+        nhlTeamQuery.find().then(function(nhlteams) {
+          console.log("How many available NHLteams = " + _.size(nhlteams));
+          if (nhlteams) {
+            res.render('signup-rookie', {
+              nhlteams: nhlteams
+            });
+          } else {
+            res.send(500, 'Failed finding teams');
+          }
+        },
+        function(error) {
+          console.log("Team retrieval failed with error.code " + error.code + " error.message " + error.message);
+          res.send(500, 'Failed finding teams');
+        });
+      } else {
+        var passedWarningVariable = "Alla platser för Hot Rod 2016 är bokade!";
+        var Team = Parse.Object.extend('Team');
+        var teamQuery = new Parse.Query(Team);
+        teamQuery.ascending('team_name');
+        teamQuery.include('nhlTeam');
+        teamQuery.find().then(function(teams) {
+          if (teams) {
+            var count = _.size(teams);
+            res.render('hub', {
+              teams: teams,
+              count: count,
+              flashWarning: passedWarningVariable
+            });
+          } else {
+            res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
+          }
+        },
+        function() {
+          res.send(500, 'Failed finding teams');
+        });
+      }
+    },
+    error: function(error) {
+      res.send(500, 'Failed getting a count of the teams');
+    }
+  });
+};
+
 // Create a new team with specified information.
 exports.create = function(req, res) {
   var captain_name = req.body.captain_name;
@@ -73,6 +128,7 @@ exports.create = function(req, res) {
   var nhlTeam = req.body.nhlTeam;
   var level = req.body.level;
   var comment = req.body.comment
+  var hidden = false;
 
   var legend = ["-","-","-"];
   var marathon = ["-","-","-"];
@@ -118,6 +174,8 @@ exports.create = function(req, res) {
 
   team.set('qualified', false);
   team.set('champion', false);
+
+  team.set('hidden', hidden);
 
   var pass = Math.random().toString(36).slice(-8);
   team.set('password', pass);

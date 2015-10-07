@@ -43,7 +43,13 @@
            <div id="navbar" class="navbar-collapse collapse">
              <ul class="nav navbar-nav">
                <li><a href="/">Lag</a></li>
-               <li><a href="/signup">Anmäl lag</a></li>
+               <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Anmäl lag <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/signup">Cobra Cup</a></li>
+                        <li><a href="/signup/rookie">Hot Rod Cup</a></li>
+                    </ul>
+                </li>
                <li class="dropdown">
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
                  <ul class="dropdown-menu" role="menu">
@@ -421,25 +427,37 @@
                         <h2 class="text-center text-uppercase" style="word-wrap: break-word;"><%= teamObj[0].get("team_name") %></h2>
                         <hr>
                         <div class="col-md-6">
-                            <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
+                            <% if(!_.isEmpty(teamObj[0].get("captain").get("avatar").url())){ %>
+                                <img src="<%= teamObj[0].get("captain").get("avatar").url() %>" class="img-responsive img-circle" alt="Captain image" style="min-height:75px;height:75px; margin: 0 auto;">
+                            <% } else { %>
+                                <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
+                            <% } %>
+                            
                             <h5 class="text-center" title="<%= teamObj[0].get("captain_name") %>"><%= getFirstname(teamObj[0].get("captain_name")) %> <small style="color: rgb(0,0,0);">Kapten</small></h5>
                             <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj[0].get("captain_telephone") %></p>
                             <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj[0].get("captain_gamertag") %></strong></span></small><p>
                         </div>
                         <div class="col-md-6">
-                            <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
+                            <% if(!_.isEmpty(teamObj[0].get("lieutenant").get("avatar").url())){ %>
+                                <img src="<%= teamObj[0].get("lieutenant").get("avatar").url() %>" class="img-responsive img-circle" alt="Lieutenant image" style="min-height:75px;height:75px; margin: 0 auto;">
+                            <% } else { %>
+                                <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
+                            <% } %>
+                            
                             <h5 class="text-center" title="<%= teamObj[0].get("lieutenant_name") %>"><%= getFirstname(teamObj[0].get("lieutenant_name")) %> <small style="color: rgb(0,0,0);">Assisterande</small></h5>
                             <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj[0].get("lieutenant_telephone") %></p>
                             <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj[0].get("lieutenant_gamertag") %></strong></span></small><p>
                         </div>
                         <hr>
+                        <!--
                         <div class="col-md-6 col-md-offset-3">
                             <p class="text-center lead"><i>Lagmotto</i></p>
                             <blockquote>
-                                <p><!-- <i class="fa fa-quote-left fa-2x pull-left fa-border"></i> --> <%= teamObj[0].get("team_motto") %></p>
+                                <p><%= teamObj[0].get("team_motto") %></p>
                                 <small><%= teamObj[0].get("team_name") %></small>
                             </blockquote>
                         </div>
+                        -->
                         <div class="col-md-8 col-md-offset-2">
                             <p class="text-center lead" style="margin-bottom: 5px;"><span class="fui-list"></span> Nivå <span class="fui-list"></span></p>
                             <div class="progress" style="height: 20px;">

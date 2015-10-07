@@ -11,6 +11,7 @@ Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 var hubController = require('cloud/controllers/hub.js');
 var singupController = require('cloud/controllers/signup.js');
 var teamController = require('cloud/controllers/team.js');
+var playerController = require('cloud/controllers/player.js');
 var adminController = require('cloud/controllers/admin.js');
 var statController = require('cloud/controllers/stat.js');
 
@@ -77,9 +78,16 @@ app.get('/', hubController.index);
 app.get('/signup', singupController.new);
 app.put('/signup', singupController.create);
 
+app.get('/signup/rookie', singupController.rookie);
+app.put('/signup/rookie', singupController.create);
+
 app.get('/team/:teamid', teamController.getTeam);
 app.put('/team/:teamid', teamController.update);
 app.del('/team/:teamid', teamController.delete);
+
+app.get('/player/:playerid', playerController.getPlayer);
+app.put('/player/:playerid', playerController.updatePlayer);
+app.del('/player/:playerid', playerController.deletePlayer);
 
 app.get('/stat/league', statController.showLeague);
 app.get('/stat/divisions', statController.showDivisions);

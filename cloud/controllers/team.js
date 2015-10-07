@@ -7,10 +7,11 @@ exports.getTeam = function(req, res) {
   var Team = Parse.Object.extend('Team');
   var teamQuery = new Parse.Query(Team);
   teamQuery.equalTo('team_id', req.params.teamid);
-  teamQuery.include('nhlTeam');
+  teamQuery.include(['nhlTeam','captain','lieutenant']);
   teamQuery.find().then(function(theTeam) {
     if (theTeam) {
       console.log("Gotten the team...");
+      console.log(JSON.stringify(theTeam));
       var Standings = Parse.Object.extend('Standings');
       var standingsQuery = new Parse.Query(Standings);
       standingsQuery.descending('points');
@@ -42,7 +43,7 @@ exports.getTeam = function(req, res) {
                   //console.log("Gotten the games...");
                   var allTeamsQuery = new Parse.Query(Team);
                   allTeamsQuery.descending('team_name');
-                  allTeamsQuery.include('nhlTeam');
+                  allTeamsQuery.include(['nhlTeam','captain','lieutenant']);
                   allTeamsQuery.find().then(function(teams) {
                     if (teams) {
                       var latestGameQuery = Parse.Query.or(homeTeamQuery, awayTeamQuery);

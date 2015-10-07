@@ -8,25 +8,15 @@ exports.index = function(req, res) {
 
   var Team = Parse.Object.extend('Team');
   var teamQuery = new Parse.Query(Team);
-  teamQuery.descending('createdAt');
+  teamQuery.ascending('team_name');
+  teamQuery.equalTo('hidden', false);
   teamQuery.include('nhlTeam');
   teamQuery.find().then(function(teams) {
     if (teams) {
       var count = _.size(teams);
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-      console.log(JSON.stringify(teams));
-      console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
       var countData = _.countBy(teams, function(team){
           return team.get("level");
       }); 
-      console.log("*******");
-      console.log(countData);
-      console.log("*******");
-      console.log("€€€€€€€");
-      console.log(_.isArray(countData));
-      console.log(_.isObject(countData));
-      console.log("€€€€€€€");
-      console.log(countData["1"]);
 
       res.render('hub', {
         teams: teams,

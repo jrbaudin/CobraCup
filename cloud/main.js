@@ -18,6 +18,492 @@ Parse.Cloud.define("sendTweet", function(request, response) {
     });
 });
 
+Parse.Cloud.define("createPlayer", function(request, response) {
+	Parse.Cloud.useMasterKey();
+	var Player = Parse.Object.extend("Player");
+  	var player = new Player();
+
+  	player.set('name', request.params.name);
+  	player.set('email', request.params.email);
+  	player.set('gamertag', request.params.gamertag);
+  	player.set('telephone', request.params.telephone);
+  	player.set('fights', 0);
+  	player.set('goals', 0);
+  	var playerId = Math.floor((Math.random() * 100000) + 1);
+  	player.set('player_id', playerId.toString());
+
+  	player.save().then(function(result) {
+  		response.success("Saved the Player with objectId = " + result.id);
+  	}, function(error) {
+    	response.error('Error saving Player, try again. Msg: ' + error.message);
+  	});
+});
+
+Parse.Cloud.define("getPlayer", function(request, response) {
+	var Player = Parse.Object.extend('Player');
+  	var playerQuery = new Parse.Query(Player);
+  	playerQuery.equalTo('player_id', request.params.player_id);
+    playerQuery.include('team');
+  	playerQuery.find().then(function(result) {
+  		console.log("Found player with id = " + result.id);
+  		response.success(result);
+  	}, function(error) {
+  		console.log("Player retrieval failed with error.code " + error.code + " error.message " + error.message);
+    	response.error("Player retrieval failed with error.code " + error.code + " error.message " + error.message);
+  	});
+});
+
+/*** START Create PRO/ALLSTAR Team ***/
+Parse.Cloud.define("createTeam", function(request, response) {
+
+	var Team = Parse.Object.extend("Team");
+	var Player = Parse.Object.extend("Player");
+
+  	var team = new Team();
+
+  	var captain_name = request.params.captain_name;
+  	var captain_email = request.params.captain_email;
+  	var captain_telephone = request.params.captain_telephone;
+  	var captain_gamertag = request.params.captain_gamertag;
+
+  	var lieutenant_name = request.params.lieutenant_name;
+  	var lieutenant_email = request.params.lieutenant_email;
+  	var lieutenant_telephone = request.params.lieutenant_telephone;
+  	var lieutenant_gamertag = request.params.lieutenant_gamertag;
+
+  	var team_name = request.params.team_name;
+  	var team_motto = request.params.team_motto;
+  	var nhlTeam = request.params.nhlTeam;
+  	var level = request.params.level;
+  	var comment = request.params.comment;
+  	var hidden = request.params.hidden;
+
+  	var NHLTeam = Parse.Object.extend("NHLTeam");
+  	var nhlTeamObj = new NHLTeam();
+  	nhlTeamObj.id = nhlTeam;
+
+  	team.set("nhlTeam", nhlTeamObj);
+
+  	var legend = ["-","-","-"];
+  	var marathon = ["-","-","-"];
+
+  	team.set("legend", legend);
+  	team.set("marathon", marathon);
+
+  	team.set('team_name', team_name);
+  	team.set('team_motto', team_motto);
+  	team.set('level', level);
+  	team.set('comment', comment);
+
+  	team.set('group', "0");
+
+  	team.set('qualified', false);
+  	team.set('champion', false);
+
+  	var pass = Math.random().toString(36).slice(-8);
+  	team.set('password', pass);
+
+  	var genId = Math.floor((Math.random() * 100000) + 1);
+  	team.set('team_id', genId.toString());
+
+  	if (_.isEmpty(hidden)) {hidden = false};
+  	if(hidden === "true"){
+		hidden = true;
+	} else {
+		hidden = false;
+	}
+
+	team.set('hidden', hidden);
+
+  	//Create Captain object
+  	var captain = new Player();
+  	captain.set('name', captain_name);
+  	captain.set('email', captain_email);
+  	captain.set('telephone', captain_telephone);
+
+  	if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
+  	captain.set('gamertag', captain_gamertag);
+
+  	var capId = Math.floor((Math.random() * 100000) + 1);
+  	captain.set('player_id', capId.toString());
+
+  	captain.set('fights', 0);
+  	captain.set('goals', 0);
+
+
+  	//Create Lieutenant object
+  	var lieutenant = new Player();
+  	lieutenant.set('name', lieutenant_name);
+  	lieutenant.set('email', lieutenant_email);
+  	lieutenant.set('telephone', lieutenant_telephone);
+
+  	if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
+  	lieutenant.set('gamertag', lieutenant_gamertag);
+
+  	var lieuId = Math.floor((Math.random() * 100000) + 1);
+  	lieutenant.set('player_id', lieuId.toString());
+
+  	lieutenant.set('fights', 0);
+  	lieutenant.set('goals', 0);
+
+  	var teamObj;
+  	var savedCaptain; 
+  	var savedLieutenant;
+  	
+  	//Save the Captain
+  	captain.save().then(function(result) {
+  		//add a Pointer to the Captain on the Team
+  		team.set('captain', result);
+  		savedCaptain = result;
+
+  		var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	//Then we save the Lieutenant
+	      	return lieutenant.save();
+    	});
+    	return promise;
+
+  	}).then(function(result){
+  		//add a Pointer to the Lieutenant on the Team
+  		team.set('lieutenant', result);
+  		savedLieutenant = result;
+
+  		var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	//Save the Team object
+	      	return team.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(result){
+
+  		teamObj = result;
+
+  		var Standing = Parse.Object.extend("Standings");
+        var standing = new Standing();
+
+        standing.set('team', result);
+        standing.set('points', 0);
+        standing.set('games_played', 0);
+        standing.set('wins', 0);
+        standing.set('tie', 0);
+        standing.set('losses', 0);
+        standing.set('goals_for', 0);
+        standing.set('goals_against', 0);
+
+        var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	// Return a promise that will be resolved when the save is finished.
+	      	return standing.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(){
+
+  		savedCaptain.set('team', teamObj);
+
+        var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	// Return a promise that will be resolved when the save is finished.
+	      	return savedCaptain.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(){
+
+  		savedLieutenant.set('team', teamObj);
+
+        var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	// Return a promise that will be resolved when the save is finished.
+	      	return savedLieutenant.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(){
+  		var promise = Parse.Promise.as();
+
+  		var NHLTeam = Parse.Object.extend('NHLTeam');
+	    var nhlTeamQuery = new Parse.Query(NHLTeam);
+	    nhlTeamQuery.equalTo('objectId', nhlTeam);
+	    console.log("query: " + JSON.stringify(nhlTeamQuery));
+  		nhlTeamQuery.find().then(function(nhlTeamToUpdate) {
+  			console.log("do we get here?");
+  			console.log("found this team: " + JSON.stringify(nhlTeamToUpdate));
+  		    nhlTeamToUpdate[0].set('taken', true);
+    	    promise = promise.then(function() {
+    	      	// Return a promise that will be resolved when the save is finished.
+    	      	console.log("defining promise...");
+    	      	return nhlTeamToUpdate[0].save();
+        	});
+  		}, function(error) {
+  			console.log("Couldn't find any NHLTeam and error.code " + error.code + " error.message " + error.message);
+  		});
+  		console.log("Ready to return ... ");
+
+  		return promise;
+  	}).then(function(){
+		response.success("Added new PRO/ALLSTAR team and updated NHL Team with taken status");
+  	}, function(error) {
+    	response.error("Creating Rookie team failed with error.code " + error.code + " error.message " + error.message);
+  	});
+});
+/*** END Create PRO/ALLSTAR Team ***/
+
+/*** START Create Rookie Team ***/
+Parse.Cloud.define("createRookieTeam", function(request, response) {
+
+	var Team = Parse.Object.extend("Team");
+	var Player = Parse.Object.extend("Player");
+
+  	var team = new Team();
+
+  	var captain_name = request.params.captain_name;
+  	var captain_email = request.params.captain_email;
+  	var captain_telephone = request.params.captain_telephone;
+  	var captain_gamertag = request.params.captain_gamertag;
+
+  	var lieutenant_name = request.params.lieutenant_name;
+  	var lieutenant_email = request.params.lieutenant_email;
+  	var lieutenant_telephone = request.params.lieutenant_telephone;
+  	var lieutenant_gamertag = request.params.lieutenant_gamertag;
+
+  	var team_name = request.params.team_name;
+  	var team_motto = request.params.team_motto;
+  	var nhlTeam = request.params.nhlTeam;
+  	var level = "1";
+  	var comment = request.params.comment;
+  	var hidden = request.params.hidden;
+
+  	var NHLTeam = Parse.Object.extend("NHLTeam");
+  	var nhlTeamObj = new NHLTeam();
+  	nhlTeamObj.id = nhlTeam;
+
+  	team.set("nhlTeam", nhlTeamObj);
+
+  	var legend = ["-","-","-"];
+  	var marathon = ["-","-","-"];
+
+  	team.set("legend", legend);
+  	team.set("marathon", marathon);
+
+  	team.set('team_name', team_name);
+  	team.set('team_motto', team_motto);
+  	team.set('level', level);
+  	team.set('comment', comment);
+
+  	team.set('group', "0");
+
+  	team.set('qualified', false);
+  	team.set('champion', false);
+
+  	var pass = Math.random().toString(36).slice(-8);
+  	team.set('password', pass);
+
+  	var genId = Math.floor((Math.random() * 100000) + 1);
+  	team.set('team_id', genId.toString());
+
+  	if (_.isEmpty(hidden)) {hidden = false};
+  	if(hidden === "true"){
+		hidden = true;
+	} else {
+		hidden = false;
+	}
+
+	team.set('hidden', hidden);
+
+  	/*** Legacy ***/
+  	team.set('captain_name', captain_name);
+  	team.set('captain_email', captain_email);
+  	team.set('captain_telephone', captain_telephone);
+
+  	var capId = Math.floor((Math.random() * 100000) + 1);
+  	team.set('captain_id', capId.toString());
+
+  	team.set('lieutenant_name', lieutenant_name);
+  	team.set('lieutenant_email', lieutenant_email);
+  	team.set('lieutenant_telephone', lieutenant_telephone);
+
+  	var lieuId = Math.floor((Math.random() * 100000) + 1);
+  	team.set('lieutenant_id', lieuId.toString());
+
+  	if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
+  	if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
+
+  	team.set('captain_gamertag', captain_gamertag);
+  	team.set('lieutenant_gamertag', lieutenant_gamertag);
+  	/**** END Legacy ***/
+
+  	//Create Captain object
+  	var captain = new Player();
+  	captain.set('name', captain_name);
+  	captain.set('email', captain_email);
+  	captain.set('telephone', captain_telephone);
+
+  	if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
+  	captain.set('gamertag', captain_gamertag);
+
+  	var capId = Math.floor((Math.random() * 100000) + 1);
+  	captain.set('player_id', capId.toString());
+
+  	captain.set('fights', 0);
+  	captain.set('goals', 0);
+
+
+  	//Create Lieutenant object
+  	var lieutenant = new Player();
+  	lieutenant.set('name', lieutenant_name);
+  	lieutenant.set('email', lieutenant_email);
+  	lieutenant.set('telephone', lieutenant_telephone);
+
+  	if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
+  	lieutenant.set('gamertag', lieutenant_gamertag);
+
+  	var lieuId = Math.floor((Math.random() * 100000) + 1);
+  	lieutenant.set('player_id', lieuId.toString());
+
+  	lieutenant.set('fights', 0);
+  	lieutenant.set('goals', 0);
+
+  	var teamObj;
+  	var savedCaptain; 
+  	var savedLieutenant;
+  	
+  	//Save the Captain
+  	captain.save().then(function(result) {
+  		//add a Pointer to the Captain on the Team
+  		team.set('captain', result);
+  		savedCaptain = result;
+
+  		var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	//Then we save the Lieutenant
+	      	return lieutenant.save();
+    	});
+    	return promise;
+
+  	}).then(function(result){
+  		//add a Pointer to the Lieutenant on the Team
+  		team.set('lieutenant', result);
+  		savedLieutenant = result;
+
+  		var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	//Save the Team object
+	      	return team.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(result){
+
+  		teamObj = result;
+
+  		var Standing = Parse.Object.extend("Standings");
+        var standing = new Standing();
+
+        standing.set('team', result);
+        standing.set('points', 0);
+        standing.set('games_played', 0);
+        standing.set('wins', 0);
+        standing.set('tie', 0);
+        standing.set('losses', 0);
+        standing.set('goals_for', 0);
+        standing.set('goals_against', 0);
+
+        var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	// Return a promise that will be resolved when the save is finished.
+	      	return standing.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(result){
+
+  		var PlayerStats = Parse.Object.extend("PlayerStats");
+
+	    var playerStatCaptain = new PlayerStats();
+
+	    playerStatCaptain.set('player_name', captain_name);
+	    playerStatCaptain.set('player_id', capId.toString());
+	    playerStatCaptain.set('player_team', teamObj);
+	    playerStatCaptain.set('player_goals', 0);
+	    playerStatCaptain.set('player_fights', 0);
+
+        var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	// Return a promise that will be resolved when the save is finished.
+	      	return playerStatCaptain.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(result){
+
+  		var PlayerStats = Parse.Object.extend("PlayerStats");
+
+	    var playerStatLieutenant = new PlayerStats();
+
+	    playerStatLieutenant.set('player_name', lieutenant_name);
+	    playerStatLieutenant.set('player_id', lieuId.toString());
+	    playerStatLieutenant.set('player_team', teamObj);
+	    playerStatLieutenant.set('player_goals', 0);
+	    playerStatLieutenant.set('player_fights', 0);
+
+        var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	// Return a promise that will be resolved when the save is finished.
+	      	return playerStatLieutenant.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(result){
+
+  		savedCaptain.set('team', teamObj);
+
+        var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	// Return a promise that will be resolved when the save is finished.
+	      	return savedCaptain.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(result){
+
+  		savedLieutenant.set('team', teamObj);
+
+        var promise = Parse.Promise.as();
+  		promise = promise.then(function() {
+	      	// Return a promise that will be resolved when the save is finished.
+	      	return savedLieutenant.save();
+    	});
+    	return promise;
+  		
+  	}).then(function(){
+  		var promise = Parse.Promise.as();
+
+  		var NHLTeam = Parse.Object.extend('NHLTeam');
+  		var nhlTeamQuery = new Parse.Query(NHLTeam);
+  		nhlTeamQuery.equalTo('objectId', nhlTeam);
+  		nhlTeamQuery.find().then(function(nhlTeamToUpdate) {
+  		    nhlTeamToUpdate[0].set('taken_rookie', true);
+    	    promise = promise.then(function() {
+    	      	// Return a promise that will be resolved when the save is finished.
+    	      	return nhlTeamToUpdate[0].save();
+        	});
+  		});
+
+  		return promise;
+  	}).then(function(){
+		response.success("Added new Rookie team and updated NHL Team with taken status");
+  	}, function(error) {
+    	response.error("Creating Rookie team failed with error.code " + error.code + " error.message " + error.message);
+  	});
+});
+/*** EMD Create Rookie Team ***/
+
+/* ----------- */
+
+/***** Utility Functions *****/
+
 Parse.Cloud.define("cleanStandings", function(request, response) {
 	var Standings = Parse.Object.extend('Standings');
 	var standingsQuery = new Parse.Query(Standings);
@@ -74,71 +560,70 @@ Parse.Cloud.define("cleanPlayerStats", function(request, response) {
 Parse.Cloud.define("migratePlayers", function(request, response) {
 	var Team = Parse.Object.extend('Team');
 	var teamQuery = new Parse.Query(Team);
+
+	var resultArray = [];
+
 	teamQuery.find().then(function(results) {
 		var promise = Parse.Promise.as();
 	  	_.each(results, function(result) {
-		  	// For each item, extend the promise with a function to save it.
+	  		promise = promise.then(function() {
+  			  	var colCaptain = {"name":result.get("captain_name"), 
+  			  					"email":result.get("captain_email"), 
+  			  					"telephone":result.get("captain_telephone"), 
+  			  					"gamertag":result.get("captain_gamertag"),
+  			  					"playerid":result.get("captain_id")
+  			  				};
 
-		  	var captain = {"name":result.get("captain_name"), 
-		  					"email":result.get("captain_email"), 
-		  					"telephone":result.get("captain_telephone"), 
-		  					"gamertag":result.get("captain_gamertag"),
-		  					"playerid":result.get("captain_id")
-		  				};
+  			  	var colLieutenant = {"name":result.get("lieutenant_name"), 
+  			  					"email":result.get("lieutenant_email"), 
+  			  					"telephone":result.get("lieutenant_telephone"), 
+  			  					"gamertag":result.get("lieutenant_gamertag"),
+  			  					"playerid":result.get("lieutenant_id")
+  			  				};	
 
-		  	var lieutenant = {"name":result.get("lieutenant_name"), 
-		  					"email":result.get("lieutenant_email"), 
-		  					"telephone":result.get("lieutenant_telephone"), 
-		  					"gamertag":result.get("lieutenant_gamertag"),
-		  					"playerid":result.get("lieutenant_id")
-		  				};	
+  			  	console.log("Captain =  " + JSON.stringify(colCaptain));
+  			  	console.log("Lieutenant =  " + JSON.stringify(colLieutenant));
 
-		  	console.log("Captain =  " + JSON.stringify(captain));
-		  	console.log("Lieutenant =  " + JSON.stringify(lieutenant));
+  				var Player = Parse.Object.extend("Player");
 
-  		    promise = promise.then(function() {
-  		    	Parse.Cloud.run('createPlayer', captain, {
-  		    	  success: function(result) {
-  		    	  	console.log(result)
-  		    	  },
-  		    	  error: function(error) {
-  		    	  	console.log(error)
-  		    	  }
-  		    	});
+  			  	var captain = new Player();
+  			  	captain.set('name', result.get("captain_name"));
+  			  	captain.set('email', result.get("captain_email"));
+  			  	captain.set('gamertag', result.get("captain_gamertag"));
+  			  	captain.set('telephone', result.get("captain_telephone"));
+  			  	captain.set('player_id', result.get("captain_id"));
+  			  	captain.set('team', result.id);
+  			  	captain.set('fights', 0);
+  			  	captain.set('goals', 0);
 
-  		    	Parse.Cloud.run('createPlayer', lieutenant, {
-  		    	  success: function(result) {
-  		    	  	console.log(result)
-  		    	  },
-  		    	  error: function(error) {
-  		    	  	console.log(error)
-  		    	  }
-  		    	});
+  			  	var lieutenant = new Player();
+  			  	lieutenant.set('name', result.get("lieutenant_name"));
+  			  	lieutenant.set('email', result.get("lieutenant_email"));
+  			  	lieutenant.set('gamertag', result.get("lieutenant_gamertag"));
+  			  	lieutenant.set('telephone', result.get("lieutenant_telephone"));
+  			  	lieutenant.set('player_id', result.get("lieutenant_id"));
+  			  	lieutenant.set('team', result.id);
+  			  	lieutenant.set('fights', 0);
+  			  	lieutenant.set('goals', 0);		  				
 
-  		      	return true;
-  	    	});
-		  	
+  			  	resultArray.push(captain);
+  			  	resultArray.push(lieutenant);
+
+  			  	return Parse.Promise.as();
+
+	  		}, function(error) {
+	  			response.error("Player retrieval failed with error.code " + error.code + " error.message " + error.message);
+	  		});
 	  	});
 
 	  	return promise;
 
 	}).then(function() {
+	    return Parse.Object.saveAll(resultArray);
+	}).then(function() {
 	    response.success("Players are migrated");
 	  	// Every object is updated.
+	}, function(error){
+		response.error("Script failed with error.code " + error.code + " error.message " + error.message);
 	});
-});
-
-Parse.Cloud.define("createPlayer", function(request, response) {
-	Parse.Cloud.useMasterKey();
-	var Player = Parse.Object.extend("Player");
-  	var player = new Player();
-
-  	player.set('name', "test");
-  
-
-  	player.save().then(function(result) {
-  		response.success("Saved the Player with objectId = " + result.id);
-  	}, function(error) {
-    	response.error('Error saving Player, try again. Msg: ' + error.message);
-  	});
 });
