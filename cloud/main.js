@@ -90,7 +90,7 @@ Parse.Cloud.define("updatePlayer", function(request, response) {
       return promise;
       
     }).then(function(result) {
-      response.success("Updated the Player with objectId = " + result.id);
+      response.success(result);
     }, function(error) {
       response.error("Updating Player failed with error.code " + error.code + " error.message " + error.message);
     });
