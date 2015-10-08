@@ -40,13 +40,14 @@ Parse.Cloud.define("createPlayer", function(request, response) {
 });
 
 Parse.Cloud.define("getPlayer", function(request, response) {
-	var Player = Parse.Object.extend('Player');
+	 var Player = Parse.Object.extend('Player');
   	var playerQuery = new Parse.Query(Player);
   	playerQuery.equalTo('player_id', request.params.player_id);
     playerQuery.include('team');
-  	playerQuery.find().then(function(result) {
+  	 playerQuery.find().then(function(result) {
       if(typeof(result[0].id) !== 'undefined'){
         console.log("main.js.getPlayer(): Found player with objectId = " + result[0].id);
+    
         response.success(result);
       } else {
         console.log("main.js.getPlayer(): No Player with id " + request.params.player_id + " was found");
@@ -56,6 +57,43 @@ Parse.Cloud.define("getPlayer", function(request, response) {
   		console.log("main.js.getPlayer(): Player retrieval failed with error.code " + error.code + " error.message " + error.message);
     	response.error("Player retrieval failed with error.code " + error.code + " error.message " + error.message);
   	});
+});
+
+Parse.Cloud.define("updatePlayer", function(request, response) {
+    var Player = Parse.Object.extend('Player');
+    var playerQuery = new Parse.Query(Player);
+    playerQuery.equalTo('player_id', request.params.player_id);
+    playerQuery.find().then(function(result) {
+
+      var promise = Parse.Promise.as();
+
+      if ((typeof(request.params.birthyear) !== 'undefined') && (!_.isEmpty(request.params.birthyear))) {
+        result[0].set('birthyear',request.params.birthyear);
+      }
+      if ((typeof(request.params.birthplace) !== 'undefined') && (!_.isEmpty(request.params.birthplace))) {
+        result[0].set('birthplace',request.params.birthplace);
+      }
+      if ((typeof(request.params.nation) !== 'undefined') && (!_.isEmpty(request.params.nation))) {
+        result[0].set('nation',request.params.nation);
+      }
+      if ((typeof(request.params.position) !== 'undefined') && (!_.isEmpty(request.params.position))) {
+        result[0].set('position',request.params.position);
+      }
+      if ((typeof(request.params.shoots) !== 'undefined') && (!_.isEmpty(request.params.shoots))) {
+        result[0].set('shoots',request.params.shoots);
+      }
+
+      promise = promise.then(function() {
+        return result[0].save();
+      });
+
+      return promise;
+      
+    }).then(function(result) {
+      response.success("Updated the Player with objectId = " + result.id);
+    }, function(error) {
+      response.error("Updating Player failed with error.code " + error.code + " error.message " + error.message);
+    });
 });
 
 /*** START Create PRO/ALLSTAR Team ***/

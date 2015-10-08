@@ -72,6 +72,11 @@ app.locals.getFromNowStripped = function(timestamp2) {
 	return published.from(currentTime, true);
 };
 
+app.locals.getAge = function(birthday) {
+	var years = momentSWE().diff(birthday, 'years');
+	return years;
+};
+
 // Show homepage
 app.get('/', hubController.index); 
 

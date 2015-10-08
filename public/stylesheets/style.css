@@ -28,3 +28,25 @@ a:focus {
 }
 
 #ranking-info { display: none; }
+
+.table > thead > tr > td.statstable,
+.table > tbody > tr > td.statstable,
+.table > tfoot > tr > td.statstable,
+.table > thead > tr > th.statstable,
+.table > tbody > tr > th.statstable,
+.table > tfoot > tr > th.statstable,
+.table > thead > tr.statstable > td,
+.table > tbody > tr.statstable > td,
+.table > tfoot > tr.statstable > td,
+.table > thead > tr.statstable > th,
+.table > tbody > tr.statstable > th,
+.table > tfoot > tr.statstable > th {
+ background-color: #e76254 ;
+}
+.table-hover > tbody > tr > td.statstable:hover,
+.table-hover > tbody > tr > th.statstable:hover,
+.table-hover > tbody > tr.statstable:hover > td,
+.table-hover > tbody > tr:hover > .statstable,
+.table-hover > tbody > tr.statstable:hover > th {
+ background-color: #e46a5d ;
+}
