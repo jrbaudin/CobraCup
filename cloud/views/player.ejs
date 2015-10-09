@@ -128,10 +128,15 @@
                                     <small><strong>ÅLDER</strong></small>
                                 </div>
                                 <div class="col-md-3">
-                                    <% if (typeof(player[0].get("birthyear")) !== 'undefined') { %>
-                                        <small><%= getAge(player[0].get("birthyear")) %></small>
+                                    <% if (typeof(player[0].get("birthyear")) !== 'undefined') {
+                                        var calcAge = getAge(player[0].get("birthyear"));
+                                        if ((_.isEqual(calcAge,"NaN")) || (_.isNaN(calcAge)))  { %>
+                                            <small></small>
+                                        <% } else { %>
+                                            <small><%= calcAge %></small>
+                                        <% } %>
                                     <% } else { %>
-                                        <small>-</small>
+                                        <small></small>
                                     <% } %>                                    
                                 </div>
                                 <div class="col-md-2">
@@ -163,6 +168,11 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <p><span><a href="http://twitter.com/<%= twitter %>" target="_blank"><i class="fa fa-twitter"></i></a></span><span style="margin-left:15px;"><a href="<%= facebook %>" target="_blank"><i class="fa fa-facebook"></i></a></span></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a class="btn btn-warning btn-xs" href="/player/edit/<%= player[0].get("player_id") %>" onclick="_gs('event', 'Clicked to edit Player')">Uppdatera information</a>
                                 </div>
                             </div>
                         </div>

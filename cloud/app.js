@@ -91,8 +91,9 @@ app.put('/team/:teamid', teamController.update);
 app.del('/team/:teamid', teamController.delete);
 
 app.get('/player/:playerid', playerController.getPlayer);
-app.put('/player/:playerid', playerController.updatePlayer);
-app.del('/player/:playerid', playerController.deletePlayer);
+app.get('/player/edit/:playerid', playerController.getPlayerForUpdate);
+app.put('/player/edit/:playerid', playerController.updatePlayer);
+//app.del('/player/:playerid', playerController.deletePlayer);
 
 app.get('/stat/league', statController.showLeague);
 app.get('/stat/divisions', statController.showDivisions);

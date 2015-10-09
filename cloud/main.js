@@ -60,6 +60,7 @@ Parse.Cloud.define("getPlayer", function(request, response) {
 });
 
 Parse.Cloud.define("updatePlayer", function(request, response) {
+    console.log("main.js: request: " + request);
     var Player = Parse.Object.extend('Player');
     var playerQuery = new Parse.Query(Player);
     playerQuery.equalTo('player_id', request.params.player_id);
@@ -67,6 +68,12 @@ Parse.Cloud.define("updatePlayer", function(request, response) {
 
       var promise = Parse.Promise.as();
 
+      if ((typeof(request.params.email) !== 'undefined') && (!_.isEmpty(request.params.email))) {
+        result[0].set('email',request.params.email);
+      }
+      if ((typeof(request.params.telephone) !== 'undefined') && (!_.isEmpty(request.params.telephone))) {
+        result[0].set('telephone',request.params.telephone);
+      }
       if ((typeof(request.params.birthyear) !== 'undefined') && (!_.isEmpty(request.params.birthyear))) {
         result[0].set('birthyear',request.params.birthyear);
       }
@@ -81,6 +88,15 @@ Parse.Cloud.define("updatePlayer", function(request, response) {
       }
       if ((typeof(request.params.shoots) !== 'undefined') && (!_.isEmpty(request.params.shoots))) {
         result[0].set('shoots',request.params.shoots);
+      }
+      if ((typeof(request.params.profile) !== 'undefined') && (!_.isEmpty(request.params.profile))) {
+        result[0].set('profile',request.params.profile);
+      }
+      if ((typeof(request.params.twitter) !== 'undefined') && (!_.isEmpty(request.params.twitter))) {
+        result[0].set('twitter',request.params.twitter);
+      }
+      if ((typeof(request.params.facebook) !== 'undefined') && (!_.isEmpty(request.params.facebook))) {
+        result[0].set('facebook',request.params.facebook);
       }
 
       promise = promise.then(function() {
