@@ -26,6 +26,24 @@
 
      _gs('GSN-270173-J');
     </script>
+    <script type="text/javascript">
+        function checkPassword() {
+            var formPassword = document.getElementById("formPassword").value;
+            var dbPassword = document.getElementById("dbPassword").value;
+            //alert("formPassword = " + formPassword + " & dbPassword = " + dbPassword);
+
+            if (dbPassword === formPassword) {
+                //alert("Passwords matched!");
+                return true;
+            } else {
+                //event.preventDefault();
+                //alert("Passwords didn't match!");
+                $("#passNoMatch").show();
+                //document.getElementById("formPassword").className += "has-error"; 
+                return false;
+            }
+        };
+    </script>
 </head>
 
 <body>
@@ -78,12 +96,23 @@
                 <strong>Problem!</strong> <%= flash %>.
             </div>
         <% } %>
+
+        <!-- START Password didn't match alert -->
+        <div class="alert alert-danger alert-dismissible" role="alert" id="passNoMatch" name="passNoMatch" style="display:none;">
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <strong>Problem!</strong> Det lösenord du skrev stämde inte. Du bör ha fått ditt lösenord på mejl, om inte hör du av dig till oss så fixar vi det.
+        </div>
+        <!-- END Password didn't match alert -->
+
         <% if(typeof(player) !== 'undefined'){ %>
             <div class="col-md-12">
                 <div class="panel" style="background-color: #eff0f2;">
                     <div class="panel-body">
                         
-                        <form class="form" role="form" method="post">
+                        <form class="form" role="form" method="post" onsubmit="return checkPassword();">
                             <div class="form-group col-md-12">
                                 <label for="email" class="control-label sr-only">Epost</label>
                                 <div class="input-group">
@@ -186,6 +215,34 @@
                             </div>
 
                             <div class="form-group col-md-12">
+                                <label for="profile" class="control-label">Profil</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-magic fa-fw"></i></div>
+
+                                    <% if((typeof(player[0].get("profile")) !== 'undefined') && (!_.isEmpty(player[0].get("profile")))){ %>
+                                        <textarea class="form-control" id="profile" name="profile" placeholder="En snabb lirare med ..."><%= player[0].get("profile") %></textarea>
+                                    <% } else { %>
+                                        <textarea class="form-control" id="profile" name="profile" placeholder="En snabb lirare med ..."></textarea>
+                                    <% } %>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <label for="gamertag" class="control-label">Xbox Live Gamertag</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
+
+                                    <% if((typeof(player[0].get("gamertag")) !== 'undefined') && (!_.isEmpty(player[0].get("gamertag")))){ %>
+                                        <input type="text" class="form-control" id="gamertag" placeholder="Doktorpung" name="gamertag" value="<%= player[0].get("gamertag") %>">
+                                    <% } else { %>
+                                        <input type="text" class="form-control" id="gamertag" placeholder="Gurklaxen" name="gamertag">
+                                    <% } %>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-12">
                                 <label for="twitter" class="control-label">Twitter användarnamn</label>
                                 <div class="input-group">
                                     <div class="input-group-addon"><i class="fa fa-twitter fa-fw"></i></div>
@@ -212,23 +269,24 @@
                                 </div>
                             </div>
                             
-                            <div class="form-group col-md-12">
-                                <label for="profile" class="control-label">Profil</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-magic fa-fw"></i></div>
-
-                                    <% if((typeof(player[0].get("profile")) !== 'undefined') && (!_.isEmpty(player[0].get("profile")))){ %>
-                                        <textarea class="form-control" id="profile" name="profile" placeholder="En snabb lirare med ..."><%= player[0].get("profile") %></textarea>
-                                    <% } else { %>
-                                        <textarea class="form-control" id="profile" name="profile" placeholder="En snabb lirare med ..."></textarea>
-                                    <% } %>
-
+                            <div class="row" style="margin-left:0px;">
+                                
+                                <div class="form-group col-md-6">
+                                    <label for="password" class="control-label sr-only">Lösenord</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-key fa-fw"></i></div>
+                                        <input type="password" class="form-control" id="formPassword" placeholder="Ditt lösenord" name="formPassword" required>
+                                    </div>
                                 </div>
+
+                                <div class="form-group col-md-6" id="passFG">
+                                    <input type='hidden' name='_method' value='put' />
+                                    <input type='hidden' name='dbPassword' id='dbPassword' value='<%= player[0].get("password") %>' />
+                                    <button type="submit" class="btn btn-lg btn-primary btn-wide" onclick="_gs('event', 'Clicked to update Player')">Uppdatera</button>
+                                </div>
+                                
                             </div>
-                            <div class="form-group col-md-12">
-                                <input type='hidden' name='_method' value='put' />
-                                <button type="submit" class="btn btn-hg btn-primary btn-wide" onclick="_gs('event', 'Clicked to update Player')">Uppdatera</button>
-                            </div>
+
                         </form>
                         
                     </div>
@@ -256,9 +314,9 @@
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
     <script>
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-    });
+        $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 </body>
 
