@@ -62,13 +62,66 @@
                <li><a href="/feed"><mark>Live</mark></a></li>
                <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
              </ul>
-             <% if(typeof(count) !== 'undefined'){ %>
-               <p class="navbar-text navbar-right"><strong><%= count %>/16 lag</strong></p>
+             <% if(typeof(teams) !== 'undefined'){ %>
+                 
+                <% 
+
+                var teamCount = _.countBy(teams, function(team){
+                    return team.get("level");
+                });
+
+                var cobracup_count = 0;
+                var hotrodcup_count = 0;
+
+                hotrodcup_count = teamCount["1"];
+                cobracup_count = teamCount["2"] + teamCount["3"];
+
+                %>
+
+                <% if (hotrodcup_count >= 4) { %>
+                    <p class="navbar-text navbar-right fullybooked"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
+                <% } else { %>
+                    <p class="navbar-text navbar-right stillopen"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
+                <% } %>
+
+                <% if (cobracup_count >= 16) { %>
+                    <p class="navbar-text navbar-right fullybooked"><strong>CC <%= cobracup_count %>/16</strong></p>
+                <% } else { %>
+                    <p class="navbar-text navbar-right stillopen"><strong>CC <%= cobracup_count %>/16</strong></p>
+                <% } %>
+                
              <% } %>
            </div><!--/.nav-collapse -->
        </div>
    </nav>
     <div class="container">
+        <% if(typeof(flashError) !== 'undefined'){ %>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <strong>Fel!</strong> <%= flashError %>
+            </div>
+        <% } %> 
+        <% if(typeof(flashWarning) !== 'undefined'){ %>
+            <div class="alert alert-warning alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <strong>Observera!</strong> <%= flashWarning %>
+            </div>
+        <% } %>
+        <% if(typeof(flashInfo) !== 'undefined'){ %>
+            <div class="alert alert-success alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <strong>Klart!</strong> <%= flashInfo %>
+            </div>
+        <% } %>
         <% if(typeof(flash) !== 'undefined'){ %>
             <div class="alert alert-danger alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert">
@@ -371,9 +424,9 @@
                                             var teamStanding = null;
 
                                             playerStats.forEach(function(player) {
-                                                if(_.isEqual(player.get("player_id"), teamObj[0].get("captain_id"))){
+                                                if(_.isEqual(player.get("player_id"), teamObj[0].get("captain").get("player_id"))){
                                                     captain = player;
-                                                } else if(_.isEqual(player.get("player_id"), teamObj[0].get("lieutenant_id"))){
+                                                } else if(_.isEqual(player.get("player_id"), teamObj[0].get("lieutenant").get("player_id"))){
                                                     lieutenant = player;
                                                 }
                                             })
@@ -391,27 +444,30 @@
                                                       <th></th>
                                                       <th class="text-center" title="Games Played">GP</th>
                                                       <th class="text-center" title="Goals">G</th>
+                                                      <th class="text-center" title="Assists">A</th>
                                                       <th class="text-center" title="Fights">F</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody style="font-size: 13px;">
                                                     <tr>
-                                                      <td><%= teamObj[0].get("captain_name") %></td>
+                                                      <td><%= teamObj[0].get("captain").get("name") %></td>
                                                       <td class="text-center" title="Kapten"><strong>C</strong></td>
                                                       <td class="text-center"><%= teamStanding.get("games_played") %></td>
-                                                      <td class="text-center"><%= captain.get("player_goals") %></td>
-                                                      <td class="text-center"><%= captain.get("player_fights") %></td>
+                                                      <td class="text-center"><%= teamObj[0].get("captain").get("goals") %></td>
+                                                      <td class="text-center"><%= teamObj[0].get("captain").get("assists") %></td>
+                                                      <td class="text-center"><%= teamObj[0].get("captain").get("fights") %></td>
                                                     </tr>
                                                     <tr>
-                                                      <td><%= teamObj[0].get("lieutenant_name") %></td>
+                                                      <td><%= teamObj[0].get("lieutenant").get("name") %></td>
                                                       <td class="text-center" title="Assisterande"><strong>A</strong></td>
                                                       <td class="text-center"><%= teamStanding.get("games_played") %></td>
-                                                      <td class="text-center"><%= lieutenant.get("player_goals") %></td>
-                                                      <td class="text-center"><%= lieutenant.get("player_fights") %></td>
+                                                      <td class="text-center"><%= teamObj[0].get("lieutenant").get("goals") %></td>
+                                                      <td class="text-center"><%= teamObj[0].get("lieutenant").get("assists") %></td>
+                                                      <td class="text-center"><%= teamObj[0].get("lieutenant").get("fights") %></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>F</strong>-Fights</small>
+                                            <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>A</strong>-Assists, <strong>F</strong>-Fights</small>
                                             <% } %>
                                         </div>
                                     </div>
@@ -428,27 +484,27 @@
                         <hr>
                         <div class="col-md-6">
                             <a href="/player/<%= teamObj[0].get("captain").get("player_id") %>">
-                                <% if(!_.isEmpty(teamObj[0].get("captain").get("avatar").url())){ %>
+                                <% if( (typeof(teamObj[0].get("captain").get("avatar")) !== 'undefined') && (!_.isEmpty(teamObj[0].get("captain").get("avatar"))) ){ %>
                                     <img src="<%= teamObj[0].get("captain").get("avatar").url() %>" class="img-responsive img-circle" alt="Captain image" style="min-height:75px;height:75px; margin: 0 auto;">
                                 <% } else { %>
-                                    <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
+                                    <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:75px;height:75px; margin: 0 auto;">
                                 <% } %>
-                                <h5 class="text-center" title="<%= teamObj[0].get("captain_name") %>"><%= getFirstname(teamObj[0].get("captain_name")) %> <small style="color: rgb(0,0,0);">Kapten</small></h5>
+                                <h5 class="text-center" title="<%= teamObj[0].get("captain").get("name") %>"><%= getFirstname(teamObj[0].get("captain").get("name")) %> <small style="color: rgb(0,0,0);">Kapten</small></h5>
                             </a>
-                            <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj[0].get("captain_telephone") %></p>
-                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj[0].get("captain_gamertag") %></strong></span></small><p>
+                            <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj[0].get("captain").get("telephone") %></p>
+                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj[0].get("captain").get("gamertag") %></strong></span></small><p>
                         </div>
                         <div class="col-md-6">
                             <a href="/player/<%= teamObj[0].get("lieutenant").get("player_id") %>">
-                                <% if(!_.isEmpty(teamObj[0].get("lieutenant").get("avatar").url())){ %>
+                                <% if( (typeof(teamObj[0].get("lieutenant").get("avatar")) !== 'undefined') && (!_.isEmpty(teamObj[0].get("lieutenant").get("avatar"))) ){ %>
                                     <img src="<%= teamObj[0].get("lieutenant").get("avatar").url() %>" class="img-responsive img-circle" alt="Lieutenant image" style="min-height:75px;height:75px; margin: 0 auto;">
                                 <% } else { %>
-                                    <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:50px;height:50px; margin: 0 auto;">
+                                    <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:75px;height:75px; margin: 0 auto;">
                                 <% } %>
-                                <h5 class="text-center" title="<%= teamObj[0].get("lieutenant_name") %>"><%= getFirstname(teamObj[0].get("lieutenant_name")) %> <small style="color: rgb(0,0,0);">Assisterande</small></h5>
+                                <h5 class="text-center" title="<%= teamObj[0].get("lieutenant").get("name") %>"><%= getFirstname(teamObj[0].get("lieutenant").get("name")) %> <small style="color: rgb(0,0,0);">Assisterande</small></h5>
                             </a>
-                            <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj[0].get("lieutenant_telephone") %></p>
-                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj[0].get("lieutenant_gamertag") %></strong></span></small><p>
+                            <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj[0].get("lieutenant").get("telephone") %></p>
+                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj[0].get("lieutenant").get("gamertag") %></strong></span></small><p>
                         </div>
                         <hr>
                         <!--

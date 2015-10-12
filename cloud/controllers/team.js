@@ -4,14 +4,17 @@ Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
 exports.getTeam = function(req, res) {
   //console.log("Trying to get the team..");
+
+  var passedInfoVariable = req.query.info;
+
   var Team = Parse.Object.extend('Team');
   var teamQuery = new Parse.Query(Team);
   teamQuery.equalTo('team_id', req.params.teamid);
   teamQuery.include(['nhlTeam','captain','lieutenant']);
   teamQuery.find().then(function(theTeam) {
-    if (theTeam) {
-      console.log("Gotten the team...");
-      console.log(JSON.stringify(theTeam));
+    if ( (typeof(theTeam) !== 'undefined') && (!_.isUndefined(theTeam)) && (!_.isEmpty(theTeam)) ) {
+      console.log("Gotten the team with id " + theTeam[0].id);
+      console.log("team = " + JSON.stringify(theTeam));
       var Standings = Parse.Object.extend('Standings');
       var standingsQuery = new Parse.Query(Standings);
       standingsQuery.descending('points');
@@ -58,7 +61,8 @@ exports.getTeam = function(req, res) {
                             playerStats: playerStats,
                             games: games,
                             teams: teams,
-                            lastPlayedGame: lastPlayedGame
+                            lastPlayedGame: lastPlayedGame,
+                            flashInfo: passedInfoVariable
                           });
                         } else {
                           res.render('team', {
@@ -67,7 +71,8 @@ exports.getTeam = function(req, res) {
                             playerStats: playerStats,
                             games: games,
                             teams: teams,
-                            flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
+                            flashWarning: 'Matchdata kunde inte hämtas eller finns inte',
+                            flashInfo: passedInfoVariable
                           });
                         }
                       },
@@ -80,7 +85,8 @@ exports.getTeam = function(req, res) {
                           playerStats: playerStats,
                           games: games,
                           teams: teams,
-                          flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
+                          flashWarning: 'Matchdata kunde inte hämtas eller finns inte',
+                          flashInfo: passedInfoVariable
                         });
                       });
                     } else {
@@ -88,7 +94,8 @@ exports.getTeam = function(req, res) {
                         teamObj: theTeam,
                         standings: standings,
                         playerStats: playerStats,
-                        flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
+                        flashWarning: 'Matchdata kunde inte hämtas eller finns inte',
+                        flashInfo: passedInfoVariable
                       });
                     }
                   },
@@ -99,7 +106,8 @@ exports.getTeam = function(req, res) {
                       teamObj: theTeam,
                       standings: standings,
                       playerStats: playerStats,
-                      flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
+                      flashWarning: 'Matchdata kunde inte hämtas eller finns inte',
+                      flashInfo: passedInfoVariable
                     });
                   });
                 } else {
@@ -107,7 +115,8 @@ exports.getTeam = function(req, res) {
                     teamObj: theTeam,
                     standings: standings,
                     playerStats: playerStats,
-                    flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
+                    flashWarning: 'Matchdata kunde inte hämtas eller finns inte',
+                    flashInfo: passedInfoVariable
                   });
                 }
               },
@@ -116,14 +125,16 @@ exports.getTeam = function(req, res) {
                   teamObj: theTeam,
                   standings: standings,
                   playerStats: playerStats,
-                  flashWarning: 'Matchdata kunde inte hämtas eller finns inte'
+                  flashWarning: 'Matchdata kunde inte hämtas eller finns inte',
+                  flashInfo: passedInfoVariable
                 });
               });
             } else {
               res.render('team', {
                 teamObj: theTeam,
                 standings: standings,
-                flashWarning: 'Information om spelarstatistik kunde inte hämtas eller finns inte'
+                flashWarning: 'Information om spelarstatistik kunde inte hämtas eller finns inte',
+                flashInfo: passedInfoVariable
               });
             }
           },
@@ -133,31 +144,40 @@ exports.getTeam = function(req, res) {
             res.render('team', {
               teamObj: theTeam,
               standings: standings,
-              flashWarning: 'Information om spelarstatistik kunde inte hämtas eller finns inte'
+              flashWarning: 'Information om spelarstatistik kunde inte hämtas eller finns inte',
+              flashInfo: passedInfoVariable
             });
           });
         } else {
           res.render('team', {
             teamObj: theTeam,
-            flashWarning: 'Information om tabellen kunde inte hämtas eller finns inte'
+            flashWarning: 'Information om tabellen kunde inte hämtas eller finns inte',
+            flashInfo: passedInfoVariable
           });
         }
       },
       function(error){
         console.error('Error when trying to get team standings');
         console.error(error);
-        res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas'});
+        res.render('hub', {
+          flashError: 'Problem när det önskade laget skulle hämtas',
+          flashInfo: passedInfoVariable
+        });
       });
     } else {
-      res.render('hub', {
+      /*res.render('hub', {
         flashError: "Kunde inte ladda lag. Försök igen"
-      });
+      });*/
+      console.log("Can't find a team with id " + req.params.teamid);
+      res.status(404);
+      res.render('404');
     }
   },
   function(error){
-    console.error('Error when trying to find team to view');
-    console.error(error);
-    res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas'});
+    alert(error);
+    //res.render('hub', {flashError: 'Problem när det önskade laget skulle hämtas'});
+    //res.send(404, "Det laget finns inte");
+    res.status(500).send({ error: 'something blew up' });
   });
 };
 

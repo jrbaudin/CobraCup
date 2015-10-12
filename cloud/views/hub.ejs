@@ -5,7 +5,7 @@
     <!-- Include header section which holds imports for shared elements -->
     <% include _header %>
 
-    <title>The Hub - Cobra Cup 2016</title>
+    <title>Hub - Cobra Cup 2016</title>
 
     <!-- Latest compiled and minified CSS -->
     <link href="dist/css/vendor/bootstrap.min.css" rel="stylesheet">
@@ -69,8 +69,19 @@
               <li><a href="/feed"><mark>Live</mark></a></li>
               <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
             </ul>
-            <p class="navbar-text navbar-right stillopen"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
-            <p class="navbar-text navbar-right stillopen"><strong style="color=#FAFFFC;">CC <%= cobracup_count %>/16</strong></p>        
+
+            <% if (hotrodcup_count >= 4) { %>
+                <p class="navbar-text navbar-right fullybooked"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
+            <% } else { %>
+                <p class="navbar-text navbar-right stillopen"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
+            <% } %>
+
+            <% if (cobracup_count >= 16) { %>
+                <p class="navbar-text navbar-right fullybooked"><strong>CC <%= cobracup_count %>/16</strong></p>
+            <% } else { %>
+                <p class="navbar-text navbar-right stillopen"><strong>CC <%= cobracup_count %>/16</strong></p>
+            <% } %>
+
           </div><!--/.nav-collapse -->
       </div>
   </nav>

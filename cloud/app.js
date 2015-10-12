@@ -123,9 +123,9 @@ app.put('/admin/final', adminController.createFinal);
 
 app.get('/feed', statController.loadFeed);
 
-app.use(function(req, res) {
-  res.status(400);
-  res.render('404');
+app.use(function(request, response) {
+  response.status(400);
+  response.render('404');
 });
 
 // Required for initializing Express app in Cloud Code.

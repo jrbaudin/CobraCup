@@ -206,123 +206,123 @@ Parse.Cloud.define("createTeam", function(request, response) {
 	var Team = Parse.Object.extend("Team");
 	var Player = Parse.Object.extend("Player");
 
- var team = new Team();
+  var team = new Team();
 
- var captain_name = request.params.captain_name;
- var captain_email = request.params.captain_email;
- var captain_telephone = request.params.captain_telephone;
- var captain_gamertag = request.params.captain_gamertag;
+  var captain_name = request.params.captain_name;
+  var captain_email = request.params.captain_email;
+  var captain_telephone = request.params.captain_telephone;
+  var captain_gamertag = request.params.captain_gamertag;
 
- var lieutenant_name = request.params.lieutenant_name;
- var lieutenant_email = request.params.lieutenant_email;
- var lieutenant_telephone = request.params.lieutenant_telephone;
- var lieutenant_gamertag = request.params.lieutenant_gamertag;
+  var lieutenant_name = request.params.lieutenant_name;
+  var lieutenant_email = request.params.lieutenant_email;
+  var lieutenant_telephone = request.params.lieutenant_telephone;
+  var lieutenant_gamertag = request.params.lieutenant_gamertag;
 
- var team_name = request.params.team_name;
- var team_motto = request.params.team_motto;
- var nhlTeam = request.params.nhlTeam;
- var level = request.params.level;
- var comment = request.params.comment;
- var hidden = request.params.hidden;
+  var team_name = request.params.team_name;
+  var team_motto = request.params.team_motto;
+  var nhlTeam = request.params.nhlTeam;
+  var level = request.params.level;
+  var comment = request.params.comment;
+  var hidden = request.params.hidden;
 
- var NHLTeam = Parse.Object.extend("NHLTeam");
- var nhlTeamObj = new NHLTeam();
- nhlTeamObj.id = nhlTeam;
+  var NHLTeam = Parse.Object.extend("NHLTeam");
+  var nhlTeamObj = new NHLTeam();
+  nhlTeamObj.id = nhlTeam;
 
- team.set("nhlTeam", nhlTeamObj);
+  team.set("nhlTeam", nhlTeamObj);
 
- var legend = ["-","-","-"];
- var marathon = ["-","-","-"];
+  var legend = ["-","-","-"];
+  var marathon = ["-","-","-"];
 
- team.set("legend", legend);
- team.set("marathon", marathon);
+  team.set("legend", legend);
+  team.set("marathon", marathon);
 
- team.set('team_name', team_name);
- team.set('team_motto', team_motto);
- team.set('level', level);
- team.set('comment', comment);
+  team.set('team_name', team_name);
+  team.set('team_motto', team_motto);
+  team.set('level', level);
+  team.set('comment', comment);
 
- team.set('group', "0");
+  team.set('group', "0");
 
- team.set('qualified', false);
- team.set('champion', false);
+  team.set('qualified', false);
+  team.set('champion', false);
+  team.set('champion_comment', "");
 
- var pass = Math.random().toString(36).slice(-8);
- team.set('password', pass);
+  var pass = Math.random().toString(36).slice(-8);
+  team.set('password', pass);
 
- var genId = Math.floor((Math.random() * 100000) + 1);
- team.set('team_id', genId.toString());
+  var genId = Math.floor((Math.random() * 100000) + 1);
+  team.set('team_id', genId.toString());
 
- if (_.isEmpty(hidden)) {hidden = false};
- if(hidden === "true"){
-  hidden = true;
-} else {
-  hidden = false;
-}
+  if (_.isEmpty(hidden)) {hidden = false};
+  if(hidden === "true"){
+    hidden = true;
+  } else {
+    hidden = false;
+  }
 
-team.set('hidden', hidden);
+  team.set('hidden', hidden);
 
-  	//Create Captain object
-  	var captain = new Player();
-  	captain.set('name', captain_name);
-  	captain.set('email', captain_email);
-  	captain.set('telephone', captain_telephone);
+	//Create Captain object
+	var captain = new Player();
+	captain.set('name', captain_name);
+	captain.set('email', captain_email);
+	captain.set('telephone', captain_telephone);
 
-  	if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
-  	captain.set('gamertag', captain_gamertag);
+	if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
+	captain.set('gamertag', captain_gamertag);
 
-  	var capId = Math.floor((Math.random() * 100000) + 1);
-  	captain.set('player_id', capId.toString());
+	var capId = Math.floor((Math.random() * 100000) + 1);
+	captain.set('player_id', capId.toString());
 
-  	captain.set('fights', 0);
-  	captain.set('goals', 0);
+	captain.set('fights', 0);
+	captain.set('goals', 0);
 
+	//Create Lieutenant object
+	var lieutenant = new Player();
+	lieutenant.set('name', lieutenant_name);
+	lieutenant.set('email', lieutenant_email);
+	lieutenant.set('telephone', lieutenant_telephone);
 
-  	//Create Lieutenant object
-  	var lieutenant = new Player();
-  	lieutenant.set('name', lieutenant_name);
-  	lieutenant.set('email', lieutenant_email);
-  	lieutenant.set('telephone', lieutenant_telephone);
+	if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
+	lieutenant.set('gamertag', lieutenant_gamertag);
 
-  	if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
-  	lieutenant.set('gamertag', lieutenant_gamertag);
+	var lieuId = Math.floor((Math.random() * 100000) + 1);
+	lieutenant.set('player_id', lieuId.toString());
 
-  	var lieuId = Math.floor((Math.random() * 100000) + 1);
-  	lieutenant.set('player_id', lieuId.toString());
+	lieutenant.set('fights', 0);
+	lieutenant.set('goals', 0);
 
-  	lieutenant.set('fights', 0);
-  	lieutenant.set('goals', 0);
-
-  	var teamObj;
-  	var savedCaptain; 
-  	var savedLieutenant;
+	var teamObj;
+	var savedCaptain; 
+	var savedLieutenant;
   	
-  	//Save the Captain
-  	captain.save().then(function(result) {
-  		//add a Pointer to the Captain on the Team
-  		team.set('captain', result);
-  		savedCaptain = result;
+	//Save the Captain
+	captain.save().then(function(result) {
+		//add a Pointer to the Captain on the Team
+		team.set('captain', result);
+		savedCaptain = result;
 
-  		var promise = Parse.Promise.as();
-  		promise = promise.then(function() {
-	      	//Then we save the Lieutenant
-	      	return lieutenant.save();
-       });
-     return promise;
+		var promise = Parse.Promise.as();
+		promise = promise.then(function() {
+      	//Then we save the Lieutenant
+      	return lieutenant.save();
+     });
+   return promise;
 
-   }).then(function(result){
-  		//add a Pointer to the Lieutenant on the Team
-  		team.set('lieutenant', result);
-  		savedLieutenant = result;
+ }).then(function(result){
+		//add a Pointer to the Lieutenant on the Team
+		team.set('lieutenant', result);
+		savedLieutenant = result;
 
-  		var promise = Parse.Promise.as();
-  		promise = promise.then(function() {
-	      	//Save the Team object
-	      	return team.save();
-       });
-     return promise;
+		var promise = Parse.Promise.as();
+		promise = promise.then(function() {
+      	//Save the Team object
+      	return team.save();
+     });
+   return promise;
 
-   }).then(function(result){
+ }).then(function(result){
 
     teamObj = result;
 
@@ -367,7 +367,17 @@ team.set('hidden', hidden);
     return promise;
 
   }).then(function(){
-      response.success("Added new PRO/ALLSTAR team");
+    var emailPromise = mailgun.sendEmail({
+      to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
+      from: "Cobra Cup 2016 <joel@cobracup.se>",
+      subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2016!",
+      html: "<html><h3>Er anmälan till Cobra Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+    });
+
+    return emailPromise;
+
+  }).then(function(){
+      response.success(teamObj);
   }, function(error) {
     	response.error("Creating team failed with error.code " + error.code + " error.message " + error.message);
   });
@@ -600,6 +610,16 @@ Parse.Cloud.define("createRookieTeam", function(request, response) {
 	      	return savedLieutenant.save();
        });
     return promise;
+
+  }).then(function(){
+    var emailPromise = mailgun.sendEmail({
+      to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
+      from: "Hot Rod Cup 2016 <joel@cobracup.se>",
+      subject: "Ditt lag " + team_name + " är nu anmält till Hot Rod Cup 2016!",
+      html: "<html><h3>Er anmälan till Hot Rod Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Hot Rod Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Hot Rod Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Hot Rod Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+    });
+
+    return emailPromise;
 
   }).then(function(){
     response.success("Added new Rookie team");
