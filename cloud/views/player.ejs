@@ -96,7 +96,14 @@
                         </div>
                         -->
 
-                        <div class="col-md-7">
+                        <div class="col-md-5 col-md-push-7">
+                            <% if( (typeof(player[0].get("avatar")) !== 'undefined') && (!_.isEmpty(player[0].get("avatar"))) ){ %>
+                                <img src="<%= player[0].get("avatar").url() %>" class="img-responsive img-thumbnail center-block" alt="Player image">
+                            <% } else { %>
+                                <img src="../img/hockeyplayer.png" class="img-responsive img-thumbnail center-block" alt="Player image">
+                            <% } %>
+                        </div>
+                        <div class="col-md-7 col-md-pull-5">
                             <h4 class="text-uppercase"><strong><%= player[0].get("name") %></strong></h4>
                             <div class="row">
                                 <% if ((typeof(player[0].get("birthyear")) !== 'undefined') && (!_.isEmpty(player[0].get("birthyear"))) ) { %>
@@ -242,13 +249,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5">
-                            <% if( (typeof(player[0].get("avatar")) !== 'undefined') && (!_.isEmpty(player[0].get("avatar"))) ){ %>
-                                <img src="<%= player[0].get("avatar").url() %>" class="img-responsive img-thumbnail center-block" alt="Player image">
-                            <% } else { %>
-                                <img src="../img/hockeyplayer.png" class="img-responsive img-thumbnail center-block" alt="Player image">
-                            <% } %>
-                        </div>
+                        
                         <div class="clearfix"></div>
                         <hr>
                         <div class="col-md-12">
