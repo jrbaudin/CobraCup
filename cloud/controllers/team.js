@@ -6,6 +6,7 @@ exports.getTeam = function(req, res) {
   //console.log("Trying to get the team..");
 
   var passedInfoVariable = req.query.info;
+  console.log("info variable = " + passedInfoVariable);
 
   var Team = Parse.Object.extend('Team');
   var teamQuery = new Parse.Query(Team);
@@ -165,9 +166,6 @@ exports.getTeam = function(req, res) {
         });
       });
     } else {
-      /*res.render('hub', {
-        flashError: "Kunde inte ladda lag. Försök igen"
-      });*/
       console.log("Can't find a team with id " + req.params.teamid);
       res.status(404);
       res.render('404');

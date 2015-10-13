@@ -180,7 +180,7 @@ exports.create = function(request, response) {
       console.log('Lag ' + team_name + ' är nu sparat med id ' + result.id);
       //console.log('Lag ' + JSON.stringify(result));
       var info_msg = encodeURIComponent('Ditt lag ' + team_name + ' är nu sparat. Lycka till!');
-      response.redirect('/team/' + result.get("team_id"));
+      response.redirect('/team/' + result.get("team_id") + '?info=' + info_msg);
       //response.json(result);
     },
     error: function(error) {

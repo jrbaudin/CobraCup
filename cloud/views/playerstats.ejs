@@ -74,125 +74,281 @@
                 <strong>Fel!</strong> <%= flash %>.
             </div>
         <% } %>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h6 class="panel-title text-uppercase">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-bullseye fa-stack-1x fa-inverse"></i>
-                        </span> <strong>Målligan</strong>
-                    </h6>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                        <thead style="font-size: 13px;">
-                            <tr>
-                                <th></th>
-                                <th class="text-center text-uppercase">Lag</th>
-                                <th class="text-uppercase">Namn</th>
-                                <th class="text-center text-uppercase" title="Games Played">GP</th>
-                                <th class="text-center bg-warning" title="Goals"><strong>G</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody style="font-size: 12px;">
-                            <% if(typeof(playerGoals) !== 'undefined'){
-                                var i = 1;
+        <% if(typeof(flashError) !== 'undefined'){ %>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <strong>Fel!</strong> <%= flashError %>
+            </div>
+        <% } %> 
 
-                                playerGoals.forEach(function(player) {
-                                    var standing_team = null;
-                                    if(typeof(standings) !== 'undefined'){
-                                        standings.forEach(function(standing) {
-                                            if(_.isEqual(standing.get("team").id, player.get("player_team").id)){
-                                                standing_team = standing;
-                                            }
-                                        })
-                                    } else {
-                                        console.log("Standings is undefined");
-                                    }
-                                    %>
-                                    <tr>
-                                        <td class="text-center"><%= i %></td>
-                                        <td><a href="/team/<%= player.get("player_team").get("team_id") %>" target="_blank"><img src="<%= player.get("player_team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
-                                        <td><%= player.get("player_name") %></td>
-                                        <% if(_.isNull(standing_team)) { %>
-                                            <td></td>
-                                        <% } else { %>
-                                            <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
-                                        <% } %>
-                                        <td class="text-center"><strong><%= player.get("player_goals") %></strong></td>
-                                    </tr>
-                                    <% i = i+1;
-                                }) %>
-                            <% } %>
-                        </tbody>
-                    </table>
-                    <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals</small>
+        <%  
+        var playerGoals;
+        var playerFights;
+        var playerAssists;
+        var playerPoints;
+        if(typeof(players) !== 'undefined'){
+            playerGoals = players;
+            
+            playerFights = _.sortBy(players, function(player){
+                return player.get("fights");
+            });
+            playerFights = playerFights.reverse();
+
+            playerAssists = _.sortBy(players, function(player){
+                return player.get("assists");
+            });
+            playerAssists = playerAssists.reverse();
+
+            playerPoints = _.sortBy(players, function(player){
+                return player.get("points");
+            });
+            playerPoints = playerPoints.reverse();
+        }
+        %>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-balance-scale fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Poäng</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center text-uppercase">Lag</th>
+                                    <th class="text-uppercase">Namn</th>
+                                    <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                    <th class="text-center bg-warning" title="Points"><strong>P</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if(typeof(playerPoints) !== 'undefined'){
+                                    var i = 1;
+
+                                    playerPoints.forEach(function(player) {
+                                        var standing_team = null;
+                                        if(typeof(standings) !== 'undefined'){
+                                            standings.forEach(function(standing) {
+                                                if(_.isEqual(standing.get("team").id, player.get("team").id)){
+                                                    standing_team = standing;
+                                                }
+                                            })
+                                        } else {
+                                            console.log("Standings is undefined");
+                                        }
+                                        %>
+                                        <tr>
+                                            <td class="text-center"><%= i %></td>
+                                            <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><img src="<%= player.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                            <td><%= player.get("name") %></td>
+                                            <% if(_.isNull(standing_team)) { %>
+                                                <td></td>
+                                            <% } else { %>
+                                                <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
+                                            <% } %>
+                                            <td class="text-center"><strong><%= player.get("points") %></strong></td>
+                                        </tr>
+                                        <% i = i+1;
+                                    }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>P</strong>-Points</small>
+                    </div>
+                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel-body -->
+                <!-- /.panel -->
             </div>
-            <!-- /.panel -->
-        </div>
-        <!-- /.col-md-6 -->
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h6 class="panel-title text-uppercase">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-wheelchair fa-stack-1x fa-inverse"></i>
-                        </span> <strong>Slagsmålsligan</strong>
-                    </h6>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-bullseye fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Mål</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center text-uppercase">Lag</th>
+                                    <th class="text-uppercase">Namn</th>
+                                    <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                    <th class="text-center bg-warning" title="Goals"><strong>G</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if(typeof(playerGoals) !== 'undefined'){
+                                    var i = 1;
+
+                                    playerGoals.forEach(function(player) {
+                                        var standing_team = null;
+                                        if(typeof(standings) !== 'undefined'){
+                                            standings.forEach(function(standing) {
+                                                if(_.isEqual(standing.get("team").id, player.get("team").id)){
+                                                    standing_team = standing;
+                                                }
+                                            })
+                                        } else {
+                                            console.log("Standings is undefined");
+                                        }
+                                        %>
+                                        <tr>
+                                            <td class="text-center"><%= i %></td>
+                                            <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><img src="<%= player.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                            <td><%= player.get("name") %></td>
+                                            <% if(_.isNull(standing_team)) { %>
+                                                <td></td>
+                                            <% } else { %>
+                                                <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
+                                            <% } %>
+                                            <td class="text-center"><strong><%= player.get("goals") %></strong></td>
+                                        </tr>
+                                        <% i = i+1;
+                                    }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals</small>
+                    </div>
+                    <!-- /.panel-body -->
                 </div>
-                <div class="panel-body">
-                    <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                        <thead style="font-size: 13px;">
-                            <tr>
-                                <th></th>
-                                <th class="text-center text-uppercase">Lag</th>
-                                <th class="text-uppercase">Namn</th>
-                                <th class="text-center text-uppercase" title="Games Played">GP</th>
-                                <th class="text-center bg-warning" title="Fights"><strong>F</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody style="font-size: 12px;">
-                            <% if(typeof(playerFights) !== 'undefined'){
-                                var i = 1;
-                                playerFights.forEach(function(player) {
-                                    var f_standing_team = null;
-                                    if(typeof(standings) !== 'undefined'){
-                                        standings.forEach(function(standing) {
-                                            if(_.isEqual(standing.get("team").id, player.get("player_team").id)){
-                                                f_standing_team = standing;
-                                            }
-                                        })
-                                    } else {
-                                        console.log("Standings is undefined");
-                                    }
-                                    %>
-                                    <tr>
-                                        <td class="text-center"><%= i %></td>
-                                        <td><a href="/team/<%= player.get("player_team").get("team_id") %>" target="_blank"><img src="<%= player.get("player_team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
-                                        <td><%= player.get("player_name") %></td>
-                                        <% if(_.isNull(f_standing_team)) { %>
-                                            <td></td>
-                                        <% } else { %>
-                                            <td class="text-center"><strong><%= f_standing_team.get("games_played") %></strong></td>
-                                        <% } %>
-                                        <td class="text-center"><strong><%= player.get("player_fights") %></strong></td>
-                                    </tr>
-                                    <% i = i+1;
-                                }) %>
-                            <% } %>
-                        </tbody>
-                    </table>
-                    <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>F</strong>-Fights</small>
-                </div>
-                <!-- /.panel-body -->
+                <!-- /.panel -->
             </div>
-            <!-- /.panel -->
         </div>
-        <!-- /.col-md-6 -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Assist</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center text-uppercase">Lag</th>
+                                    <th class="text-uppercase">Namn</th>
+                                    <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                    <th class="text-center bg-warning" title="Assists"><strong>A</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if(typeof(playerAssists) !== 'undefined'){
+                                    var i = 1;
+
+                                    playerGoals.forEach(function(player) {
+                                        var standing_team = null;
+                                        if(typeof(standings) !== 'undefined'){
+                                            standings.forEach(function(standing) {
+                                                if(_.isEqual(standing.get("team").id, player.get("team").id)){
+                                                    standing_team = standing;
+                                                }
+                                            })
+                                        } else {
+                                            console.log("Standings is undefined");
+                                        }
+                                        %>
+                                        <tr>
+                                            <td class="text-center"><%= i %></td>
+                                            <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><img src="<%= player.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                            <td><%= player.get("name") %></td>
+                                            <% if(_.isNull(standing_team)) { %>
+                                                <td></td>
+                                            <% } else { %>
+                                                <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
+                                            <% } %>
+                                            <td class="text-center"><strong><%= player.get("assists") %></strong></td>
+                                        </tr>
+                                        <% i = i+1;
+                                    }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals</small>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-wheelchair fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Slagsmålsligan</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center text-uppercase">Lag</th>
+                                    <th class="text-uppercase">Namn</th>
+                                    <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                    <th class="text-center bg-warning" title="Fights"><strong>F</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if(typeof(playerFights) !== 'undefined'){
+                                    var i = 1;
+                                    playerFights.forEach(function(player) {
+                                        var f_standing_team = null;
+                                        if(typeof(standings) !== 'undefined'){
+                                            standings.forEach(function(standing) {
+                                                if(_.isEqual(standing.get("team").id, player.get("team").id)){
+                                                    f_standing_team = standing;
+                                                }
+                                            })
+                                        } else {
+                                            console.log("Standings is undefined");
+                                        }
+                                        %>
+                                        <tr>
+                                            <td class="text-center"><%= i %></td>
+                                            <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><img src="<%= player.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                            <td><%= player.get("name") %></td>
+                                            <% if(_.isNull(f_standing_team)) { %>
+                                                <td></td>
+                                            <% } else { %>
+                                                <td class="text-center"><strong><%= f_standing_team.get("games_played") %></strong></td>
+                                            <% } %>
+                                            <td class="text-center"><strong><%= player.get("fights") %></strong></td>
+                                        </tr>
+                                        <% i = i+1;
+                                    }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>F</strong>-Fights</small>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        </div>
     </div>
     <!-- /.container -->
 

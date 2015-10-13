@@ -87,8 +87,8 @@ app.get('/signup/rookie', singupController.rookie);
 app.put('/signup/rookie', singupController.create);
 
 app.get('/team/:teamid', teamController.getTeam);
-app.put('/team/:teamid', teamController.update);
-app.del('/team/:teamid', teamController.delete);
+//app.put('/team/:teamid', teamController.update);
+//app.del('/team/:teamid', teamController.delete);
 
 app.get('/player/:playerid', playerController.getPlayer);
 app.get('/player/edit/:playerid', playerController.getPlayerForUpdate);

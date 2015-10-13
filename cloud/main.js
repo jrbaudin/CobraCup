@@ -659,7 +659,11 @@ Parse.Cloud.beforeSave("Team", function(request, response) {
   nhlTeamQuery.find().then(function(team) {
     var level = request.object.get("level");
 
-    if ((typeof(level) !== 'undefined') && (_.isEqual(level, "1"))) {
+    var objectId = request.object.id;
+    if ((typeof(objectId) !== 'undefined') && (!_.isEmpty(objectId))) {
+      console.log("team with id " + objectId + " already exists, no need to deny save");
+      response.success();
+    } else if ((typeof(level) !== 'undefined') && (_.isEqual(level, "1"))) {
       if(team[0].get('taken_rookie')){
         response.error("you cannot choose an NHL team that's already taken");
       } else {
@@ -683,6 +687,52 @@ Parse.Cloud.beforeSave("Team", function(request, response) {
 /* ----------- */
 
 /***** Utility Functions *****/
+
+Parse.Cloud.define("calculatePoints", function(request, response) {
+  var Player = Parse.Object.extend('Player');
+  var playersQuery = new Parse.Query(Player);
+  playersQuery.find().then(function(results) {
+    var promise = Parse.Promise.as();
+    _.each(results, function(result) {
+        var points = result.get('goals') + result.get('assists');
+        result.set('points', points);
+        promise = promise.then(function() {
+            // Return a promise that will be resolved when the save is finished.
+            return result.save();
+          });
+      });
+
+    return promise;
+
+  }).then(function() {
+   response.success("Player points successfully calculated");
+      // Every object is updated.
+   });
+});
+
+Parse.Cloud.define("cleanPlayerStats", function(request, response) {
+  var Player = Parse.Object.extend('Player');
+  var playersQuery = new Parse.Query(Player);
+  playersQuery.find().then(function(results) {
+    var promise = Parse.Promise.as();
+    _.each(results, function(result) {
+        result.set('points', 0);
+        result.set('goals', 0);
+        result.set('assists', 0);
+        result.set('fights', 0);
+        promise = promise.then(function() {
+            // Return a promise that will be resolved when the save is finished.
+            return result.save();
+          });
+      });
+
+    return promise;
+
+  }).then(function() {
+   response.success("Player points successfully calculated");
+      // Every object is updated.
+   });
+});
 
 Parse.Cloud.define("cleanStandings", function(request, response) {
 	var Standings = Parse.Object.extend('Standings');
@@ -710,29 +760,6 @@ Parse.Cloud.define("cleanStandings", function(request, response) {
 
   }).then(function() {
    response.success("Standings table is cleaned");
-	  	// Every object is updated.
-   });
-});
-
-Parse.Cloud.define("cleanPlayerStats", function(request, response) {
-	var PlayerStats = Parse.Object.extend('PlayerStats');
-	var playerStatsQuery = new Parse.Query(PlayerStats);
-	playerStatsQuery.find().then(function(results) {
-    var promise = Parse.Promise.as();
-    _.each(results, function(result) {
-		  	// For each item, extend the promise with a function to save it.
-        result.set('player_fights', 0);
-        result.set('player_goals', 0);
-        promise = promise.then(function() {
-		      	// Return a promise that will be resolved when the save is finished.
-		      	return result.save();
-          });
-      });
-
-    return promise;
-
-  }).then(function() {
-   response.success("PlayerStats table is cleaned");
 	  	// Every object is updated.
    });
 });

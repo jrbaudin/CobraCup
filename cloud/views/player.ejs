@@ -243,7 +243,11 @@
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <img src="<%= player[0].get("avatar").url() %>" class="img-responsive img-thumbnail center-block" alt="Player image">
+                            <% if( (typeof(player[0].get("avatar")) !== 'undefined') && (!_.isEmpty(player[0].get("avatar"))) ){ %>
+                                <img src="<%= player[0].get("avatar").url() %>" class="img-responsive img-thumbnail center-block" alt="Player image">
+                            <% } else { %>
+                                <img src="../img/hockeyplayer.png" class="img-responsive img-thumbnail center-block" alt="Player image">
+                            <% } %>
                         </div>
                         <div class="clearfix"></div>
                         <hr>
@@ -254,7 +258,7 @@
                             <p class="text-uppercase" style="margin-bottom:2px;"><strong>Karriärstatistik</strong></p>
                             <div class="table-responsive" style="margin-bottom:30px;">
                                 <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                                    <thead>
+                                    <thead class="small-table-header">
                                         <tr class="statstable">
                                             <th class="text-uppercase">Säsong</th>
                                             <th class="text-uppercase">Lag</th>
@@ -268,28 +272,32 @@
                                             <th class="text-center text-uppercase" title="Fights">F</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <% _.each(stats.seasons, function(season) { %>
-                                            <tr>
-                                                <td><%= season.season %></td>
-                                                <td><%= season.team %></td>
-                                                <td class="text-center"><%= season.gp %></td>
-                                                <td class="text-center"><%= season.goals %></td>
-                                                <td class="text-center"><%= season.fights %></td>
-                                                <td class="text-center">|</td>
-                                                <% if ((typeof(season.playoffs) !== 'undefined') && (season.playoffs.gp > 0)) { %>
-                                                    <td><i class="fa fa-arrow-right"></i> Slutspel</td>
-                                                    <td class="text-center"><%= season.playoffs.gp %></td>
-                                                    <td class="text-center"><%= season.playoffs.goals %></td>
-                                                    <td class="text-center"><%= season.playoffs.fights %></td>
-                                                <% } else { %>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                <% } %>
-                                            </tr>
-                                        <% })%> 
+                                    <tbody class="small-table-rows">
+                                        <% if( typeof(stats) !== 'undefined' ){ %>
+                                        
+                                            <% _.each(stats.seasons, function(season) { %>
+                                                <tr>
+                                                    <td><%= season.season %></td>
+                                                    <td><%= season.team %></td>
+                                                    <td class="text-center"><%= season.gp %></td>
+                                                    <td class="text-center"><%= season.goals %></td>
+                                                    <td class="text-center"><%= season.fights %></td>
+                                                    <td class="text-center">|</td>
+                                                    <% if ((typeof(season.playoffs) !== 'undefined') && (season.playoffs.gp > 0)) { %>
+                                                        <td><i class="fa fa-arrow-right"></i> Slutspel</td>
+                                                        <td class="text-center"><%= season.playoffs.gp %></td>
+                                                        <td class="text-center"><%= season.playoffs.goals %></td>
+                                                        <td class="text-center"><%= season.playoffs.fights %></td>
+                                                    <% } else { %>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    <% } %>
+                                                </tr>
+                                            <% })%> 
+
+                                        <% } %>
                                     </tbody>
                                 </table>
                             </div>
@@ -297,7 +305,7 @@
                             <p class="text-uppercase" style="margin-bottom:2px;"><strong>Totalt över karriären</strong></p>
                             <div class="table-responsive" style="margin-bottom:30px;">
                                 <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                                    <thead>
+                                    <thead class="small-table-header">
                                         <tr class="statstable">
                                             <th class="text-uppercase"></th>
                                             <th></th>
@@ -310,35 +318,37 @@
                                             <th class="text-center text-uppercase" title="Fights">F</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <% 
-                                        var gp = 0;
-                                        var goals = 0;
-                                        var fights = 0;
-                                        var po_gp = 0;
-                                        var po_goals = 0;
-                                        var po_fights = 0;
-                                        _.each(stats.seasons, function(season) { 
-                                            gp = gp + season.gp;
-                                            goals = goals + season.goals;
-                                            fights = fights + season.fights;
-                                            if (typeof(season.playoffs) !== 'undefined') {
-                                                po_gp = po_gp + season.playoffs.gp;
-                                                po_goals = po_goals + season.playoffs.goals;
-                                                po_fights = po_fights + season.playoffs.fights;
-                                            }                                            
-                                         })%>
-                                        <tr>
-                                            <td>Cobra Cup</td>
-                                            <td class="text-center">| <i class="fa fa-arrow-right"></i> Gruppspel</td>
-                                            <td class="text-center"><%= gp %></td>
-                                            <td class="text-center"><%= goals %></td>
-                                            <td class="text-center"><%= fights %></td>
-                                            <td class="text-center">| <i class="fa fa-arrow-right"></i> Slutspel</td>
-                                            <td class="text-center"><%= po_gp %></td>
-                                            <td class="text-center"><%= po_goals %></td>
-                                            <td class="text-center"><%= po_fights %></td>
-                                        </tr>
+                                    <tbody class="small-table-rows">
+                                        <% if( typeof(stats) !== 'undefined' ){ %>
+                                            <% 
+                                            var gp = 0;
+                                            var goals = 0;
+                                            var fights = 0;
+                                            var po_gp = 0;
+                                            var po_goals = 0;
+                                            var po_fights = 0;
+                                            _.each(stats.seasons, function(season) { 
+                                                gp = gp + season.gp;
+                                                goals = goals + season.goals;
+                                                fights = fights + season.fights;
+                                                if (typeof(season.playoffs) !== 'undefined') {
+                                                    po_gp = po_gp + season.playoffs.gp;
+                                                    po_goals = po_goals + season.playoffs.goals;
+                                                    po_fights = po_fights + season.playoffs.fights;
+                                                }                                            
+                                             })%>
+                                            <tr>
+                                                <td>Cobra Cup</td>
+                                                <td class="text-center">| <i class="fa fa-arrow-right"></i> Gruppspel</td>
+                                                <td class="text-center"><%= gp %></td>
+                                                <td class="text-center"><%= goals %></td>
+                                                <td class="text-center"><%= fights %></td>
+                                                <td class="text-center">| <i class="fa fa-arrow-right"></i> Slutspel</td>
+                                                <td class="text-center"><%= po_gp %></td>
+                                                <td class="text-center"><%= po_goals %></td>
+                                                <td class="text-center"><%= po_fights %></td>
+                                            </tr>
+                                        <% } %>
                                     </tbody>
                                 </table>
                             </div>
@@ -346,7 +356,7 @@
                             <p class="text-uppercase" style="margin-bottom:2px;"><strong>Transaktioner</strong></p>
                             <div class="table-responsive" style="margin-bottom:30px;">
                                 <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
-                                    <thead>
+                                    <thead class="small-table-header">
                                         <tr class="statstable">
                                             <th class="text-uppercase">Datum</th>
                                             <th class="text-uppercase">Status</th>
@@ -354,7 +364,7 @@
                                             <th class="text-uppercase">Till</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="small-table-rows">
                                         <% if (typeof(trans) !== 'undefined') { %>
                                             <% _.each(trans.transactions, function(transaction) { %>
                                                 <tr>

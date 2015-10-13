@@ -23,6 +23,14 @@ body {
 	color: #2ECC71 !important;
 }
 
+.small-table-header{
+	font-size: 14px;
+}
+
+.small-table-rows{
+	font-size: 13px;
+}
+
 a:focus {
   color: #F1C40F;
 }
@@ -42,6 +50,7 @@ a:focus {
 .table > tbody > tr.statstable > th,
 .table > tfoot > tr.statstable > th {
  background-color: #e76254 ;
+ color: #34495E;
 }
 .table-hover > tbody > tr > td.statstable:hover,
 .table-hover > tbody > tr > th.statstable:hover,
