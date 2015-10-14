@@ -296,7 +296,7 @@ Parse.Cloud.define("createTeam", function(request, response) {
 	var teamObj;
 	var savedCaptain; 
 	var savedLieutenant;
-  	
+
 	//Save the Captain
 	captain.save().then(function(result) {
 		//add a Pointer to the Captain on the Team
@@ -307,7 +307,7 @@ Parse.Cloud.define("createTeam", function(request, response) {
 		promise = promise.then(function() {
       	//Then we save the Lieutenant
       	return lieutenant.save();
-     });
+      });
    return promise;
 
  }).then(function(result){
@@ -319,68 +319,68 @@ Parse.Cloud.define("createTeam", function(request, response) {
 		promise = promise.then(function() {
       	//Save the Team object
       	return team.save();
-     });
+      });
    return promise;
 
  }).then(function(result){
 
-    teamObj = result;
+  teamObj = result;
 
-    var Standing = Parse.Object.extend("Standings");
-    var standing = new Standing();
+  var Standing = Parse.Object.extend("Standings");
+  var standing = new Standing();
 
-    standing.set('team', result);
-    standing.set('points', 0);
-    standing.set('games_played', 0);
-    standing.set('wins', 0);
-    standing.set('tie', 0);
-    standing.set('losses', 0);
-    standing.set('goals_for', 0);
-    standing.set('goals_against', 0);
+  standing.set('team', result);
+  standing.set('points', 0);
+  standing.set('games_played', 0);
+  standing.set('wins', 0);
+  standing.set('tie', 0);
+  standing.set('losses', 0);
+  standing.set('goals_for', 0);
+  standing.set('goals_against', 0);
 
-    var promise = Parse.Promise.as();
-    promise = promise.then(function() {
+  var promise = Parse.Promise.as();
+  promise = promise.then(function() {
       	// Return a promise that will be resolved when the save is finished.
       	return standing.save();
-     });
-    return promise;
+      });
+  return promise;
 
-  }).then(function(){
+}).then(function(){
 
-    savedCaptain.set('team', teamObj);
+  savedCaptain.set('team', teamObj);
 
-    var promise = Parse.Promise.as();
-    promise = promise.then(function() {
+  var promise = Parse.Promise.as();
+  promise = promise.then(function() {
 	      	// Return a promise that will be resolved when the save is finished.
 	      	return savedCaptain.save();
        });
-    return promise;
+  return promise;
 
-  }).then(function(){
+}).then(function(){
 
-    savedLieutenant.set('team', teamObj);
+  savedLieutenant.set('team', teamObj);
 
-    var promise = Parse.Promise.as();
-    promise = promise.then(function() {
-      return savedLieutenant.save();
-    });
-    return promise;
-
-  }).then(function(){
-    var emailPromise = mailgun.sendEmail({
-      to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
-      from: "Cobra Cup 2016 <joel@cobracup.se>",
-      subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2016!",
-      html: "<html><h3>Er anmälan till Cobra Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
-    });
-
-    return emailPromise;
-
-  }).then(function(){
-      response.success(teamObj);
-  }, function(error) {
-    	response.error("Creating team failed with error.code " + error.code + " error.message " + error.message);
+  var promise = Parse.Promise.as();
+  promise = promise.then(function() {
+    return savedLieutenant.save();
   });
+  return promise;
+
+}).then(function(){
+  var emailPromise = mailgun.sendEmail({
+    to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
+    from: "Cobra Cup 2016 <joel@cobracup.se>",
+    subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2016!",
+    html: "<html><h3>Er anmälan till Cobra Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+  });
+
+return emailPromise;
+
+}).then(function(){
+  response.success(teamObj);
+}, function(error) {
+ response.error("Creating team failed with error.code " + error.code + " error.message " + error.message);
+});
 });
 /*** END Create PRO/ALLSTAR Team ***/
 
@@ -619,13 +619,13 @@ Parse.Cloud.define("createRookieTeam", function(request, response) {
       html: "<html><h3>Er anmälan till Hot Rod Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Hot Rod Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Hot Rod Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Hot Rod Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
     });
 
-    return emailPromise;
+return emailPromise;
 
-  }).then(function(){
-    response.success("Added new Rookie team");
-  }, function(error) {
-   response.error("Creating Rookie team failed with error.code " + error.code + " error.message " + error.message);
- });
+}).then(function(){
+  response.success("Added new Rookie team");
+}, function(error) {
+ response.error("Creating Rookie team failed with error.code " + error.code + " error.message " + error.message);
+});
 });
 /*** END Create Rookie Team ***/
 
@@ -694,20 +694,20 @@ Parse.Cloud.define("calculatePoints", function(request, response) {
   playersQuery.find().then(function(results) {
     var promise = Parse.Promise.as();
     _.each(results, function(result) {
-        var points = result.get('goals') + result.get('assists');
-        result.set('points', points);
-        promise = promise.then(function() {
+      var points = result.get('goals') + result.get('assists');
+      result.set('points', points);
+      promise = promise.then(function() {
             // Return a promise that will be resolved when the save is finished.
             return result.save();
           });
-      });
+    });
 
     return promise;
 
   }).then(function() {
    response.success("Player points successfully calculated");
       // Every object is updated.
-   });
+    });
 });
 
 Parse.Cloud.define("cleanPlayerStats", function(request, response) {
@@ -716,22 +716,22 @@ Parse.Cloud.define("cleanPlayerStats", function(request, response) {
   playersQuery.find().then(function(results) {
     var promise = Parse.Promise.as();
     _.each(results, function(result) {
-        result.set('points', 0);
-        result.set('goals', 0);
-        result.set('assists', 0);
-        result.set('fights', 0);
-        promise = promise.then(function() {
+      result.set('points', 0);
+      result.set('goals', 0);
+      result.set('assists', 0);
+      result.set('fights', 0);
+      promise = promise.then(function() {
             // Return a promise that will be resolved when the save is finished.
             return result.save();
           });
-      });
+    });
 
     return promise;
 
   }).then(function() {
    response.success("Player points successfully calculated");
       // Every object is updated.
-   });
+    });
 });
 
 Parse.Cloud.define("cleanStandings", function(request, response) {
@@ -833,4 +833,88 @@ return promise;
    }, function(error){
     response.error("Script failed with error.code " + error.code + " error.message " + error.message);
   });
+});
+
+Parse.Cloud.define("getSortedTeamListGoalsFor", function(request, response) {
+    var Team = Parse.Object.extend('Team');
+    var teamsQuery = new Parse.Query(Team);
+    teamsQuery.include(['nhlTeam','captain','lieutenant']);
+    teamsQuery.find().then(function(results) {
+        var sortedList = _.sortBy(results, function(result){
+                            var stats = result.get("stats");
+                            var gf = 0;
+                            _.each(stats.seasons, function(season) {
+                              //console.log("season.gf = " + season.gf);
+                              gf = gf+season.gf;
+                            });
+                            //console.log(gf + " for " + result.get("team_name"));
+                            return gf; 
+                          });
+        sortedList = sortedList.reverse();
+
+        /*console.log("--------- after sort ------------");
+        _.each(sortedList, function(team){
+          var stats = team.get("stats");
+          var gf = 0;
+          var count = 0;
+          _.each(stats.seasons, function(season) {
+            //console.log("year = " + season.season);
+            gf = gf+season.gf;
+            count = count + 1;
+          });
+
+          console.log(gf + " for " + team.get("team_name") + " in " + count + " seasons");
+        });*/
+        
+        response.success(sortedList);                            
+
+    }, function(error) {
+      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
+Parse.Cloud.define("getSortedTeamListWins", function(request, response) {
+    var Team = Parse.Object.extend('Team');
+    var teamsQuery = new Parse.Query(Team);
+    teamsQuery.include(['nhlTeam','captain','lieutenant']);
+    teamsQuery.find().then(function(results) {
+        var sortedList = _.sortBy(results, function(result){
+                            var stats = result.get("stats");
+                            var wins = 0;
+                            _.each(stats.seasons, function(season) {
+                              wins = wins+season.wins;
+                            });
+                            return wins; 
+                          });
+        sortedList = sortedList.reverse();
+        
+        response.success(sortedList);                            
+
+    }, function(error) {
+      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
+Parse.Cloud.define("getSortedTeamListPlayoffWins", function(request, response) {
+    var Team = Parse.Object.extend('Team');
+    var teamsQuery = new Parse.Query(Team);
+    teamsQuery.include(['nhlTeam','captain','lieutenant']);
+    teamsQuery.find().then(function(results) {
+        var sortedList = _.sortBy(results, function(result){
+                            var stats = result.get("stats");
+                            var wins = 0;
+                            _.each(stats.seasons, function(season) {
+                                if ((typeof(season.playoffs) !== 'undefined') && (season.playoffs.gp > 0)) {
+                                  wins = wins+season.playoffs.wins;
+                                }
+                            });
+                            return wins; 
+                          });
+        sortedList = sortedList.reverse();
+        
+        response.success(sortedList);                            
+
+    }, function(error) {
+      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+    });
 });

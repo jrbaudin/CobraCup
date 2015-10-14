@@ -102,6 +102,8 @@ app.get('/stat/playerstats', statController.showPlayerStats);
 app.get('/stat/game/:gameid', statController.loadMatchReporter);
 app.put('/stat/game/:gameid', statController.saveMatchResult);
 
+app.get('/stat/history', statController.showHistory);
+
 app.get('/games', statController.loadGames);
 app.get('/games/group/:groupid', statController.loadGroupGames);
 

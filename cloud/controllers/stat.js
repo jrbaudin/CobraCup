@@ -2,6 +2,29 @@ var _ = require('underscore');
 var moment = require('moment');
 var momentSWE = require('cloud/tools/moment-with-locales.min.js');
 
+exports.showHistory = function(request, response) {
+  var resGF;
+  var resWins;
+
+  Parse.Cloud.run('getSortedTeamListGoalsFor', {
+  }).then(function(result){
+    resGF = result;
+    return Parse.Cloud.run('getSortedTeamListWins',{});
+  }).then(function(result){
+    resWins = result;
+    return Parse.Cloud.run('getSortedTeamListPlayoffWins',{});
+  }).then(function(result){
+    response.render('stats-history', {
+      teamsGF: resGF,
+      teamsWins: resWins,
+      teamsPOWins: result
+    });
+  }, function(error){
+    alert(error);
+    response.send(500, 'Failed getting sorted Teams list');
+  });
+};
+
 exports.showLeague = function(req, res) {
   var Standings = Parse.Object.extend('Standings');
   var standingsQuery = new Parse.Query(Standings);
