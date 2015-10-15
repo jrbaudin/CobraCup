@@ -65,7 +65,7 @@
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-    <div class="container">
+    <div class="container-fluid">
         <% if(typeof(flash) !== 'undefined'){ %>
             <div class="alert alert-danger alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert">
@@ -109,8 +109,8 @@
             playerPoints = playerPoints.reverse();
         }
         %>
-        <div class="row">
-            <div class="col-md-6">
+        <!-- <div class="row"> -->
+            <div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h6 class="panel-title text-uppercase">
@@ -121,14 +121,14 @@
                         </h6>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                        <table class="table table-condensed table-striped" style="margin-bottom: 0;">
                             <thead style="font-size: 13px;">
                                 <tr>
                                     <th></th>
                                     <th class="text-center text-uppercase">Lag</th>
                                     <th class="text-uppercase">Namn</th>
                                     <th class="text-center text-uppercase" title="Games Played">GP</th>
-                                    <th class="text-center bg-warning" title="Points"><strong>P</strong></th>
+                                    <th class="text-center info" title="Points"><strong>P</strong></th>
                                 </tr>
                             </thead>
                             <tbody style="font-size: 12px;">
@@ -156,7 +156,7 @@
                                             <% } else { %>
                                                 <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
                                             <% } %>
-                                            <td class="text-center"><strong><%= player.get("points") %></strong></td>
+                                            <td class="text-center info"><strong><%= player.get("points") %></strong></td>
                                         </tr>
                                         <% i = i+1;
                                     }) %>
@@ -170,7 +170,7 @@
                 <!-- /.panel -->
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h6 class="panel-title text-uppercase">
@@ -181,14 +181,14 @@
                         </h6>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                        <table class="table table-condensed table-striped" style="margin-bottom: 0;">
                             <thead style="font-size: 13px;">
                                 <tr>
                                     <th></th>
                                     <th class="text-center text-uppercase">Lag</th>
                                     <th class="text-uppercase">Namn</th>
                                     <th class="text-center text-uppercase" title="Games Played">GP</th>
-                                    <th class="text-center bg-warning" title="Goals"><strong>G</strong></th>
+                                    <th class="text-center info" title="Goals"><strong>G</strong></th>
                                 </tr>
                             </thead>
                             <tbody style="font-size: 12px;">
@@ -216,7 +216,7 @@
                                             <% } else { %>
                                                 <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
                                             <% } %>
-                                            <td class="text-center"><strong><%= player.get("goals") %></strong></td>
+                                            <td class="text-center info"><strong><%= player.get("goals") %></strong></td>
                                         </tr>
                                         <% i = i+1;
                                     }) %>
@@ -229,9 +229,9 @@
                 </div>
                 <!-- /.panel -->
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
+        <!-- </div> -->
+        <!-- <div class="row"> -->
+            <div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h6 class="panel-title text-uppercase">
@@ -242,14 +242,14 @@
                         </h6>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                        <table class="table table-condensed table-striped" style="margin-bottom: 0;">
                             <thead style="font-size: 13px;">
                                 <tr>
                                     <th></th>
                                     <th class="text-center text-uppercase">Lag</th>
                                     <th class="text-uppercase">Namn</th>
                                     <th class="text-center text-uppercase" title="Games Played">GP</th>
-                                    <th class="text-center bg-warning" title="Assists"><strong>A</strong></th>
+                                    <th class="text-center info" title="Assists"><strong>A</strong></th>
                                 </tr>
                             </thead>
                             <tbody style="font-size: 12px;">
@@ -277,7 +277,7 @@
                                             <% } else { %>
                                                 <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
                                             <% } %>
-                                            <td class="text-center"><strong><%= player.get("assists") %></strong></td>
+                                            <td class="text-center info"><strong><%= player.get("assists") %></strong></td>
                                         </tr>
                                         <% i = i+1;
                                     }) %>
@@ -291,25 +291,25 @@
                 <!-- /.panel -->
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h6 class="panel-title text-uppercase">
                             <span class="fa-stack fa-lg">
                               <i class="fa fa-circle fa-stack-2x"></i>
                               <i class="fa fa-wheelchair fa-stack-1x fa-inverse"></i>
-                            </span> <strong>Slagsmålsligan</strong>
+                            </span> <strong>Slagsmål</strong>
                         </h6>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                        <table class="table table-condensed table-striped" style="margin-bottom: 0;">
                             <thead style="font-size: 13px;">
                                 <tr>
                                     <th></th>
                                     <th class="text-center text-uppercase">Lag</th>
                                     <th class="text-uppercase">Namn</th>
                                     <th class="text-center text-uppercase" title="Games Played">GP</th>
-                                    <th class="text-center bg-warning" title="Fights"><strong>F</strong></th>
+                                    <th class="text-center info" title="Fights"><strong>F</strong></th>
                                 </tr>
                             </thead>
                             <tbody style="font-size: 12px;">
@@ -336,7 +336,7 @@
                                             <% } else { %>
                                                 <td class="text-center"><strong><%= f_standing_team.get("games_played") %></strong></td>
                                             <% } %>
-                                            <td class="text-center"><strong><%= player.get("fights") %></strong></td>
+                                            <td class="text-center info"><strong><%= player.get("fights") %></strong></td>
                                         </tr>
                                         <% i = i+1;
                                     }) %>
@@ -349,7 +349,7 @@
                 </div>
                 <!-- /.panel -->
             </div>
-        </div>
+        <!-- </div> -->
     </div>
     <!-- /.container -->
 

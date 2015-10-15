@@ -5,20 +5,72 @@ var momentSWE = require('cloud/tools/moment-with-locales.min.js');
 exports.showHistory = function(request, response) {
   var resGF;
   var resWins;
+  var resPOWins;
 
-  Parse.Cloud.run('getSortedTeamListGoalsFor', {
-  }).then(function(result){
-    resGF = result;
-    return Parse.Cloud.run('getSortedTeamListWins',{});
-  }).then(function(result){
-    resWins = result;
-    return Parse.Cloud.run('getSortedTeamListPlayoffWins',{});
-  }).then(function(result){
+  Parse.Cloud.run('getTeams', {}).then(function(results){
+    resGF = _.sortBy(results, function(result){
+                        var stats = result.get("stats");
+                        var gf = 0;
+                        _.each(stats.seasons, function(season) {
+                          gf = gf+season.gf;
+                        });
+                        return gf; 
+                      });
+    resGF = resGF.reverse();
+
+    resWins = _.sortBy(results, function(result){
+                        var stats = result.get("stats");
+                        var wins = 0;
+                        _.each(stats.seasons, function(season) {
+                          wins = wins+season.wins;
+                        });
+                        return wins; 
+                      });
+    resWins = resWins.reverse();
+
+    resPOWins = _.sortBy(results, function(result){
+                        var stats = result.get("stats");
+                        var wins = 0;
+                        _.each(stats.seasons, function(season) {
+                            if ((typeof(season.playoffs) !== 'undefined') && (season.playoffs.gp > 0)) {
+                              wins = wins+season.playoffs.wins;
+                            }
+                        });
+                        return wins; 
+                      });
+    resPOWins = resPOWins.reverse();
+
+    return Parse.Cloud.run('getPlayers', {});
+  }).then(function(results){
+
+    var playerGoals = _.sortBy(results, function(result){
+                        var stats = result.get("stats");
+                        var goals = 0;
+                        _.each(stats.seasons, function(season) {
+                          goals = goals+season.goals;
+                        });
+                        return goals; 
+                      });
+    playerGoals = playerGoals.reverse();
+
+    var playerFights = _.sortBy(results, function(result){
+                        var stats = result.get("stats");
+                        var fights = 0;
+                        _.each(stats.seasons, function(season) {
+                          fights = fights+season.fights;
+                        });
+                        return fights; 
+                      });
+    playerFights = playerFights.reverse();
+
     response.render('stats-history', {
       teamsGF: resGF,
       teamsWins: resWins,
-      teamsPOWins: result
+      teamsPOWins: resPOWins,
+      playerGoals: playerGoals,
+      playerFights: playerFights
     });
+
   }, function(error){
     alert(error);
     response.send(500, 'Failed getting sorted Teams list');

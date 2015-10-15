@@ -5,8 +5,51 @@ Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 exports.getPlayer = function(request, response) {
   Parse.Cloud.run('getPlayer', { player_id: request.params.playerid}, {
     success: function(result) {
+
+      var arrData = [];
+      var stats = result[0].get("stats")
+      var goalsList = _.sortBy(stats.seasons, function(season){
+                          return season.season; 
+                      });
+      
+      var goalsPluck = _.pluck(goalsList, 'goals');
+      var seasonPluck = _.pluck(goalsList, 'season');
+
+      
+      if (_.size(goalsPluck) < 2) {
+        var i = 0;
+        _.each(goalsPluck, function(year){
+          if (_.isEqual(seasonPluck[i], 2014)) {
+              arrData.push(year);
+              arrData.push(0);
+          } else if (_.isEqual(seasonPluck[i], 2015)){
+            arrData.push(0);
+            arrData.push(year);
+          }
+        });
+        
+      } else {
+        _.each(goalsPluck, function(year){
+            arrData.push(year);
+        });
+      }
+      /*var arrTeamGoals = [];
+      var tStats = result[0].get("team").get("stats");
+      var tGoalsList = _.sortBy(tStats.seasons, function(season){
+                          return season.season; 
+                      });
+      
+      var tGoalsPluck = _.pluck(tGoalsList, 'gf');
+
+      _.each(tGoalsPluck, function(tYear){
+          console.log("T goals > " + tYear);
+          arrTeamGoals.push(tYear);
+      });
+      console.log("arrTeamGoals Size = " + _.size(arrTeamGoals));*/
+
       response.render('player', {
-        player: result
+        player: result,
+        graphData: arrData
       });
     },
     error: function(error) {

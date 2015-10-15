@@ -5,23 +5,44 @@ var mailgun = require('mailgun');
 mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
 Parse.Cloud.define("sendTweet", function(request, response) {
-	twitter.request({
-   url: 'statuses/update',
-   params: {
-    status: request.params.status
-  }
-}).then(function(httpResponse) {
-  console.log('sendTweet(): ' + httpResponse.text);
-  response.success("Tweet succesfully sent");
-}, function(httpResponse) {
-  console.log('sendTweet(): Request failed with response code ' + httpResponse.status);
-  console.log('sendTweet(): Response text: ' + httpResponse.text);
-  response.error('Sending Tweet failed with response code ' + httpResponse.status);
+  	twitter.request({
+      url: 'statuses/update',
+      params: {
+        status: request.params.status
+      }
+  }).then(function(httpResponse) {
+      console.log('sendTweet(): ' + httpResponse.text);
+      response.success("Tweet succesfully sent");
+  }, function(httpResponse) {
+      console.log('sendTweet(): Request failed with response code ' + httpResponse.status);
+      console.log('sendTweet(): Response text: ' + httpResponse.text);
+      response.error('Sending Tweet failed with response code ' + httpResponse.status);
+  });
 });
+
+Parse.Cloud.define("getTeams", function(request, response) {
+    var Team = Parse.Object.extend('Team');
+    var teamsQuery = new Parse.Query(Team);
+    teamsQuery.include(['nhlTeam','captain','lieutenant']);
+    teamsQuery.find().then(function(results) {
+        response.success(results);                            
+    }, function(error) {
+      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
+Parse.Cloud.define("getPlayers", function(request, response) {
+    var Player = Parse.Object.extend('Player');
+    var playersQuery = new Parse.Query(Player);
+    playersQuery.include('team');
+    playersQuery.find().then(function(results) {
+        response.success(results);                            
+    }, function(error) {
+      response.error("Players retrieval failed with error.code " + error.code + " error.message " + error.message);
+    });
 });
 
 Parse.Cloud.define("createPlayer", function(request, response) {
-	Parse.Cloud.useMasterKey();
 	var Player = Parse.Object.extend("Player");
  var player = new Player();
 
@@ -833,88 +854,4 @@ return promise;
    }, function(error){
     response.error("Script failed with error.code " + error.code + " error.message " + error.message);
   });
-});
-
-Parse.Cloud.define("getSortedTeamListGoalsFor", function(request, response) {
-    var Team = Parse.Object.extend('Team');
-    var teamsQuery = new Parse.Query(Team);
-    teamsQuery.include(['nhlTeam','captain','lieutenant']);
-    teamsQuery.find().then(function(results) {
-        var sortedList = _.sortBy(results, function(result){
-                            var stats = result.get("stats");
-                            var gf = 0;
-                            _.each(stats.seasons, function(season) {
-                              //console.log("season.gf = " + season.gf);
-                              gf = gf+season.gf;
-                            });
-                            //console.log(gf + " for " + result.get("team_name"));
-                            return gf; 
-                          });
-        sortedList = sortedList.reverse();
-
-        /*console.log("--------- after sort ------------");
-        _.each(sortedList, function(team){
-          var stats = team.get("stats");
-          var gf = 0;
-          var count = 0;
-          _.each(stats.seasons, function(season) {
-            //console.log("year = " + season.season);
-            gf = gf+season.gf;
-            count = count + 1;
-          });
-
-          console.log(gf + " for " + team.get("team_name") + " in " + count + " seasons");
-        });*/
-        
-        response.success(sortedList);                            
-
-    }, function(error) {
-      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
-    });
-});
-
-Parse.Cloud.define("getSortedTeamListWins", function(request, response) {
-    var Team = Parse.Object.extend('Team');
-    var teamsQuery = new Parse.Query(Team);
-    teamsQuery.include(['nhlTeam','captain','lieutenant']);
-    teamsQuery.find().then(function(results) {
-        var sortedList = _.sortBy(results, function(result){
-                            var stats = result.get("stats");
-                            var wins = 0;
-                            _.each(stats.seasons, function(season) {
-                              wins = wins+season.wins;
-                            });
-                            return wins; 
-                          });
-        sortedList = sortedList.reverse();
-        
-        response.success(sortedList);                            
-
-    }, function(error) {
-      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
-    });
-});
-
-Parse.Cloud.define("getSortedTeamListPlayoffWins", function(request, response) {
-    var Team = Parse.Object.extend('Team');
-    var teamsQuery = new Parse.Query(Team);
-    teamsQuery.include(['nhlTeam','captain','lieutenant']);
-    teamsQuery.find().then(function(results) {
-        var sortedList = _.sortBy(results, function(result){
-                            var stats = result.get("stats");
-                            var wins = 0;
-                            _.each(stats.seasons, function(season) {
-                                if ((typeof(season.playoffs) !== 'undefined') && (season.playoffs.gp > 0)) {
-                                  wins = wins+season.playoffs.wins;
-                                }
-                            });
-                            return wins; 
-                          });
-        sortedList = sortedList.reverse();
-        
-        response.success(sortedList);                            
-
-    }, function(error) {
-      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
-    });
 });

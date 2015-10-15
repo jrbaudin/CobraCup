@@ -23,8 +23,21 @@ body {
 	color: #2ECC71 !important;
 }
 
+.positive{
+  color: #2ECC71 !important;
+}
+
+.negative{
+  color: #E74C3C !important;
+}
+
 .small-table-header{
 	font-size: 14px;
+}
+
+.canvas-mod{
+  width: 100%;
+  height: auto;
 }
 
 .small-table-rows{
@@ -58,4 +71,11 @@ a:focus {
 .table-hover > tbody > tr:hover > .statstable,
 .table-hover > tbody > tr.statstable:hover > th {
  background-color: #e46a5d ;
+}
+
+.nav-tabs.compact > li > a {
+  font-size: 0.9em;
+  padding: 4px 5px;
+  margin-right: 4px;
+  line-height: 16px;
 }

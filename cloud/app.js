@@ -9,6 +9,7 @@ Mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
  
 // Controller code in separate files.
 var hubController = require('cloud/controllers/hub.js');
+var testController = require('cloud/controllers/test.js');
 var singupController = require('cloud/controllers/signup.js');
 var teamController = require('cloud/controllers/team.js');
 var playerController = require('cloud/controllers/player.js');
@@ -79,6 +80,8 @@ app.locals.getAge = function(birthday) {
 
 // Show homepage
 app.get('/', hubController.index); 
+
+app.get('/test', testController.load); 
 
 app.get('/signup', singupController.new);
 app.put('/signup', singupController.create);

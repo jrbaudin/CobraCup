@@ -54,7 +54,9 @@
                     <li><a href="/stat/playerstats">Spelarstatistik</a></li>
                   </ul>
                 </li>
-                <li><a href="/stat/history">Statistik</a></li>
+
+                <li class="active"><a href="/stat/history">Statistik</a></li>
+                
                 <li><a href="/games">Matcher</a></li>
                 <li><a href="/feed"><mark>Live</mark></a></li>
                 <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
@@ -88,20 +90,20 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                            <table class="table table-condensed table-striped" style="margin-bottom: 0;">
                                 <thead style="font-size: 13px;">
                                     <tr>
-                                        <th></th>
-                                        <th class="text-center text-uppercase">Lag</th>
-                                        <th class="text-uppercase">Namn</th>
+                                        <th class="text-center">Rank</th>
+                                        <th class="text-center">Lag</th>
+                                        <th>Namn</th>
                                         <th class="text-center text-uppercase" title="Games Played">GP</th>
                                         <th class="text-center text-uppercase" title="Wins">W</th>
                                         <th class="text-center text-uppercase" title="Losses">L</th>
                                         <th class="text-center text-uppercase" title="Overtime Losses">OT</th>
-                                        <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
+                                        <th class="text-center text-uppercase info" style="font-size: 14px;" title="Points"><strong>P</strong></th>
                                         <th class="text-center text-uppercase" title="Goals For">GF</th>
                                         <th class="text-center text-uppercase" title="Goals Against">GA</th>
-                                        <th class="text-center text-uppercase">+/-</th>
+                                        <th class="text-center text-uppercase" title="Goal Differential">DIFF</th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px;">
@@ -113,7 +115,11 @@
                                                 var goalsAgainst = parseInt(standing.get("goals_against"));
                                                 var difference = goalsFor-goalsAgainst;
                                                 %>
-                                                <tr>
+                                                <% if (i == 2) { %>
+                                                    <tr style="border-bottom: 2pt solid rgba(52,73,94,0.3);">
+                                                <% } else { %>
+                                                    <tr>
+                                                <% } %>
                                                     <td class="text-center"><%= i %></td>
                                                     <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
                                                     <td><%= standing.get("team").get("team_name") %></td>
@@ -121,7 +127,7 @@
                                                     <td class="text-center"><%= standing.get("wins") %></td>
                                                     <td class="text-center"><%= standing.get("losses") %></td>
                                                     <td class="text-center"><%= standing.get("ot_losses") %></td>
-                                                    <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
+                                                    <td class="text-center info" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
                                                     <td class="text-center"><%= standing.get("goals_for") %></td>
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
                                                     <td class="text-center"><strong><%= difference %></strong></td>
@@ -133,7 +139,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against, <strong>DIFF</strong>-Goal Differential</small>
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -152,20 +158,20 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                            <table class="table table-condensed table-striped" style="margin-bottom: 0;">
                                 <thead style="font-size: 13px;">
                                     <tr>
-                                        <th></th>
-                                        <th class="text-center text-uppercase">Lag</th>
-                                        <th class="text-uppercase">Namn</th>
+                                        <th class="text-center">Rank</th>
+                                        <th class="text-center">Lag</th>
+                                        <th>Namn</th>
                                         <th class="text-center text-uppercase" title="Games Played">GP</th>
                                         <th class="text-center text-uppercase" title="Wins">W</th>
                                         <th class="text-center text-uppercase" title="Losses">L</th>
                                         <th class="text-center text-uppercase" title="Overtime Losses">OT</th>
-                                        <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
+                                        <th class="text-center text-uppercase info" style="font-size: 14px;" title="Points"><strong>P</strong></th>
                                         <th class="text-center text-uppercase" title="Goals For">GF</th>
                                         <th class="text-center text-uppercase" title="Goals Against">GA</th>
-                                        <th class="text-center text-uppercase">+/-</th>
+                                        <th class="text-center text-uppercase" title="Goal Differential">DIFF</th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px;">
@@ -177,7 +183,11 @@
                                                 var goalsAgainst = parseInt(standing.get("goals_against"));
                                                 var difference = goalsFor-goalsAgainst;
                                                 %>
-                                                <tr>
+                                                <% if (i == 2) { %>
+                                                    <tr style="border-bottom: 2pt solid rgba(52,73,94,0.3);">
+                                                <% } else { %>
+                                                    <tr>
+                                                <% } %>
                                                     <td class="text-center"><%= i %></td>
                                                     <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
                                                     <td><%= standing.get("team").get("team_name") %></td>
@@ -185,7 +195,7 @@
                                                     <td class="text-center"><%= standing.get("wins") %></td>
                                                     <td class="text-center"><%= standing.get("losses") %></td>
                                                     <td class="text-center"><%= standing.get("ot_losses") %></td>
-                                                    <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
+                                                    <td class="text-center info" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
                                                     <td class="text-center"><%= standing.get("goals_for") %></td>
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
                                                     <td class="text-center"><strong><%= difference %></strong></td>
@@ -197,7 +207,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against, <strong>DIFF</strong>-Goal Differential</small>
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -218,20 +228,20 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                            <table class="table table-condensed table-striped" style="margin-bottom: 0;">
                                 <thead style="font-size: 13px;">
                                     <tr>
-                                        <th></th>
-                                        <th class="text-center text-uppercase">Lag</th>
-                                        <th class="text-uppercase">Namn</th>
+                                        <th class="text-center">Rank</th>
+                                        <th class="text-center">Lag</th>
+                                        <th>Namn</th>
                                         <th class="text-center text-uppercase" title="Games Played">GP</th>
                                         <th class="text-center text-uppercase" title="Wins">W</th>
                                         <th class="text-center text-uppercase" title="Losses">L</th>
                                         <th class="text-center text-uppercase" title="Overtime Losses">OT</th>
-                                        <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
+                                        <th class="text-center text-uppercase info" style="font-size: 14px;" title="Points"><strong>P</strong></th>
                                         <th class="text-center text-uppercase" title="Goals For">GF</th>
                                         <th class="text-center text-uppercase" title="Goals Against">GA</th>
-                                        <th class="text-center text-uppercase">+/-</th>
+                                        <th class="text-center text-uppercase" title="Goal Differential">DIFF</th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px;">
@@ -243,7 +253,11 @@
                                                 var goalsAgainst = parseInt(standing.get("goals_against"));
                                                 var difference = goalsFor-goalsAgainst;
                                                 %>
-                                                <tr>
+                                                <% if (i == 2) { %>
+                                                    <tr style="border-bottom: 2pt solid rgba(52,73,94,0.3);">
+                                                <% } else { %>
+                                                    <tr>
+                                                <% } %>
                                                     <td class="text-center"><%= i %></td>
                                                     <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
                                                     <td><%= standing.get("team").get("team_name") %></td>
@@ -251,7 +265,7 @@
                                                     <td class="text-center"><%= standing.get("wins") %></td>
                                                     <td class="text-center"><%= standing.get("losses") %></td>
                                                     <td class="text-center"><%= standing.get("ot_losses") %></td>
-                                                    <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
+                                                    <td class="text-center info" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
                                                     <td class="text-center"><%= standing.get("goals_for") %></td>
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
                                                     <td class="text-center"><strong><%= difference %></strong></td>
@@ -263,7 +277,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against, <strong>DIFF</strong>-Goal Differential</small>
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -282,20 +296,20 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
+                            <table class="table table-condensed table-striped" style="margin-bottom: 0;">
                                 <thead style="font-size: 13px;">
                                     <tr>
-                                        <th></th>
-                                        <th class="text-center text-uppercase">Lag</th>
-                                        <th class="text-uppercase">Namn</th>
+                                        <th class="text-center">Rank</th>
+                                        <th class="text-center">Lag</th>
+                                        <th>Namn</th>
                                         <th class="text-center text-uppercase" title="Games Played">GP</th>
                                         <th class="text-center text-uppercase" title="Wins">W</th>
                                         <th class="text-center text-uppercase" title="Losses">L</th>
                                         <th class="text-center text-uppercase" title="Overtime Losses">OT</th>
-                                        <th class="text-center text-uppercase bg-warning" style="font-size: 14px;" title="Points"><strong>P</strong></th>
+                                        <th class="text-center text-uppercase info" style="font-size: 14px;" title="Points"><strong>P</strong></th>
                                         <th class="text-center text-uppercase" title="Goals For">GF</th>
                                         <th class="text-center text-uppercase" title="Goals Against">GA</th>
-                                        <th class="text-center text-uppercase">+/-</th>
+                                        <th class="text-center text-uppercase" title="Goal Differential">DIFF</th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px;">
@@ -307,7 +321,11 @@
                                                 var goalsAgainst = parseInt(standing.get("goals_against"));
                                                 var difference = goalsFor-goalsAgainst;
                                                 %>
-                                                <tr>
+                                                <% if (i == 2) { %>
+                                                    <tr style="border-bottom: 2pt solid rgba(52,73,94,0.3);">
+                                                <% } else { %>
+                                                    <tr>
+                                                <% } %>
                                                     <td class="text-center"><%= i %></td>
                                                     <td><a href="/team/<%= standing.get("team").get("team_id") %>" target="_blank"><img src="<%= standing.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
                                                     <td><%= standing.get("team").get("team_name") %></td>
@@ -315,7 +333,7 @@
                                                     <td class="text-center"><%= standing.get("wins") %></td>
                                                     <td class="text-center"><%= standing.get("losses") %></td>
                                                     <td class="text-center"><%= standing.get("ot_losses") %></td>
-                                                    <td class="text-center" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
+                                                    <td class="text-center info" style="font-size: 13px;"><strong><%= standing.get("points") %></strong></td>
                                                     <td class="text-center"><%= standing.get("goals_for") %></td>
                                                     <td class="text-center"><%= standing.get("goals_against") %></td>
                                                     <td class="text-center"><strong><%= difference %></strong></td>
@@ -327,7 +345,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against</small>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>OT</strong>-Overtime Losses, <strong>P</strong>-Points, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against, <strong>DIFF</strong>-Goal Differential</small>
                     </div>
                     <!-- /.panel-body -->
                 </div>

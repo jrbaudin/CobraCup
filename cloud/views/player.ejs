@@ -81,7 +81,7 @@
         <% } %>
         <% if(typeof(player) !== 'undefined'){ %>
             <div class="col-md-12">
-                <div class="panel" style="background-color: #eff0f2;">
+                <div class="panel">
                     <div class="panel-body">
                         <!--
                         <div class="media">
@@ -255,7 +255,7 @@
                         <hr>
                         <div class="col-md-12">
                             <% var stats = player[0].get("stats"); %>
-                            <% var trans = player[0].get("transactions"); %>
+                            <% var trans = player[0].get("transactions"); %>                            
 
                             <p class="text-uppercase" style="margin-bottom:2px;"><strong>Karriärstatistik</strong></p>
                             <div class="table-responsive" style="margin-bottom:30px;">
@@ -356,7 +356,7 @@
                             </div>
 
                             <p class="text-uppercase" style="margin-bottom:2px;"><strong>Transaktioner</strong></p>
-                            <div class="table-responsive" style="margin-bottom:30px;">
+                            <div class="table-responsive">
                                 <table class="table table-bordered table-condensed table-striped" style="margin-bottom: 0;">
                                     <thead class="small-table-header">
                                         <tr class="statstable">
@@ -384,7 +384,12 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>F</strong>-Fights</small>
+                            <small style="font-size: 10px; margin-bottom:30px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>F</strong>-Fights</small>
+                            <div class="clearfix"></div>
+                            <div class="col-md-6">
+                                <p class="text-uppercase" style="margin-bottom:2px;"><strong>Måltrend</strong></p>
+                                <canvas id="myChart" class="canvas-mod" width="400" height="400"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -405,15 +410,49 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="../dist/js/flat-ui.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+
     <!-- jQuery Version 1.11.0 -->
     <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
 
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
     <script>
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-    });
+
+        var arrData = [];
+        var graphDataObj = <%- JSON.stringify(graphData) %>
+        if (typeof(graphDataObj) !== 'undefined') {
+            arrData = graphDataObj;
+        } 
+
+        var data = {
+            labels: ["2014", "2015"],
+            datasets: [
+                {
+                    label: "Player Goals",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: arrData
+                }
+            ]
+        };
+
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var myLineChart = new Chart(ctx).Line(data, {
+            scaleOverride: true, 
+            scaleStartValue: 0,
+            scaleStepWidth: 5,
+            scaleSteps: 6,
+            responsive: true
+        });
+
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 </body>
 

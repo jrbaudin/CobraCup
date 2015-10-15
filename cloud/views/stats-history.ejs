@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include header section which holds imports for shared elements -->
+    <% include _header %>
+
+    <title>Statistik - Cobra Cup</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- <link rel="stylesheet" href="../../dist/css/vendor/bootstrap.min.css" > -->
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="../../dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="../../stylesheets/style.css">
+    <script>
+     !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+     arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+     d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+     insertBefore(d,q)}(window,document,'script','_gs');
+
+     _gs('GSN-270173-J');
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/"><i class="fa fa-cube"></i> Hub <span style="font-family: 'Kaushan Script', cursive;">2016</span></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="/">Lag</a></li>
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Anmäl lag <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/signup">Cobra Cup</a></li>
+                        <li><a href="/signup/rookie">Hot Rod Cup</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="/stat/league">Ligan</a></li>
+                    <li><a href="/stat/divisions">Divisioner</a></li>
+                    <li><a href="/stat/playerstats">Spelarstatistik</a></li>
+                  </ul>
+                </li>
+                <li class="active"><a href="/stat/history">Statistik</a></li>
+                <li><a href="/games">Matcher</a></li>
+                <li><a href="/feed"><mark>Live</mark></a></li>
+                <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
+              </ul>
+              <% if(typeof(count) !== 'undefined'){ %>
+                <p class="navbar-text navbar-right"><strong><%= count %>/16 lag</strong></p>
+              <% } %>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    <div class="container">
+        <% if(typeof(flash) !== 'undefined'){ %>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Fel!</strong> <%= flash %>.
+            </div>
+        <% } %>
+        <% if(typeof(flashError) !== 'undefined'){ %>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <strong>Fel!</strong> <%= flashError %>
+            </div>
+        <% } %> 
+        <div id="content" class="panel panel-default">
+
+            <ul id="tabs1" class="nav nav-tabs nav-justified" data-tabs="tabs" role="tablist">
+                <li role="presentation" class="active text-uppercase info" data-toggle="tab" aria-controls="team" role="tab"><a href="#team"><strong>Lag</strong></a></li>
+                <li role="presentation" class="text-uppercase warning" data-toggle="tab" aria-controls="player" role="tab"><a href="#player"><strong>Spelare</strong></a></li>
+            </ul>
+
+            <div id="stats-content" class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="team">
+                    <ul id="tabs" class="nav nav-tabs nav-justified compact" data-tabs="tabs" role="tablist">
+                        <li role="presentation" class="active text-uppercase" data-toggle="tab" aria-controls="goals" role="tab"><a href="#goals"><small>Mål</small></a></li>
+                        <li role="presentation" class="text-uppercase" data-toggle="tab" aria-controls="wins" role="tab"><a href="#wins"><small>Vinster i gruppspel</small></a></li>
+                        <li role="presentation" class="text-uppercase" data-toggle="tab" aria-controls="playoff-wins" role="tab"><a href="#playoff-wins"><small>Vinster i slutspel</small></a></li>
+                    </ul>
+
+                    <div id="my-tab-content" class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="goals">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h6 class="panel-title text-uppercase">
+                                        Mål <small>totalt under alla säsonger</small>
+                                    </h6>
+                                </div>
+                                <div class="panel-body table-responsive">
+                                    <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                                        <thead style="font-size: 13px;">
+                                            <tr>
+                                                <th class="text-center">Rank</th>
+                                                <th>Lag</th>
+                                                <th class="text-center text-uppercase" title="Seasons Played">SP</th>
+                                                <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                                <th class="text-center text-uppercase success" title="Goals"><strong>GF</strong></th>
+                                                <th class="text-center text-uppercase" title="Games Played">GA</th>
+                                                <th class="text-center text-uppercase" title="Goals For Per Game">GF/GP</th>
+                                                <th class="text-center text-uppercase" title="Goals Against Per Game">GA/GP</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-size: 12px;">
+                                            <% if(typeof(teamsGF) !== 'undefined'){
+                                                var i = 1;
+
+                                                teamsGF.forEach(function(team) { 
+                                                    var stats = team.get("stats");
+                                                    var gf = 0;
+                                                    var ga = 0;
+                                                    var gp = 0;
+                                                    var count = 0;
+                                                    _.each(stats.seasons, function(season) {
+                                                      gf = gf+season.gf;
+                                                      ga = ga+season.ga;
+                                                      gp = gp+season.gp;
+                                                      count = count + 1;
+                                                    });
+
+                                                    var ratio = 0;
+
+                                                    if ((gf > 0) || (gp > 0)){
+                                                        ratio = (gf / gp).toFixed(2);
+                                                    }
+
+                                                    var goalsAgainst = 0;
+
+                                                    if (ga > 0){
+                                                        goalsAgainst = (ga / gp).toFixed(2);
+                                                    }
+
+                                                    %>
+                                                    <tr>
+                                                        <td class="text-center"><%= i %></td>
+                                                        <td><a href="/team/<%= team.get("team_id") %>" target="_blank"><%= team.get("team_name") %></a></td>
+                                                        <td class="text-center"><%= count %></td>
+                                                        <td class="text-center"><%= gp %></td>
+                                                        <td class="text-center success"><strong><%= gf %></strong></td>
+                                                        <td class="text-center"><%= ga %></td>
+                                                        <td class="text-center"><%= ratio %></td>
+                                                        <td class="text-center"><%= goalsAgainst %></td>
+                                                    </tr>
+                                                    <% i = i+1;
+                                                }) %>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                    <small style="font-size: 10px;"><strong>SP</strong>-Seasons Played, <strong>GP</strong>-Games Played, <strong>GF</strong>-Goals For, <strong>GA</strong>-Goals Against, <strong>GF/GP</strong>-Goals For Per Game, <strong>GA/GP</strong>-Goals Against Per Game</small>
+                                </div>
+                                <!-- /.panel-body -->
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="wins">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h6 class="panel-title text-uppercase">
+                                        Vinster i Gruppspel <small>totalt under alla säsonger</small>
+                                    </h6>
+                                </div>
+                                <div class="panel-body table-responsive">
+                                    <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                                        <thead style="font-size: 13px;">
+                                            <tr>
+                                                <th class="text-center">Rank</th>
+                                                <th>Lag</th>
+                                                <th class="text-center text-uppercase" title="Seasons Played">SP</th>
+                                                <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                                <th class="text-center text-uppercase success" title="Wins"><strong>W</strong></th>
+                                                <th class="text-center text-uppercase" title="Losses">L</th>
+                                                <th class="text-center text-uppercase" title="Ties">T</th>
+                                                <th class="text-center text-uppercase" title="Win Percentage">WIN%</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-size: 12px;">
+                                            <% if(typeof(teamsWins) !== 'undefined'){
+                                                var i = 1;
+
+                                                teamsWins.forEach(function(team) { 
+                                                    var stats = team.get("stats");
+                                                    var wins = 0;
+                                                    var losses = 0;
+                                                    var ties = 0;
+                                                    var gp = 0;
+                                                    var count = 0;
+
+                                                    _.each(stats.seasons, function(season) {
+                                                      wins = wins+season.wins;
+                                                      losses = losses+season.losses;
+                                                      ties = ties+season.ties;
+                                                      gp = gp+season.gp;
+                                                      count = count + 1;
+                                                    });
+
+                                                    var ratio = 0;
+
+                                                    if (wins > 0){
+                                                        ratio = ((wins / gp) * 100);
+                                                        if (_.isNumber(ratio)){
+                                                            ratio = Math.round(ratio);
+                                                        }
+                                                    }
+
+                                                    %>
+                                                    <tr>
+                                                        <td class="text-center"><%= i %></td>
+                                                        <td><a href="/team/<%= team.get("team_id") %>" target="_blank"><%= team.get("team_name") %></a></td>
+                                                        <td class="text-center"><%= count %></td>
+                                                        <td class="text-center"><%= gp %></td>
+                                                        <td class="text-center success"><strong><%= wins %></strong></td>
+                                                        <td class="text-center"><%= losses %></td>
+                                                        <td class="text-center"><%= ties %></td>
+                                                        <td class="text-center"><%= ratio %>%</td>
+                                                    </tr>
+                                                    <% i = i+1;
+                                                }) %>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                    <small style="font-size: 10px;"><strong>SP</strong>-Seasons Played, <strong>GP</strong>-Games Played, <strong>L</strong>-Losses, <strong>T</strong>-Ties, <strong>W</strong>-Wins, <strong>WIN%</strong>-Wins per played game</small>
+                                </div>
+                                <!-- /.panel-body -->
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="playoff-wins">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h6 class="panel-title text-uppercase">
+                                        Vinster i Slutspel <small>totalt under alla säsonger</small>
+                                    </h6>
+                                </div>
+                                <div class="panel-body table-responsive">
+                                    <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                                        <thead style="font-size: 13px;">
+                                            <tr>
+                                                <th class="text-center">Rank</th>
+                                                <th>Lag</th>
+                                                <th class="text-center text-uppercase" title="Seasons Played">PP</th>
+                                                <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                                <th class="text-center text-uppercase success" title="Wins"><strong>w</strong></th>
+                                                <th class="text-center text-uppercase" title="Losses">L</th>
+                                                <th class="text-center text-uppercase" title="Win Percentage">WIN%</th>
+                                                <th class="text-center text-uppercase" title="Avg Wins per Playoff">WPP</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-size: 12px;">
+                                            <% if(typeof(teamsPOWins) !== 'undefined'){
+                                                var i = 1;
+
+                                                teamsPOWins.forEach(function(team) { 
+                                                    var stats = team.get("stats");
+                                                    var wins = 0;
+                                                    var losses = 0;
+                                                    var gp = 0;
+                                                    var count = 0;
+                                                    _.each(stats.seasons, function(season) {
+                                                      if ((typeof(season.playoffs) !== 'undefined') && (season.playoffs.gp > 0)) {
+                                                        wins = wins+season.playoffs.wins;
+                                                        losses = losses+season.playoffs.losses;
+                                                        gp = gp+season.playoffs.gp;
+                                                        count = count + 1;
+                                                      }
+                                                    });
+
+                                                    var ratio = 0;
+
+                                                    if ((wins > 0)){
+                                                        ratio = (wins / count).toFixed(2);
+                                                    } else {
+                                                        ratio = "0.00"
+                                                    }
+
+                                                    var winRatio = 0;
+
+                                                    if (wins > 0){
+                                                        winRatio = ((wins / gp) * 100);
+                                                        if (_.isNumber(winRatio)){
+                                                            winRatio = Math.round(winRatio);
+                                                        }
+                                                    }
+
+                                                    %>
+                                                    <tr>
+                                                        <td class="text-center"><%= i %></td>
+                                                        <td><a href="/team/<%= team.get("team_id") %>" target="_blank"><%= team.get("team_name") %></a></td>
+                                                        <td class="text-center"><%= count %></td>
+                                                        <td class="text-center"><%= gp %></td>
+                                                        <td class="text-center success"><strong><%= wins %></strong></td>
+                                                        <td class="text-center"><%= losses %></td>
+                                                        <td class="text-center"><%= winRatio %>%</td>
+                                                        <td class="text-center"><%= ratio %></td>
+                                                    </tr>
+                                                    <% i = i+1;
+                                                }) %>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                    <small style="font-size: 10px;"><strong>PP</strong>-Playoffs Played, <strong>GP</strong>-Games Played, <strong>W</strong>-Wins, <strong>L</strong>-Losses, <strong>WIN%</strong>-Wins per played game, <strong>WPP</strong>-Average Wins per Playoff</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="player">
+                    <ul id="tabs" class="nav nav-tabs nav-justified compact" data-tabs="tabs" role="tablist">
+                        <li role="presentation" class="active text-uppercase" data-toggle="tab" aria-controls="pGoals" role="tab"><a href="#pGoals"><small>Mål</small></a></li>
+                        <li role="presentation" class="text-uppercase" data-toggle="tab" aria-controls="pFights" role="tab"><a href="#pFights"><small>Fajter</small></a></li>
+                    </ul>
+
+                    <div id="my-tab-content" class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="pGoals">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h6 class="panel-title text-uppercase">
+                                        Mål <small>totalt under alla säsonger</small>
+                                    </h6>
+                                </div>
+                                <div class="panel-body table-responsive">
+                                    <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                                        <thead style="font-size: 13px;">
+                                            <tr>
+                                                <th class="text-center">Rank</th>
+                                                <th>Namn</th>
+                                                <th>Lag</th>
+                                                <th class="text-center text-uppercase" title="Seasons Played">SP</th>
+                                                <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                                <th class="text-center text-uppercase success" title="Goals"><strong>G</strong></th>
+                                                <th class="text-center text-uppercase" title="Goals For Per Game">G/GP</th>
+                                                <th class="text-center text-uppercase" title="Goal Scoring Trend">GST</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-size: 12px;">
+                                            <% if(typeof(playerGoals) !== 'undefined'){
+                                                var i = 1;
+
+                                                playerGoals.forEach(function(player) { 
+                                                    var stats = player.get("stats");
+                                                    var goals = 0;
+                                                    var gp = 0;
+                                                    var count = 0;
+                                                    
+                                                    _.each(stats.seasons, function(season) {
+                                                      goals = goals+season.goals;
+                                                      gp = gp+season.gp;
+                                                      count = count + 1;
+                                                    });
+
+                                                    var ratio = 0;
+
+                                                    if (goals > 0){
+                                                        ratio = (goals / gp).toFixed(2);
+                                                    }
+
+
+                                                    var size = _.size(stats.seasons);
+
+                                                    if(size > 1) {
+                                                        var goalsList = _.sortBy(stats.seasons, function(result){
+                                                                            return result.season; 
+                                                                        });
+                                                
+                                                        var goalsPluck = _.pluck(goalsList, 'goals');
+
+                                                        var lastVal = 0;
+                                                        var secondLastVal = 0;
+
+                                                        if(_.size(goalsPluck) > 1){
+                                                            lastVal = goalsPluck[_.size(goalsPluck)-1];
+                                                            secondLastVal = goalsPluck[_.size(goalsPluck)-2];
+                                                        }        
+                                                    }
+
+                                                    %>
+                                                    <tr>
+                                                        <td class="text-center"><%= i %></td>
+                                                        <td><a href="/player/<%= player.get("player_id") %>" target="_blank"><%= player.get("name") %></a></td>
+                                                        <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><%= player.get("team").get("team_name") %></a></td>
+                                                        <td class="text-center"><%= count %></td>
+                                                        <td class="text-center"><%= gp %></td>
+                                                        <td class="text-center success"><strong><%= goals %></strong></td>
+                                                        <td class="text-center"><%= ratio %></td>
+                                                        <% if(lastVal > secondLastVal) { %>
+                                                            <td class="text-center positive"><i class="fa fa-arrow-up"></i></td>
+                                                        <% } else if(_.isEqual(lastVal, secondLastVal)){ %>
+                                                            <td class="text-center"><i class="fa fa-minus"></td>
+                                                        <% } else { %>
+                                                            <td class="text-center negative"><i class="fa fa-arrow-down"></i></td>
+                                                        <% } %>
+                                                    </tr>
+                                                    <% i = i+1;
+                                                }) %>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                    <small style="font-size: 10px;"><strong>SP</strong>-Seasons Played, <strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>G/GP</strong>-Goals Per Game, <strong>GST</strong>-Goal Scoring Trend</small>
+                                </div>
+                                <!-- /.panel-body -->
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="pFights">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h6 class="panel-title text-uppercase">
+                                        Fajter <small>totalt under alla säsonger</small>
+                                    </h6>
+                                </div>
+                                <div class="panel-body table-responsive">
+                                    <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                                        <thead style="font-size: 13px;">
+                                            <tr>
+                                                <th class="text-center">Rank</th>
+                                                <th>Namn</th>
+                                                <th>Lag</th>
+                                                <th class="text-center text-uppercase" title="Seasons Played">SP</th>
+                                                <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                                <th class="text-center text-uppercase success" title="Fights"><strong>F</strong></th>
+                                                <th class="text-center text-uppercase" title="Fights For Per Game">F/GP</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-size: 12px;">
+                                            <% if(typeof(playerFights) !== 'undefined'){
+                                                var i = 1;
+
+                                                playerFights.forEach(function(player) { 
+                                                    var stats = player.get("stats");
+                                                    var fights = 0;
+                                                    var gp = 0;
+                                                    var count = 0;
+                                                    _.each(stats.seasons, function(season) {
+                                                      fights = fights+season.fights;
+                                                      gp = gp+season.gp;
+                                                      count = count + 1;
+                                                    });
+
+                                                    var ratio = 0;
+
+                                                    if (fights > 0){
+                                                        ratio = (fights / gp).toFixed(2);
+                                                    }
+
+                                                    %>
+                                                    <tr>
+                                                        <td class="text-center"><%= i %></td>
+                                                        <td><a href="/player/<%= player.get("player_id") %>" target="_blank"><%= player.get("name") %></a></td>
+                                                        <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><%= player.get("team").get("team_name") %></a></td>
+                                                        <td class="text-center"><%= count %></td>
+                                                        <td class="text-center"><%= gp %></td>
+                                                        <td class="text-center success"><strong><%= fights %></strong></td>
+                                                        <td class="text-center"><%= ratio %></td>
+                                                    </tr>
+                                                    <% i = i+1;
+                                                }) %>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                    <small style="font-size: 10px;"><strong>SP</strong>-Seasons Played, <strong>GP</strong>-Games Played, <strong>F</strong>-Fights, <strong>F/GP</strong>-Fights Per Game</small>
+                                </div>
+                                <!-- /.panel-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
+    <p class="text-center">
+        <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- <script src="../../dist/js/vendor/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../../dist/js/flat-ui.min.js"></script>
+
+    <!-- jQuery Version 1.11.0 -->
+    <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+    <script>
+        $("select").select2({dropdownCssClass: 'dropdown-inverse'});
+        $('#levelLbl').tooltip('hide');
+
+        $('#tabs a').click(function (e) {
+          e.preventDefault()
+          $(this).tab('show')
+        })
+
+        $('#tabs1 a').click(function (e) {
+          e.preventDefault()
+          $(this).tab('show')
+        })
+    </script>
+</body>
+
+</html>
