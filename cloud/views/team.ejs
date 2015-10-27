@@ -116,7 +116,7 @@
                 <strong>Observera!</strong> <%= warning %>
               </div>
             <% }) %>
-            
+
         <% } %>
         <% if(typeof(flashInfo) !== 'undefined'){ %>
             <div class="alert alert-success alert-dismissible" role="alert">
@@ -583,7 +583,7 @@
                                     </div>
                                     <div id="collapseTwoStat" class="panel-collapse collapse">
                                         <div class="panel-body" style="padding: 5px;">
-                                            <% if((typeof(teamObj[0]) !== 'undefined') && (typeof(standings) !== 'undefined')){
+                                            <% if((typeof(teamObj) !== 'undefined') && (typeof(standings) !== 'undefined')){
                                               var teamStanding = null;
 
                                               standings.forEach(function(standing) {

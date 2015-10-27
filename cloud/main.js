@@ -700,14 +700,13 @@ Parse.Cloud.afterDelete("Team", function(request) {
   nhlTeamQuery.equalTo('objectId', request.object.get("nhlTeam").id);
 
   nhlTeamQuery.find().then(function(team) {
-    console.log("Setting t");
     var level = request.object.get("level");
 
     if ((typeof(level) !== 'undefined') && (_.isEqual(level, "1"))) {
-      console.log("Setting taken_rookie status for " + request.object.get("nhlTeam").get("name") + " to false");
+      console.log("Setting taken_rookie status for " + team[0].get("name") + " to false");
       team[0].set('taken_rookie', false);
     } else {
-      console.log("Setting taken status for " + request.object.get("nhlTeam").get("name") + " to false");
+      console.log("Setting taken status for " + team[0].get("name") + " to false");
       team[0].set('taken', false);
     }
 
@@ -725,102 +724,78 @@ Parse.Cloud.define("deleteTeam", function(request, response) {
   teamQuery.include(['nhlTeam','captain','lieutenant']);
   teamQuery.equalTo('team_id', request.params.team_id);
 
-  var teamObj; 
+  var Standings = Parse.Object.extend('Standings');
+  var standingsQuery = new Parse.Query(Standings);
+  standingsQuery.matchesQuery('team', teamQuery);
 
-  teamQuery.find().then(function(result){
-    if((typeof(result[0]) !== 'undefined') && (typeof(result[0].id) !== 'undefined')){
+  var Player = Parse.Object.extend('Player');
+  var playerQuery = new Parse.Query(Player);
+  playerQuery.matchesQuery('team', teamQuery);
+
+  console.log("Looking for Standings object...");
+  standingsQuery.find().then(function(standing){
+    if(typeof(standing[0]) !== 'undefined'){
+
+      console.log("Found object in Standings with objectId = " + standing[0].id);
+
+      return standing[0].destroy();
+
+    } else {
+      console.log("Couldn't find a Standings object to delete");
+      return Parse.Promise.error("Couldn't find a Standings object to delete");
+    }
+
+  }).then(function(){
+      
+      console.log("Looking for Player objects...");
+
+      return playerQuery.find();
+
+  }).then(function(players){
+
+    if(typeof(players) !== 'undefined'){
+      var size = _.size(players);
+      console.log("Found " + size + " Player(s) to delete" + "\n" + "\n");
+
       var promise = Parse.Promise.as();
-      console.log("Found Team with objectId = " + result[0].id + "\n" + "\n");
 
-      teamObj = result[0];
-
-      promise = promise.then(function() {
-        return result[0].destroy();
+      _.each(players, function(player) {
+        console.log("Deleting Player with id " + player.id);
+        promise = promise.then(function() {
+          return player.destroy();
+        });
       });
 
       return promise;
 
     } else {
+      console.log("Couldn't find Player objects to delete");
+      return Parse.Promise.error("Couldn't find Player objects to delete");
+    }
+    
+  }).then(function(){
+
+    console.log("Looking for Team object...");
+
+    return teamQuery.find();
+
+  }).then(function(team){
+
+    if((typeof(team[0]) !== 'undefined') && (typeof(team[0].id) !== 'undefined')){
+      console.log("Found Team with objectId = " + team[0].id);
+
+      return team[0].destroy();
+
+    } else {
       console.log("No Team with id " + request.params.team_id + " was found");
       return Parse.Promise.error("No Team with id " + request.params.team_id + " was found");
     }
-
+  
   }).then(function(){
-    if((typeof(teamObj) !== 'undefined') && (!_.isNull(teamObj))){
-      console.log("Starting to delete standings object..." + "\n" + "\n");
-      var Team = Parse.Object.extend('Team');
-      var teamQuery = new Parse.Query(Team);
-      teamQuery.equalTo('team_id', teamObj.get("team_id"));
-
-      var Standings = Parse.Object.extend('Standings');
-      var standingsQuery = new Parse.Query(Standings);
-      standingsQuery.matchesQuery('team', teamQuery);
-
-      standingsQuery.find().then(function(standing) {
-        if((typeof(standing[0]) !== 'undefined') && (typeof(standing[0].id) !== 'undefined')){
-          var promise = Parse.Promise.as();
-
-          console.log("Found Standings with objectId = " + standing[0].id);
-
-          promise = promise.then(function() {
-            return standing[0].destroy();
-          });
-
-          return promise;
-
-        } else {
-          console.log("Couldn't find a Standings object to delete");
-          return Parse.Promise.error("Couldn't find a Standings object to delete");
-        }
-      }, function(error){
-        console.log("Error when looking for Standings object to delete");
-        return Parse.Promise.error("Error when looking for Standings object to delete");
-      });
-    } else {
-      console.log("the var teamObj was undefined or NULL, can't search for Standings");
-      return Parse.Promise.error("the var teamObj was undefined or NULL, can't search for Standings");
-    }
-  }).then(function(){
-    if((typeof(teamObj) !== 'undefined') && (!_.isNull(teamObj))){
-      var Team = Parse.Object.extend('Team');
-      var teamQuery = new Parse.Query(Team);
-      teamQuery.equalTo('team_id', teamObj.get("team_id"));
-
-      var Player = Parse.Object.extend('Player');
-      var playerQuery = new Parse.Query(Player);
-      playerQuery.matchesQuery('team', teamQuery);
-
-      playerQuery.find().then(function(players) {
-        if((typeof(players[0]) !== 'undefined') && (typeof(players[0].id) !== 'undefined')){
-          var size = _.size(players);
-          console.log("Found " + size + " Player(s) to delete" + "\n" + "\n");
-
-          var promise = Parse.Promise.as();
-          _.each(players, function(player) {
-            console.log("Deleting Player with id " + player.id);
-            promise = promise.then(function() {
-              return player.destroy();
-            });
-          });
-          return promise;
-
-        } else {
-          console.log("Couldn't find a Player(s) object(s) to delete");
-          return Parse.Promise.error("Couldn't find a Player(s) object(s) to delete");
-        }
-      }, function(error){
-        console.log("Error when looking for Player(s) object(s) to delete");
-        return Parse.Promise.error("Error when looking for Player(s) object(s) to delete");
-      });
-    } else {
-      console.log("the var teamObj was undefined or NULL, can't search for Player(s)");
-      return Parse.Promise.error("the var teamObj was undefined or NULL, can't search for Player(s)");
-    }
-
-  }).then(function(result){
-    console.log("Deleted the Team with objectId = " + teamObj.id + "\n" + "\n");
-    response.success("Deleted the Team with objectId = " + teamObj.id);
+    console.log("Deleted the Team with id = " + request.params.team_id + "\n" + "\n");
+    response.success("Deleted the Team with id = " + request.params.team_id);
   }, function(error) {
+
     if((typeof(error.code) !== 'undefined') || (typeof(error.message) !== 'undefined')){
         console.log("Deleting Team failed with error.code " + error.code + " error.message " + error.message);
         response.error("Deleting Team failed with error.code " + error.code + " error.message " + error.message);
@@ -828,6 +803,7 @@ Parse.Cloud.define("deleteTeam", function(request, response) {
         console.log("Deleting Team failed with error.message: " + error);
         response.error("Deleting Team failed with error.message: " + error);
     }
+
   });
 });
 
