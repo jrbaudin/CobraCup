@@ -6,18 +6,18 @@ mailgun.initialize('mg.cobracup.se', 'key-bc14dd14e4c28a20da1bdbc5f5f1223a');
 
 Parse.Cloud.define("sendTweet", function(request, response) {
   	twitter.request({
-      url: 'statuses/update',
-      params: {
-        status: request.params.status
-      }
-  }).then(function(httpResponse) {
-      console.log('sendTweet(): ' + httpResponse.text);
-      response.success("Tweet succesfully sent");
-  }, function(httpResponse) {
-      console.log('sendTweet(): Request failed with response code ' + httpResponse.status);
-      console.log('sendTweet(): Response text: ' + httpResponse.text);
-      response.error('Sending Tweet failed with response code ' + httpResponse.status);
-  });
+        url: 'statuses/update',
+        params: {
+          status: request.params.status
+        }
+    }).then(function(httpResponse) {
+        //console.log('sendTweet(): ' + httpResponse.text);
+        response.success("Tweet succesfully sent");
+    }, function(httpResponse) {
+        console.log('sendTweet(): Request failed with response code ' + httpResponse.status);
+        console.log('sendTweet(): Response text: ' + httpResponse.text);
+        response.error('Sending Tweet failed with response code ' + httpResponse.status);
+    });
 });
 
 Parse.Cloud.define("getTeams", function(request, response) {
@@ -43,23 +43,23 @@ Parse.Cloud.define("getPlayers", function(request, response) {
 });
 
 Parse.Cloud.define("createPlayer", function(request, response) {
-	var Player = Parse.Object.extend("Player");
- var player = new Player();
+    var Player = Parse.Object.extend("Player");
+    var player = new Player();
 
- player.set('name', request.params.name);
- player.set('email', request.params.email);
- player.set('gamertag', request.params.gamertag);
- player.set('telephone', request.params.telephone);
- player.set('fights', 0);
- player.set('goals', 0);
- var playerId = Math.floor((Math.random() * 100000) + 1);
- player.set('player_id', playerId.toString());
+    player.set('name', request.params.name);
+    player.set('email', request.params.email);
+    player.set('gamertag', request.params.gamertag);
+    player.set('telephone', request.params.telephone);
+    player.set('fights', 0);
+    player.set('goals', 0);
+    var playerId = Math.floor((Math.random() * 100000) + 1);
+    player.set('player_id', playerId.toString());
 
- player.save().then(function(result) {
-  response.success("Saved the Player with objectId = " + result.id);
-}, function(error) {
- response.error('Error saving Player, try again. Msg: ' + error.message);
-});
+    player.save().then(function(result) {
+        response.success("Saved the Player with objectId = " + result.id);
+    }, function(error) {
+        response.error('Error saving Player, try again. Msg: ' + error.message);
+    });
 });
 
 Parse.Cloud.define("getPlayer", function(request, response) {
@@ -223,430 +223,418 @@ Parse.Cloud.define("createPlayerPass", function(request, response) {
 
 /*** START Create PRO/ALLSTAR Team ***/
 Parse.Cloud.define("createTeam", function(request, response) {
+    var Team = Parse.Object.extend("Team");
+    var Player = Parse.Object.extend("Player");
 
-	var Team = Parse.Object.extend("Team");
-	var Player = Parse.Object.extend("Player");
+    var team = new Team();
 
-  var team = new Team();
+    var captain_name = request.params.captain_name;
+    var captain_email = request.params.captain_email;
+    var captain_telephone = request.params.captain_telephone;
+    var captain_gamertag = request.params.captain_gamertag;
 
-  var captain_name = request.params.captain_name;
-  var captain_email = request.params.captain_email;
-  var captain_telephone = request.params.captain_telephone;
-  var captain_gamertag = request.params.captain_gamertag;
+    var lieutenant_name = request.params.lieutenant_name;
+    var lieutenant_email = request.params.lieutenant_email;
+    var lieutenant_telephone = request.params.lieutenant_telephone;
+    var lieutenant_gamertag = request.params.lieutenant_gamertag;
 
-  var lieutenant_name = request.params.lieutenant_name;
-  var lieutenant_email = request.params.lieutenant_email;
-  var lieutenant_telephone = request.params.lieutenant_telephone;
-  var lieutenant_gamertag = request.params.lieutenant_gamertag;
+    var team_name = request.params.team_name;
+    var team_motto = request.params.team_motto;
+    var nhlTeam = request.params.nhlTeam;
+    var level = request.params.level;
+    var comment = request.params.comment;
+    var hidden = request.params.hidden;
 
-  var team_name = request.params.team_name;
-  var team_motto = request.params.team_motto;
-  var nhlTeam = request.params.nhlTeam;
-  var level = request.params.level;
-  var comment = request.params.comment;
-  var hidden = request.params.hidden;
+    var NHLTeam = Parse.Object.extend("NHLTeam");
+    var nhlTeamObj = new NHLTeam();
+    nhlTeamObj.id = nhlTeam;
 
-  var NHLTeam = Parse.Object.extend("NHLTeam");
-  var nhlTeamObj = new NHLTeam();
-  nhlTeamObj.id = nhlTeam;
+    team.set("nhlTeam", nhlTeamObj);
 
-  team.set("nhlTeam", nhlTeamObj);
+    var legend = ["-","-","-"];
+    var marathon = ["-","-","-"];
 
-  var legend = ["-","-","-"];
-  var marathon = ["-","-","-"];
+    team.set("legend", legend);
+    team.set("marathon", marathon);
 
-  team.set("legend", legend);
-  team.set("marathon", marathon);
+    team.set('team_name', team_name);
+    team.set('team_motto', team_motto);
+    team.set('level', level);
+    team.set('comment', comment);
 
-  team.set('team_name', team_name);
-  team.set('team_motto', team_motto);
-  team.set('level', level);
-  team.set('comment', comment);
+    team.set('group', "0");
 
-  team.set('group', "0");
+    team.set('qualified', false);
+    team.set('champion', false);
+    team.set('champion_comment', "");
 
-  team.set('qualified', false);
-  team.set('champion', false);
-  team.set('champion_comment', "");
+    var pass = Math.random().toString(36).slice(-8);
+    team.set('password', pass);
 
-  var pass = Math.random().toString(36).slice(-8);
-  team.set('password', pass);
+    var genId = Math.floor((Math.random() * 100000) + 1);
+    team.set('team_id', genId.toString());
 
-  var genId = Math.floor((Math.random() * 100000) + 1);
-  team.set('team_id', genId.toString());
+    if (_.isEmpty(hidden)) {hidden = false};
+    if(hidden === "true"){
+        hidden = true;
+    } else {
+        hidden = false;
+    }
 
-  if (_.isEmpty(hidden)) {hidden = false};
-  if(hidden === "true"){
-    hidden = true;
-  } else {
-    hidden = false;
-  }
+    team.set('hidden', hidden);
 
-  team.set('hidden', hidden);
+    //Create Captain object
+    var captain = new Player();
+    captain.set('name', captain_name);
+    captain.set('email', captain_email);
+    captain.set('telephone', captain_telephone);
 
-	//Create Captain object
-	var captain = new Player();
-	captain.set('name', captain_name);
-	captain.set('email', captain_email);
-	captain.set('telephone', captain_telephone);
+    if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
+    captain.set('gamertag', captain_gamertag);
 
-	if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
-	captain.set('gamertag', captain_gamertag);
+    var capId = Math.floor((Math.random() * 100000) + 1);
+    captain.set('player_id', capId.toString());
 
-	var capId = Math.floor((Math.random() * 100000) + 1);
-	captain.set('player_id', capId.toString());
+    captain.set('fights', 0);
+    captain.set('goals', 0);
+    captain.set('assists', 0);
+    captain.set('points', 0);
 
-	captain.set('fights', 0);
-	captain.set('goals', 0);
+    var pass1 = Math.random().toString(36).slice(-8);
+    captain.set('password', pass1);
 
-	//Create Lieutenant object
-	var lieutenant = new Player();
-	lieutenant.set('name', lieutenant_name);
-	lieutenant.set('email', lieutenant_email);
-	lieutenant.set('telephone', lieutenant_telephone);
+    //Create Lieutenant object
+    var lieutenant = new Player();
+    lieutenant.set('name', lieutenant_name);
+    lieutenant.set('email', lieutenant_email);
+    lieutenant.set('telephone', lieutenant_telephone);
 
-	if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
-	lieutenant.set('gamertag', lieutenant_gamertag);
+    if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
+    lieutenant.set('gamertag', lieutenant_gamertag);
 
-	var lieuId = Math.floor((Math.random() * 100000) + 1);
-	lieutenant.set('player_id', lieuId.toString());
+    var lieuId = Math.floor((Math.random() * 100000) + 1);
+    lieutenant.set('player_id', lieuId.toString());
 
-	lieutenant.set('fights', 0);
-	lieutenant.set('goals', 0);
+    lieutenant.set('fights', 0);
+    lieutenant.set('goals', 0);
+    lieutenant.set('assists', 0);
+    lieutenant.set('points', 0);
 
-	var teamObj;
-	var savedCaptain; 
-	var savedLieutenant;
+    var pass2 = Math.random().toString(36).slice(-8);
+    lieutenant.set('password', pass2);
 
-	//Save the Captain
-	captain.save().then(function(result) {
-		//add a Pointer to the Captain on the Team
-		team.set('captain', result);
-		savedCaptain = result;
+    var teamObj;
+    var savedCaptain; 
+    var savedLieutenant;
 
-		var promise = Parse.Promise.as();
-		promise = promise.then(function() {
-      	//Then we save the Lieutenant
-      	return lieutenant.save();
-      });
-   return promise;
+    //Save the Captain
+    captain.save().then(function(result) {
+        //add a Pointer to the Captain on the Team
+        team.set('captain', result);
+        savedCaptain = result;
 
- }).then(function(result){
-		//add a Pointer to the Lieutenant on the Team
-		team.set('lieutenant', result);
-		savedLieutenant = result;
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+            //Then we save the Lieutenant
+            return lieutenant.save();
+          });
+        return promise;
 
-		var promise = Parse.Promise.as();
-		promise = promise.then(function() {
-      	//Save the Team object
-      	return team.save();
-      });
-   return promise;
+    }).then(function(result){
+        //add a Pointer to the Lieutenant on the Team
+        team.set('lieutenant', result);
+        savedLieutenant = result;
 
- }).then(function(result){
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+            //Save the Team object
+            return team.save();
+        });
+        return promise;
 
-  teamObj = result;
+    }).then(function(result){
 
-  var Standing = Parse.Object.extend("Standings");
-  var standing = new Standing();
+        teamObj = result;
 
-  standing.set('team', result);
-  standing.set('points', 0);
-  standing.set('games_played', 0);
-  standing.set('wins', 0);
-  standing.set('tie', 0);
-  standing.set('losses', 0);
-  standing.set('goals_for', 0);
-  standing.set('goals_against', 0);
+        var Standing = Parse.Object.extend("Standings");
+        var standing = new Standing();
 
-  var promise = Parse.Promise.as();
-  promise = promise.then(function() {
-      	// Return a promise that will be resolved when the save is finished.
-      	return standing.save();
-      });
-  return promise;
+        standing.set('team', result);
+        standing.set('points', 0);
+        standing.set('games_played', 0);
+        standing.set('wins', 0);
+        standing.set('tie', 0);
+        standing.set('ot_losses', 0);
+        standing.set('losses', 0);
+        standing.set('goals_for', 0);
+        standing.set('goals_against', 0);
 
-}).then(function(){
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+              // Return a promise that will be resolved when the save is finished.
+              return standing.save();
+            });
+        return promise;
 
-  savedCaptain.set('team', teamObj);
+    }).then(function(){
 
-  var promise = Parse.Promise.as();
-  promise = promise.then(function() {
-	      	// Return a promise that will be resolved when the save is finished.
-	      	return savedCaptain.save();
-       });
-  return promise;
+        savedCaptain.set('team', teamObj);
 
-}).then(function(){
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+           // Return a promise that will be resolved when the save is finished.
+            return savedCaptain.save();
+        });
+        return promise;
 
-  savedLieutenant.set('team', teamObj);
+    }).then(function(){
 
-  var promise = Parse.Promise.as();
-  promise = promise.then(function() {
-    return savedLieutenant.save();
-  });
-  return promise;
+        savedLieutenant.set('team', teamObj);
 
-}).then(function(){
-  var emailPromise = mailgun.sendEmail({
-    to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
-    from: "Cobra Cup 2016 <joel@cobracup.se>",
-    subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2016!",
-    html: "<html><h3>Er anmälan till Cobra Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
-  });
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+          return savedLieutenant.save();
+        });
+        return promise;
 
-return emailPromise;
+    }).then(function(){
+        var emailPromise = mailgun.sendEmail({
+          to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
+          from: "Cobra Cup 2016 <joel@cobracup.se>",
+          subject: "Ditt lag " + team_name + " är nu anmält till Cobra Cup 2016!",
+          html: "<html><h3>Er anmälan till Cobra Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Cobra Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Cobra Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Cobra Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+        });
 
-}).then(function(){
-  response.success(teamObj);
-}, function(error) {
- response.error("Creating team failed with error.code " + error.code + " error.message " + error.message);
-});
+        return emailPromise;
+
+    }).then(function(){
+        response.success(teamObj);
+    }, function(error) {
+        response.error("Creating team failed with error.code " + error.code + " error.message " + error.message);
+    });
 });
 /*** END Create PRO/ALLSTAR Team ***/
 
 /*** START Create Rookie Team ***/
 Parse.Cloud.define("createRookieTeam", function(request, response) {
 
-	var Team = Parse.Object.extend("Team");
-	var Player = Parse.Object.extend("Player");
+    var Team = Parse.Object.extend("Team");
+    var Player = Parse.Object.extend("Player");
 
-  var team = new Team();
+    var team = new Team();
 
-  var captain_name = request.params.captain_name;
-  var captain_email = request.params.captain_email;
-  var captain_telephone = request.params.captain_telephone;
-  var captain_gamertag = request.params.captain_gamertag;
+    var captain_name = request.params.captain_name;
+    var captain_email = request.params.captain_email;
+    var captain_telephone = request.params.captain_telephone;
+    var captain_gamertag = request.params.captain_gamertag;
 
-  var lieutenant_name = request.params.lieutenant_name;
-  var lieutenant_email = request.params.lieutenant_email;
-  var lieutenant_telephone = request.params.lieutenant_telephone;
-  var lieutenant_gamertag = request.params.lieutenant_gamertag;
+    var lieutenant_name = request.params.lieutenant_name;
+    var lieutenant_email = request.params.lieutenant_email;
+    var lieutenant_telephone = request.params.lieutenant_telephone;
+    var lieutenant_gamertag = request.params.lieutenant_gamertag;
 
-  var team_name = request.params.team_name;
-  var team_motto = request.params.team_motto;
-  var nhlTeam = request.params.nhlTeam;
-  var level = "1";
-  var comment = request.params.comment;
-  var hidden = request.params.hidden;
+    var team_name = request.params.team_name;
+    var team_motto = request.params.team_motto;
+    var nhlTeam = request.params.nhlTeam;
+    var level = "1";
+    var comment = request.params.comment;
+    var hidden = request.params.hidden;
 
-  var NHLTeam = Parse.Object.extend("NHLTeam");
-  var nhlTeamObj = new NHLTeam();
-  nhlTeamObj.id = nhlTeam;
+    var NHLTeam = Parse.Object.extend("NHLTeam");
+    var nhlTeamObj = new NHLTeam();
+    nhlTeamObj.id = nhlTeam;
 
-  team.set("nhlTeam", nhlTeamObj);
+    team.set("nhlTeam", nhlTeamObj);
 
-  var legend = ["-","-","-"];
-  var marathon = ["-","-","-"];
+    var legend = ["-","-","-"];
+    var marathon = ["-","-","-"];
 
-  team.set("legend", legend);
-  team.set("marathon", marathon);
+    team.set("legend", legend);
+    team.set("marathon", marathon);
 
-  team.set('team_name', team_name);
-  team.set('team_motto', team_motto);
-  team.set('level', level);
-  team.set('comment', comment);
+    team.set('team_name', team_name);
+    team.set('team_motto', team_motto);
+    team.set('level', level);
+    team.set('comment', comment);
 
-  team.set('group', "0");
+    team.set('group', "0");
 
-  team.set('qualified', false);
-  team.set('champion', false);
+    team.set('qualified', false);
+    team.set('champion', false);
 
-  var pass = Math.random().toString(36).slice(-8);
-  team.set('password', pass);
+    var pass = Math.random().toString(36).slice(-8);
+    team.set('password', pass);
 
-  var genId = Math.floor((Math.random() * 100000) + 1);
-  team.set('team_id', genId.toString());
+    var genId = Math.floor((Math.random() * 100000) + 1);
+    team.set('team_id', genId.toString());
 
-  if (_.isEmpty(hidden)) {hidden = false};
-  if(hidden === "true"){
-    hidden = true;
-  } else {
-    hidden = false;
-  }
+    if (_.isEmpty(hidden)) {hidden = false};
+    if(hidden === "true"){
+      hidden = true;
+    } else {
+      hidden = false;
+    }
 
-  team.set('hidden', hidden);
+    team.set('hidden', hidden);
 
-  /*** Legacy ***/
-  team.set('captain_name', captain_name);
-  team.set('captain_email', captain_email);
-  team.set('captain_telephone', captain_telephone);
+    //Create Captain object
+    var captain = new Player();
+    captain.set('name', captain_name);
+    captain.set('email', captain_email);
+    captain.set('telephone', captain_telephone);
 
-  var capId = Math.floor((Math.random() * 100000) + 1);
-  team.set('captain_id', capId.toString());
+    if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
+    captain.set('gamertag', captain_gamertag);
 
-  team.set('lieutenant_name', lieutenant_name);
-  team.set('lieutenant_email', lieutenant_email);
-  team.set('lieutenant_telephone', lieutenant_telephone);
+    var capId = Math.floor((Math.random() * 100000) + 1);
+    captain.set('player_id', capId.toString());
 
-  var lieuId = Math.floor((Math.random() * 100000) + 1);
-  team.set('lieutenant_id', lieuId.toString());
+    captain.set('fights', 0);
+    captain.set('goals', 0);
 
-  if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
-  if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
+    //Create Lieutenant object
+    var lieutenant = new Player();
+    lieutenant.set('name', lieutenant_name);
+    lieutenant.set('email', lieutenant_email);
+    lieutenant.set('telephone', lieutenant_telephone);
 
-  team.set('captain_gamertag', captain_gamertag);
-  team.set('lieutenant_gamertag', lieutenant_gamertag);
-  /**** END Legacy ***/
+    if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
+    lieutenant.set('gamertag', lieutenant_gamertag);
 
-  	//Create Captain object
-  	var captain = new Player();
-  	captain.set('name', captain_name);
-  	captain.set('email', captain_email);
-  	captain.set('telephone', captain_telephone);
+    var lieuId = Math.floor((Math.random() * 100000) + 1);
+    lieutenant.set('player_id', lieuId.toString());
 
-  	if (_.isEmpty(captain_gamertag)) {captain_gamertag = "-"};
-  	captain.set('gamertag', captain_gamertag);
+    lieutenant.set('fights', 0);
+    lieutenant.set('goals', 0);
 
-  	var capId = Math.floor((Math.random() * 100000) + 1);
-  	captain.set('player_id', capId.toString());
+    var teamObj;
+    var savedCaptain; 
+    var savedLieutenant;
+    
+    //Save the Captain
+    captain.save().then(function(result) {
+        //add a Pointer to the Captain on the Team
+        team.set('captain', result);
+        savedCaptain = result;
 
-  	captain.set('fights', 0);
-  	captain.set('goals', 0);
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+            //Then we save the Lieutenant
+            return lieutenant.save();
+         });
+       return promise;
 
+    }).then(function(result){
+        //add a Pointer to the Lieutenant on the Team
+        team.set('lieutenant', result);
+        savedLieutenant = result;
 
-  	//Create Lieutenant object
-  	var lieutenant = new Player();
-  	lieutenant.set('name', lieutenant_name);
-  	lieutenant.set('email', lieutenant_email);
-  	lieutenant.set('telephone', lieutenant_telephone);
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+            //Save the Team object
+            return team.save();
+        });
+        return promise;
 
-  	if (_.isEmpty(lieutenant_gamertag)) {lieutenant_gamertag = "-"};
-  	lieutenant.set('gamertag', lieutenant_gamertag);
+    }).then(function(result){
 
-  	var lieuId = Math.floor((Math.random() * 100000) + 1);
-  	lieutenant.set('player_id', lieuId.toString());
+        teamObj = result;
 
-  	lieutenant.set('fights', 0);
-  	lieutenant.set('goals', 0);
+        var Standing = Parse.Object.extend("Standings");
+        var standing = new Standing();
 
-  	var teamObj;
-  	var savedCaptain; 
-  	var savedLieutenant;
-  	
-  	//Save the Captain
-  	captain.save().then(function(result) {
-  		//add a Pointer to the Captain on the Team
-  		team.set('captain', result);
-  		savedCaptain = result;
+        standing.set('team', result);
+        standing.set('points', 0);
+        standing.set('games_played', 0);
+        standing.set('wins', 0);
+        standing.set('tie', 0);
+        standing.set('ot_losses', 0);
+        standing.set('losses', 0);
+        standing.set('goals_for', 0);
+        standing.set('goals_against', 0);
 
-  		var promise = Parse.Promise.as();
-  		promise = promise.then(function() {
-	      	//Then we save the Lieutenant
-	      	return lieutenant.save();
-       });
-     return promise;
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+              // Return a promise that will be resolved when the save is finished.
+              return standing.save();
+           });
+        return promise;
 
-   }).then(function(result){
-  		//add a Pointer to the Lieutenant on the Team
-  		team.set('lieutenant', result);
-  		savedLieutenant = result;
+    }).then(function(result){
 
-  		var promise = Parse.Promise.as();
-  		promise = promise.then(function() {
-	      	//Save the Team object
-	      	return team.save();
-       });
-     return promise;
+        var PlayerStats = Parse.Object.extend("PlayerStats");
 
-   }).then(function(result){
+        var playerStatCaptain = new PlayerStats();
 
-    teamObj = result;
+        playerStatCaptain.set('player_name', captain_name);
+        playerStatCaptain.set('player_id', capId.toString());
+        playerStatCaptain.set('player_team', teamObj);
+        playerStatCaptain.set('player_goals', 0);
+        playerStatCaptain.set('player_fights', 0);
 
-    var Standing = Parse.Object.extend("Standings");
-    var standing = new Standing();
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+              // Return a promise that will be resolved when the save is finished.
+              return playerStatCaptain.save();
+           });
+        return promise;
 
-    standing.set('team', result);
-    standing.set('points', 0);
-    standing.set('games_played', 0);
-    standing.set('wins', 0);
-    standing.set('tie', 0);
-    standing.set('losses', 0);
-    standing.set('goals_for', 0);
-    standing.set('goals_against', 0);
+    }).then(function(result){
 
-    var promise = Parse.Promise.as();
-    promise = promise.then(function() {
-	      	// Return a promise that will be resolved when the save is finished.
-	      	return standing.save();
-       });
-    return promise;
+        var PlayerStats = Parse.Object.extend("PlayerStats");
 
-  }).then(function(result){
+        var playerStatLieutenant = new PlayerStats();
 
-    var PlayerStats = Parse.Object.extend("PlayerStats");
+        playerStatLieutenant.set('player_name', lieutenant_name);
+        playerStatLieutenant.set('player_id', lieuId.toString());
+        playerStatLieutenant.set('player_team', teamObj);
+        playerStatLieutenant.set('player_goals', 0);
+        playerStatLieutenant.set('player_fights', 0);
 
-    var playerStatCaptain = new PlayerStats();
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+            // Return a promise that will be resolved when the save is finished.
+            return playerStatLieutenant.save();
+        });
+        return promise;
 
-    playerStatCaptain.set('player_name', captain_name);
-    playerStatCaptain.set('player_id', capId.toString());
-    playerStatCaptain.set('player_team', teamObj);
-    playerStatCaptain.set('player_goals', 0);
-    playerStatCaptain.set('player_fights', 0);
+    }).then(function(result){
 
-    var promise = Parse.Promise.as();
-    promise = promise.then(function() {
-	      	// Return a promise that will be resolved when the save is finished.
-	      	return playerStatCaptain.save();
-       });
-    return promise;
+        savedCaptain.set('team', teamObj);
 
-  }).then(function(result){
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+              // Return a promise that will be resolved when the save is finished.
+              return savedCaptain.save();
+           });
+        return promise;
 
-    var PlayerStats = Parse.Object.extend("PlayerStats");
+    }).then(function(result){
 
-    var playerStatLieutenant = new PlayerStats();
+        savedLieutenant.set('team', teamObj);
 
-    playerStatLieutenant.set('player_name', lieutenant_name);
-    playerStatLieutenant.set('player_id', lieuId.toString());
-    playerStatLieutenant.set('player_team', teamObj);
-    playerStatLieutenant.set('player_goals', 0);
-    playerStatLieutenant.set('player_fights', 0);
+        var promise = Parse.Promise.as();
+        promise = promise.then(function() {
+              // Return a promise that will be resolved when the save is finished.
+              return savedLieutenant.save();
+           });
+        return promise;
 
-    var promise = Parse.Promise.as();
-    promise = promise.then(function() {
-	      	// Return a promise that will be resolved when the save is finished.
-	      	return playerStatLieutenant.save();
-       });
-    return promise;
+    }).then(function(){
+        var emailPromise = mailgun.sendEmail({
+          to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
+          from: "Hot Rod Cup 2016 <joel@cobracup.se>",
+          subject: "Ditt lag " + team_name + " är nu anmält till Hot Rod Cup 2016!",
+          html: "<html><h3>Er anmälan till Hot Rod Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Hot Rod Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Hot Rod Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Hot Rod Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+        });
 
-  }).then(function(result){
+        return emailPromise;
 
-    savedCaptain.set('team', teamObj);
-
-    var promise = Parse.Promise.as();
-    promise = promise.then(function() {
-	      	// Return a promise that will be resolved when the save is finished.
-	      	return savedCaptain.save();
-       });
-    return promise;
-
-  }).then(function(result){
-
-    savedLieutenant.set('team', teamObj);
-
-    var promise = Parse.Promise.as();
-    promise = promise.then(function() {
-	      	// Return a promise that will be resolved when the save is finished.
-	      	return savedLieutenant.save();
-       });
-    return promise;
-
-  }).then(function(){
-    var emailPromise = mailgun.sendEmail({
-      to: captain_name + " <" + captain_email + ">; Joel Baudin <joel.baudin88@gmail.com>; " + lieutenant_name + " <" + lieutenant_email + ">",
-      from: "Hot Rod Cup 2016 <joel@cobracup.se>",
-      subject: "Ditt lag " + team_name + " är nu anmält till Hot Rod Cup 2016!",
-      html: "<html><h3>Er anmälan till Hot Rod Cup 2016 är klar!</h3> <p>Det här är ett automatiskt genererat mail som skickas till båda lagmedlemmarna för att meddela att anmälan har gått igenom.</p><p>Era uppgifter är:<br> Kapten: <b>" + captain_name + "</b><br>Assisterande: <b>" + lieutenant_name + "</b><br>Lagnamn: <b>" + team_name + "</b><br><br>Ert lösenord är <b>" + pass + "</b></p><p><h3>Viktig information</h3>Som ni kanske sett så har vi en anmälningsavgift för att vara med på Hot Rod Cup. Denna avgift är till för att täcka hyra av lokal, middag till alla deltagare samt priser.<br>Denna avgift ligger på <b>200 kr</b> per person och ska vara betald en vecka innan Hot Rod Cup dvs. 12 december 2015. <b>Obs.</b> Om denna avgift på 200 kr /person (400 kr /lag) <u>inte</u> är betald i tid tappar laget sin plats i turneringen.<br><br>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med lagnamn.<br>Om du/ni inte har Swish eller inte vill använda er av det ber jag er kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för att du använder dig av denna sida men mer än det, tack för att du vill vara med på Hot Rod Cup!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+    }).then(function(){
+        response.success("Added new Rookie team");
+    }, function(error) {
+        response.error("Creating Rookie team failed with error.code " + error.code + " error.message " + error.message);
     });
-
-return emailPromise;
-
-}).then(function(){
-  response.success("Added new Rookie team");
-}, function(error) {
- response.error("Creating Rookie team failed with error.code " + error.code + " error.message " + error.message);
-});
 });
 /*** END Create Rookie Team ***/
 
@@ -702,6 +690,144 @@ Parse.Cloud.beforeSave("Team", function(request, response) {
     
   }, function(error){
     response.error("Getting taken status NHL Team failed with error.code " + error.code + " error.message " + error.message);
+  });
+});
+
+
+Parse.Cloud.afterDelete("Team", function(request) {
+  var NHLTeam = Parse.Object.extend('NHLTeam');
+  var nhlTeamQuery = new Parse.Query(NHLTeam);
+  nhlTeamQuery.equalTo('objectId', request.object.get("nhlTeam").id);
+
+  nhlTeamQuery.find().then(function(team) {
+    console.log("Setting t");
+    var level = request.object.get("level");
+
+    if ((typeof(level) !== 'undefined') && (_.isEqual(level, "1"))) {
+      console.log("Setting taken_rookie status for " + request.object.get("nhlTeam").get("name") + " to false");
+      team[0].set('taken_rookie', false);
+    } else {
+      console.log("Setting taken status for " + request.object.get("nhlTeam").get("name") + " to false");
+      team[0].set('taken', false);
+    }
+
+    team[0].save();
+    
+  }, function(error){
+    response.error("Updating taken status for NHL Team failed with error.code " + error.code + " error.message " + error.message);
+  });
+});
+
+
+Parse.Cloud.define("deleteTeam", function(request, response) {
+  var Team = Parse.Object.extend('Team');
+  var teamQuery = new Parse.Query(Team);
+  teamQuery.include(['nhlTeam','captain','lieutenant']);
+  teamQuery.equalTo('team_id', request.params.team_id);
+
+  var teamObj; 
+
+  teamQuery.find().then(function(result){
+    if((typeof(result[0]) !== 'undefined') && (typeof(result[0].id) !== 'undefined')){
+      var promise = Parse.Promise.as();
+      console.log("Found Team with objectId = " + result[0].id + "\n" + "\n");
+
+      teamObj = result[0];
+
+      promise = promise.then(function() {
+        return result[0].destroy();
+      });
+
+      return promise;
+
+    } else {
+      console.log("No Team with id " + request.params.team_id + " was found");
+      return Parse.Promise.error("No Team with id " + request.params.team_id + " was found");
+    }
+
+  }).then(function(){
+    if((typeof(teamObj) !== 'undefined') && (!_.isNull(teamObj))){
+      console.log("Starting to delete standings object..." + "\n" + "\n");
+      var Team = Parse.Object.extend('Team');
+      var teamQuery = new Parse.Query(Team);
+      teamQuery.equalTo('team_id', teamObj.get("team_id"));
+
+      var Standings = Parse.Object.extend('Standings');
+      var standingsQuery = new Parse.Query(Standings);
+      standingsQuery.matchesQuery('team', teamQuery);
+
+      standingsQuery.find().then(function(standing) {
+        if((typeof(standing[0]) !== 'undefined') && (typeof(standing[0].id) !== 'undefined')){
+          var promise = Parse.Promise.as();
+
+          console.log("Found Standings with objectId = " + standing[0].id);
+
+          promise = promise.then(function() {
+            return standing[0].destroy();
+          });
+
+          return promise;
+
+        } else {
+          console.log("Couldn't find a Standings object to delete");
+          return Parse.Promise.error("Couldn't find a Standings object to delete");
+        }
+      }, function(error){
+        console.log("Error when looking for Standings object to delete");
+        return Parse.Promise.error("Error when looking for Standings object to delete");
+      });
+    } else {
+      console.log("the var teamObj was undefined or NULL, can't search for Standings");
+      return Parse.Promise.error("the var teamObj was undefined or NULL, can't search for Standings");
+    }
+  }).then(function(){
+    if((typeof(teamObj) !== 'undefined') && (!_.isNull(teamObj))){
+      var Team = Parse.Object.extend('Team');
+      var teamQuery = new Parse.Query(Team);
+      teamQuery.equalTo('team_id', teamObj.get("team_id"));
+
+      var Player = Parse.Object.extend('Player');
+      var playerQuery = new Parse.Query(Player);
+      playerQuery.matchesQuery('team', teamQuery);
+
+      playerQuery.find().then(function(players) {
+        if((typeof(players[0]) !== 'undefined') && (typeof(players[0].id) !== 'undefined')){
+          var size = _.size(players);
+          console.log("Found " + size + " Player(s) to delete" + "\n" + "\n");
+
+          var promise = Parse.Promise.as();
+          _.each(players, function(player) {
+            console.log("Deleting Player with id " + player.id);
+            promise = promise.then(function() {
+              return player.destroy();
+            });
+          });
+          return promise;
+
+        } else {
+          console.log("Couldn't find a Player(s) object(s) to delete");
+          return Parse.Promise.error("Couldn't find a Player(s) object(s) to delete");
+        }
+      }, function(error){
+        console.log("Error when looking for Player(s) object(s) to delete");
+        return Parse.Promise.error("Error when looking for Player(s) object(s) to delete");
+      });
+    } else {
+      console.log("the var teamObj was undefined or NULL, can't search for Player(s)");
+      return Parse.Promise.error("the var teamObj was undefined or NULL, can't search for Player(s)");
+    }
+
+  }).then(function(result){
+    console.log("Deleted the Team with objectId = " + teamObj.id + "\n" + "\n");
+    response.success("Deleted the Team with objectId = " + teamObj.id);
+  }, function(error) {
+    if((typeof(error.code) !== 'undefined') || (typeof(error.message) !== 'undefined')){
+        console.log("Deleting Team failed with error.code " + error.code + " error.message " + error.message);
+        response.error("Deleting Team failed with error.code " + error.code + " error.message " + error.message);
+    } else {
+        console.log("Deleting Team failed with error.message: " + error);
+        response.error("Deleting Team failed with error.message: " + error);
+    }
   });
 });
 
@@ -786,72 +912,72 @@ Parse.Cloud.define("cleanStandings", function(request, response) {
 });
 
 Parse.Cloud.define("migratePlayers", function(request, response) {
-	var Team = Parse.Object.extend('Team');
-	var teamQuery = new Parse.Query(Team);
+  	var Team = Parse.Object.extend('Team');
+  	var teamQuery = new Parse.Query(Team);
 
-	var resultArray = [];
+  	var resultArray = [];
 
-	teamQuery.find().then(function(results) {
-		var promise = Parse.Promise.as();
-    _.each(results, function(result) {
-     promise = promise.then(function() {
-      var colCaptain = {"name":result.get("captain_name"), 
-      "email":result.get("captain_email"), 
-      "telephone":result.get("captain_telephone"), 
-      "gamertag":result.get("captain_gamertag"),
-      "playerid":result.get("captain_id")
-    };
+  	teamQuery.find().then(function(results) {
+  		var promise = Parse.Promise.as();
+      _.each(results, function(result) {
+          promise = promise.then(function() {
 
-    var colLieutenant = {"name":result.get("lieutenant_name"), 
-    "email":result.get("lieutenant_email"), 
-    "telephone":result.get("lieutenant_telephone"), 
-    "gamertag":result.get("lieutenant_gamertag"),
-    "playerid":result.get("lieutenant_id")
-  };	
+              var colCaptain = {"name":result.get("captain_name"), 
+              "email":result.get("captain_email"), 
+              "telephone":result.get("captain_telephone"), 
+              "gamertag":result.get("captain_gamertag"),
+              "playerid":result.get("captain_id")
+              };
 
-  console.log("Captain =  " + JSON.stringify(colCaptain));
-  console.log("Lieutenant =  " + JSON.stringify(colLieutenant));
+              var colLieutenant = {"name":result.get("lieutenant_name"), 
+              "email":result.get("lieutenant_email"), 
+              "telephone":result.get("lieutenant_telephone"), 
+              "gamertag":result.get("lieutenant_gamertag"),
+              "playerid":result.get("lieutenant_id")
+              };	
 
-  var Player = Parse.Object.extend("Player");
+              console.log("Captain =  " + JSON.stringify(colCaptain));
+              console.log("Lieutenant =  " + JSON.stringify(colLieutenant));
 
-  var captain = new Player();
-  captain.set('name', result.get("captain_name"));
-  captain.set('email', result.get("captain_email"));
-  captain.set('gamertag', result.get("captain_gamertag"));
-  captain.set('telephone', result.get("captain_telephone"));
-  captain.set('player_id', result.get("captain_id"));
-  captain.set('team', result.id);
-  captain.set('fights', 0);
-  captain.set('goals', 0);
+              var Player = Parse.Object.extend("Player");
 
-  var lieutenant = new Player();
-  lieutenant.set('name', result.get("lieutenant_name"));
-  lieutenant.set('email', result.get("lieutenant_email"));
-  lieutenant.set('gamertag', result.get("lieutenant_gamertag"));
-  lieutenant.set('telephone', result.get("lieutenant_telephone"));
-  lieutenant.set('player_id', result.get("lieutenant_id"));
-  lieutenant.set('team', result.id);
-  lieutenant.set('fights', 0);
-  lieutenant.set('goals', 0);		  				
+              var captain = new Player();
+              captain.set('name', result.get("captain_name"));
+              captain.set('email', result.get("captain_email"));
+              captain.set('gamertag', result.get("captain_gamertag"));
+              captain.set('telephone', result.get("captain_telephone"));
+              captain.set('player_id', result.get("captain_id"));
+              captain.set('team', result.id);
+              captain.set('fights', 0);
+              captain.set('goals', 0);
 
-  resultArray.push(captain);
-  resultArray.push(lieutenant);
+              var lieutenant = new Player();
+              lieutenant.set('name', result.get("lieutenant_name"));
+              lieutenant.set('email', result.get("lieutenant_email"));
+              lieutenant.set('gamertag', result.get("lieutenant_gamertag"));
+              lieutenant.set('telephone', result.get("lieutenant_telephone"));
+              lieutenant.set('player_id', result.get("lieutenant_id"));
+              lieutenant.set('team', result.id);
+              lieutenant.set('fights', 0);
+              lieutenant.set('goals', 0);		  				
 
-  return Parse.Promise.as();
+              resultArray.push(captain);
+              resultArray.push(lieutenant);
 
-}, function(error) {
-  response.error("Player retrieval failed with error.code " + error.code + " error.message " + error.message);
-});
-});
+              return Parse.Promise.as();
 
-return promise;
+          }, function(error) {
+            response.error("Player retrieval failed with error.code " + error.code + " error.message " + error.message);
+          });
+      });
 
-}).then(function() {
- return Parse.Object.saveAll(resultArray);
-}).then(function() {
- response.success("Players are migrated");
-	  	// Every object is updated.
-   }, function(error){
-    response.error("Script failed with error.code " + error.code + " error.message " + error.message);
-  });
+      return promise;
+
+    }).then(function() {
+      return Parse.Object.saveAll(resultArray);
+    }).then(function() {
+      response.success("Players are migrated");
+    }, function(error){
+      response.error("Script failed with error.code " + error.code + " error.message " + error.message);
+    });
 });

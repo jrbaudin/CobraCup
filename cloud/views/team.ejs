@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../stylesheets/style.css">
 
     <% if(typeof(teamObj) !== 'undefined'){ %>
-        <title><%= teamObj[0].get("team_name") %> - Cobra Cup 2016</title>
+        <title><%= teamObj.get("team_name") %> - Cobra Cup 2016</title>
     <% } else { %>
         <title>Kunde inte hitta laget - Cobra Cup 2016</title>
     <% } %>
@@ -106,13 +106,17 @@
             </div>
         <% } %> 
         <% if(typeof(flashWarning) !== 'undefined'){ %>
-            <div class="alert alert-warning alert-dismissible" role="alert">
-              <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-              </button>
-              <strong>Observera!</strong> <%= flashWarning %>
-            </div>
+            
+            <% _.each(flashWarning, function(warning) { %>
+              <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span>
+                </button>
+                <strong>Observera!</strong> <%= warning %>
+              </div>
+            <% }) %>
+            
         <% } %>
         <% if(typeof(flashInfo) !== 'undefined'){ %>
             <div class="alert alert-success alert-dismissible" role="alert">
@@ -137,74 +141,74 @@
             <div class="col-md-8 col-md-push-4">
                 <div class="panel">
                     <div class="panel-body">
-                        <h2 class="text-center text-uppercase" style="word-wrap: break-word;"><%= teamObj[0].get("team_name") %></h2>
+                        <h2 class="text-center text-uppercase" style="word-wrap: break-word;"><%= teamObj.get("team_name") %></h2>
                         <hr>
                         <div class="col-md-6">
-                            <a href="/player/<%= teamObj[0].get("captain").get("player_id") %>">
-                                <% if( (typeof(teamObj[0].get("captain").get("avatar")) !== 'undefined') && (!_.isEmpty(teamObj[0].get("captain").get("avatar"))) ){ %>
-                                    <img src="<%= teamObj[0].get("captain").get("avatar").url() %>" class="img-responsive img-circle" alt="Captain image" style="min-height:75px;height:75px; margin: 0 auto;">
+                            <a href="/player/<%= teamObj.get("captain").get("player_id") %>">
+                                <% if( (typeof(teamObj.get("captain").get("avatar")) !== 'undefined') && (!_.isEmpty(teamObj.get("captain").get("avatar"))) ){ %>
+                                    <img src="<%= teamObj.get("captain").get("avatar").url() %>" class="img-responsive img-circle" alt="Captain image" style="min-height:75px;height:75px; margin: 0 auto;">
                                 <% } else { %>
                                     <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:75px;height:75px; margin: 0 auto;">
                                 <% } %>
-                                <h5 class="text-center" title="<%= teamObj[0].get("captain").get("name") %>"><%= getFirstname(teamObj[0].get("captain").get("name")) %> <small style="color: rgb(0,0,0);">Kapten</small></h5>
+                                <h5 class="text-center" title="<%= teamObj.get("captain").get("name") %>"><%= getFirstname(teamObj.get("captain").get("name")) %> <small style="color: rgb(0,0,0);">Kapten</small></h5>
                             </a>
-                            <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj[0].get("captain").get("telephone") %></p>
-                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj[0].get("captain").get("gamertag") %></strong></span></small><p>
+                            <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj.get("captain").get("telephone") %></p>
+                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj.get("captain").get("gamertag") %></strong></span></small><p>
                         </div>
                         <div class="col-md-6">
-                            <a href="/player/<%= teamObj[0].get("lieutenant").get("player_id") %>">
-                                <% if( (typeof(teamObj[0].get("lieutenant").get("avatar")) !== 'undefined') && (!_.isEmpty(teamObj[0].get("lieutenant").get("avatar"))) ){ %>
-                                    <img src="<%= teamObj[0].get("lieutenant").get("avatar").url() %>" class="img-responsive img-circle" alt="Lieutenant image" style="min-height:75px;height:75px; margin: 0 auto;">
+                            <a href="/player/<%= teamObj.get("lieutenant").get("player_id") %>">
+                                <% if( (typeof(teamObj.get("lieutenant").get("avatar")) !== 'undefined') && (!_.isEmpty(teamObj.get("lieutenant").get("avatar"))) ){ %>
+                                    <img src="<%= teamObj.get("lieutenant").get("avatar").url() %>" class="img-responsive img-circle" alt="Lieutenant image" style="min-height:75px;height:75px; margin: 0 auto;">
                                 <% } else { %>
                                     <img src="../img/hockeyplayer.png" class="img-responsive" alt="Responsive image" style="min-height:75px;height:75px; margin: 0 auto;">
                                 <% } %>
-                                <h5 class="text-center" title="<%= teamObj[0].get("lieutenant").get("name") %>"><%= getFirstname(teamObj[0].get("lieutenant").get("name")) %> <small style="color: rgb(0,0,0);">Assisterande</small></h5>
+                                <h5 class="text-center" title="<%= teamObj.get("lieutenant").get("name") %>"><%= getFirstname(teamObj.get("lieutenant").get("name")) %> <small style="color: rgb(0,0,0);">Assisterande</small></h5>
                             </a>
-                            <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj[0].get("lieutenant").get("telephone") %></p>
-                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj[0].get("lieutenant").get("gamertag") %></strong></span></small><p>
+                            <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj.get("lieutenant").get("telephone") %></p>
+                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj.get("lieutenant").get("gamertag") %></strong></span></small><p>
                         </div>
                         <hr>
                         <!--
                         <div class="col-md-6 col-md-offset-3">
                             <p class="text-center lead"><i>Lagmotto</i></p>
                             <blockquote>
-                                <p><%= teamObj[0].get("team_motto") %></p>
-                                <small><%= teamObj[0].get("team_name") %></small>
+                                <p><%= teamObj.get("team_motto") %></p>
+                                <small><%= teamObj.get("team_name") %></small>
                             </blockquote>
                         </div>
                         -->
                         <div class="col-md-8 col-md-offset-2">
                             <p class="text-center lead" style="margin-bottom: 5px;"><span class="fui-list"></span> Nivå <span class="fui-list"></span></p>
                             <div class="progress" style="height: 20px;">
-                            <% if(_.isEqual(teamObj[0].get("level"), "1")) { %>
+                            <% if(_.isEqual(teamObj.get("level"), "1")) { %>
                                 <div class="progress-bar" style="width: 35%; line-height: 20px;"><i class="fa fa-child"></i> Rookie</div>
-                            <% } else if(_.isEqual(teamObj[0].get("level"), "2")) { %>
+                            <% } else if(_.isEqual(teamObj.get("level"), "2")) { %>
                                 <div class="progress-bar progress-bar-success" style="width: 65%; line-height: 20px;"><i class="fa fa-gamepad"></i> Pro</div>
                             <% } else { %>
                                 <div class="progress-bar progress-bar-warning" style="width: 100%; line-height: 20px;"><i class="fa fa-trophy"></i> All Star</div>
                             <% } %>
                             </div>
                         </div>
-                        <% if (typeof teamObj[0].get("legend") !== 'undefined') { %>
+                        <% if (typeof teamObj.get("legend") !== 'undefined') { %>
                           <div class="col-md-8 col-md-offset-2">
                             <p class="text-center lead" style="margin-bottom: 5px;"><i class="fa fa-trophy"></i> <i>Placeringar i Cobra Cup</i></p>
 
-                            <% if ( (!_.isEmpty(teamObj[0].get("legend")[2])) && (!_.isEqual(teamObj[0].get("legend")[2], "-")) ) { %>
-                                <p class="text-center" style="line-height: 2; margin: 0;"><strong>2015</strong> - <%= teamObj[0].get("legend")[2] %></p>
+                            <% if ( (!_.isEmpty(teamObj.get("legend")[2])) && (!_.isEqual(teamObj.get("legend")[2], "-")) ) { %>
+                                <p class="text-center" style="line-height: 2; margin: 0;"><strong>2015</strong> - <%= teamObj.get("legend")[2] %></p>
                             <% } %>
 
-                            <% if ( (!_.isEmpty(teamObj[0].get("legend")[1])) && (!_.isEqual(teamObj[0].get("legend")[1], "-")) ) { %>
-                                <p class="text-center" style="line-height: 2; margin: 0;"><strong>2014</strong> - <%= teamObj[0].get("legend")[1] %></p>
+                            <% if ( (!_.isEmpty(teamObj.get("legend")[1])) && (!_.isEqual(teamObj.get("legend")[1], "-")) ) { %>
+                                <p class="text-center" style="line-height: 2; margin: 0;"><strong>2014</strong> - <%= teamObj.get("legend")[1] %></p>
                             <% } %>
 
-                            <% if ( (!_.isEmpty(teamObj[0].get("legend")[0])) && (!_.isEqual(teamObj[0].get("legend")[0], "-")) ) { %>
-                                <p class="text-center" style="line-height: 2; margin: 0;"><strong>2010</strong> - <%= teamObj[0].get("legend")[0] %></p>
+                            <% if ( (!_.isEmpty(teamObj.get("legend")[0])) && (!_.isEqual(teamObj.get("legend")[0], "-")) ) { %>
+                                <p class="text-center" style="line-height: 2; margin: 0;"><strong>2010</strong> - <%= teamObj.get("legend")[0] %></p>
                             <% } %>
                             
                             <!--
-                            <% if (typeof teamObj[0].get("marathon") !== 'undefined') { %>
+                            <% if (typeof teamObj.get("marathon") !== 'undefined') { %>
                               <p class="text-center" title="Legend för lagen. Baserat på matcher spelade 2014 & 2015" style="line-height: 2; margin: 0;">
-                                <small>W:<strong><%= teamObj[0].get("marathon")[0] %></strong> - T:<strong><%= teamObj[0].get("marathon")[1] %></strong> - L:<strong><%= teamObj[0].get("marathon")[2] %></strong></small>
+                                <small>W:<strong><%= teamObj.get("marathon")[0] %></strong> - T:<strong><%= teamObj.get("marathon")[1] %></strong> - L:<strong><%= teamObj.get("marathon")[2] %></strong></small>
                                 <a href="#" style="margin-left: 15px;"data-toggle="tooltip" title="" data-original-title="Baserat på matcher spelade i gruppspel 2014 & 2015." data-placement="right"><i class="fa fa-info-circle"></i></a>
                               </p>
                             <% } %>
@@ -217,7 +221,7 @@
                         </div> -->
 
                         <div class="col-md-12">
-                            <% var stats = teamObj[0].get("stats"); %>
+                            <% var stats = teamObj.get("stats"); %>
 
                             <p class="text-uppercase" style="margin-bottom:2px;"><strong>Säsonger</strong></p>
                             <div class="table-responsive" style="margin-bottom:30px;">
@@ -297,10 +301,10 @@
                 <div class="row">
                     <div class="panel">
                         <div class="panel-body">
-                            <img src="<%= teamObj[0].get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:150px;height:150px; margin: 0 auto;">
-                            <h4 class="text-center"><%= teamObj[0].get("nhlTeam").get("name") %></h4>
-                            <h6 class="text-center"><%= teamObj[0].get("nhlTeam").get("city") %></h4>
-                            <a class="btn btn-primary btn-md center-block" href="<%= teamObj[0].get("nhlTeam").get("homepage") %>" target="_blank" onclick="_gs('event', 'Clicked to see NHL team homepage')">Hemsida</a>
+                            <img src="<%= teamObj.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:150px;height:150px; margin: 0 auto;">
+                            <h4 class="text-center"><%= teamObj.get("nhlTeam").get("name") %></h4>
+                            <h6 class="text-center"><%= teamObj.get("nhlTeam").get("city") %></h4>
+                            <a class="btn btn-primary btn-md center-block" href="<%= teamObj.get("nhlTeam").get("homepage") %>" target="_blank" onclick="_gs('event', 'Clicked to see NHL team homepage')">Hemsida</a>
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -318,12 +322,12 @@
                                     teams.forEach(function(team) {
                                         if(_.isEqual(team.id, lastPlayedGame.get("home").id)){
                                             hometeam = team;
-                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                            if(!_.isEqual(team.id, teamObj.id)){
                                                 versus = team.get("nhlTeam").get("nickname");
                                             }
                                         } else if(_.isEqual(team.id, lastPlayedGame.get("away").id)){
                                             awayteam = team;
-                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                            if(!_.isEqual(team.id, teamObj.id)){
                                                 versus = team.get("nhlTeam").get("nickname");
                                             }
                                         }
@@ -384,12 +388,12 @@
                                     teams.forEach(function(team) {
                                         if(_.isEqual(team.id, nextGame.get("home").id)){
                                             hometeam = team;
-                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                            if(!_.isEqual(team.id, teamObj.id)){
                                                 versus = team.get("nhlTeam").get("nickname");
                                             }
                                         } else if(_.isEqual(team.id, nextGame.get("away").id)){
                                             awayteam = team;
-                                            if(!_.isEqual(team.id, teamObj[0].id)){
+                                            if(!_.isEqual(team.id, teamObj.id)){
                                                 versus = team.get("nhlTeam").get("nickname");
                                             }
                                         }
@@ -458,11 +462,11 @@
 
                                                         teams.forEach(function(team) {
                                                             if(_.isEqual(team.id, game.get("home").id)){
-                                                                if(!_.isEqual(team.id, teamObj[0].id)){
+                                                                if(!_.isEqual(team.id, teamObj.id)){
                                                                     versusLogo = team.get("nhlTeam").get("logo").url();
                                                                 }
                                                             } else if(_.isEqual(team.id, game.get("away").id)){
-                                                                if(!_.isEqual(team.id, teamObj[0].id)){
+                                                                if(!_.isEqual(team.id, teamObj.id)){
                                                                     versusLogo = team.get("nhlTeam").get("logo").url();
                                                                 }
                                                             }
@@ -513,7 +517,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <%
-                                            var group = teamObj[0].get("group");
+                                            var group = teamObj.get("group");
                                             var groupName = "-";
                                             if(_.isEqual(group, "1")){
                                                 groupName = "Atlantic";
@@ -579,56 +583,46 @@
                                     </div>
                                     <div id="collapseTwoStat" class="panel-collapse collapse">
                                         <div class="panel-body" style="padding: 5px;">
-                                            <% if((typeof(playerStats) !== 'undefined') && (typeof(standings) !== 'undefined')){
-                                            var captain = null;
-                                            var lieutenant = null;
-                                            var teamStanding = null;
+                                            <% if((typeof(teamObj[0]) !== 'undefined') && (typeof(standings) !== 'undefined')){
+                                              var teamStanding = null;
 
-                                            playerStats.forEach(function(player) {
-                                                if(_.isEqual(player.get("player_id"), teamObj[0].get("captain").get("player_id"))){
-                                                    captain = player;
-                                                } else if(_.isEqual(player.get("player_id"), teamObj[0].get("lieutenant").get("player_id"))){
-                                                    lieutenant = player;
-                                                }
-                                            })
-
-                                            standings.forEach(function(standing) {
-                                                if(_.isEqual(standing.get("team").id, teamObj[0].id)){
-                                                    teamStanding = standing;
-                                                }
-                                            })
-                                            %>
-                                            <table class="table table-bordered table-condensed" style="margin-bottom: 0;">
-                                                <thead style="font-size: 13px;">
-                                                    <tr>
-                                                      <th>Spelare:</th>
-                                                      <th></th>
-                                                      <th class="text-center" title="Games Played">GP</th>
-                                                      <th class="text-center" title="Goals">G</th>
-                                                      <th class="text-center" title="Assists">A</th>
-                                                      <th class="text-center" title="Fights">F</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody style="font-size: 13px;">
-                                                    <tr>
-                                                      <td><%= teamObj[0].get("captain").get("name") %></td>
-                                                      <td class="text-center" title="Kapten"><strong>C</strong></td>
-                                                      <td class="text-center"><%= teamStanding.get("games_played") %></td>
-                                                      <td class="text-center"><%= teamObj[0].get("captain").get("goals") %></td>
-                                                      <td class="text-center"><%= teamObj[0].get("captain").get("assists") %></td>
-                                                      <td class="text-center"><%= teamObj[0].get("captain").get("fights") %></td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td><%= teamObj[0].get("lieutenant").get("name") %></td>
-                                                      <td class="text-center" title="Assisterande"><strong>A</strong></td>
-                                                      <td class="text-center"><%= teamStanding.get("games_played") %></td>
-                                                      <td class="text-center"><%= teamObj[0].get("lieutenant").get("goals") %></td>
-                                                      <td class="text-center"><%= teamObj[0].get("lieutenant").get("assists") %></td>
-                                                      <td class="text-center"><%= teamObj[0].get("lieutenant").get("fights") %></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>A</strong>-Assists, <strong>F</strong>-Fights</small>
+                                              standings.forEach(function(standing) {
+                                                  if(_.isEqual(standing.get("team").id, teamObj.id)){
+                                                      teamStanding = standing;
+                                                  }
+                                              })
+                                              %>
+                                              <table class="table table-bordered table-condensed" style="margin-bottom: 0;">
+                                                  <thead style="font-size: 13px;">
+                                                      <tr>
+                                                        <th>Spelare:</th>
+                                                        <th></th>
+                                                        <th class="text-center" title="Games Played">GP</th>
+                                                        <th class="text-center" title="Goals">G</th>
+                                                        <th class="text-center" title="Assists">A</th>
+                                                        <th class="text-center" title="Fights">F</th>
+                                                      </tr>
+                                                  </thead>
+                                                  <tbody style="font-size: 13px;">
+                                                      <tr>
+                                                        <td><%= teamObj.get("captain").get("name") %></td>
+                                                        <td class="text-center" title="Kapten"><strong>C</strong></td>
+                                                        <td class="text-center"><%= teamStanding.get("games_played") %></td>
+                                                        <td class="text-center"><%= teamObj.get("captain").get("goals") %></td>
+                                                        <td class="text-center"><%= teamObj.get("captain").get("assists") %></td>
+                                                        <td class="text-center"><%= teamObj.get("captain").get("fights") %></td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td><%= teamObj.get("lieutenant").get("name") %></td>
+                                                        <td class="text-center" title="Assisterande"><strong>A</strong></td>
+                                                        <td class="text-center"><%= teamStanding.get("games_played") %></td>
+                                                        <td class="text-center"><%= teamObj.get("lieutenant").get("goals") %></td>
+                                                        <td class="text-center"><%= teamObj.get("lieutenant").get("assists") %></td>
+                                                        <td class="text-center"><%= teamObj.get("lieutenant").get("fights") %></td>
+                                                      </tr>
+                                                  </tbody>
+                                              </table>
+                                              <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>A</strong>-Assists, <strong>F</strong>-Fights</small>
                                             <% } %>
                                         </div>
                                     </div>
