@@ -491,6 +491,11 @@ Parse.Cloud.define("createRookieTeam", function(request, response) {
 
     captain.set('fights', 0);
     captain.set('goals', 0);
+    captain.set('assists', 0);
+    captain.set('points', 0);
+
+    var pass1 = Math.random().toString(36).slice(-8);
+    captain.set('password', pass1);
 
     //Create Lieutenant object
     var lieutenant = new Player();
@@ -506,6 +511,11 @@ Parse.Cloud.define("createRookieTeam", function(request, response) {
 
     lieutenant.set('fights', 0);
     lieutenant.set('goals', 0);
+    lieutenant.set('assists', 0);
+    lieutenant.set('points', 0);
+
+    var pass2 = Math.random().toString(36).slice(-8);
+    lieutenant.set('password', pass2);
 
     var teamObj;
     var savedCaptain; 
@@ -558,44 +568,6 @@ Parse.Cloud.define("createRookieTeam", function(request, response) {
               // Return a promise that will be resolved when the save is finished.
               return standing.save();
            });
-        return promise;
-
-    }).then(function(result){
-
-        var PlayerStats = Parse.Object.extend("PlayerStats");
-
-        var playerStatCaptain = new PlayerStats();
-
-        playerStatCaptain.set('player_name', captain_name);
-        playerStatCaptain.set('player_id', capId.toString());
-        playerStatCaptain.set('player_team', teamObj);
-        playerStatCaptain.set('player_goals', 0);
-        playerStatCaptain.set('player_fights', 0);
-
-        var promise = Parse.Promise.as();
-        promise = promise.then(function() {
-              // Return a promise that will be resolved when the save is finished.
-              return playerStatCaptain.save();
-           });
-        return promise;
-
-    }).then(function(result){
-
-        var PlayerStats = Parse.Object.extend("PlayerStats");
-
-        var playerStatLieutenant = new PlayerStats();
-
-        playerStatLieutenant.set('player_name', lieutenant_name);
-        playerStatLieutenant.set('player_id', lieuId.toString());
-        playerStatLieutenant.set('player_team', teamObj);
-        playerStatLieutenant.set('player_goals', 0);
-        playerStatLieutenant.set('player_fights', 0);
-
-        var promise = Parse.Promise.as();
-        promise = promise.then(function() {
-            // Return a promise that will be resolved when the save is finished.
-            return playerStatLieutenant.save();
-        });
         return promise;
 
     }).then(function(result){

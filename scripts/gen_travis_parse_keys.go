@@ -8,15 +8,15 @@ import (
 const parseConfig = `
 {
   "global": {
-    "parseVersion": "1.4.2"
+    "parseVersion": "1.6.7"
   },
   "applications": {
-    "Cobra Cup 2016": {
+    "Cobra Cup 2016 Production": {
       "applicationId": "{{.AppID}}",
       "masterKey": "{{.MasterKey}}"
     },
     "_default": {
-      "link": "Cobra Cup 2016"
+      "link": "Cobra Cup 2016 Production"
     }
   }
 }
