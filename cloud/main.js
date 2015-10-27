@@ -20,17 +20,7 @@ Parse.Cloud.define("sendTweet", function(request, response) {
     });
 });
 
-Parse.Cloud.define("getTeams", function(request, response) {
-    var Team = Parse.Object.extend('Team');
-    var teamsQuery = new Parse.Query(Team);
-    teamsQuery.include(['nhlTeam','captain','lieutenant']);
-    teamsQuery.find().then(function(results) {
-        response.success(results);                            
-    }, function(error) {
-      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
-    });
-});
-
+/**** PLAYER ****/
 Parse.Cloud.define("getPlayers", function(request, response) {
     var Player = Parse.Object.extend('Player');
     var playersQuery = new Parse.Query(Player);
@@ -220,8 +210,20 @@ Parse.Cloud.define("createPlayerPass", function(request, response) {
     response.success("Added player passwords");
   });
 });
+/**** PLAYER ****/
 
-/*** START Create PRO/ALLSTAR Team ***/
+/**** TEAM ****/
+Parse.Cloud.define("getTeams", function(request, response) {
+    var Team = Parse.Object.extend('Team');
+    var teamsQuery = new Parse.Query(Team);
+    teamsQuery.include(['nhlTeam','captain','lieutenant']);
+    teamsQuery.find().then(function(results) {
+        response.success(results);                            
+    }, function(error) {
+      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
 Parse.Cloud.define("createTeam", function(request, response) {
     var Team = Parse.Object.extend("Team");
     var Player = Parse.Object.extend("Player");
@@ -413,9 +415,7 @@ Parse.Cloud.define("createTeam", function(request, response) {
         response.error("Creating team failed with error.code " + error.code + " error.message " + error.message);
     });
 });
-/*** END Create PRO/ALLSTAR Team ***/
 
-/*** START Create Rookie Team ***/
 Parse.Cloud.define("createRookieTeam", function(request, response) {
 
     var Team = Parse.Object.extend("Team");
@@ -608,7 +608,6 @@ Parse.Cloud.define("createRookieTeam", function(request, response) {
         response.error("Creating Rookie team failed with error.code " + error.code + " error.message " + error.message);
     });
 });
-/*** END Create Rookie Team ***/
 
 Parse.Cloud.afterSave("Team", function(request) {
 
@@ -665,7 +664,6 @@ Parse.Cloud.beforeSave("Team", function(request, response) {
   });
 });
 
-
 Parse.Cloud.afterDelete("Team", function(request) {
   var NHLTeam = Parse.Object.extend('NHLTeam');
   var nhlTeamQuery = new Parse.Query(NHLTeam);
@@ -688,7 +686,6 @@ Parse.Cloud.afterDelete("Team", function(request) {
     response.error("Updating taken status for NHL Team failed with error.code " + error.code + " error.message " + error.message);
   });
 });
-
 
 Parse.Cloud.define("deleteTeam", function(request, response) {
   var Team = Parse.Object.extend('Team');
@@ -779,7 +776,7 @@ Parse.Cloud.define("deleteTeam", function(request, response) {
   });
 });
 
-/* ----------- */
+/**** /TEAM ****/
 
 /***** Utility Functions *****/
 
