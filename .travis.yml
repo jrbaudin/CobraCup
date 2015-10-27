@@ -1,23 +1,19 @@
 env:
   matrix:
   - GOPATH=$TRAVIS_BUILD_DIR/gosrc
-  global:
-  - secure: KTDVJhfoD23nunhzdsQLy/flle/pQzW1RqqomAsGCAQwOzU+5402TJWc6LK3zbgHg5t5ivrceZP5mjmPav5vr3LIIQrcsuo0ZtHz96i8iZZq+SjxDkjeMzvoe8g+WMDGvhwcL7JlG35DXqcc5f63jDYTqTIfMEI7S6X8ARkqPf7MBN1UcW/DAf7Zmx93KnoCDbsheZSp0HCDyN59qEZ6cVGSxxWu3z7T0s4/uNGoHsdSsMmqTnIBhKeJBTfg6/GTkcs//2ZjjR2hlF5AhWxP6q6INnaiWvRbc/B04KxzkRsswemAv/+Yl/jxtSE3QKQGnnswKtwcFak3ANk/pni9T1rz3XPaGfTsxO3UhcfsUchUOHgoVfkpsdNnp0UN1S4CGsWlwx4qBhYRRQ5Lq4SHChf0KmFUlDtjSCbGQGbAFnDCpFw52RXWG5lOjZOaRWJOio14Z7vmjxkxsBoGHEXC5iGe7EYoalTcdX0sw5rFnFLkcryWYXdNNYDyORQ9NJVF/kSsUntcVvwId5hFicDaeR9G5Ua7ZeZ/8BUSRNdwbdkc21uVcS7uDk4vATRm649x55LEKc9/8ej6h32bPo7v0C0kM7DdAnkX6wtBT4GWo9FHbmhjPLe71nneLzQIHB2iePA6DCaDdkEumBAGbV9e5lf+rWqURFVTG8hd3kPlvmU=
-  - secure: RjEttDJhq+U4ojgM1tnh2hH9WspcGtW8h2w2GJyvw/wxNwOLTE2FAfJ1ut8HmlRDoCDp3zLyNpLujUcbiznoNHWTmsbGLl2qon5VVgvk4Q2mul4fO6+YmAwrnnYwD5E+KLvoYu/qGyQBSXkgE6C4DX4aIHiKiBV7XSlcydqGUnGlj+rXl0/kD9MaJz1Ab+U5FWzDBx3C6O6toXuk8omVDheahZGn3RliwdNzVeHukMQZTEmFBUpOcPSBYr3X4+aGDliVsOZGyw2eHCIDhMVdHIfwhiFDtRwltshvu1lb/hHup4B1SD987+pVKXqCKIWC7lWD2BVbtRFg6SdX9UgA5bvrnGRp+9hIwXb3CmFHID0P8R9cCe6QTRLr+yOeYagr1vjc7W8RmpueZSi9Q15MjrAhdaGMHRQZ66B21f2fAnQVwHUQkcIcrQv+WZxb4J3VFXl0C8zVyL0GwK7ay0OlLiHTBTIXVQ8KDtx7z73Ee5yx8Leaqb4czKnGC1ooQFtqWv8yneKfma7UgpJKQRYgM+0V1chU/hh8nEATwOieaOyYdr++Y79HGG0AzZS1enjdbsutvPc4fX/5jeoAIHDQ3IcBxzlpXqePz7WU0xbfk13eBidF/lmTS3s3WtC5IDHaZUNdroXeDiG2SXxZi0Btc/uKPf1vpZtb2mGlwdBFhj4=
 # blacklist
 branches:
   except:
     - develop
     - production
     - develop-workcup
+    - develop-cobra-cup-2016-development
 # whitelist
 branches:
   only:
     - develop-cobra-cup-2016-production
-    - develop-cobra-cup-2016-development
 install:
 - mkdir -p "$TRAVIS_BUILD_DIR/gosrc"
 - mkdir -p "$TRAVIS_BUILD_DIR/static"
-- curl -s https://www.parse.com/downloads/cloud_code/installer.sh | /bin/bash
+- curl -s https://www.parse.com/downloads/cloud_code/installer.sh | sudo /bin/bash
 script: ./scripts/build_all.sh
-sudo: false
