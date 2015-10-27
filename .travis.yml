@@ -16,5 +16,7 @@ install:
 - mkdir -p "$TRAVIS_BUILD_DIR/gosrc"
 - mkdir -p "$TRAVIS_BUILD_DIR/static"
 - curl -s https://www.parse.com/downloads/cloud_code/installer.sh | sudo /bin/bash
+before_script:
+- chmod +x ./scripts/build_all.sh
 script: ./scripts/build_all.sh
 sudo: required
