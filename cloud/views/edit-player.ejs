@@ -244,6 +244,20 @@
                             </div>
 
                             <div class="form-group col-md-12">
+                                <label for="gamertag" class="control-label">PlayStation Network ID</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></div>
+
+                                    <% if((typeof(player[0].get("psn_id")) !== 'undefined') && (!_.isEmpty(player[0].get("psn_id")))){ %>
+                                        <input type="text" class="form-control" id="psn_id" placeholder="mrbig" name="psn_id" value="<%= player[0].get("psn_id") %>">
+                                    <% } else { %>
+                                        <input type="text" class="form-control" id="psn_id" placeholder="diskopinne" name="psn_id">
+                                    <% } %>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-12">
                                 <label for="twitter" class="control-label">Twitter användarnamn</label>
                                 <div class="input-group">
                                     <div class="input-group-addon"><i class="fa fa-twitter fa-fw"></i></div>

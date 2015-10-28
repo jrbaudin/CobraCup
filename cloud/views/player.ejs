@@ -182,24 +182,11 @@
                                 <% } %>                                
                             </div>
                             <div class="row">
-                                <% if ((typeof(player[0].get("gamertag")) !== 'undefined') && (!_.isEmpty(player[0].get("gamertag")))) { %>
-
-                                    <div class="col-md-2">
-                                        <small title="Xbox Live Gamertag"><strong>GAMERTAG</strong></small>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <small><span style="color: rgb(16,124,16);"><%= player[0].get("gamertag") %></span></small>
-                                    </div>
-
-                                <% } %>
+                                <div class="col-md-2">
+                                    <small><strong>SPELAR I</strong></small>
+                                </div>     
                                 <% if ((typeof(player[0].get("team").get("team_name")) !== 'undefined') && (!_.isEmpty(player[0].get("team").get("team_name")))) { %>
-
-                                    <div class="col-md-2">
-                                        <small><strong>SPELAR I</strong></small>
-                                    </div>   
-
-                                    <div class="col-md-5">
+                                    <div class="col-md-3">
                                         <% if (!_.isEmpty(player[0].get("team").get("team_name"))) { %>
                                             <small><a href="/team/<%= player[0].get("team").get("team_id") %>"><%= player[0].get("team").get("team_name") %></a></small>
                                         <% } else { %>
@@ -209,14 +196,25 @@
                                     </div>
 
                                 <% } %>
+                                <% if ((typeof(player[0].get("gamertag")) !== 'undefined') && (!_.isEmpty(player[0].get("gamertag")))) { %>
+
+                                    <div class="col-md-2">
+                                        <small title="Xbox Live Gamertag"><strong>GAMERTAG</strong></small>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <small><span style="color: rgb(16,124,16);"><%= player[0].get("gamertag") %></span></small>
+                                    </div>
+
+                                <% } %>                                
                             </div>
 
                             <% if ((typeof(player[0].get("email")) !== 'undefined') || (typeof(player[0].get("twitter")) !== 'undefined') || (typeof(player[0].get("facebook")) !== 'undefined')) { %>
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <small title="Xbox Live Gamertag"><strong>SOCIAL</strong></small>
+                                        <small title="Social Links"><strong>SOCIAL</strong></small>
                                     </div>
-                                    <div class="col-md-10">
+                                    <div class="col-md-3">
                                         <p>
                                         <% if ((typeof(player[0].get("email")) !== 'undefined') && (!_.isEmpty(player[0].get("email")))) { %>
                                             <span><a href="mailto:<%= player[0].get("email") %>" target="_top"><i class="fa fa-envelope"></i></a></span>
@@ -235,6 +233,17 @@
                                         <% } %>
                                         </p>
                                     </div>
+                                    <% if ((typeof(player[0].get("psn_id")) !== 'undefined') && (!_.isEmpty(player[0].get("psn_id")))) { %>
+
+                                        <div class="col-md-2">
+                                            <small title="PlayStation Network ID"><strong>PSN ID</strong></small>
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <small><span style="color: rgb(16,124,16);"><%= player[0].get("psn_id") %></span></small>
+                                        </div>
+
+                                    <% } %>
                                 </div>
                             <% } %>
                             <% if ((typeof(player[0].get("profile")) !== 'undefined') && (!_.isEmpty(player[0].get("profile")))) { %>

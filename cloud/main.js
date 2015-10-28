@@ -32,6 +32,92 @@ Parse.Cloud.define("getPlayers", function(request, response) {
     });
 });
 
+Parse.Cloud.beforeSave("Order", function(request, response) {
+  var price = request.object.get("price");
+  price = price.replace(/\D/g,'');
+  request.object.set('price', price);
+
+  var size = request.object.get("size");
+
+  if (
+    (_.isEqual(size, "S")) ||
+    (_.isEqual(size, "M")) ||
+    (_.isEqual(size, "L")) ||
+    (_.isEqual(size, "XL")) ||
+    (_.isEqual(size, "XXL"))) 
+  {
+    response.success();
+  } else {
+    response.error("A non valid size marker was entered");
+  }
+});
+
+Parse.Cloud.afterSave("Order", function(request, response) {
+  var email = request.object.get("email");
+  var name = request.object.get("name");
+  var price = request.object.get("price");
+  var size = request.object.get("size");
+
+  mailgun.sendEmail({
+    to: name + " <" + email + ">",
+    bcc: "Joel Baudin <joel.baudin88@gmail.com>",
+    from: "Cobra Cup 2016 <joel@cobracup.se>",
+    subject: "Anton Hatar T-Shirt - Tack för din beställning och bidrag!",
+    html: "<html><h3>Din beställning av en Anton Hatar T-Shirt är mottagen!</h3><p>Du har beställt en T-Shirt med storlek <b>" + size + "</b> och valt att betala <b>" + price + " kr</b> för den.</p><p><h3>Betalning</h3>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med <b>AH + ditt namn</b>.<br>Om du inte har Swish eller inte vill använda dig av det ber jag dig kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för ditt bidrag!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+  }).then(function(result) {
+      response.success();
+  }, function(error) {
+      response.error("Sending email failed with error.code " + error.code + " error.message " + error.message);
+  });
+
+});
+
+Parse.Cloud.define("placeOrder", function(request, response) {
+    var Order = Parse.Object.extend("Order");
+    var order = new Order();
+
+    var email = request.params.email;
+    var telephone = request.params.telephone;
+    var name = request.params.name;
+    var size = request.params.size;
+    var price = request.params.price;
+
+    if (
+        (typeof(email) === 'undefined') || 
+        (typeof(telephone) === 'undefined') || 
+        (typeof(name) === 'undefined') || 
+        (typeof(price) === 'undefined') || 
+        (typeof(size) === 'undefined') || 
+        (_.isEmpty(email)) ||
+        (_.isEmpty(telephone)) ||
+        (_.isEmpty(name)) ||
+        (_.isEmpty(price)) ||
+        (_.isEmpty(size))) 
+    {
+      response.error("One or more mandatory field was missing. Can't save Order.");
+    }
+
+    if ((typeof(request.params.player) !== 'undefined') && (!_.isEmpty(request.params.player))) {
+      var Player = Parse.Object.extend("Player");
+      var player = new Player();
+      player.id = request.params.player;
+
+      order.set('player', player);
+    }
+
+    order.set('email', email);
+    order.set('telephone', telephone);
+    order.set('name', name);
+    order.set('price', price);
+    order.set('size', size);
+
+    order.save().then(function(result) {
+        response.success("Saved the Order with objectId = " + result.id);
+    }, function(error) {
+        response.error("Saving Order failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
 Parse.Cloud.define("createPlayer", function(request, response) {
     var Player = Parse.Object.extend("Player");
     var player = new Player();
@@ -87,31 +173,73 @@ Parse.Cloud.define("updatePlayer", function(request, response) {
       result[0].set('telephone',request.params.telephone);
     }
     if ((typeof(request.params.birthyear) !== 'undefined') && (!_.isEmpty(request.params.birthyear))) {
-      result[0].set('birthyear',request.params.birthyear);
+      if (_.isEqual(request.params.birthyear, "-radera")) {
+        result[0].set('birthyear',"");
+      } else {
+        result[0].set('birthyear',request.params.birthyear);
+      }
     }
     if ((typeof(request.params.birthplace) !== 'undefined') && (!_.isEmpty(request.params.birthplace))) {
+      if (_.isEqual(request.params.birthplace, "-radera")) {
+        result[0].set('birthplace',"");
+      }
       result[0].set('birthplace',request.params.birthplace);
     }
     if ((typeof(request.params.nation) !== 'undefined') && (!_.isEmpty(request.params.nation))) {
-      result[0].set('nation',request.params.nation);
+      if (_.isEqual(request.params.nation, "-radera")) {
+        result[0].set('nation',"");
+      } else {
+        result[0].set('nation',request.params.nation);
+      }
     }
     if ((typeof(request.params.position) !== 'undefined') && (!_.isEmpty(request.params.position))) {
-      result[0].set('position',request.params.position);
+      if (_.isEqual(request.params.position, "-radera")) {
+        result[0].set('position',"");
+      } else  {
+        result[0].set('position',request.params.position);  
+      }
     }
     if ((typeof(request.params.shoots) !== 'undefined') && (!_.isEmpty(request.params.shoots))) {
-      result[0].set('shoots',request.params.shoots);
+      if (_.isEqual(request.params.shoots, "-radera")) {
+        result[0].set('shoots',"");
+      } else {
+        result[0].set('shoots',request.params.shoots);
+      }
     }
     if ((typeof(request.params.profile) !== 'undefined') && (!_.isEmpty(request.params.profile))) {
-      result[0].set('profile',request.params.profile);
+      if (_.isEqual(request.params.profile, "-radera")) {
+        result[0].set('profile',"");
+      } else {
+        result[0].set('profile',request.params.profile);
+      }
     }
     if ((typeof(request.params.twitter) !== 'undefined') && (!_.isEmpty(request.params.twitter))) {
-      result[0].set('twitter',request.params.twitter);
+      if (_.isEqual(request.params.twitter, "-radera")) {
+        result[0].set('twitter',"");
+      } else {
+        result[0].set('twitter',request.params.twitter);
+      }
     }
     if ((typeof(request.params.facebook) !== 'undefined') && (!_.isEmpty(request.params.facebook))) {
-      result[0].set('facebook',request.params.facebook);
+      if (_.isEqual(request.params.facebook, "-radera")) {
+        result[0].set('facebook',"");
+      } else {
+        result[0].set('facebook',request.params.facebook);
+      }
     }
     if ((typeof(request.params.gamertag) !== 'undefined') && (!_.isEmpty(request.params.gamertag))) {
-      result[0].set('gamertag',request.params.gamertag);
+      if (_.isEqual(request.params.gamertag, "-radera")) {
+        result[0].set('gamertag',"");
+      } else {
+        result[0].set('gamertag',request.params.gamertag);
+      }
+    }
+    if ((typeof(request.params.psn_id) !== 'undefined') && (!_.isEmpty(request.params.psn_id))) {
+      if (_.isEqual(request.params.psn_id, "-radera")) {
+        result[0].set('psn_id',"");
+      } else {
+        result[0].set('psn_id',request.params.psn_id);
+      }
     }
 
     promise = promise.then(function() {

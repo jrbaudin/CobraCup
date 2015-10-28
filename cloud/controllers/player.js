@@ -86,6 +86,7 @@ exports.updatePlayer = function(request, response) {
   var twitter = "";
   var facebook = "";
   var gamertag = "";
+  var psn_id = "";
 
   if ((typeof(request.body.telephone) !== 'undefined') && (!_.isEmpty(request.body.telephone))) {
     telephone = request.body.telephone;
@@ -120,8 +121,23 @@ exports.updatePlayer = function(request, response) {
   if ((typeof(request.body.gamertag) !== 'undefined') && (!_.isEmpty(request.body.gamertag))) {
     gamertag = request.body.gamertag;
   }
+  if ((typeof(request.body.psn_id) !== 'undefined') && (!_.isEmpty(request.body.psn_id))) {
+    psn_id = request.body.psn_id;
+  }
 
-  Parse.Cloud.run('updatePlayer', { player_id: request.params.playerid, telephone: telephone, email: email, birthyear: birthyear, birthplace: birthplace, nation: nation, position: position, shoots: shoots, profile: profile, twitter: twitter, facebook: facebook, gamertag: gamertag }, {
+  Parse.Cloud.run('updatePlayer', { player_id: request.params.playerid, 
+    telephone: telephone,
+    email: email,
+    birthyear: birthyear,
+    birthplace: birthplace,
+    nation: nation,
+    position: position,
+    shoots: shoots,
+    profile: profile,
+    twitter: twitter,
+    facebook: facebook,
+    gamertag: gamertag,
+    psn_id: psn_id }, {
     success: function(result) {
       //response.send(200, 'Updated Player with id ' + request.params.playerid);
       //response.json(result);
