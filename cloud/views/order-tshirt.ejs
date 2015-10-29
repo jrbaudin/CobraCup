@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include header section which holds imports for shared elements -->
+    <% include _header %>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="http://www.hub.cobracup.se/dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="http://www.hub.cobracup.se/stylesheets/style.css">
+
+    <title>Beställ Anton Hatar T-Shirt</title>
+    <script>
+     !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+     arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+     d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+     insertBefore(d,q)}(window,document,'script','_gs');
+
+     _gs('GSN-270173-J');
+    </script>
+</head>
+
+<body>
+   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+           <div class="navbar-header">
+             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+             </button>
+             <a class="navbar-brand" href="/"><i class="fa fa-cube"></i> Hub <span style="font-family: 'Kaushan Script', cursive;">2016</span></a>
+           </div>
+           <div id="navbar" class="navbar-collapse collapse">
+             <ul class="nav navbar-nav">
+               <li><a href="/">Lag</a></li>
+               <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Anmäl lag <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/signup">Cobra Cup</a></li>
+                        <li><a href="/signup/rookie">Hot Rod Cup</a></li>
+                    </ul>
+                </li>
+               <li class="dropdown">
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
+                 <ul class="dropdown-menu" role="menu">
+                   <li><a href="/stat/league">Ligan</a></li>
+                   <li><a href="/stat/divisions">Divisioner</a></li>
+                   <li><a href="/stat/playerstats">Spelarstatistik</a></li>
+                 </ul>
+               </li>
+               <li><a href="/stat/history">Statistik</a></li>
+               <li><a href="/games">Matcher</a></li>
+               <li><a href="/feed"><mark>Live</mark></a></li>
+               <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
+             </ul>
+             <% if(typeof(count) !== 'undefined'){ %>
+               <p class="navbar-text navbar-right"><strong><%= count %>/16 lag</strong></p>
+             <% } %>
+           </div><!--/.nav-collapse -->
+       </div>
+   </nav>
+    <div class="container">
+
+        <% if(typeof(flashError) !== 'undefined'){ %>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Problem!</strong> <%= flashError %>.
+            </div>
+        <% } %>
+
+        <% if(typeof(flashWarning) !== 'undefined'){ %>
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Varning!</strong> <%= flashWarning %>.
+            </div>
+        <% } %>
+
+        <% if(typeof(flashInfo) !== 'undefined'){ %>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Klart!</strong> <%= flashInfo %>.
+            </div>
+        <% } %>
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Köp en Anton Hatar T-Shirt <small>och bidra till vår insamling</small></h3>
+                </div>
+            </div>
+            <hr style="margin-top:0;">
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-md-8">
+                    <a href="https://se.betternow.org/en/fundraisers/cobra-cup-friska-grabbar" target="_blank">
+                        <img src="/img/friskagrabbar.jpg" class="img-responsive" alt="Friska Grabbar Image">
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="/img/antonhatar-big.jpg" target="_blank">
+                        <img src="/img/antonhatar.jpg" class="img-responsive" alt="Anton Hatar Image">
+                    </a>
+                </div>
+            </div>
+            <hr>
+            <div class="clearfix"></div>
+            <div class="panel" style="background-color: #eff0f2;">
+                <div class="panel-body">
+
+                    <h6>Beställ din T-Shirt</h6>
+                    <p>Köper du en Anton Hatar T-Shirt bidrar du med <strong>minst 150 kr</strong> till vår insamling till Prostatacancerförbundet. Läs mer om insamlingen <a href="http://cobracup.se/2015/10/29/cobra-cup-%E2%99%A5-friska-grabbar/" target="_blank">här</a>.</p>
+                    
+                    <form class="form" role="form" method="post">
+                        
+                        <div class="form-group col-md-12">
+                            <label for="name" class="control-label sr-only">Namn</label>
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
+                                <input type="text" class="form-control" id="name" placeholder="Peter Forsberg" name="name">
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left:0px; margin-right:0px;">
+                            <div class="form-group col-md-6">
+                                <label for="email" class="control-label sr-only">Epost</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="fa fa-envelope fa-fw"></span></div>
+                                    <input type="email" class="form-control" id="email" placeholder="placeholder@cobracup.se" name="email" required autofocus>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="telephone" class="control-label sr-only">Telefon</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-phone fa-fw"></i></div>
+                                    <input type="telephone" class="form-control" id="telephone" placeholder="0701112233" name="telephone" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left:0px; margin-right:0px;" title="Storlek">
+                            <div class="form-group col-md-6">
+                                <label for="size" class="sr-only">Storlek</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-check-square fa-fw"></i></div>
+
+                                    <select class="form-control" id="size" name="size">
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L" selected>L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6" title="Typ">
+                                <label for="type" class="sr-only">Typ</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-genderless fa-fw"></i></div>
+
+                                    <select class="form-control" id="type" name="type">
+                                        <option value="H" selected>Herr</option>
+                                        <option value="D">Dam</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label for="price" style="margin-top: 0; margin-bottom: 0; padding-bottom: 0;"><strong>Pris</strong></label>
+                            <input type="text" class="form-control" id="price" placeholder="300 kr" value="300 kr" name="price">
+                            <p class="help-block">En T-Shirt kostar minst 300 kr men du kan välja att betala hur mycket du vill över det.</p>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <input type='hidden' name='_method' value='put' />
+                            <button type="submit" class="btn btn-lg btn-success btn-wide btn-block text-uppercase" onclick="_gs('event', 'Clicked to Order T-Shirt')">Beställ</button>
+                        </div>
+                            
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <p class="text-center" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
+    <p class="text-center">
+        <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://www.hub.cobracup.se/dist/js/flat-ui.min.js"></script>
+
+    <!-- jQuery Version 1.11.0 -->
+    <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+    <script>
+        $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+</body>
+
+</html>

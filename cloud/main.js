@@ -80,6 +80,7 @@ Parse.Cloud.define("placeOrder", function(request, response) {
     var telephone = request.params.telephone;
     var name = request.params.name;
     var size = request.params.size;
+    var type = request.params.type;
     var price = request.params.price;
 
     if (
@@ -87,12 +88,14 @@ Parse.Cloud.define("placeOrder", function(request, response) {
         (typeof(telephone) === 'undefined') || 
         (typeof(name) === 'undefined') || 
         (typeof(price) === 'undefined') || 
-        (typeof(size) === 'undefined') || 
+        (typeof(size) === 'undefined') ||
+        (typeof(type) === 'undefined') || 
         (_.isEmpty(email)) ||
         (_.isEmpty(telephone)) ||
         (_.isEmpty(name)) ||
         (_.isEmpty(price)) ||
-        (_.isEmpty(size))) 
+        (_.isEmpty(size)) ||
+        (_.isEmpty(type))) 
     {
       response.error("One or more mandatory field was missing. Can't save Order.");
     }
@@ -110,6 +113,7 @@ Parse.Cloud.define("placeOrder", function(request, response) {
     order.set('name', name);
     order.set('price', price);
     order.set('size', size);
+    order.set('type', type);
 
     order.save().then(function(result) {
         response.success("Saved the Order with objectId = " + result.id);

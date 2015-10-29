@@ -15,6 +15,7 @@ var teamController = require('cloud/controllers/team.js');
 var playerController = require('cloud/controllers/player.js');
 var adminController = require('cloud/controllers/admin.js');
 var statController = require('cloud/controllers/stat.js');
+var storeController = require('cloud/controllers/store.js');
 
 var requireUser = require('cloud/require-user');
  
@@ -82,6 +83,9 @@ app.locals.getAge = function(birthday) {
 app.get('/', hubController.index); 
 
 app.get('/test', testController.load); 
+
+app.get('/order', storeController.load); 
+app.put('/order', storeController.placeOrder); 
 
 app.get('/signup', singupController.new);
 app.put('/signup', singupController.create);
