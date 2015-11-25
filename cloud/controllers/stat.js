@@ -20,6 +20,15 @@ exports.showHistory = function(request, response) {
 
     resWins = _.sortBy(results, function(result){
                         var stats = result.get("stats");
+                        var gp = 0;
+                        _.each(stats.seasons, function(season) {
+                          gp = gp+season.gp;
+                        });
+                        return gp; 
+                      });
+    
+    resWins = _.sortBy(resWins, function(result){
+                        var stats = result.get("stats");
                         var wins = 0;
                         _.each(stats.seasons, function(season) {
                           wins = wins+season.wins;
@@ -29,6 +38,17 @@ exports.showHistory = function(request, response) {
     resWins = resWins.reverse();
 
     resPOWins = _.sortBy(results, function(result){
+                        var stats = result.get("stats");
+                        var gp = 0;
+                        _.each(stats.seasons, function(season) {
+                            if ((typeof(season.playoffs) !== 'undefined') && (season.playoffs.gp > 0)) {
+                              gp = gp+season.playoffs.gp;
+                            }
+                        });
+                        return gp; 
+                      });
+
+    resPOWins = _.sortBy(resPOWins, function(result){
                         var stats = result.get("stats");
                         var wins = 0;
                         _.each(stats.seasons, function(season) {
@@ -45,6 +65,15 @@ exports.showHistory = function(request, response) {
 
     var playerGoals = _.sortBy(results, function(result){
                         var stats = result.get("stats");
+                        var gp = 0;
+                        _.each(stats.seasons, function(season) {
+                          gp = gp+season.gp;
+                        });
+                        return gp; 
+                      });
+
+    var playerGoals = _.sortBy(playerGoals, function(result){
+                        var stats = result.get("stats");
                         var goals = 0;
                         _.each(stats.seasons, function(season) {
                           goals = goals+season.goals;
@@ -52,8 +81,17 @@ exports.showHistory = function(request, response) {
                         return goals; 
                       });
     playerGoals = playerGoals.reverse();
-
+    
     var playerFights = _.sortBy(results, function(result){
+                        var stats = result.get("stats");
+                        var gp = 0;
+                        _.each(stats.seasons, function(season) {
+                          gp = gp+season.gp;
+                        });
+                        return gp; 
+                      });
+
+    var playerFights = _.sortBy(playerFights, function(result){
                         var stats = result.get("stats");
                         var fights = 0;
                         _.each(stats.seasons, function(season) {

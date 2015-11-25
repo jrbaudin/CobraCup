@@ -153,3 +153,25 @@ exports.updatePlayer = function(request, response) {
 exports.deletePlayer = function(request, response) {
   //Not implemented
 };
+
+exports.getListForParticipantFees = function(request, response) {
+  Parse.Cloud.run('getPlayers', {}, {
+    success: function(results) {
+      var resultList = _.sortBy(results, function(player){
+                          var payed = player.get("payed");
+                          return payed;
+                        });
+      resultList = resultList.reverse();
+
+      response.render('participant-fee', {
+        players: resultList
+      });
+    },
+    error: function(error) {
+      alert(error);
+      response.render('participant-fee', {
+        flashError: error
+      });
+    }
+  });
+};

@@ -20,105 +20,18 @@ Parse.Cloud.define("sendTweet", function(request, response) {
     });
 });
 
+
+
 /**** PLAYER ****/
 Parse.Cloud.define("getPlayers", function(request, response) {
     var Player = Parse.Object.extend('Player');
+
     var playersQuery = new Parse.Query(Player);
     playersQuery.include('team');
     playersQuery.find().then(function(results) {
         response.success(results);                            
     }, function(error) {
       response.error("Players retrieval failed with error.code " + error.code + " error.message " + error.message);
-    });
-});
-
-Parse.Cloud.beforeSave("Order", function(request, response) {
-  var price = request.object.get("price");
-  price = price.replace(/\D/g,'');
-  request.object.set('price', price);
-
-  var size = request.object.get("size");
-
-  if (
-    (_.isEqual(size, "S")) ||
-    (_.isEqual(size, "M")) ||
-    (_.isEqual(size, "L")) ||
-    (_.isEqual(size, "XL")) ||
-    (_.isEqual(size, "XXL"))) 
-  {
-    response.success();
-  } else {
-    response.error("A non valid size marker was entered");
-  }
-});
-
-Parse.Cloud.afterSave("Order", function(request, response) {
-  var email = request.object.get("email");
-  var name = request.object.get("name");
-  var price = request.object.get("price");
-  var size = request.object.get("size");
-
-  mailgun.sendEmail({
-    to: name + " <" + email + ">",
-    bcc: "Joel Baudin <joel.baudin88@gmail.com>",
-    from: "Cobra Cup 2016 <joel@cobracup.se>",
-    subject: "Anton Hatar T-Shirt - Tack för din beställning och bidrag!",
-    html: "<html><h3>Din beställning av en Anton Hatar T-Shirt är mottagen!</h3><p>Du har beställt en T-Shirt med storlek <b>" + size + "</b> och valt att betala <b>" + price + " kr</b> för den.</p><p><h3>Betalning</h3>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med <b>AH + ditt namn</b>.<br>Om du inte har Swish eller inte vill använda dig av det ber jag dig kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för ditt bidrag!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
-  }).then(function(result) {
-      response.success();
-  }, function(error) {
-      response.error("Sending email failed with error.code " + error.code + " error.message " + error.message);
-  });
-
-});
-
-Parse.Cloud.define("placeOrder", function(request, response) {
-    var Order = Parse.Object.extend("Order");
-    var order = new Order();
-
-    var email = request.params.email;
-    var telephone = request.params.telephone;
-    var name = request.params.name;
-    var size = request.params.size;
-    var type = request.params.type;
-    var price = request.params.price;
-
-    if (
-        (typeof(email) === 'undefined') || 
-        (typeof(telephone) === 'undefined') || 
-        (typeof(name) === 'undefined') || 
-        (typeof(price) === 'undefined') || 
-        (typeof(size) === 'undefined') ||
-        (typeof(type) === 'undefined') || 
-        (_.isEmpty(email)) ||
-        (_.isEmpty(telephone)) ||
-        (_.isEmpty(name)) ||
-        (_.isEmpty(price)) ||
-        (_.isEmpty(size)) ||
-        (_.isEmpty(type))) 
-    {
-      response.error("One or more mandatory field was missing. Can't save Order.");
-    }
-
-    if ((typeof(request.params.player) !== 'undefined') && (!_.isEmpty(request.params.player))) {
-      var Player = Parse.Object.extend("Player");
-      var player = new Player();
-      player.id = request.params.player;
-
-      order.set('player', player);
-    }
-
-    order.set('email', email);
-    order.set('telephone', telephone);
-    order.set('name', name);
-    order.set('price', price);
-    order.set('size', size);
-    order.set('type', type);
-
-    order.save().then(function(result) {
-        response.success("Saved the Order with objectId = " + result.id);
-    }, function(error) {
-        response.error("Saving Order failed with error.code " + error.code + " error.message " + error.message);
     });
 });
 
@@ -264,11 +177,17 @@ Parse.Cloud.define("sendPasswordToUser", function(request, response) {
 
   var i = 0;
 
+  var name = "";
+  var email = "";
+
   var Player = Parse.Object.extend('Player');
   var playerQuery = new Parse.Query(Player);
   playerQuery.equalTo('player_id', request.params.player_id);
   playerQuery.find().then(function(results) {
     _.each(results, function(result) {
+
+      name = result.get("name");
+      email = result.get("email");
 
       var emailPromise = mailgun.sendEmail({
         to: result.get("name") + " <" + result.get("email") + ">",
@@ -286,7 +205,9 @@ Parse.Cloud.define("sendPasswordToUser", function(request, response) {
     return Parse.Promise.when(emailPromises);;
 
   }).then(function() {
-    response.success("Sent password to " + i + " players");
+    response.success("Sent password to " + i + " player with name " + name + " and email " + email);
+  }, function(error){
+    response.error("Sending password to user failed with error.code " + error.code + " error.message " + error.message);
   });
 });
 
@@ -910,6 +831,130 @@ Parse.Cloud.define("deleteTeam", function(request, response) {
 
 /**** /TEAM ****/
 
+/** GAMES **/
+Parse.Cloud.define("getGames", function(request, response) {
+    var Team = Parse.Object.extend('Team');
+    var teamsQuery = new Parse.Query(Team);
+    teamsQuery.include(['nhlTeam','captain','lieutenant']);
+    teamsQuery.find().then(function(results) {
+        response.success(results);                            
+    }, function(error) {
+      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
+Parse.Cloud.define("getPlayoffGames", function(request, response) {
+    var Team = Parse.Object.extend('Team');
+    var teamsQuery = new Parse.Query(Team);
+    teamsQuery.include(['nhlTeam','captain','lieutenant']);
+    teamsQuery.find().then(function(results) {
+        response.success(results);                            
+    }, function(error) {
+      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
+Parse.Cloud.define("getGameWithId", function(request, response) {
+    var Team = Parse.Object.extend('Team');
+    var teamsQuery = new Parse.Query(Team);
+    teamsQuery.include(['nhlTeam','captain','lieutenant']);
+    teamsQuery.find().then(function(results) {
+        response.success(results);                            
+    }, function(error) {
+      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
+Parse.Cloud.beforeSave("Game", function(request, response) {
+  var round = request.object.get("round");
+  var group = request.object.get("group");
+  var type = request.object.get("type");
+
+  if ((typeof(round) !== 'undefined') && ((round < 1) || (round > 12))){
+    response.error("there's only 12 rounds in the group phase of Cobra Cup");
+  } else if ((typeof(group) !== 'undefined') && ((group < 1) || (group > 4))){
+    response.error("We have 4 groups in Cobra Cup so it can't be less or more than that");
+  } else if ((typeof(type) !== 'undefined') && ((_.isEqual(type, "1")) || (_.isEqual(type, "2")))){
+    response.error("There's only two types of games in Cobra Cup Group (1) or Playoff (2)");
+  } else {
+    response.success();
+  }
+});
+
+Parse.Cloud.define("createGame", function(request, response) {
+    var Game = Parse.Object.extend("Game");
+    var game = new Game();
+
+    var round = "";
+    var group = "";
+    var type = "";
+    var hometeam = "";
+    var awayteam = "";
+    
+    if((typeof(request.params.round) !== 'undefined') && (!_.isEmpty(request.params.round))){
+      round = request.params.round;
+    }
+    if((typeof(request.params.group) !== 'undefined') && (!_.isEmpty(request.params.group))){
+      group = request.params.group;
+    }
+    if((typeof(request.params.type) !== 'undefined') && (!_.isEmpty(request.params.type))){
+      type = request.params.type;
+    } 
+    if((typeof(request.params.hometeam) !== 'undefined') && (!_.isEmpty(request.params.hometeam))){
+      hometeam = request.params.hometeam;
+    } 
+    if((typeof(request.params.awayteam) !== 'undefined') && (!_.isEmpty(request.params.awayteam))){
+      awayteam = request.params.awayteam;
+    }  
+
+    if (_.isEmpty(round) || _.isEmpty(type) || _.isEmpty(hometeam) || _.isEmpty(awayteam)) {
+      console.log("Mandatory values was missing.");
+      response.error("Mandatory values was missing.");
+    }
+
+    if (_.isEmpty(group) && _.isEqual("1",type)) {
+      console.log("We need a group number if we're to create Group Games");
+      response.error("We need a group number if we're to create Group Games");
+    }
+
+    var Team = Parse.Object.extend("Team");
+
+    var obj_hometeam = new Team();
+    obj_hometeam.id = hometeam;
+
+    var obj_awayteam = new Team();
+    obj_awayteam.id = awayteam;
+
+    game.set("home", obj_hometeam);
+    game.set("away", obj_awayteam);
+
+    game.set('played', false);
+
+    var gameId = Math.floor((Math.random() * 100000) + 1);
+    game.set('game_id', gameId.toString());
+
+    if(!_.isNumber(round)) {
+      round = parseInt(round);
+    }
+    game.set('round', round);
+
+    if(!_.isNumber(group)) {
+      group = parseInt(group);
+    }
+    game.set('group', group);
+
+    if(!_.isNumber(type)) {
+      type = parseInt(type);
+    }
+    game.set('type', type);
+
+    game.save().then(function(result) {
+        response.success("Saved Game with id = '" + gameId + "'");
+    }, function(error) {
+        response.error("Creating Game failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
 /***** Utility Functions *****/
 
 Parse.Cloud.define("calculatePoints", function(request, response) {
@@ -1056,5 +1101,96 @@ Parse.Cloud.define("migratePlayers", function(request, response) {
       response.success("Players are migrated");
     }, function(error){
       response.error("Script failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
+/** -- Order -- **/
+Parse.Cloud.beforeSave("Order", function(request, response) {
+  var price = request.object.get("price");
+  price = price.replace(/\D/g,'');
+  request.object.set('price', price);
+
+  var size = request.object.get("size");
+
+  if (
+    (_.isEqual(size, "S")) ||
+    (_.isEqual(size, "M")) ||
+    (_.isEqual(size, "L")) ||
+    (_.isEqual(size, "XL")) ||
+    (_.isEqual(size, "XXL"))) 
+  {
+    response.success();
+  } else {
+    response.error("A non valid size marker was entered");
+  }
+});
+
+Parse.Cloud.afterSave("Order", function(request, response) {
+  var email = request.object.get("email");
+  var name = request.object.get("name");
+  var price = request.object.get("price");
+  var size = request.object.get("size");
+
+  mailgun.sendEmail({
+    to: name + " <" + email + ">",
+    bcc: "Joel Baudin <joel.baudin88@gmail.com>",
+    from: "Cobra Cup 2016 <joel@cobracup.se>",
+    subject: "Anton Hatar T-Shirt - Tack för din beställning och bidrag!",
+    html: "<html><h3>Din beställning av en Anton Hatar T-Shirt är mottagen!</h3><p>Du har beställt en T-Shirt med storlek <b>" + size + "</b> och valt att betala <b>" + price + " kr</b> för den.</p><p><h3>Betalning</h3>Betalning sker enklast via Swish till <b>070 566 64 21</b>. Märk din betalning med <b>AH + ditt namn</b>.<br>Om du inte har Swish eller inte vill använda dig av det ber jag dig kontakta mig för att få kontonummer.<br><br>Om det är några frågor tveka inte att kontakta oss på joel@cobracup.se.</p><p>Tack för ditt bidrag!<br><br>Med vänlig hälsning<br>Joel & David<br>www.cobracup.se</p></html>"
+  }).then(function(result) {
+      response.success();
+  }, function(error) {
+      response.error("Sending email failed with error.code " + error.code + " error.message " + error.message);
+  });
+
+});
+
+Parse.Cloud.define("placeOrder", function(request, response) {
+    var Order = Parse.Object.extend("Order");
+    var order = new Order();
+
+    var email = request.params.email;
+    var telephone = request.params.telephone;
+    var name = request.params.name;
+    var size = request.params.size;
+    var type = request.params.type;
+    var price = request.params.price;
+
+    if (
+        (typeof(email) === 'undefined') || 
+        (typeof(telephone) === 'undefined') || 
+        (typeof(name) === 'undefined') || 
+        (typeof(price) === 'undefined') || 
+        (typeof(size) === 'undefined') ||
+        (typeof(type) === 'undefined') || 
+        (_.isEmpty(email)) ||
+        (_.isEmpty(telephone)) ||
+        (_.isEmpty(name)) ||
+        (_.isEmpty(price)) ||
+        (_.isEmpty(size)) ||
+        (_.isEmpty(type))) 
+    {
+      response.error("One or more mandatory field was missing. Can't save Order.");
+    }
+
+    if ((typeof(request.params.player) !== 'undefined') && (!_.isEmpty(request.params.player))) {
+      var Player = Parse.Object.extend("Player");
+      var player = new Player();
+      player.id = request.params.player;
+
+      order.set('player', player);
+    }
+
+    order.set('email', email);
+    order.set('telephone', telephone);
+    order.set('name', name);
+    order.set('price', price);
+    order.set('size', size);
+    order.set('type', type);
+
+    order.save().then(function(result) {
+        response.success("Saved the Order with objectId = " + result.id);
+    }, function(error) {
+        response.error("Saving Order failed with error.code " + error.code + " error.message " + error.message);
     });
 });

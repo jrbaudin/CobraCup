@@ -90,8 +90,8 @@ app.put('/order', storeController.placeOrder);
 app.get('/signup', singupController.new);
 app.put('/signup', singupController.create);
 
-app.get('/signup/rookie', singupController.rookie);
-app.put('/signup/rookie', singupController.create);
+//app.get('/signup/rookie', singupController.rookie);
+//app.put('/signup/rookie', singupController.create);
 
 app.get('/team/:teamid', teamController.getTeam);
 //app.put('/team/:teamid', teamController.update);
@@ -101,6 +101,8 @@ app.get('/player/:playerid', playerController.getPlayer);
 app.get('/player/edit/:playerid', playerController.getPlayerForUpdate);
 app.put('/player/edit/:playerid', playerController.updatePlayer);
 //app.del('/player/:playerid', playerController.deletePlayer);
+
+app.get('/payed', playerController.getListForParticipantFees);
 
 app.get('/stat/league', statController.showLeague);
 app.get('/stat/divisions', statController.showDivisions);

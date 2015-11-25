@@ -43,13 +43,7 @@
            <div id="navbar" class="navbar-collapse collapse">
              <ul class="nav navbar-nav">
                <li><a href="/">Lag</a></li>
-               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Anmäl lag <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="/signup">Cobra Cup</a></li>
-                        <li><a href="/signup/rookie">Hot Rod Cup</a></li>
-                    </ul>
-                </li>
+               <li><a href="/signup">Anmäl lag</a></li>
                <li class="dropdown">
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
                  <ul class="dropdown-menu" role="menu">
@@ -66,24 +60,15 @@
              <% if(typeof(teams) !== 'undefined'){ %>
                  
                 <% 
-
                 var teamCount = _.countBy(teams, function(team){
                     return team.get("level");
                 });
 
                 var cobracup_count = 0;
-                var hotrodcup_count = 0;
 
-                hotrodcup_count = teamCount["1"];
                 cobracup_count = teamCount["2"] + teamCount["3"];
 
                 %>
-
-                <% if (hotrodcup_count >= 4) { %>
-                    <p class="navbar-text navbar-right fullybooked"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
-                <% } else { %>
-                    <p class="navbar-text navbar-right stillopen"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
-                <% } %>
 
                 <% if (cobracup_count >= 16) { %>
                     <p class="navbar-text navbar-right fullybooked"><strong>CC <%= cobracup_count %>/16</strong></p>
@@ -154,10 +139,12 @@
                             </a>
                             <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj.get("captain").get("telephone") %></p>
 
-                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj.get("captain").get("gamertag") %></strong></span></small></p>
+                            <% if ((typeof(teamObj.get("captain").get("gamertag")) !== 'undefined') && (!_.isEmpty(teamObj.get("captain").get("gamertag")))) { %>
+                                <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj.get("captain").get("gamertag") %></strong></span></small></p>
+                            <% } %>
 
                             <% if ((typeof(teamObj.get("captain").get("psn_id")) !== 'undefined') && (!_.isEmpty(teamObj.get("captain").get("psn_id")))) { %>
-                                <p class="text-center" style="line-height: 1; margin: 0;" title="PlayStation Network ID"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(56,90,124);"><strong><%= teamObj.get("captain").get("psn_id") %></strong></span></small></p>
+                                <p class="text-center" style="line-height: 1; margin: 0;" title="PlayStation Network ID"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: #003791;"><strong><%= teamObj.get("captain").get("psn_id") %></strong></span></small></p>
                             <% } %>
                             
                         </div>
@@ -172,12 +159,12 @@
                             </a>
                             <p class="text-center" style="line-height: 1; margin: 0;"><%= teamObj.get("lieutenant").get("telephone") %></p>
                             
-                            <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj.get("lieutenant").get("gamertag") %></strong></span></small></p>
+                            <% if ((typeof(teamObj.get("lieutenant").get("gamertag")) !== 'undefined') && (!_.isEmpty(teamObj.get("lieutenant").get("gamertag")))) { %>
+                                <p class="text-center" style="line-height: 1; margin: 0;" title="Xbox Live Gamertag"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(16,124,16);"><strong><%= teamObj.get("lieutenant").get("gamertag") %></strong></span></small></p>
+                            <% } %>
 
                             <% if ((typeof(teamObj.get("lieutenant").get("psn_id")) !== 'undefined') && (!_.isEmpty(teamObj.get("lieutenant").get("psn_id")))) { %>
-                                <p class="text-center" style="line-height: 1; margin: 0;" title="PlayStation Network ID">
-                                <small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: rgb(56,90,124);"><strong><%= teamObj.get("lieutenant").get("psn_id") %></strong></span></small>
-                                </p>
+                                <p class="text-center" style="line-height: 1; margin: 0;" title="PlayStation Network ID"><small><i class="fa fa-gamepad" style="color: rgb(0,0,0);"></i> <span style="color: #003791;"><strong><%= teamObj.get("lieutenant").get("psn_id") %></strong></span></small></p>
                             <% } %>
                         </div>
                         <hr>

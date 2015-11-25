@@ -9,7 +9,7 @@ exports.new = function(req, res) {
   teamQuery.count({
     success: function(number) {
       console.log("number: " + number);
-      if(number <=19){
+      if(number <=15){
         var NHLTeam = Parse.Object.extend('NHLTeam');
         var nhlTeamQuery = new Parse.Query(NHLTeam);
         nhlTeamQuery.ascending('name');
@@ -27,27 +27,8 @@ exports.new = function(req, res) {
           res.send(500, 'Failed finding teams');
         });
       } else {
-        var passedWarningVariable = "Alla platser för Cobra Cup 2016 är bokade!";
-        var Team = Parse.Object.extend('Team');
-        var teamQuery = new Parse.Query(Team);
-        teamQuery.descending('createdAt');
-        teamQuery.include('nhlTeam');
-        teamQuery.find().then(function(teams) {
-          if (teams) {
-            var count = _.size(teams);
-            console.log("count: " + count);
-            res.render('hub', {
-              teams: teams,
-              count: count,
-              flashWarning: passedWarningVariable
-            });
-          } else {
-            res.render('hub', {flash: 'Inga lag är ännu registrerade.'});
-          }
-        },
-        function() {
-          res.send(500, 'Failed finding teams');
-        });
+        var info_msg = encodeURIComponent('Cobra Cup 2016 är fullbokat. Tack för visat intresse!');
+        res.redirect('/' + '?info=' + info_msg);
       }
     },
     error: function(error) {

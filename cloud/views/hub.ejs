@@ -50,13 +50,7 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="/">Lag</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Anmäl lag <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="/signup">Cobra Cup</a></li>
-                  <li><a href="/signup/rookie">Hot Rod Cup</a></li>
-                </ul>
-              </li>
+              <li><a href="/signup">Anmäl lag</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
@@ -70,13 +64,7 @@
               <li><a href="/feed"><mark>Live</mark></a></li>
               <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
             </ul>
-
-            <% if (hotrodcup_count >= 4) { %>
-                <p class="navbar-text navbar-right fullybooked"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
-            <% } else { %>
-                <p class="navbar-text navbar-right stillopen"><strong>HRC <%= hotrodcup_count %>/4</strong></p>
-            <% } %>
-
+            
             <% if (cobracup_count >= 16) { %>
                 <p class="navbar-text navbar-right fullybooked"><strong>CC <%= cobracup_count %>/16</strong></p>
             <% } else { %>
@@ -113,7 +101,7 @@
               <% if(typeof(flashGameId) !== 'undefined'){ %>
                 <strong>Klart!</strong> <%= flashInfo %> <a href="/stat/game/<%= flashGameId %>" class="alert-link"><%= flashGameId %></a> sparat med lyckat resultat.
               <% } else { %>
-                <strong>Klart!</strong> <%= flashInfo %>
+                <%= flashInfo %>
               <% } %>
             </div>
         <% } %>
@@ -126,15 +114,10 @@
               <strong>Fel!</strong> <%= flash %>.
             </div>
         <% } %>
-        <% if(typeof(teams) !== 'undefined'){ 
-            var rookies = [];
-          %>
+        <% if(typeof(teams) !== 'undefined') { %>
           <h4 style="color:#eff0f2;">Cobra Cup 2016 <i class="fa fa-hand-spock-o"></i> <%= cobracup_count %>/16 lag</h4>
           <div class="row demo-tiles">
               <% teams.forEach(function(team) { %>
-                 <% if(team.get("level") == 1) { 
-                        rookies.push(team);
-                  } else { %>
                     <div class="col-md-3 col-lg-3">
                       <div class="tile tile-hot">
                         <!-- Add Champion trophy -->
@@ -157,26 +140,8 @@
                         <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>" onclick="_gs('event', 'Clicked to go to the Team Corner')">Team Corner</a>
                       </div>
                     </div>
-                  <% } %>
               <% }) %>
             </div>
-            <h4 style="color:#eff0f2;">Hot Rod Cup 2016 <i class="fa fa-motorcycle"></i> <%= hotrodcup_count %>/4 lag</h4>
-            <div class="row demo-tiles">
-              <% rookies.forEach(function(team) { %>
-                <div class="col-md-3 col-lg-3">
-                  <div class="tile tile-hot">
-                    <img src="dist/img/icons/svg/ribbon_rookie.svg" alt="Rookie ribbon" class="tile-hot-ribbon">
-                    <a href="/team/<%= team.get("team_id") %>">
-                      <img src="<%= team.get("nhlTeam").get("logo").url() %>" alt="Team logo" class="tile-image big-illustration img-circle">
-                    </a>
-                    <h3 class="tile-title text-uppercase"><%= team.get("team_name") %></h3>
-                    <p><%= team.get("nhlTeam").get("name") %></p>
-                    <a class="btn btn-primary btn-large btn-block" href="/team/<%= team.get("team_id") %>" onclick="_gs('event', 'Clicked to go to the Team Corner')">Team Corner</a>
-                  </div>
-                </div>
-              <% }) %>
-            </div>
-            <!-- /tiles -->
           <% } %>          
     </div>
     <!-- /.col-lg-12 -->

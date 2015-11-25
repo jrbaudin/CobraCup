@@ -5,10 +5,13 @@
     <!-- Include header section which holds imports for shared elements -->
     <% include _header %>
 
-    <title>Live - Cobra Cup 2016</title>
+    <title>Betalstatus Spelaravgift</title>
 
     <!-- Latest compiled and minified CSS -->
-    <link href="dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="../../dist/css/vendor/bootstrap.min.css" > -->
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="dist/css/flat-ui.css">
@@ -48,75 +51,69 @@
                     <li><a href="/stat/playerstats">Spelarstatistik</a></li>
                   </ul>
                 </li>
-                <li><a href="/stat/history">Statistik</a></li>
+                <li class="active"><a href="/stat/history">Statistik</a></li>
                 <li><a href="/games">Matcher</a></li>
-                <li class="active"><a href="/feed"><mark>Live</mark></a></li>
+                <li><a href="/feed"><mark>Live</mark></a></li>
                 <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
               </ul>
               <% if(typeof(count) !== 'undefined'){ %>
                 <p class="navbar-text navbar-right"><strong><%= count %>/16 lag</strong></p>
-              <% } %>s
+              <% } %>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
     <div class="container">
         <% if(typeof(flashError) !== 'undefined'){ %>
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert">
-                    <span aria-hidden="true">&times;</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                <strong>Fel!</strong> <%= flashError %>.
-            </div>
-        <% } else if(typeof(flashErrorGame) !== 'undefined'){ %>
-            <div class="alert alert-danger alert-dismissible" role="alert">
               <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
               </button>
-              <strong>Fel!</strong> <%= flashErrorGame %>
+              <strong>Fel!</strong> <%= flashError %>
             </div>
-        <% } %>
-        <div class="col-md-3 hidden-xs">
-            <div class="row">
-                <div class="panel" style="background-color: #eff0f2;">
-                    <div class="panel-body">
-                        <p class="text-uppercase lead text-center"  style="margin-bottom:0; padding-bottom: 0;">Cobra Cup 2016</p>
-                        <p class="text-uppercase text-center"  style="margin-bottom:0; margin-top: 0; padding-top:0;"><small style="color: #C0392B;">nedsläpp om</small></p>
-                        <p class="text-uppercase text-center lead"><strong><%= getFromNowStripped("2015-12-19 12:00:00") %></strong></p>
-                    </div>
-                    <!-- /.panel-body -->
+        <% } %> 
+        <div id="content" class="panel panel-default">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h6 class="panel-title text-uppercase">
+                        Spelaravgift <small>betalt 200 kr </small>
+                        <span class="push-right"><small><a href="http://cobracup.se/anmalningsavgift/" target="_blank">läs mer här</a></small></span>
+                    </h6>
                 </div>
-                <!-- /.panel -->
+                <div class="panel-body table-responsive">
+                    <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                        <thead style="font-size: 13px;">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>Namn</th>
+                                <th>Lag</th>
+                                <th class="text-center text-uppercase" title="Payed Fee">Betalt</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 12px;">
+                            <% if(typeof(players) !== 'undefined'){
+                                var i = 1;
+
+                                players.forEach(function(player) { 
+                                    var payed = player.get("payed"); %>
+                                    <tr>
+                                        <td class="text-center"><%= i %></td>
+                                        <td><a href="/player/<%= player.get("player_id") %>" target="_blank"><%= player.get("name") %></a></td>
+                                        <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><%= player.get("team").get("team_name") %></a></td>
+                                        <% if((typeof(payed) !== 'undefined') && (payed)) { %>
+                                            <td class="text-center positive"><i class="fa fa-thumbs-up"></i></td>
+                                        <% } else { %>
+                                            <td class="text-center negative"><i class="fa fa-thumbs-down"></i></td>
+                                        <% } %>
+                                    </tr>
+                                    <% i = i+1;
+                                }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="col-md-9 col-xs-12">
-            <% if(typeof(notifications) !== 'undefined'){ %>
-                <% notifications.forEach(function(note) { %>
-                    <div class="panel" style="background-color: #eff0f2;">
-                        <div class="panel-body" style="margin-bottom: 0; padding-bottom: 5px; padding-top: 5px;">
-                            <p style="margin-bottom:0;"><a href="<%= note.get("link") %>" style="color: rgb(241,102,57);"><strong><%= note.get("header") %></strong></a> <small style="color: #E74C3C; margin-left: 10px;"><%= getFromNow(note.get("published")) %></small></p>
-                            <p style="margin-bottom:0;"><%= note.get("message") %></p>
-                            <p class="hidden-xs" style="margin-bottom:0;">
-                                <a href="https://twitter.com/intent/tweet?button_hashtag=CobraCup" class="twitter-hashtag-button" data-lang="sv" data-related="CobraCup" onclick="_gs('event', 'Clicked the tweet #CobraCup button')">Tweet #CobraCup</a>
-                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                            </p>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                <% }) %>
-            <% } else { %>
-                <div class="panel" style="background-color: #eff0f2;">
-                    <div class="panel-body" style="margin-bottom: 0; padding-bottom: 5px; padding-top: 5px;">
-                        <p>Kunde inte ladda live feeden! Försök att ladda om sidan.</p>
-                    </div>
-                    <!-- /.panel-body -->
-                </div>
-                <!-- /.panel -->
-            <% } %>
-        </div>
-        <!-- /.col-md-8 -->
     </div>
     <!-- /.container -->
 
@@ -125,9 +122,10 @@
         <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     </p>
-
+    
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="dist/js/vendor/jquery.min.js"></script>
+    <!-- <script src="../../dist/js/vendor/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="dist/js/flat-ui.min.js"></script>
 
@@ -135,7 +133,7 @@
     <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
 
     <!-- Latest compiled and minified JavaScript -->
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
 </body>
 
 </html>
