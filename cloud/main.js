@@ -832,36 +832,45 @@ Parse.Cloud.define("deleteTeam", function(request, response) {
 /**** /TEAM ****/
 
 /** GAMES **/
-Parse.Cloud.define("getGames", function(request, response) {
-    var Team = Parse.Object.extend('Team');
-    var teamsQuery = new Parse.Query(Team);
-    teamsQuery.include(['nhlTeam','captain','lieutenant']);
-    teamsQuery.find().then(function(results) {
+Parse.Cloud.define("getGroupGames", function(request, response) {
+    var Game = Parse.Object.extend('Game');
+    var gameQuery = new Parse.Query(Game);
+    gameQuery.include(['home.nhlTeam','away.nhlTeam']);
+    gameQuery.include(['home.captain','home.lieutenant']);
+    gameQuery.include(['away.captain','away.lieutenant']);
+    gameQuery.equalTo('type', 1);
+    gameQuery.find().then(function(results) {
         response.success(results);                            
     }, function(error) {
-      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+      response.error("Fetching group games failed with error.code " + error.code + " error.message " + error.message);
     });
 });
 
 Parse.Cloud.define("getPlayoffGames", function(request, response) {
-    var Team = Parse.Object.extend('Team');
-    var teamsQuery = new Parse.Query(Team);
-    teamsQuery.include(['nhlTeam','captain','lieutenant']);
-    teamsQuery.find().then(function(results) {
+    var Game = Parse.Object.extend('Game');
+    var gameQuery = new Parse.Query(Game);
+    gameQuery.include(['home.nhlTeam','away.nhlTeam']);
+    gameQuery.include(['home.captain','home.lieutenant']);
+    gameQuery.include(['away.captain','away.lieutenant']);
+    gameQuery.equalTo('type', 2);
+    gameQuery.find().then(function(results) {
         response.success(results);                            
     }, function(error) {
-      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+      response.error("Fetching group games failed with error.code " + error.code + " error.message " + error.message);
     });
 });
 
 Parse.Cloud.define("getGameWithId", function(request, response) {
-    var Team = Parse.Object.extend('Team');
-    var teamsQuery = new Parse.Query(Team);
-    teamsQuery.include(['nhlTeam','captain','lieutenant']);
-    teamsQuery.find().then(function(results) {
-        response.success(results);                            
+    var Game = Parse.Object.extend('Game');
+    var gameQuery = new Parse.Query(Game);
+    gameQuery.include(['home.nhlTeam','away.nhlTeam']);
+    gameQuery.include(['home.captain','home.lieutenant']);
+    gameQuery.include(['away.captain','away.lieutenant']);
+    gameQuery.equalTo('game_id', request.params.game_id);
+    gameQuery.find().then(function(result) {
+        response.success(result);                            
     }, function(error) {
-      response.error("Teams retrieval failed with error.code " + error.code + " error.message " + error.message);
+      response.error("Fetching Game with id '" + request.params.game_id + "' failed with error.code " + error.code + " error.message " + error.message);
     });
 });
 
@@ -871,11 +880,11 @@ Parse.Cloud.beforeSave("Game", function(request, response) {
   var type = request.object.get("type");
 
   if ((typeof(round) !== 'undefined') && ((round < 1) || (round > 12))){
-    response.error("there's only 12 rounds in the group phase of Cobra Cup");
+    response.error("Round '" + round + "' is not valid. There's only 12 rounds in the group phase of Cobra Cup");
   } else if ((typeof(group) !== 'undefined') && ((group < 1) || (group > 4))){
-    response.error("We have 4 groups in Cobra Cup so it can't be less or more than that");
-  } else if ((typeof(type) !== 'undefined') && ((_.isEqual(type, "1")) || (_.isEqual(type, "2")))){
-    response.error("There's only two types of games in Cobra Cup Group (1) or Playoff (2)");
+    response.error("Group '" + group + "' is not valid. We have 4 groups in Cobra Cup so it can't be less or more than that");
+  } else if ((typeof(type) !== 'undefined') && ((type < 1) || (type > 2))){
+    response.error("Type '" + type + "' is not valid. There's only two types of games in Cobra Cup Group (1) or Playoff (2)");
   } else {
     response.success();
   }
