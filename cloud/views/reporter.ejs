@@ -53,10 +53,7 @@
                 <li><a href="/feed"><mark>Live</mark></a></li>
                 <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
               </ul>
-              <% if(typeof(count) !== 'undefined'){ %>
-                <p class="navbar-text navbar-right"><strong><%= count %>/16 lag</strong></p>
-              <% } %>
-            </div><!--/.nav-collapse -->
+            </div>
         </div>
     </nav>
     <div class="container">
@@ -77,42 +74,162 @@
               <strong>Fel!</strong> <%= flashErrorGame %>
             </div>
         <% } %>
-        <% if((typeof(game) !== 'undefined') && (typeof(teams) !== 'undefined')){
-            var hometeam = null;
-            var awayteam = null;
+        <% if(typeof(game) !== 'undefined'){
 
-            teams.forEach(function(team) {
-                if(_.isEqual(team.id, game[0].get("home").id)){
-                    hometeam = team;
-                } else if(_.isEqual(team.id, game[0].get("away").id)){
-                    awayteam = team;
-                }
-            })
+            var round = "";
+            if(typeof(game[0].get("round")) !== 'undefined'){
+                round = game[0].get("round");
+            }
+
+            var group = "";
+            if(typeof(game[0].get("group")) !== 'undefined'){
+                group = game[0].get("group");
+            }
+
+            var played = false;
+            if( typeof(game[0].get("played")) !== 'undefined' && _.isEqual(game[0].get("played"), true) ){
+                played = true;
+            }
+
+            var home_team_name = "";
+            if( typeof(game[0].get("home").get("team_name")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("team_name")) ){
+                home_team_name = game[0].get("home").get("team_name");
+            }
+
+            var home_goals_total = 0;
+            if(typeof(game[0].get("home_goals_total")) !== 'undefined'){
+                home_goals_total = game[0].get("home_goals_total");
+            }
+
+            var home_logo_url = "";
+            if( typeof(game[0].get("home").get("nhlTeam").get("logo").url()) !== 'undefined' && !_.isEmpty(game[0].get("home").get("nhlTeam").get("logo").url()) ){
+                home_logo_url = game[0].get("home").get("nhlTeam").get("logo").url();
+            }
+
+            var home_captain_name = "";
+            if( typeof(game[0].get("home").get("captain").get("name")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("captain").get("name")) ){
+                home_captain_name = game[0].get("home").get("captain").get("name");
+            }
+
+            var home_captain_id = "";
+            if( typeof(game[0].get("home").get("captain").get("player_id")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("captain").get("player_id")) ){
+                home_captain_id = game[0].get("home").get("captain").get("player_id");
+            }
+
+            var home_lieutenant_name = "";
+            if( typeof(game[0].get("home").get("lieutenant").get("name")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("lieutenant").get("name")) ){
+                home_lieutenant_name = game[0].get("home").get("lieutenant").get("name");
+            }
+            
+            var home_lieutenant_id = "";
+            if( typeof(game[0].get("home").get("lieutenant").get("player_id")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("lieutenant").get("player_id")) ){
+                home_lieutenant_id = game[0].get("home").get("lieutenant").get("player_id");
+            }
+            
+            var home_captain_id = 0;
+            var home_captain_goals = 0;
+            var home_captain_fights = 0;
+            var home_captain_assists = 0;
+
+            var home_lieutenant_id = 0;
+            var home_lieutenant_goals = 0;
+            var home_lieutenant_fights = 0;
+            var home_lieutenant_assists = 0;
+
+            var away_team_name = "";
+            if( typeof(game[0].get("away").get("team_name")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("team_name")) ){
+                away_team_name = game[0].get("away").get("team_name");
+            }
+
+            var away_goals_total = 0;
+            if(typeof(game[0].get("away_goals_total")) !== 'undefined'){
+                away_goals_total = game[0].get("away_goals_total");
+            }
+
+            var away_logo_url = "";
+            if( typeof(game[0].get("away").get("nhlTeam").get("logo").url()) !== 'undefined' && !_.isEmpty(game[0].get("away").get("nhlTeam").get("logo").url()) ){
+                away_logo_url = game[0].get("away").get("nhlTeam").get("logo").url();
+            }
+
+            var away_captain_name = "";
+            if( typeof(game[0].get("away").get("captain").get("name")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("captain").get("name")) ){
+                away_captain_name = game[0].get("away").get("captain").get("name");
+            }
+
+            var away_captain_id = "";
+            if( typeof(game[0].get("away").get("captain").get("player_id")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("captain").get("player_id")) ){
+                away_captain_id = game[0].get("away").get("captain").get("player_id");
+            }
+
+            var away_lieutenant_name = "";
+            if( typeof(game[0].get("away").get("lieutenant").get("name")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("lieutenant").get("name")) ){
+                away_lieutenant_name = game[0].get("away").get("lieutenant").get("name");
+            }
+
+            var away_lieutenant_id = "";
+            if( typeof(game[0].get("away").get("lieutenant").get("player_id")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("lieutenant").get("player_id")) ){
+                away_lieutenant_id = game[0].get("away").get("lieutenant").get("player_id");
+            }
+
+            var away_captain_goals = 0;
+            var away_captain_fights = 0;
+            var away_captain_assists = 0;
+
+            var away_lieutenant_goals = 0;
+            var away_lieutenant_fights = 0;
+            var away_lieutenant_assists = 0;
+
+            var overtime = false;
+
+            if (game[0].get("played")) {
+                var home_stats = game[0].get("home_stats");
+
+                home_captain_goals = home_stats.captain_goals;
+                home_captain_assists = home_stats.captain_assists;
+                home_captain_fights = home_stats.captain_fights;
+
+                home_lieutenant_goals = home_stats.lieutenant_goals;
+                home_lieutenant_assists = home_stats.lieutenant_assists;
+                home_lieutenant_fights = home_stats.lieutenant_fights;
+
+                var away_stats = game[0].get("away_stats");
+
+                away_captain_goals = away_stats.captain_goals;
+                away_captain_assists = away_stats.captain_assists;
+                away_captain_fights = away_stats.captain_fights;
+
+                away_lieutenant_goals = away_stats.lieutenant_goals;
+                away_lieutenant_assists = away_stats.lieutenant_assists;
+                away_lieutenant_fights = away_stats.lieutenant_fights;
+
+                overtime = _.isEqual(game[0].get("overtime"), true);
+            }
+
             %>
             <div class="col-md-12">
-                <h2 class="text-center text-uppercase"><%= hometeam.get("team_name") %> <span style="color: #F39C12;">vs.</span> <%= awayteam.get("team_name") %></h2>
+                <h2 class="text-center text-uppercase"><%= home_team_name %> <span style="color: #F39C12;">vs.</span> <%= away_team_name %></h2>
             </div>
             <div class="col-md-8 col-md-offset-2">
-                <p class="text-center"><small>Runda #<strong><%= game[0].get("round") %></strong> Grupp #<strong><%= game[0].get("group") %></strong></small></p>
+                <p class="text-center"><small>Runda #<strong><%= round %></strong> Grupp #<strong><%= group %></strong></small></p>
                 <form class="form" role="form" method="post">
                     <div class="panel">
                         <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0;">
                             <div class="col-md-6 col-md-offset-3" style="margin-bottom: 0;">
                                 <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
-                                    <% if(!(typeof(game[0].get("result").get("home_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_goals"), 0))){ %>
-                                        <input type="text" class="form-control text-center input-hg" id="home_goals" name="home_goals" placeholder="0" value="<%= game[0].get("result").get("home_goals") %>" style="font-weight: bold;" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center input-hg" id="home_goals" name="home_goals" placeholder="0" value="<%= home_goals_total %>" style="font-weight: bold;" readonly>
                                     <% } else { %>
-                                        <input type="text" class="form-control text-center input-hg" id="home_goals" name="home_goals" placeholder="0" style="font-weight: bold;" required>
+                                        <input type="text" class="form-control text-center input-hg" id="home_goals" name="home_goals" placeholder="0" style="font-weight: bold;" readonly>
                                     <% } %>
                                 </div>
                                 <div class="col-md-2 col-xs-2" style="margin-bottom: 0;">
                                     <p class="lead text-uppercase text-center">-</p>
                                 </div>
                                 <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
-                                    <% if(!(typeof(game[0].get("result").get("away_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_goals"), 0))){ %>
-                                        <input type="text" class="form-control text-center input-hg" id="away_goals" name="away_goals" placeholder="0" value="<%= game[0].get("result").get("away_goals") %>" style="font-weight: bold;" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center input-hg" id="away_goals" name="away_goals" placeholder="0" value="<%= away_goals_total %>" style="font-weight: bold;" readonly>
                                     <% } else { %>
-                                        <input type="text" class="form-control text-center input-hg" id="away_goals" name="away_goals" placeholder="0" style="font-weight: bold;" required>
+                                        <input type="text" class="form-control text-center input-hg" id="away_goals" name="away_goals" placeholder="0" style="font-weight: bold;" readonly>
                                     <% } %>
                                 </div>
                             </div>
@@ -123,8 +240,8 @@
                         <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0; padding-top: 0;">
                             <div class="col-md-10 col-md-offset-1" style="margin-bottom: 0;">
                                 <div class="form-group col-md-12 col-xs-12" style="margin-bottom: 0; margin-top: 0;">
-                                    <% if(game[0].get("result_submitted")) { %>
-                                        <% if((typeof(game[0].get("result").get("overtime")) !== 'undefined') && (_.isEqual(game[0].get("result").get("overtime"), true))){ %>
+                                    <% if(played) { %>
+                                        <% if(overtime){ %>
                                             <label class="checkbox" for="overtime_checkbox">
                                                 <input type="checkbox" checked="checked" value="true" name="overtime_checkbox" id="overtime_checkbox" data-toggle="checkbox" disabled="" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span> Denna match gick till övertid
                                             </label>
@@ -160,23 +277,23 @@
                             <hr style="margin-bottom: 10px; margin-top: 10px;">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h6 class="text-uppercase"><img src="<%= hometeam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Hemmalaget</strong></span></h6>
+                                    <h6 class="text-uppercase"><img src="<%= home_logo_url %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Hemmalaget</strong></span></h6>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-5 col-xs-4">
-                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(hometeam.get("captain_name")) %></p>
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(home_captain_name) %></p>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
-                                    <% if(!(typeof(game[0].get("result").get("home_captain_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_captain_goals"), 0))){ %>
-                                        <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="0" value="<%= game[0].get("result").get("home_captain_goals") %>" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="0" value="<%= home_captain_goals %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="0" required>
                                     <% } %>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
-                                    <% if(!(typeof(game[0].get("result").get("home_captain_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_captain_fights"), 0))){ %>
-                                        <input type="text" class="form-control text-center" id="home_captain_fights" name="home_captain_fights" placeholder="0" value="<%= game[0].get("result").get("home_captain_fights") %>" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_captain_fights" name="home_captain_fights" placeholder="0" value="<%= home_captain_fights %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="home_captain_fights" name="home_captain_fights" placeholder="0" required>
                                     <% } %>
@@ -184,40 +301,40 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-5 col-xs-4">
-                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(hometeam.get("lieutenant_name")) %></p>
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(home_lieutenant_name) %></p>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
-                                    <% if(!(typeof(game[0].get("result").get("home_lieutenant_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_lieutenant_goals"), 0))){ %>
-                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="0" value="<%= game[0].get("result").get("home_lieutenant_goals") %>" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="0" value="<%= home_lieutenant_goals %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="0" required>
                                     <% } %>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
-                                    <% if(!(typeof(game[0].get("result").get("home_lieutenant_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("home_lieutenant_fights"), 0))){ %>
-                                        <input type="text" class="form-control text-center" id="home_lieutenant_fights" name="home_lieutenant_fights" placeholder="0" value="<%= game[0].get("result").get("home_lieutenant_fights") %>" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_fights" name="home_lieutenant_fights" placeholder="0" value="<%= home_lieutenant_fights %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="home_lieutenant_fights" name="home_lieutenant_fights" placeholder="0" required>
                                     <% } %>
                                 </div>
                             </div>
                             <div class="row col-md-12">
-                                <h6 class="text-uppercase"><img src="<%= awayteam.get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Bortalaget</strong></span></h6>
+                                <h6 class="text-uppercase"><img src="<%= away_logo_url %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Bortalaget</strong></span></h6>
                             </div>
                             <div class="row">
                                 <div class="col-md-5 col-xs-4">
-                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(awayteam.get("captain_name")) %></p>
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(away_captain_name) %></p>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
-                                    <% if(!(typeof(game[0].get("result").get("away_captain_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_captain_goals"), 0))){ %>
-                                        <input type="text" class="form-control text-center" id="away_captain_goals" name="away_captain_goals" placeholder="0" value="<%= game[0].get("result").get("away_captain_goals") %>" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_goals" name="away_captain_goals" placeholder="0" value="<%= away_captain_goals %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="away_captain_goals" name="away_captain_goals" placeholder="0" required>
                                     <% } %>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
-                                    <% if(!(typeof(game[0].get("result").get("away_captain_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_captain_fights"), 0))){ %>
-                                        <input type="text" class="form-control text-center" id="away_captain_fights" name="away_captain_fights" placeholder="0" value="<%= game[0].get("result").get("away_captain_fights") %>" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_fights" name="away_captain_fights" placeholder="0" value="<%= away_captain_fights %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="away_captain_fights" name="away_captain_fights" placeholder="0" required>
                                     <% } %>
@@ -225,18 +342,18 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-5 col-xs-4">
-                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(awayteam.get("lieutenant_name")) %></p>
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(away_lieutenant_name) %></p>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
-                                    <% if(!(typeof(game[0].get("result").get("away_lieutenant_goals")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_lieutenant_goals"), 0))){ %>
-                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals" name="away_lieutenant_goals" placeholder="0" value="<%= game[0].get("result").get("away_lieutenant_goals") %>" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals" name="away_lieutenant_goals" placeholder="0" value="<%= away_lieutenant_goals %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="away_lieutenant_goals" name="away_lieutenant_goals" placeholder="0" required>
                                     <% } %>
                                 </div>
                                 <div class="form-group col-md-2 col-xs-4">
-                                    <% if(!(typeof(game[0].get("result").get("away_lieutenant_fights")) !== 'undefined') || (!_.isEqual(game[0].get("result").get("away_lieutenant_fights"), 0))){ %>
-                                        <input type="text" class="form-control text-center" id="away_lieutenant_fights" name="away_lieutenant_fights" placeholder="0" value="<%= game[0].get("result").get("away_lieutenant_fights") %>" required>
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_fights" name="away_lieutenant_fights" placeholder="0" value="<%= away_lieutenant_fights %>" required>
                                     <% } else { %>
                                         <input type="text" class="form-control text-center" id="away_lieutenant_fights" name="away_lieutenant_fights" placeholder="0" required>
                                     <% } %>
@@ -251,7 +368,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <p class="text-center">
-                                        <% if(game[0].get("result_submitted")) { %>
+                                        <% if(played) { %>
                                             Resultat för denna match uppdaterades
                                             <br>
                                             <span class="text-capitalize"><strong><%= formatDateAndTime(game[0].get("updatedAt")) %></strong></span>
@@ -267,13 +384,13 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div class="form-group" style="margin-bottom: 0;">
-                                <input type='hidden' name='home_captain_id' id='home_captain_id' value='<%= hometeam.get("captain_id") %>' />
-                                <input type='hidden' name='home_lieutenant_id' id='home_lieutenant_id' value='<%= hometeam.get("lieutenant_id") %>' />
-                                <input type='hidden' name='away_captain_id' id='away_captain_id' value='<%= awayteam.get("captain_id") %>' />
-                                <input type='hidden' name='away_lieutenant_id' id='away_lieutenant_id' value='<%= awayteam.get("lieutenant_id") %>' />
+                                <input type='hidden' name='home_captain_id' id='home_captain_id' value='<%= home_captain_id %>' />
+                                <input type='hidden' name='home_lieutenant_id' id='home_lieutenant_id' value='<%= home_lieutenant_id %>' />
+                                <input type='hidden' name='away_captain_id' id='away_captain_id' value='<%= away_captain_id %>' />
+                                <input type='hidden' name='away_lieutenant_id' id='away_lieutenant_id' value='<%= away_lieutenant_id %>' />
 
                                 <input type='hidden' name='_method' value='put' />
-                                <% if(game[0].get("result_submitted")) { %>
+                                <% if(played) { %>
                                     <button type="submit" class="btn btn-hg btn-warning btn-wide btn-block text-uppercase" disabled><i class="fa fa-lock"></i> Matchresulat rapporterat</button>
                                     <p class="text-center" style="margin-bottom:0;"><small><em><strong>Kontakta admin för att uppdatera resultat</strong></em></small></p>
                                 <% } else { %>
@@ -307,6 +424,52 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('#home_captain_goals').on('input', function() {
+                var temp_home_captain_goals = $('#home_captain_goals').val();
+                var temp_home_lieutenant_goals = $('#home_lieutenant_goals').val();
+
+                var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
+                //alert("temp_home_goals_total: " + temp_home_goals_total);
+
+                $('#home_goals').val(String(temp_home_goals_total));
+            });
+
+            $('#home_lieutenant_goals').on('input', function() {
+                var temp_home_captain_goals = $('#home_captain_goals').val();
+                var temp_home_lieutenant_goals = $('#home_lieutenant_goals').val();
+
+                var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
+                //alert("temp_home_goals_total: " + temp_home_goals_total);
+
+                $('#home_goals').val(String(temp_home_goals_total));
+            });
+
+            $('#away_captain_goals').on('input', function() {
+                var temp_away_captain_goals = $('#away_captain_goals').val();
+                var temp_away_lieutenant_goals = $('#away_lieutenant_goals').val();
+
+                var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
+                //alert("temp_away_goals_total: " + temp_away_goals_total);
+
+                $('#away_goals').val(String(temp_away_goals_total));
+            });
+
+            $('#away_lieutenant_goals').on('input', function() {
+                var temp_away_captain_goals = $('#away_captain_goals').val();
+                var temp_away_lieutenant_goals = $('#away_lieutenant_goals').val();
+
+                var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
+                //alert("temp_away_goals_total: " + temp_away_goals_total);
+
+                $('#away_goals').val(String(temp_away_goals_total));
+            });
+
+        })
+    </script>
 </body>
 
 </html>

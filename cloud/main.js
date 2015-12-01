@@ -20,8 +20,6 @@ Parse.Cloud.define("sendTweet", function(request, response) {
     });
 });
 
-
-
 /**** PLAYER ****/
 Parse.Cloud.define("getPlayers", function(request, response) {
     var Player = Parse.Object.extend('Player');
@@ -262,6 +260,27 @@ Parse.Cloud.define("createPlayerPass", function(request, response) {
   }).then(function() {
     response.success("Added player passwords");
   });
+});
+
+Parse.Cloud.beforeSave("Player", function(request, response) {
+  var goals = request.object.get("goals");
+  var assists = request.object.get("assists");
+  var points = request.object.get("points");
+
+  if ((typeof(goals) === 'undefined') || (typeof(assists) === 'undefined') || (typeof(points) === 'undefined')){
+    response.error("The stats objects goals, assists and points need to be defined on the Player object");
+  } else {
+    var temp_points = goals + assists;
+    /*
+    console.log("temp_points: " + temp_points);
+    console.log("points: " + points);
+    */
+    if (_.isEqual(parseInt(points), parseInt(temp_points))) {
+      response.success();
+    } else {
+      response.error("The Points didn't match the sum of Goals and Assists. Points: '" + points + "' and Goals + Assists: '" + temp_points + "'");
+    }
+  }
 });
 /**** PLAYER ****/
 
@@ -847,8 +866,8 @@ Parse.Cloud.define("getGroupGames", function(request, response) {
 });
 
 Parse.Cloud.define("getPlayoffGames", function(request, response) {
-    var Game = Parse.Object.extend('Game');
-    var gameQuery = new Parse.Query(Game);
+    var POGame = Parse.Object.extend('POGame');
+    var gameQuery = new Parse.Query(POGame);
     gameQuery.include(['home.nhlTeam','away.nhlTeam']);
     gameQuery.include(['home.captain','home.lieutenant']);
     gameQuery.include(['away.captain','away.lieutenant']);
@@ -906,13 +925,12 @@ Parse.Cloud.beforeSave("Game", function(request, response) {
   }
 });
 
-Parse.Cloud.define("createGame", function(request, response) {
+Parse.Cloud.define("createGroupGame", function(request, response) {
     var Game = Parse.Object.extend("Game");
     var game = new Game();
 
     var round = "";
     var group = "";
-    var type = "";
     var hometeam = "";
     var awayteam = "";
     
@@ -922,9 +940,6 @@ Parse.Cloud.define("createGame", function(request, response) {
     if((typeof(request.params.group) !== 'undefined') && (!_.isEmpty(request.params.group))){
       group = request.params.group;
     }
-    if((typeof(request.params.type) !== 'undefined') && (!_.isEmpty(request.params.type))){
-      type = request.params.type;
-    } 
     if((typeof(request.params.hometeam) !== 'undefined') && (!_.isEmpty(request.params.hometeam))){
       hometeam = request.params.hometeam;
     } 
@@ -932,14 +947,9 @@ Parse.Cloud.define("createGame", function(request, response) {
       awayteam = request.params.awayteam;
     }  
 
-    if (_.isEmpty(round) || _.isEmpty(type) || _.isEmpty(hometeam) || _.isEmpty(awayteam)) {
+    if (_.isEmpty(round) || _.isEmpty(group) || _.isEmpty(hometeam) || _.isEmpty(awayteam)) {
       console.log("Mandatory values was missing.");
       response.error("Mandatory values was missing.");
-    }
-
-    if (_.isEmpty(group) && _.isEqual("1",type)) {
-      console.log("We need a group number if we're to create Group Games");
-      response.error("We need a group number if we're to create Group Games");
     }
 
     var Team = Parse.Object.extend("Team");
@@ -968,10 +978,7 @@ Parse.Cloud.define("createGame", function(request, response) {
     }
     game.set('group', group);
 
-    if(!_.isNumber(type)) {
-      type = parseInt(type);
-    }
-    game.set('type', type);
+    game.set('type', 1);
 
     game.save().then(function(result) {
         response.success("Saved Game with id = '" + gameId + "'");
@@ -1168,7 +1175,6 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
       away_lieutenant_fights = parseInt(request.params.away_lieutenant_fights);
     }
 
-
     home_goals_total = (home_goals_p1+home_goals_p2+home_goals_p3+home_goals_ot);
     home_shots_total = (home_shots_p1+home_shots_p2+home_shots_p3+home_shots_ot);
 
@@ -1336,6 +1342,475 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
     response.error("Saving result for Group Game with id '" + request.params.game_id + "' failed with error.code " + error.code + " error.message " + error.message);
   });
 });
+
+/** Playoff Games **/
+/**
+Parse.Cloud.define("generatePlayoffGames", function(request, response) {
+    Parse.Cloud.run('getPlayoffTeams', {}).then(function(results) {
+      var promise = Parse.Promise.as();
+
+      _.each(results, function(result) {
+
+
+        result.set('points', 0);
+        result.set('goals', 0);
+        result.set('assists', 0);
+        result.set('fights', 0);
+
+        promise = promise.then(function() {
+          return result.save();
+        });
+
+      });
+
+      return promise;
+
+      response.success("Saved Playoff Game with id = '" + gameId + "'");
+    }, function(error) {
+        response.error("Creating Playoff Game failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+**/
+
+Parse.Cloud.beforeSave("POGame", function(request, response) {
+  var round = request.object.get("round");
+  var played = request.object.get("played");
+
+  if ((typeof(round) !== 'undefined') && ((round < 1) || (round > 3))){
+    response.error("Round '" + round + "' is not valid. There's only 3 rounds (Quarter, Semi, and Final) in the Playoff phase of Cobra Cup");
+  } else if (played){
+    var home_goals_total = request.object.get("home_goals_total");
+    var away_goals_total = request.object.get("away_goals_total");
+    var away_stats = request.object.get("away_stats");
+    var home_stats = request.object.get("home_stats");
+
+    var home_player_goals = home_stats.captain_goals + home_stats.lieutenant_goals;
+    var away_player_goals = away_stats.captain_goals + away_stats.lieutenant_goals;
+    if (!_.isEqual(home_player_goals,home_goals_total)) {
+      response.error("The amount of goals the Home team has made and the players has made need to match. Now its Team:'" + home_goals_total + "' and Players:'" + home_player_goals);
+    } else if (!_.isEqual(away_player_goals,away_goals_total)) {
+      response.error("The amount of goals the Away team has made and the players has made need to match. Now its Team:'" + away_goals_total + "' and Players:'" + away_player_goals);
+    } else {
+      response.success();
+    }
+  } else {
+    response.success();
+  }
+});
+
+Parse.Cloud.define("createPlayoffGame", function(request, response) {
+    var POGame = Parse.Object.extend("POGame");
+    var game = new POGame();
+
+    var round = "";
+    var indentifier = ""
+    var hometeam = "";
+    var awayteam = "";
+    
+    if((typeof(request.params.round) !== 'undefined') && (!_.isEmpty(request.params.round))){
+      round = request.params.round;
+    }
+    if((typeof(request.params.indentifier) !== 'undefined') && (!_.isEmpty(request.params.indentifier))){
+      indentifier = request.params.indentifier;
+    }
+    if((typeof(request.params.hometeam) !== 'undefined') && (!_.isEmpty(request.params.hometeam))){
+      hometeam = request.params.hometeam;
+    } 
+    if((typeof(request.params.awayteam) !== 'undefined') && (!_.isEmpty(request.params.awayteam))){
+      awayteam = request.params.awayteam;
+    }  
+
+    if (_.isEmpty(round) || _.isEmpty(hometeam) || _.isEmpty(awayteam)) {
+      console.log("Mandatory values was missing.");
+      response.error("Mandatory values was missing.");
+    }
+
+    var Team = Parse.Object.extend("Team");
+
+    var obj_hometeam = new Team();
+    obj_hometeam.id = hometeam;
+
+    var obj_awayteam = new Team();
+    obj_awayteam.id = awayteam;
+
+    game.set("home", obj_hometeam);
+    game.set("away", obj_awayteam);
+
+    game.set('played', false);
+
+    var gameId = Math.floor((Math.random() * 100000) + 1);
+    game.set('game_id', gameId.toString());
+
+    if(!_.isNumber(round)) {
+      round = parseInt(round);
+    }
+    game.set('round', round);
+
+    if(!_.isNumber(indentifier)) {
+      indentifier = parseInt(indentifier);
+    }
+    game.set('indentifier', indentifier);
+
+    game.set('type', 2);
+
+    game.save().then(function(result) {
+        response.success("Saved Playoff Game with id = '" + gameId + "'");
+    }, function(error) {
+        response.error("Creating Playoff Game failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+
+Parse.Cloud.define("savePlayoffGameResult", function(request, response) {
+  /* global variables */
+  var home_id = "";
+  var away_id = "";
+
+  home_goals_total = 0;
+  away_goals_total = 0;
+
+  var away_stats;
+  var home_stats;
+
+  var to_overtime;
+
+  var POGame = Parse.Object.extend('POGame');
+  var gameQuery = new Parse.Query(POGame);
+  gameQuery.equalTo('game_id', request.params.game_id);
+  gameQuery.include(['home.captain','home.lieutenant']);
+  gameQuery.include(['away.captain','away.lieutenant']);
+  gameQuery.find().then(function(result) {
+
+    var home_captain_id = "";
+    var home_lieutenant_id = "";
+
+    var away_captain_id = "";
+    var away_lieutenant_id = "";
+
+    home_captain_id = result[0].get("home").get("captain").get("player_id");
+    home_lieutenant_id = result[0].get("home").get("lieutenant").get("player_id");
+
+    away_captain_id = result[0].get("away").get("captain").get("player_id");
+    away_lieutenant_id = result[0].get("away").get("lieutenant").get("player_id");
+
+    /** global **/
+    to_overtime = false;
+
+    /** home team **/
+    var home_goals_p1 = 0;
+    var home_goals_p2 = 0;
+    var home_goals_p3 = 0;
+    var home_goals_ot = 0;
+
+    var home_faceoffs = 0;
+
+    var home_shots_total = 0;
+
+    var home_shots_p1 = 0;
+    var home_shots_p2 = 0;
+    var home_shots_p3 = 0;
+    var home_shots_ot = 0;
+
+    var home_captain_goals = 0;
+    var home_captain_assists = 0;
+    var home_captain_fights = 0;
+
+    var home_lieutenant_goals = 0;
+    var home_lieutenant_assists = 0;
+    var home_lieutenant_fights = 0;
+
+    if ((typeof(request.params.home_goals_p1) !== 'undefined') && (!_.isEmpty(request.params.home_goals_p1))) {
+      home_goals_p1 = parseInt(request.params.home_goals_p1);
+    }
+    if ((typeof(request.params.home_goals_p2) !== 'undefined') && (!_.isEmpty(request.params.home_goals_p2))) {
+      home_goals_p2 = parseInt(request.params.home_goals_p2);
+    }
+    if ((typeof(request.params.home_goals_p3) !== 'undefined') && (!_.isEmpty(request.params.home_goals_p3))) {
+      home_goals_p3 = parseInt(request.params.home_goals_p3);
+    }
+    if ((typeof(request.params.home_goals_ot) !== 'undefined') && (!_.isEmpty(request.params.home_goals_ot))) {
+      home_goals_ot = parseInt(request.params.home_goals_ot);
+    }
+
+    if ((typeof(request.params.home_faceoffs) !== 'undefined') && (!_.isEmpty(request.params.home_faceoffs))) {
+      home_faceoffs = parseInt(request.params.home_faceoffs);
+    }
+
+    if ((typeof(request.params.home_shots_p1) !== 'undefined') && (!_.isEmpty(request.params.home_shots_p1))) {
+      home_shots_p1 = parseInt(request.params.home_shots_p1);
+    }
+    if ((typeof(request.params.home_shots_p2) !== 'undefined') && (!_.isEmpty(request.params.home_shots_p2))) {
+      home_shots_p2 = parseInt(request.params.home_shots_p2);
+    }
+    if ((typeof(request.params.home_shots_p3) !== 'undefined') && (!_.isEmpty(request.params.home_shots_p3))) {
+      home_shots_p3 = parseInt(request.params.home_shots_p3);
+    }
+    if ((typeof(request.params.home_shots_ot) !== 'undefined') && (!_.isEmpty(request.params.home_shots_ot))) {
+      home_shots_ot = parseInt(request.params.home_shots_ot);
+    }
+
+    if ((typeof(request.params.home_captain_goals) !== 'undefined') && (!_.isEmpty(request.params.home_captain_goals))) {
+      home_captain_goals = parseInt(request.params.home_captain_goals);
+    }
+    if ((typeof(request.params.home_captain_assists) !== 'undefined') && (!_.isEmpty(request.params.home_captain_assists))) {
+      home_captain_assists = parseInt(request.params.home_captain_assists);
+    }
+    if ((typeof(request.params.home_captain_fights) !== 'undefined') && (!_.isEmpty(request.params.home_captain_fights))) {
+      home_captain_fights = parseInt(request.params.home_captain_fights);
+    }
+
+    if ((typeof(request.params.home_lieutenant_goals) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_goals))) {
+      home_lieutenant_goals = parseInt(request.params.home_lieutenant_goals);
+    }
+    if ((typeof(request.params.home_lieutenant_assists) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_assists))) {
+      home_lieutenant_assists = parseInt(request.params.home_lieutenant_assists);
+    }
+    if ((typeof(request.params.home_lieutenant_fights) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_fights))) {
+      home_lieutenant_fights = parseInt(request.params.home_lieutenant_fights);
+    }
+
+    /** away team **/
+    var away_goals_p1 = 0;
+    var away_goals_p2 = 0;
+    var away_goals_p3 = 0;
+    var away_goals_ot = 0;
+
+    var away_shots_total = 0;
+
+    var away_shots_p1 = 0;
+    var away_shots_p2 = 0;
+    var away_shots_p3 = 0;
+    var away_shots_ot = 0;
+
+    var away_faceoffs = 0;
+
+    var away_captain_goals = 0;
+    var away_captain_assists = 0;
+    var away_captain_fights = 0;
+
+    var away_lieutenant_goals = 0;
+    var away_lieutenant_assists = 0;
+    var away_lieutenant_fights = 0;
+
+    if ((typeof(request.params.away_goals_p1) !== 'undefined') && (!_.isEmpty(request.params.away_goals_p1))) {
+      away_goals_p1 = parseInt(request.params.away_goals_p1);
+    }
+    if ((typeof(request.params.away_goals_p2) !== 'undefined') && (!_.isEmpty(request.params.away_goals_p2))) {
+      away_goals_p2 = parseInt(request.params.away_goals_p2);
+    }
+    if ((typeof(request.params.away_goals_p3) !== 'undefined') && (!_.isEmpty(request.params.away_goals_p3))) {
+      away_goals_p3 = parseInt(request.params.away_goals_p3);
+    }
+    if ((typeof(request.params.away_goals_ot) !== 'undefined') && (!_.isEmpty(request.params.away_goals_ot))) {
+      away_goals_ot = parseInt(request.params.away_goals_ot);
+    }
+    
+    if ((typeof(request.params.away_faceoffs) !== 'undefined') && (!_.isEmpty(request.params.away_faceoffs))) {
+      away_faceoffs = parseInt(request.params.away_faceoffs);
+    }
+
+    if ((typeof(request.params.away_shots_p1) !== 'undefined') && (!_.isEmpty(request.params.away_shots_p1))) {
+      away_shots_p1 = parseInt(request.params.away_shots_p1);
+    }
+    if ((typeof(request.params.away_shots_p2) !== 'undefined') && (!_.isEmpty(request.params.away_shots_p2))) {
+      away_shots_p2 = parseInt(request.params.away_shots_p2);
+    }
+    if ((typeof(request.params.away_shots_p3) !== 'undefined') && (!_.isEmpty(request.params.away_shots_p3))) {
+      away_shots_p3 = parseInt(request.params.away_shots_p3);
+    }
+    if ((typeof(request.params.away_shots_ot) !== 'undefined') && (!_.isEmpty(request.params.away_shots_ot))) {
+      away_shots_ot = parseInt(request.params.away_shots_ot);
+    }
+
+    if ((typeof(request.params.away_captain_goals) !== 'undefined') && (!_.isEmpty(request.params.away_captain_goals))) {
+      away_captain_goals = parseInt(request.params.away_captain_goals);
+    }
+    if ((typeof(request.params.away_captain_assists) !== 'undefined') && (!_.isEmpty(request.params.away_captain_assists))) {
+      away_captain_assists = parseInt(request.params.away_captain_assists);
+    }
+    if ((typeof(request.params.away_captain_fights) !== 'undefined') && (!_.isEmpty(request.params.away_captain_fights))) {
+      away_captain_fights = parseInt(request.params.away_captain_fights);
+    }
+
+    if ((typeof(request.params.away_lieutenant_goals) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_goals))) {
+      away_lieutenant_goals = parseInt(request.params.away_lieutenant_goals);
+    }
+    if ((typeof(request.params.away_lieutenant_assists) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_assists))) {
+      away_lieutenant_assists = parseInt(request.params.away_lieutenant_assists);
+    }
+    if ((typeof(request.params.away_lieutenant_fights) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_fights))) {
+      away_lieutenant_fights = parseInt(request.params.away_lieutenant_fights);
+    }
+
+    home_goals_total = (home_goals_p1+home_goals_p2+home_goals_p3+home_goals_ot);
+    home_shots_total = (home_shots_p1+home_shots_p2+home_shots_p3+home_shots_ot);
+
+    result[0].set('home_goals_total',home_goals_total);
+    result[0].set('home_shots_total',home_shots_total);
+    result[0].set('home_faceoffs_total',home_faceoffs);
+
+    away_goals_total = (away_goals_p1+away_goals_p2+away_goals_p3+away_goals_ot);
+    away_shots_total = (away_shots_p1+away_shots_p2+away_shots_p3+away_shots_ot);
+
+    result[0].set('away_goals_total',away_goals_total);
+    result[0].set('away_shots_total',away_shots_total);
+    result[0].set('away_faceoffs_total',away_faceoffs);
+
+    var jsonDataHome = {};
+
+    jsonDataHome["goals_p1"] = home_goals_p1;
+    jsonDataHome["goals_p2"] = home_goals_p2;
+    jsonDataHome["goals_p3"] = home_goals_p3;
+    jsonDataHome["goals_ot"] = home_goals_ot;
+
+    jsonDataHome["shots_p1"] = home_shots_p1;
+    jsonDataHome["shots_p2"] = home_shots_p2;
+    jsonDataHome["shots_p3"] = home_shots_p3;
+    jsonDataHome["shots_ot"] = home_shots_ot;
+
+    jsonDataHome["captain_id"] = home_captain_id;
+    jsonDataHome["captain_goals"] = home_captain_goals;
+    jsonDataHome["captain_assists"] = home_captain_assists;
+    jsonDataHome["captain_fights"] = home_captain_fights;
+
+    jsonDataHome["lieutenant_id"] = home_lieutenant_id;
+    jsonDataHome["lieutenant_goals"] = home_lieutenant_goals;
+    jsonDataHome["lieutenant_assists"] = home_lieutenant_assists;
+    jsonDataHome["lieutenant_fights"] = home_lieutenant_fights;
+
+    result[0].set('home_stats',jsonDataHome);
+
+    var jsonDataAway = {};
+
+    jsonDataAway["goals_p1"] = away_goals_p1;
+    jsonDataAway["goals_p2"] = away_goals_p2;
+    jsonDataAway["goals_p3"] = away_goals_p3;
+    jsonDataAway["goals_ot"] = away_goals_ot;
+
+    jsonDataAway["shots_p1"] = away_shots_p1;
+    jsonDataAway["shots_p2"] = away_shots_p2;
+    jsonDataAway["shots_p3"] = away_shots_p3;
+    jsonDataAway["shots_ot"] = away_shots_ot;
+
+    jsonDataAway["captain_id"] = away_captain_id;
+    jsonDataAway["captain_goals"] = away_captain_goals;
+    jsonDataAway["captain_assists"] = away_captain_assists;
+    jsonDataAway["captain_fights"] = away_captain_fights;
+
+    jsonDataAway["lieutenant_id"] = away_lieutenant_id;
+    jsonDataAway["lieutenant_goals"] = away_lieutenant_goals;
+    jsonDataAway["lieutenant_assists"] = away_lieutenant_assists;
+    jsonDataAway["lieutenant_fights"] = away_lieutenant_fights;
+
+    result[0].set('away_stats',jsonDataAway);
+
+    home_stats = jsonDataHome;
+    away_stats = jsonDataAway;
+
+    var Team = Parse.Object.extend("Team");
+
+    var obj_hometeam = new Team();
+    obj_hometeam.id = result[0].get("home").id;
+
+    var Team = Parse.Object.extend("Team");
+
+    var obj_awayteam = new Team();
+    obj_awayteam.id = result[0].get("away").id;
+
+    home_id = obj_hometeam.id;
+    away_id = obj_awayteam.id;
+
+    if (home_goals_total > away_goals_total) {
+      result[0].set('winner',obj_hometeam);
+    } else {
+      result[0].set('winner',obj_awayteam);
+    }
+
+    if ((home_goals_ot > 0) || (away_goals_ot > 0)) {
+      to_overtime = true;
+    }
+    result[0].set('overtime',to_overtime);
+
+    result[0].set('played',true);
+
+    return result[0].save();
+
+  }).then(function(result){
+    console.log(result);
+    console.log("Updating Home Captain ...");
+    //Home Captain
+    var h_c_id = home_stats.captain_id;
+    var h_c_goals = home_stats.captain_goals;
+    var h_c_assists = home_stats.captain_assists;
+    var h_c_fights = home_stats.captain_fights;
+
+    h_c_goals = h_c_goals.toString();
+    h_c_assists = h_c_assists.toString();
+    h_c_fights = h_c_fights.toString();
+
+    return Parse.Cloud.run('updatePlayoffPlayerStats', {player_id: h_c_id, goals: h_c_goals, assists: h_c_assists, fights: h_c_fights});
+  }).then(function(result){
+    console.log(result);
+    console.log("Updating Home Lieutenant ...");
+    //Home Lieutenant
+    var h_l_id = home_stats.lieutenant_id;
+    var h_l_goals = home_stats.lieutenant_goals;
+    var h_l_assists = home_stats.lieutenant_assists;
+    var h_l_fights = home_stats.lieutenant_fights;
+
+    h_l_goals = h_l_goals.toString();
+    h_l_assists = h_l_assists.toString();
+    h_l_fights = h_l_fights.toString();
+
+    return Parse.Cloud.run('updatePlayoffPlayerStats', {player_id: h_l_id, goals: h_l_goals, assists: h_l_assists, fights: h_l_fights});
+  }).then(function(result){
+    console.log(result);
+    console.log("Updating Away Captain ...");
+    //Away Captain
+    var a_c_id = away_stats.captain_id;
+    var a_c_goals = away_stats.captain_goals;
+    var a_c_assists = away_stats.captain_assists;
+    var a_c_fights = away_stats.captain_fights;
+
+    a_c_goals = a_c_goals.toString();
+    a_c_assists = a_c_assists.toString();
+    a_c_fights = a_c_fights.toString();
+
+    return Parse.Cloud.run('updatePlayoffPlayerStats', {player_id: a_c_id, goals: a_c_goals, assists: a_c_assists, fights: a_c_fights});
+  }).then(function(result){
+    console.log(result);
+    console.log("Updating Away Lieutenant ...");
+    //Away Lieutenant
+    var a_l_id = away_stats.lieutenant_id;
+    var a_l_goals = away_stats.lieutenant_goals;
+    var a_l_assists = away_stats.lieutenant_assists;
+    var a_l_fights = away_stats.lieutenant_fights;
+
+    a_l_goals = a_l_goals.toString();
+    a_l_assists = a_l_assists.toString();
+    a_l_fights = a_l_fights.toString();
+
+    return Parse.Cloud.run('updatePlayoffPlayerStats', {player_id: a_l_id, goals: a_l_goals, assists: a_l_assists, fights: a_l_fights});
+  }).then(function(result){
+    response.success("Saved result for Playoff Game with id '" + request.params.game_id + "'");
+  }, function(error) {
+    response.error("Saving result for Playoff Game with id '" + request.params.game_id + "' failed with error.code " + error.code + " error.message " + error.message);
+  });
+});
+/**
+Parse.Cloud.define("getPlayoffTeams", function(request, response) {
+  var Standings = Parse.Object.extend('Standings');
+  var standingsQuery = new Parse.Query(Standings);
+  standingsQuery.descending('points,difference,goals_for,games_played');
+  standingsQuery.include(["team.nhlTeam"]);
+  standingsQuery.limit(8);
+  standingsQuery.find().then(function(result) {
+    response.success(result);
+  }, function(error) {
+    response.error("Getting Playoff Teams failed with error.code " + error.code + " error.message " + error.message);
+  });
+});
+**/
+/** End Playoff Games **/
 
 /*
 Parse.Cloud.afterSave("Game", function(request) {
@@ -1505,27 +1980,6 @@ Parse.Cloud.define("updateStandingForTeam", function(request, response) {
   });
 });
 
-Parse.Cloud.beforeSave("Player", function(request, response) {
-  var goals = request.object.get("goals");
-  var assists = request.object.get("assists");
-  var points = request.object.get("points");
-
-  if ((typeof(goals) === 'undefined') || (typeof(assists) === 'undefined') || (typeof(points) === 'undefined')){
-    response.error("The stats objects goals, assists and points need to be defined on the Player object");
-  } else {
-    var temp_points = goals + assists;
-    /*
-    console.log("temp_points: " + temp_points);
-    console.log("points: " + points);
-    */
-    if (_.isEqual(parseInt(points), parseInt(temp_points))) {
-      response.success();
-    } else {
-      response.error("The Points didn't match the sum of Goals and Assists. Points: '" + points + "' and Goals + Assists: '" + temp_points + "'");
-    }
-  }
-});
-
 Parse.Cloud.define("updatePlayerStats", function(request, response) {
   var player_name = "";
 
@@ -1576,6 +2030,59 @@ Parse.Cloud.define("updatePlayerStats", function(request, response) {
     response.success("Saved Stats for Player with id '" + request.params.player_id + "' and name '" + player_name + "'");
   }, function(error) {
     response.error("Saving Stats for Player with id '" + request.params.player_id + "' failed with error.code " + error.code + " error.message " + error.message);
+  });
+});
+
+Parse.Cloud.define("updatePlayoffPlayerStats", function(request, response) {
+  var player_name = "";
+
+  var Player = Parse.Object.extend('Player');
+  var playerQuery = new Parse.Query(Player);
+  playerQuery.equalTo("player_id",request.params.player_id);
+  playerQuery.find().then(function(result) {
+    player_name = result[0].get("name");
+
+    var goals = 0;
+    var assists = 0;
+    var fights = 0;
+
+    if ((typeof(request.params.goals) !== 'undefined') && (!_.isEmpty(request.params.goals))) {
+      goals = parseInt(request.params.goals);
+    }
+    if ((typeof(request.params.assists) !== 'undefined') && (!_.isEmpty(request.params.assists))) {
+      assists = parseInt(request.params.assists);
+    }
+    if ((typeof(request.params.fights) !== 'undefined') && (!_.isEmpty(request.params.fights))) {
+      fights = parseInt(request.params.fights);
+    }
+    /*
+    console.log("goals = '" + goals + "'");
+    console.log("assists = '" + assists + "'");
+    console.log("fights = '" + fights + "'");
+    */
+    var db_po_goals = result[0].get("po_goals");
+    var db_po_assists = result[0].get("po_assists");
+    var db_po_fights = result[0].get("po_fights");
+
+    var db_po_points = result[0].get("po_points");
+
+    db_po_goals = db_po_goals + goals;
+    db_po_assists = db_po_assists + assists;
+    db_po_fights = db_po_fights + fights;
+
+    db_po_points = db_po_points + (goals + assists);
+
+    result[0].set('po_goals',db_po_goals);
+    result[0].set('po_assists',db_po_assists);
+    result[0].set('po_points',db_po_points);
+    result[0].set('po_fights',db_po_fights);
+
+    return result[0].save();
+
+  }).then(function(result) {
+    response.success("Saved Playoff Stats for Player with id '" + request.params.player_id + "' and name '" + player_name + "'");
+  }, function(error) {
+    response.error("Saving Playoff Stats for Player with id '" + request.params.player_id + "' failed with error.code " + error.code + " error.message " + error.message);
   });
 });
 

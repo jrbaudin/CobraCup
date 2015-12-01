@@ -194,13 +194,36 @@ exports.showPlayerStats = function(request, response) {
   });
 };
 
+exports.loadMatchReporter = function(request, response) {
+  var passedErrorVariable = request.query.error;
+
+  var Game = Parse.Object.extend('Game');
+  var gameQuery = new Parse.Query(Game);
+  gameQuery.equalTo('game_id', request.params.gameid);
+  gameQuery.include(['home.nhlTeam','away.nhlTeam']);
+  gameQuery.include(['home.captain','home.lieutenant']);
+  gameQuery.include(['away.captain','away.lieutenant']);
+  gameQuery.find().then(function(game) {
+    response.render('reporter', {
+      game: game,
+      flashErrorGame: passedErrorVariable
+    });
+  }, function(error){
+    console.log("Getting Game with id '" + request.params.gameid + "' failed with error.code " + error.code + " error.message " + error.message);
+    response.render('reporter', {flashError: 'Problem när den önskade matchen skulle hämtas'});
+  });
+};
+
+/**
 exports.loadMatchReporter = function(req, res) {
   var passedErrorVariable = req.query.error;
 
   var Game = Parse.Object.extend('Game');
   var gameQuery = new Parse.Query(Game);
   gameQuery.equalTo('game_id', req.params.gameid);
-  gameQuery.include('result');
+  gameQuery.include(['home.nhlTeam','away.nhlTeam']);
+  gameQuery.include(['home.captain','home.lieutenant']);
+  gameQuery.include(['away.captain','away.lieutenant']);
   gameQuery.find().then(function(game) {
     if (game) {
       console.log("Gotten the game...");
@@ -240,6 +263,7 @@ exports.loadMatchReporter = function(req, res) {
     res.render('reporter', {flashError: 'Problem när den önskade matchen skulle hämtas'});
   });
 };
+**/
 
 exports.saveMatchResult = function(req, res) {
   //console.log("Starting to save the result...");
@@ -651,17 +675,11 @@ exports.loadGames = function(req, res) {
   var teamQuery = new Parse.Query(Team);
   teamQuery.ascending('group');
   teamQuery.include('nhlTeam');
-  teamQuery.find().then(function(teams) {
-    if (teams) {
-      res.render('games', {
-        teams: teams
-      });
-    } else {
-      log.error("Couldn't load teams. Rendering Games page anyway.");
-      res.render('games', {});
-    }
-  },
-  function(error) {
+  teamQuery.find().then(function(results) {
+    res.render('games', {
+      teams: results
+    });
+  }, function(error) {
     log.error("Couldn't load teams. Rendering Games page anyway.");
     log.error(error);
     res.render('games', {});
