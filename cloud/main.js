@@ -911,9 +911,11 @@ Parse.Cloud.beforeSave("Game", function(request, response) {
     var away_stats = request.object.get("away_stats");
     var home_stats = request.object.get("home_stats");
 
-    var home_player_goals = home_stats.captain_goals + home_stats.lieutenant_goals;
-    var away_player_goals = away_stats.captain_goals + away_stats.lieutenant_goals;
-    if (!_.isEqual(home_player_goals,home_goals_total)) {
+    var home_player_goals = home_stats.captain_goals_total + home_stats.lieutenant_goals_total;
+    var away_player_goals = away_stats.captain_goals_total + away_stats.lieutenant_goals_total;
+    if (home_goals_total === away_goals_total){
+      response.error("If the goals for the home team and away team are the same we can't determine a winner. home_goals_total: '" + home_goals_total + "' and away_goals_total: '" + away_goals_total + "'");
+    } else if (!_.isEqual(home_player_goals,home_goals_total)) {
       response.error("The amount of goals the Home team has made and the players has made need to match. Now its Team:'" + home_goals_total + "' and Players:'" + home_player_goals);
     } else if (!_.isEqual(away_player_goals,away_goals_total)) {
       response.error("The amount of goals the Away team has made and the players has made need to match. Now its Team:'" + away_goals_total + "' and Players:'" + away_player_goals);
@@ -992,8 +994,8 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
   var home_id = "";
   var away_id = "";
 
-  home_goals_total = 0;
-  away_goals_total = 0;
+  var home_goals_total = 0;
+  var away_goals_total = 0;
 
   var away_stats;
   var home_stats;
@@ -1030,43 +1032,53 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
     to_overtime = false;
 
     /** home team **/
-    var home_goals_p1 = 0;
-    var home_goals_p2 = 0;
-    var home_goals_p3 = 0;
-    var home_goals_ot = 0;
-
-    var home_faceoffs = 0;
-
     var home_shots_total = 0;
-
     var home_shots_p1 = 0;
     var home_shots_p2 = 0;
     var home_shots_p3 = 0;
     var home_shots_ot = 0;
 
-    var home_captain_goals = 0;
-    var home_captain_assists = 0;
+    var home_faceoffs_total = 0;
+    var home_faceoffs_p1 = 0;
+    var home_faceoffs_p2 = 0;
+    var home_faceoffs_p3 = 0;
+    var home_faceoffs_ot = 0;
+    
+    var home_captain_goals_p1 = 0;
+    var home_captain_goals_p2 = 0;
+    var home_captain_goals_p3 = 0;
+    var home_captain_goals_ot = 0;
+
+    var home_captain_assists_p1 = 0;
+    var home_captain_assists_p2 = 0;
+    var home_captain_assists_p3 = 0;
+    var home_captain_assists_ot = 0;
+
     var home_captain_fights = 0;
 
-    var home_lieutenant_goals = 0;
-    var home_lieutenant_assists = 0;
+    var home_lieutenant_goals_p1 = 0;
+    var home_lieutenant_goals_p2 = 0;
+    var home_lieutenant_goals_p3 = 0;
+    var home_lieutenant_goals_ot = 0;
+
+    var home_lieutenant_assists_p1 = 0;
+    var home_lieutenant_assists_p2 = 0;
+    var home_lieutenant_assists_p3 = 0;
+    var home_lieutenant_assists_ot = 0;
+
     var home_lieutenant_fights = 0;
 
-    if ((typeof(request.params.home_goals_p1) !== 'undefined') && (!_.isEmpty(request.params.home_goals_p1))) {
-      home_goals_p1 = parseInt(request.params.home_goals_p1);
+    if ((typeof(request.params.home_faceoffs_p1) !== 'undefined') && (!_.isEmpty(request.params.home_faceoffs_p1))) {
+      home_faceoffs_p1 = parseInt(request.params.home_faceoffs_p1);
     }
-    if ((typeof(request.params.home_goals_p2) !== 'undefined') && (!_.isEmpty(request.params.home_goals_p2))) {
-      home_goals_p2 = parseInt(request.params.home_goals_p2);
+    if ((typeof(request.params.home_faceoffs_p2) !== 'undefined') && (!_.isEmpty(request.params.home_faceoffs_p2))) {
+      home_faceoffs_p2 = parseInt(request.params.home_faceoffs_p2);
     }
-    if ((typeof(request.params.home_goals_p3) !== 'undefined') && (!_.isEmpty(request.params.home_goals_p3))) {
-      home_goals_p3 = parseInt(request.params.home_goals_p3);
+    if ((typeof(request.params.home_faceoffs_p3) !== 'undefined') && (!_.isEmpty(request.params.home_faceoffs_p3))) {
+      home_faceoffs_p3 = parseInt(request.params.home_faceoffs_p3);
     }
-    if ((typeof(request.params.home_goals_ot) !== 'undefined') && (!_.isEmpty(request.params.home_goals_ot))) {
-      home_goals_ot = parseInt(request.params.home_goals_ot);
-    }
-
-    if ((typeof(request.params.home_faceoffs) !== 'undefined') && (!_.isEmpty(request.params.home_faceoffs))) {
-      home_faceoffs = parseInt(request.params.home_faceoffs);
+    if ((typeof(request.params.home_faceoffs_ot) !== 'undefined') && (!_.isEmpty(request.params.home_faceoffs_ot))) {
+      home_faceoffs_ot = parseInt(request.params.home_faceoffs_ot);
     }
 
     if ((typeof(request.params.home_shots_p1) !== 'undefined') && (!_.isEmpty(request.params.home_shots_p1))) {
@@ -1082,64 +1094,114 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
       home_shots_ot = parseInt(request.params.home_shots_ot);
     }
 
-    if ((typeof(request.params.home_captain_goals) !== 'undefined') && (!_.isEmpty(request.params.home_captain_goals))) {
-      home_captain_goals = parseInt(request.params.home_captain_goals);
+    if ((typeof(request.params.home_captain_goals_p1) !== 'undefined') && (!_.isEmpty(request.params.home_captain_goals_p1))) {
+      home_captain_goals_p1 = parseInt(request.params.home_captain_goals_p1);
     }
-    if ((typeof(request.params.home_captain_assists) !== 'undefined') && (!_.isEmpty(request.params.home_captain_assists))) {
-      home_captain_assists = parseInt(request.params.home_captain_assists);
+    if ((typeof(request.params.home_captain_goals_p2) !== 'undefined') && (!_.isEmpty(request.params.home_captain_goals_p2))) {
+      home_captain_goals_p2 = parseInt(request.params.home_captain_goals_p2);
     }
+    if ((typeof(request.params.home_captain_goals_p3) !== 'undefined') && (!_.isEmpty(request.params.home_captain_goals_p3))) {
+      home_captain_goals_p3 = parseInt(request.params.home_captain_goals_p3);
+    }
+    if ((typeof(request.params.home_captain_goals_ot) !== 'undefined') && (!_.isEmpty(request.params.home_captain_goals_ot))) {
+      home_captain_goals_ot = parseInt(request.params.home_captain_goals_ot);
+    }
+
+    if ((typeof(request.params.home_captain_assists_p1) !== 'undefined') && (!_.isEmpty(request.params.home_captain_assists_p1))) {
+      home_captain_assists_p1 = parseInt(request.params.home_captain_assists_p1);
+    }
+    if ((typeof(request.params.home_captain_assists_p2) !== 'undefined') && (!_.isEmpty(request.params.home_captain_assists_p2))) {
+      home_captain_assists_p2 = parseInt(request.params.home_captain_assists_p2);
+    }
+    if ((typeof(request.params.home_captain_assists_p3) !== 'undefined') && (!_.isEmpty(request.params.home_captain_assists_p3))) {
+      home_captain_assists_p3 = parseInt(request.params.home_captain_assists_p3);
+    }
+    if ((typeof(request.params.home_captain_assists_ot) !== 'undefined') && (!_.isEmpty(request.params.home_captain_assists_ot))) {
+      home_captain_assists_ot = parseInt(request.params.home_captain_assists_ot);
+    }
+
     if ((typeof(request.params.home_captain_fights) !== 'undefined') && (!_.isEmpty(request.params.home_captain_fights))) {
       home_captain_fights = parseInt(request.params.home_captain_fights);
     }
 
-    if ((typeof(request.params.home_lieutenant_goals) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_goals))) {
-      home_lieutenant_goals = parseInt(request.params.home_lieutenant_goals);
+    if ((typeof(request.params.home_lieutenant_goals_p1) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_goals_p1))) {
+      home_lieutenant_goals_p1 = parseInt(request.params.home_lieutenant_goals_p1);
     }
-    if ((typeof(request.params.home_lieutenant_assists) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_assists))) {
-      home_lieutenant_assists = parseInt(request.params.home_lieutenant_assists);
+    if ((typeof(request.params.home_lieutenant_goals_p2) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_goals_p2))) {
+      home_lieutenant_goals_p2 = parseInt(request.params.home_lieutenant_goals_p2);
     }
+    if ((typeof(request.params.home_lieutenant_goals_p3) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_goals_p3))) {
+      home_lieutenant_goals_p3 = parseInt(request.params.home_lieutenant_goals_p3);
+    }
+    if ((typeof(request.params.home_lieutenant_goals_ot) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_goals_ot))) {
+      home_lieutenant_goals_ot = parseInt(request.params.home_lieutenant_goals_ot);
+    }
+
+    if ((typeof(request.params.home_lieutenant_assists_p1) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_assists_p1))) {
+      home_lieutenant_assists_p1 = parseInt(request.params.home_lieutenant_assists_p1);
+    }
+    if ((typeof(request.params.home_lieutenant_assists_p2) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_assists_p2))) {
+      home_lieutenant_assists_p2 = parseInt(request.params.home_lieutenant_assists_p2);
+    }
+    if ((typeof(request.params.home_lieutenant_assists_p3) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_assists_p3))) {
+      home_lieutenant_assists_p3 = parseInt(request.params.home_lieutenant_assists_p3);
+    }
+    if ((typeof(request.params.home_lieutenant_assists_ot) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_assists_ot))) {
+      home_lieutenant_assists_ot = parseInt(request.params.home_lieutenant_assists_ot);
+    }
+
     if ((typeof(request.params.home_lieutenant_fights) !== 'undefined') && (!_.isEmpty(request.params.home_lieutenant_fights))) {
       home_lieutenant_fights = parseInt(request.params.home_lieutenant_fights);
     }
 
     /** away team **/
-    var away_goals_p1 = 0;
-    var away_goals_p2 = 0;
-    var away_goals_p3 = 0;
-    var away_goals_ot = 0;
-
     var away_shots_total = 0;
-
     var away_shots_p1 = 0;
     var away_shots_p2 = 0;
     var away_shots_p3 = 0;
     var away_shots_ot = 0;
 
-    var away_faceoffs = 0;
+    var away_faceoffs_total = 0;
+    var away_faceoffs_p1 = 0;
+    var away_faceoffs_p2 = 0;
+    var away_faceoffs_p3 = 0;
+    var away_faceoffs_ot = 0;
 
-    var away_captain_goals = 0;
-    var away_captain_assists = 0;
+    var away_captain_goals_p1 = 0;
+    var away_captain_goals_p2 = 0;
+    var away_captain_goals_p3 = 0;
+    var away_captain_goals_ot = 0;
+
+    var away_captain_assists_p1 = 0;
+    var away_captain_assists_p2 = 0;
+    var away_captain_assists_p3 = 0;
+    var away_captain_assists_ot = 0;
+
     var away_captain_fights = 0;
 
-    var away_lieutenant_goals = 0;
-    var away_lieutenant_assists = 0;
+    var away_lieutenant_goals_p1 = 0;
+    var away_lieutenant_goals_p2 = 0;
+    var away_lieutenant_goals_p3 = 0;
+    var away_lieutenant_goals_ot = 0;
+
+    var away_lieutenant_assists_p1 = 0;
+    var away_lieutenant_assists_p2 = 0;
+    var away_lieutenant_assists_p3 = 0;
+    var away_lieutenant_assists_ot = 0;
+
     var away_lieutenant_fights = 0;
 
-    if ((typeof(request.params.away_goals_p1) !== 'undefined') && (!_.isEmpty(request.params.away_goals_p1))) {
-      away_goals_p1 = parseInt(request.params.away_goals_p1);
+    if ((typeof(request.params.away_faceoffs_p1) !== 'undefined') && (!_.isEmpty(request.params.away_faceoffs_p1))) {
+      away_faceoffs_p1 = parseInt(request.params.away_faceoffs_p1);
     }
-    if ((typeof(request.params.away_goals_p2) !== 'undefined') && (!_.isEmpty(request.params.away_goals_p2))) {
-      away_goals_p2 = parseInt(request.params.away_goals_p2);
+    if ((typeof(request.params.away_faceoffs_p2) !== 'undefined') && (!_.isEmpty(request.params.away_faceoffs_p2))) {
+      away_faceoffs_p2 = parseInt(request.params.away_faceoffs_p2);
     }
-    if ((typeof(request.params.away_goals_p3) !== 'undefined') && (!_.isEmpty(request.params.away_goals_p3))) {
-      away_goals_p3 = parseInt(request.params.away_goals_p3);
+    if ((typeof(request.params.away_faceoffs_p3) !== 'undefined') && (!_.isEmpty(request.params.away_faceoffs_p3))) {
+      away_faceoffs_p3 = parseInt(request.params.away_faceoffs_p3);
     }
-    if ((typeof(request.params.away_goals_ot) !== 'undefined') && (!_.isEmpty(request.params.away_goals_ot))) {
-      away_goals_ot = parseInt(request.params.away_goals_ot);
-    }
-    
-    if ((typeof(request.params.away_faceoffs) !== 'undefined') && (!_.isEmpty(request.params.away_faceoffs))) {
-      away_faceoffs = parseInt(request.params.away_faceoffs);
+    if ((typeof(request.params.away_faceoffs_ot) !== 'undefined') && (!_.isEmpty(request.params.away_faceoffs_ot))) {
+      away_faceoffs_ot = parseInt(request.params.away_faceoffs_ot);
     }
 
     if ((typeof(request.params.away_shots_p1) !== 'undefined') && (!_.isEmpty(request.params.away_shots_p1))) {
@@ -1155,84 +1217,186 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
       away_shots_ot = parseInt(request.params.away_shots_ot);
     }
 
-    if ((typeof(request.params.away_captain_goals) !== 'undefined') && (!_.isEmpty(request.params.away_captain_goals))) {
-      away_captain_goals = parseInt(request.params.away_captain_goals);
+    if ((typeof(request.params.away_captain_goals_p1) !== 'undefined') && (!_.isEmpty(request.params.away_captain_goals_p1))) {
+      away_captain_goals_p1 = parseInt(request.params.away_captain_goals_p1);
     }
-    if ((typeof(request.params.away_captain_assists) !== 'undefined') && (!_.isEmpty(request.params.away_captain_assists))) {
-      away_captain_assists = parseInt(request.params.away_captain_assists);
+    if ((typeof(request.params.away_captain_goals_p2) !== 'undefined') && (!_.isEmpty(request.params.away_captain_goals_p2))) {
+      away_captain_goals_p2 = parseInt(request.params.away_captain_goals_p2);
     }
+    if ((typeof(request.params.away_captain_goals_p3) !== 'undefined') && (!_.isEmpty(request.params.away_captain_goals_p3))) {
+      away_captain_goals_p3 = parseInt(request.params.away_captain_goals_p3);
+    }
+    if ((typeof(request.params.away_captain_goals_ot) !== 'undefined') && (!_.isEmpty(request.params.away_captain_goals_ot))) {
+      away_captain_goals_ot = parseInt(request.params.away_captain_goals_ot);
+    }
+
+    if ((typeof(request.params.away_captain_assists_p1) !== 'undefined') && (!_.isEmpty(request.params.away_captain_assists_p1))) {
+      away_captain_assists_p1 = parseInt(request.params.away_captain_assists_p1);
+    }
+    if ((typeof(request.params.away_captain_assists_p2) !== 'undefined') && (!_.isEmpty(request.params.away_captain_assists_p2))) {
+      away_captain_assists_p2 = parseInt(request.params.away_captain_assists_p2);
+    }
+    if ((typeof(request.params.away_captain_assists_p3) !== 'undefined') && (!_.isEmpty(request.params.away_captain_assists_p3))) {
+      away_captain_assists_p3 = parseInt(request.params.away_captain_assists_p3);
+    }
+    if ((typeof(request.params.away_captain_assists_ot) !== 'undefined') && (!_.isEmpty(request.params.away_captain_assists_ot))) {
+      away_captain_assists_ot = parseInt(request.params.away_captain_assists_ot);
+    }
+
     if ((typeof(request.params.away_captain_fights) !== 'undefined') && (!_.isEmpty(request.params.away_captain_fights))) {
       away_captain_fights = parseInt(request.params.away_captain_fights);
     }
 
-    if ((typeof(request.params.away_lieutenant_goals) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_goals))) {
-      away_lieutenant_goals = parseInt(request.params.away_lieutenant_goals);
+    if ((typeof(request.params.away_lieutenant_goals_p1) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_goals_p1))) {
+      away_lieutenant_goals_p1 = parseInt(request.params.away_lieutenant_goals_p1);
     }
-    if ((typeof(request.params.away_lieutenant_assists) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_assists))) {
-      away_lieutenant_assists = parseInt(request.params.away_lieutenant_assists);
+    if ((typeof(request.params.away_lieutenant_goals_p2) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_goals_p2))) {
+      away_lieutenant_goals_p2 = parseInt(request.params.away_lieutenant_goals_p2);
     }
+    if ((typeof(request.params.away_lieutenant_goals_p3) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_goals_p3))) {
+      away_lieutenant_goals_p3 = parseInt(request.params.away_lieutenant_goals_p3);
+    }
+    if ((typeof(request.params.away_lieutenant_goals_ot) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_goals_ot))) {
+      away_lieutenant_goals_ot = parseInt(request.params.away_lieutenant_goals_ot);
+    }
+
+    if ((typeof(request.params.away_lieutenant_assists_p1) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_assists_p1))) {
+      away_lieutenant_assists_p1 = parseInt(request.params.away_lieutenant_assists_p1);
+    }
+    if ((typeof(request.params.away_lieutenant_assists_p2) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_assists_p2))) {
+      away_lieutenant_assists_p2 = parseInt(request.params.away_lieutenant_assists_p2);
+    }
+    if ((typeof(request.params.away_lieutenant_assists_p3) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_assists_p3))) {
+      away_lieutenant_assists_p3 = parseInt(request.params.away_lieutenant_assists_p3);
+    }
+    if ((typeof(request.params.away_lieutenant_assists_ot) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_assists_ot))) {
+      away_lieutenant_assists_ot = parseInt(request.params.away_lieutenant_assists_ot);
+    }
+
     if ((typeof(request.params.away_lieutenant_fights) !== 'undefined') && (!_.isEmpty(request.params.away_lieutenant_fights))) {
       away_lieutenant_fights = parseInt(request.params.away_lieutenant_fights);
     }
 
-    home_goals_total = (home_goals_p1+home_goals_p2+home_goals_p3+home_goals_ot);
+    var home_captain_goals_total = (home_captain_goals_p1+home_captain_goals_p2+home_captain_goals_p3+home_captain_goals_ot);
+    var home_lieutenant_goals_total = (home_lieutenant_goals_p1+home_lieutenant_goals_p2+home_lieutenant_goals_p3+home_lieutenant_goals_ot);
+
+    var home_captain_assists_total = (home_captain_assists_p1 + home_captain_assists_p2 + home_captain_assists_p3 + home_captain_assists_ot);
+    var home_lieutenant_assists_total = (home_lieutenant_assists_p1+home_lieutenant_assists_p2+home_lieutenant_assists_p3+home_lieutenant_assists_ot);
+
+    home_goals_total = (home_captain_goals_total+home_lieutenant_goals_total);
     home_shots_total = (home_shots_p1+home_shots_p2+home_shots_p3+home_shots_ot);
+    home_faceoffs_total = (home_faceoffs_p1+home_faceoffs_p2+home_faceoffs_p3+home_faceoffs_ot);
+
+    var home_goals_ot = (home_captain_goals_ot + home_lieutenant_goals_ot);
 
     result[0].set('home_goals_total',home_goals_total);
     result[0].set('home_shots_total',home_shots_total);
-    result[0].set('home_faceoffs_total',home_faceoffs);
+    result[0].set('home_faceoffs_total',home_faceoffs_total);
 
-    away_goals_total = (away_goals_p1+away_goals_p2+away_goals_p3+away_goals_ot);
+    var away_captain_goals_total = (away_captain_goals_p1+away_captain_goals_p2+away_captain_goals_p3+away_captain_goals_ot);
+    var away_lieutenant_goals_total = (away_lieutenant_goals_p1+away_lieutenant_goals_p2+away_lieutenant_goals_p3+away_lieutenant_goals_ot);
+
+    var away_captain_assists_total = (away_captain_assists_p1+away_captain_assists_p2+away_captain_assists_p3+away_captain_assists_ot);
+    var away_lieutenant_assists_total = (away_lieutenant_assists_p1+away_lieutenant_assists_p2+away_lieutenant_assists_p3+away_lieutenant_assists_ot);
+
+    away_goals_total = (away_captain_goals_total+away_lieutenant_goals_total);
     away_shots_total = (away_shots_p1+away_shots_p2+away_shots_p3+away_shots_ot);
+    away_faceoffs_total = (away_faceoffs_p1+away_faceoffs_p2+away_faceoffs_p3+away_faceoffs_ot);
+
+    var away_goals_ot = (away_captain_goals_ot + away_lieutenant_goals_ot);
 
     result[0].set('away_goals_total',away_goals_total);
     result[0].set('away_shots_total',away_shots_total);
-    result[0].set('away_faceoffs_total',away_faceoffs);
+    result[0].set('away_faceoffs_total',away_faceoffs_total);
 
     var jsonDataHome = {};
-
-    jsonDataHome["goals_p1"] = home_goals_p1;
-    jsonDataHome["goals_p2"] = home_goals_p2;
-    jsonDataHome["goals_p3"] = home_goals_p3;
-    jsonDataHome["goals_ot"] = home_goals_ot;
 
     jsonDataHome["shots_p1"] = home_shots_p1;
     jsonDataHome["shots_p2"] = home_shots_p2;
     jsonDataHome["shots_p3"] = home_shots_p3;
     jsonDataHome["shots_ot"] = home_shots_ot;
 
+    jsonDataHome["faceoffs_p1"] = home_faceoffs_p1;
+    jsonDataHome["faceoffs_p2"] = home_faceoffs_p2;
+    jsonDataHome["faceoffs_p3"] = home_faceoffs_p3;
+    jsonDataHome["faceoffs_ot"] = home_faceoffs_ot;
+
     jsonDataHome["captain_id"] = home_captain_id;
-    jsonDataHome["captain_goals"] = home_captain_goals;
-    jsonDataHome["captain_assists"] = home_captain_assists;
+
+    jsonDataHome["captain_goals_p1"] = home_captain_goals_p1;
+    jsonDataHome["captain_goals_p2"] = home_captain_goals_p2;
+    jsonDataHome["captain_goals_p3"] = home_captain_goals_p3;
+    jsonDataHome["captain_goals_ot"] = home_captain_goals_ot;
+    jsonDataHome["captain_goals_total"] = home_captain_goals_total;
+
+    jsonDataHome["captain_assists_p1"] = home_captain_assists_p1;
+    jsonDataHome["captain_assists_p2"] = home_captain_assists_p2;
+    jsonDataHome["captain_assists_p3"] = home_captain_assists_p3;
+    jsonDataHome["captain_assists_ot"] = home_captain_assists_ot;
+    jsonDataHome["captain_assists_total"] = home_captain_assists_total;
+
     jsonDataHome["captain_fights"] = home_captain_fights;
 
     jsonDataHome["lieutenant_id"] = home_lieutenant_id;
-    jsonDataHome["lieutenant_goals"] = home_lieutenant_goals;
-    jsonDataHome["lieutenant_assists"] = home_lieutenant_assists;
+
+    jsonDataHome["lieutenant_goals_p1"] = home_lieutenant_goals_p1;
+    jsonDataHome["lieutenant_goals_p2"] = home_lieutenant_goals_p2;
+    jsonDataHome["lieutenant_goals_p3"] = home_lieutenant_goals_p3;
+    jsonDataHome["lieutenant_goals_ot"] = home_lieutenant_goals_ot;
+    jsonDataHome["lieutenant_goals_total"] = home_lieutenant_goals_total;
+
+    jsonDataHome["lieutenant_assists_p1"] = home_lieutenant_assists_p1;
+    jsonDataHome["lieutenant_assists_p2"] = home_lieutenant_assists_p2;
+    jsonDataHome["lieutenant_assists_p3"] = home_lieutenant_assists_p3;
+    jsonDataHome["lieutenant_assists_ot"] = home_lieutenant_assists_ot;
+    jsonDataHome["lieutenant_assists_total"] = home_lieutenant_assists_total;
+
     jsonDataHome["lieutenant_fights"] = home_lieutenant_fights;
 
     result[0].set('home_stats',jsonDataHome);
 
     var jsonDataAway = {};
 
-    jsonDataAway["goals_p1"] = away_goals_p1;
-    jsonDataAway["goals_p2"] = away_goals_p2;
-    jsonDataAway["goals_p3"] = away_goals_p3;
-    jsonDataAway["goals_ot"] = away_goals_ot;
-
     jsonDataAway["shots_p1"] = away_shots_p1;
     jsonDataAway["shots_p2"] = away_shots_p2;
     jsonDataAway["shots_p3"] = away_shots_p3;
     jsonDataAway["shots_ot"] = away_shots_ot;
 
+    jsonDataAway["faceoffs_p1"] = away_faceoffs_p1;
+    jsonDataAway["faceoffs_p2"] = away_faceoffs_p2;
+    jsonDataAway["faceoffs_p3"] = away_faceoffs_p3;
+    jsonDataAway["faceoffs_ot"] = away_faceoffs_ot;
+
     jsonDataAway["captain_id"] = away_captain_id;
-    jsonDataAway["captain_goals"] = away_captain_goals;
-    jsonDataAway["captain_assists"] = away_captain_assists;
+
+    jsonDataAway["captain_goals_p1"] = away_captain_goals_p1;
+    jsonDataAway["captain_goals_p2"] = away_captain_goals_p2;
+    jsonDataAway["captain_goals_p3"] = away_captain_goals_p3;
+    jsonDataAway["captain_goals_ot"] = away_captain_goals_ot;
+    jsonDataAway["captain_goals_total"] = away_captain_goals_total;
+
+    jsonDataAway["captain_assists_p1"] = away_captain_assists_p1;
+    jsonDataAway["captain_assists_p2"] = away_captain_assists_p2;
+    jsonDataAway["captain_assists_p3"] = away_captain_assists_p3;
+    jsonDataAway["captain_assists_ot"] = away_captain_assists_ot;
+    jsonDataAway["captain_assists_total"] = away_captain_assists_total;
+
     jsonDataAway["captain_fights"] = away_captain_fights;
 
     jsonDataAway["lieutenant_id"] = away_lieutenant_id;
-    jsonDataAway["lieutenant_goals"] = away_lieutenant_goals;
-    jsonDataAway["lieutenant_assists"] = away_lieutenant_assists;
+    
+    jsonDataAway["lieutenant_goals_p1"] = away_lieutenant_goals_p1;
+    jsonDataAway["lieutenant_goals_p2"] = away_lieutenant_goals_p2;
+    jsonDataAway["lieutenant_goals_p3"] = away_lieutenant_goals_p3;
+    jsonDataAway["lieutenant_goals_ot"] = away_lieutenant_goals_ot;
+    jsonDataAway["lieutenant_goals_total"] = away_lieutenant_goals_total;
+
+    jsonDataAway["lieutenant_assists_p1"] = away_lieutenant_assists_p1;
+    jsonDataAway["lieutenant_assists_p2"] = away_lieutenant_assists_p2;
+    jsonDataAway["lieutenant_assists_p3"] = away_lieutenant_assists_p3;
+    jsonDataAway["lieutenant_assists_ot"] = away_lieutenant_assists_ot;
+    jsonDataAway["lieutenant_assists_total"] = away_lieutenant_assists_total;
+
     jsonDataAway["lieutenant_fights"] = away_lieutenant_fights;
 
     result[0].set('away_stats',jsonDataAway);
@@ -1285,8 +1449,8 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
     console.log("Updating Home Captain ...");
     //Home Captain
     var h_c_id = home_stats.captain_id;
-    var h_c_goals = home_stats.captain_goals;
-    var h_c_assists = home_stats.captain_assists;
+    var h_c_goals = home_stats.captain_goals_total;
+    var h_c_assists = home_stats.captain_assists_total;
     var h_c_fights = home_stats.captain_fights;
 
     h_c_goals = h_c_goals.toString();
@@ -1299,8 +1463,8 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
     console.log("Updating Home Lieutenant ...");
     //Home Lieutenant
     var h_l_id = home_stats.lieutenant_id;
-    var h_l_goals = home_stats.lieutenant_goals;
-    var h_l_assists = home_stats.lieutenant_assists;
+    var h_l_goals = home_stats.lieutenant_goals_total;
+    var h_l_assists = home_stats.lieutenant_assists_total;
     var h_l_fights = home_stats.lieutenant_fights;
 
     h_l_goals = h_l_goals.toString();
@@ -1313,8 +1477,8 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
     console.log("Updating Away Captain ...");
     //Away Captain
     var a_c_id = away_stats.captain_id;
-    var a_c_goals = away_stats.captain_goals;
-    var a_c_assists = away_stats.captain_assists;
+    var a_c_goals = away_stats.captain_goals_total;
+    var a_c_assists = away_stats.captain_assists_total;
     var a_c_fights = away_stats.captain_fights;
 
     a_c_goals = a_c_goals.toString();
@@ -1327,8 +1491,8 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
     console.log("Updating Away Lieutenant ...");
     //Away Lieutenant
     var a_l_id = away_stats.lieutenant_id;
-    var a_l_goals = away_stats.lieutenant_goals;
-    var a_l_assists = away_stats.lieutenant_assists;
+    var a_l_goals = away_stats.lieutenant_goals_total;
+    var a_l_assists = away_stats.lieutenant_assists_total;
     var a_l_fights = away_stats.lieutenant_fights;
 
     a_l_goals = a_l_goals.toString();
@@ -1930,7 +2094,7 @@ Parse.Cloud.define("updateStandingForTeam", function(request, response) {
     if (goals_for === goals_against) {
       console.log("If the goals For and Against are the same we can't determine a winner. goals_for: '" + goals_for + "' and goals_against: '" + goals_against + "'");
       response.error("If the goals For and Against are the same we can't determine a winner. goals_for: '" + goals_for + "' and goals_against: '" + goals_against + "'");
-    }
+    }    
 
     var wins = result[0].get("wins");
     var losses = result[0].get("losses");

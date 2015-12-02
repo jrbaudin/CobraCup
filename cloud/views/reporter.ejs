@@ -126,15 +126,39 @@
                 home_lieutenant_id = game[0].get("home").get("lieutenant").get("player_id");
             }
             
-            var home_captain_id = 0;
-            var home_captain_goals = 0;
-            var home_captain_fights = 0;
-            var home_captain_assists = 0;
+            var home_shots_p1 = 0;
+            var home_shots_p2 = 0;
+            var home_shots_p3 = 0;
+            var home_shots_ot = 0;
 
-            var home_lieutenant_id = 0;
-            var home_lieutenant_goals = 0;
-            var home_lieutenant_fights = 0;
-            var home_lieutenant_assists = 0;
+            var home_faceoffs_p1 = 0;
+            var home_faceoffs_p2 = 0;
+            var home_faceoffs_p3 = 0;
+            var home_faceoffs_ot = 0;
+
+            var home_captain_fights = 0;
+
+            var home_captain_goals_p1 = 0;
+            var home_captain_goals_p2 = 0;
+            var home_captain_goals_p3 = 0;
+            var home_captain_goals_ot = 0;
+
+            var home_captain_assists_p1 = 0;
+            var home_captain_assists_p2 = 0;
+            var home_captain_assists_p3 = 0;
+            var home_captain_assists_ot = 0;
+
+            var home_shots_ot = 0;
+            
+            var home_lieutenant_goals_p1 = 0;
+            var home_lieutenant_goals_p2 = 0;
+            var home_lieutenant_goals_p3 = 0;
+            var home_lieutenant_goals_ot = 0;
+
+            var home_lieutenant_assists_p1 = 0;
+            var home_lieutenant_assists_p2 = 0;
+            var home_lieutenant_assists_p3 = 0;
+            var home_lieutenant_assists_ot = 0;
 
             var away_team_name = "";
             if( typeof(game[0].get("away").get("team_name")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("team_name")) ){
@@ -171,35 +195,113 @@
                 away_lieutenant_id = game[0].get("away").get("lieutenant").get("player_id");
             }
 
-            var away_captain_goals = 0;
-            var away_captain_fights = 0;
-            var away_captain_assists = 0;
+            var away_shots_p1 = 0;
+            var away_shots_p2 = 0;
+            var away_shots_p3 = 0;
+            var away_shots_ot = 0;
 
-            var away_lieutenant_goals = 0;
+            var away_faceoffs_p1 = 0;
+            var away_faceoffs_p2 = 0;
+            var away_faceoffs_p3 = 0;
+            var away_faceoffs_ot = 0;
+
+            var away_captain_fights = 0;
+
+            var away_captain_goals_p1 = 0;
+            var away_captain_goals_p2 = 0;
+            var away_captain_goals_p3 = 0;
+            var away_captain_goals_ot = 0;
+
+            var away_captain_assists_p1 = 0;
+            var away_captain_assists_p2 = 0;
+            var away_captain_assists_p3 = 0;
+            var away_captain_assists_ot = 0;
+
             var away_lieutenant_fights = 0;
-            var away_lieutenant_assists = 0;
+
+            var away_lieutenant_goals_p1 = 0;
+            var away_lieutenant_goals_p2 = 0;
+            var away_lieutenant_goals_p3 = 0;
+            var away_lieutenant_goals_ot = 0;
+
+            var away_lieutenant_assists_p1 = 0;
+            var away_lieutenant_assists_p2 = 0;
+            var away_lieutenant_assists_p3 = 0;
+            var away_lieutenant_assists_ot = 0;
 
             var overtime = false;
 
             if (game[0].get("played")) {
                 var home_stats = game[0].get("home_stats");
 
-                home_captain_goals = home_stats.captain_goals;
-                home_captain_assists = home_stats.captain_assists;
+                home_shots_p1 = home_stats.shots_p1;
+                home_shots_p2 = home_stats.shots_p2;
+                home_shots_p3 = home_stats.shots_p3;
+                home_shots_ot = home_stats.shots_ot;
+
+                home_faceoffs_p1 = home_stats.faceoffs_p1;
+                home_faceoffs_p2 = home_stats.faceoffs_p2;
+                home_faceoffs_p3 = home_stats.faceoffs_p3;
+                home_faceoffs_ot = home_stats.faceoffs_ot;
+
+                home_captain_goals_p1 = home_stats.captain_goals_p1;
+                home_captain_goals_p2 = home_stats.captain_goals_p2;
+                home_captain_goals_p3 = home_stats.captain_goals_p3;
+                home_captain_goals_ot = home_stats.captain_goals_ot;
+
+                home_captain_assists_p1 = home_stats.captain_assists_p1;
+                home_captain_assists_p2 = home_stats.captain_assists_p2;
+                home_captain_assists_p3 = home_stats.captain_assists_p3;
+                home_captain_assists_ot = home_stats.captain_assists_ot;
+
                 home_captain_fights = home_stats.captain_fights;
 
-                home_lieutenant_goals = home_stats.lieutenant_goals;
-                home_lieutenant_assists = home_stats.lieutenant_assists;
-                home_lieutenant_fights = home_stats.lieutenant_fights;
+                home_lieutenant_goals_p1 = home_stats.lieutenant_goals_p1;
+                home_lieutenant_goals_p2 = home_stats.lieutenant_goals_p2;
+                home_lieutenant_goals_p3 = home_stats.lieutenant_goals_p3;
+                home_lieutenant_goals_ot = home_stats.lieutenant_goals_ot;
+
+                home_lieutenant_assists_p1 = home_stats.lieutenant_assists_p1;
+                home_lieutenant_assists_p2 = home_stats.lieutenant_assists_p2;
+                home_lieutenant_assists_p3 = home_stats.lieutenant_assists_p3;
+                home_lieutenant_assists_ot = home_stats.lieutenant_assists_ot;
+
+                home_shots_ot = home_stats.lieutenant_fights;
 
                 var away_stats = game[0].get("away_stats");
 
-                away_captain_goals = away_stats.captain_goals;
-                away_captain_assists = away_stats.captain_assists;
+                away_shots_p1 = away_stats.shots_p1;
+                away_shots_p2 = away_stats.shots_p2;
+                away_shots_p3 = away_stats.shots_p3;
+                away_shots_ot = away_stats.shots_ot;
+
+                away_faceoffs_p1 = away_stats.faceoffs_p1;
+                away_faceoffs_p2 = away_stats.faceoffs_p2;
+                away_faceoffs_p3 = away_stats.faceoffs_p3;
+                away_faceoffs_ot = away_stats.faceoffs_ot;
+
+                away_captain_goals_p1 = away_stats.captain_goals_p1;
+                away_captain_goals_p2 = away_stats.captain_goals_p2;
+                away_captain_goals_p3 = away_stats.captain_goals_p3;
+                away_captain_goals_ot = away_stats.captain_goals_ot;
+
+                away_captain_assists_p1 = away_stats.captain_assists_p1;
+                away_captain_assists_p2 = away_stats.captain_assists_p2;
+                away_captain_assists_p3 = away_stats.captain_assists_p3;
+                away_captain_assists_ot = away_stats.captain_assists_ot;
+
                 away_captain_fights = away_stats.captain_fights;
 
-                away_lieutenant_goals = away_stats.lieutenant_goals;
-                away_lieutenant_assists = away_stats.lieutenant_assists;
+                away_lieutenant_goals_p1 = away_stats.lieutenant_goals_p1;
+                away_lieutenant_goals_p2 = away_stats.lieutenant_goals_p2;
+                away_lieutenant_goals_p3 = away_stats.lieutenant_goals_p3;
+                away_lieutenant_goals_ot = away_stats.lieutenant_goals_ot;
+
+                away_lieutenant_assists_p1 = away_stats.lieutenant_assists_p1;
+                away_lieutenant_assists_p2 = away_stats.lieutenant_assists_p2;
+                away_lieutenant_assists_p3 = away_stats.lieutenant_assists_p3;
+                away_lieutenant_assists_ot = away_stats.lieutenant_assists_ot;
+
                 away_lieutenant_fights = away_stats.lieutenant_fights;
 
                 overtime = _.isEqual(game[0].get("overtime"), true);
@@ -236,62 +338,114 @@
                         </div>
                         <!-- /.panel-body -->
                     </div>
+
                     <div class="panel">
-                        <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0; padding-top: 0;">
-                            <div class="col-md-10 col-md-offset-1" style="margin-bottom: 0;">
-                                <div class="form-group col-md-12 col-xs-12" style="margin-bottom: 0; margin-top: 0;">
-                                    <% if(played) { %>
-                                        <% if(overtime){ %>
-                                            <label class="checkbox" for="overtime_checkbox">
-                                                <input type="checkbox" checked="checked" value="true" name="overtime_checkbox" id="overtime_checkbox" data-toggle="checkbox" disabled="" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span> Denna match gick till övertid
-                                            </label>
-                                        <% } else { %>
-                                            <label class="checkbox" for="overtime_checkbox">
-                                                <input type="checkbox" value="false" name="overtime_checkbox" id="overtime_checkbox" data-toggle="checkbox" disabled="" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span> Denna match gick ej till övertid
-                                            </label>
-                                        <% } %>
-                                    <% } else { %>
-                                        <label class="checkbox" for="overtime_checkbox">
-                                            <input type="checkbox" value="true" name="overtime_checkbox" id="overtime_checkbox" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span> Gick denna match till övertid? Klicka i boxen
-                                        </label>
-                                    <% } %>
-                                </div>
-                            </div>
+                        <div class="panel-heading" style="padding-bottom:0;">
+                            <h6 class="text-uppercase" style="margin-bottom:0;">
+                                <img src="<%= home_logo_url %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;">
+                                <span>
+                                    <strong>
+                                        <%= home_team_name %> <small style="color: #34495E;">Hemma</small>
+                                    </strong>
+                                </span>
+                            </h6>
                         </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                    <div class="panel">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-5 col-xs-4">
-                                    <p style="margin-bottom: 0;"><small><strong>Spelare</strong></small></p>
+                                <div class="col-md-4 col-xs-4">
+                                    <p style="margin-bottom: 0;"><small><strong>Statistik</strong></small></p>
                                 </div>
-                                <div class="col-md-2 col-xs-4">
-                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>Mål</strong></small></p>
+                                <div class="col-md-2 col-xs-2">
+                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>1</strong></small></p>
                                 </div>
-                                <div class="col-md-2 col-xs-4">
-                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>Fajter</strong></small></p>
+                                <div class="col-md-2 col-xs-2">
+                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>2</strong></small></p>
+                                </div>
+                                <div class="col-md-2 col-xs-2">
+                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>3</strong></small></p>
+                                </div>
+                                <div class="col-md-2 col-xs-2">
+                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>OT</strong></small></p>
                                 </div>
                             </div>
                             <hr style="margin-bottom: 10px; margin-top: 10px;">
+                            <!-- START home CAPTAIN -->
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h6 class="text-uppercase"><img src="<%= home_logo_url %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Hemmalaget</strong></span></h6>
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <strong><%= getFirstname(home_captain_name) %></strong></p>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-4">
-                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(home_captain_name) %></p>
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Mål</p>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">
+                                <div class="form-group col-md-2 col-xs-2">
                                     <% if(played){ %>
-                                        <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="0" value="<%= home_captain_goals %>" required>
+                                        <input type="text" class="form-control text-center" id="home_captain_goals_p1" name="home_captain_goals_p1" placeholder="0" value="<%= home_captain_goals_p1 %>" required>
                                     <% } else { %>
-                                        <input type="text" class="form-control text-center" id="home_captain_goals" name="home_captain_goals" placeholder="0" required>
+                                        <input type="text" class="form-control text-center" id="home_captain_goals_p1" name="home_captain_goals_p1" placeholder="0" required>
                                     <% } %>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_captain_goals_p2" name="home_captain_goals_p2" placeholder="0" value="<%= home_captain_goals_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_captain_goals_p2" name="home_captain_goals_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_captain_goals_p3" name="home_captain_goals_p3" placeholder="0" value="<%= home_captain_goals_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_captain_goals_p3" name="home_captain_goals_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_captain_goals_ot" name="home_captain_goals_ot" placeholder="0" value="<%= home_captain_goals_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_captain_goals_ot" name="home_captain_goals_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Assist</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_captain_assists_p1" name="home_captain_assists_p1" placeholder="0" value="<%= home_captain_assists_p1 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_captain_assists_p1" name="home_captain_assists_p1" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_captain_assists_p2" name="home_captain_assists_p2" placeholder="0" value="<%= home_captain_assists_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_captain_assists_p2" name="home_captain_assists_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_captain_assists_p3" name="home_captain_assists_p3" placeholder="0" value="<%= home_captain_assists_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_captain_assists_p3" name="home_captain_assists_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_captain_assists_ot" name="home_captain_assists_ot" placeholder="0" value="<%= home_captain_assists_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_captain_assists_ot" name="home_captain_assists_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Fajter</p>
+                                </div>
+                                <div class="form-group col-md-8">
                                     <% if(played){ %>
                                         <input type="text" class="form-control text-center" id="home_captain_fights" name="home_captain_fights" placeholder="0" value="<%= home_captain_fights %>" required>
                                     <% } else { %>
@@ -299,40 +453,275 @@
                                     <% } %>
                                 </div>
                             </div>
+                            <!-- END home CAPTAIN -->
+                            <!-- START home lieutenant -->
                             <div class="row">
-                                <div class="col-md-5 col-xs-4">
-                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(home_lieutenant_name) %></p>
+                                <div class="col-md-12">
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <strong><%= getFirstname(home_lieutenant_name) %></strong></p>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Mål</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
                                     <% if(played){ %>
-                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="0" value="<%= home_lieutenant_goals %>" required>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals_p1" name="home_lieutenant_goals_p1" placeholder="0" value="<%= home_lieutenant_goals_p1 %>" required>
                                     <% } else { %>
-                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals" name="home_lieutenant_goals" placeholder="0" required>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals_p1" name="home_lieutenant_goals_p1" placeholder="0" required>
                                     <% } %>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">
+                                <div class="form-group col-md-2 col-xs-2">
                                     <% if(played){ %>
-                                        <input type="text" class="form-control text-center" id="home_lieutenant_fights" name="home_lieutenant_fights" placeholder="0" value="<%= home_lieutenant_fights %>" required>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals_p2" name="home_lieutenant_goals_p2" placeholder="0" value="<%= home_lieutenant_goals_p2 %>" required>
                                     <% } else { %>
-                                        <input type="text" class="form-control text-center" id="home_lieutenant_fights" name="home_lieutenant_fights" placeholder="0" required>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals_p2" name="home_lieutenant_goals_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals_p3" name="home_lieutenant_goals_p3" placeholder="0" value="<%= home_lieutenant_goals_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals_p3" name="home_lieutenant_goals_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals_ot" name="home_lieutenant_goals_ot" placeholder="0" value="<%= home_lieutenant_goals_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_goals_ot" name="home_lieutenant_goals_ot" placeholder="0" required>
                                     <% } %>
                                 </div>
                             </div>
-                            <div class="row col-md-12">
-                                <h6 class="text-uppercase"><img src="<%= away_logo_url %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;"><span><strong>Bortalaget</strong></span></h6>
-                            </div>
                             <div class="row">
-                                <div class="col-md-5 col-xs-4">
-                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(away_captain_name) %></p>
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Assist</p>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">
+                                <div class="form-group col-md-2 col-xs-2">
                                     <% if(played){ %>
-                                        <input type="text" class="form-control text-center" id="away_captain_goals" name="away_captain_goals" placeholder="0" value="<%= away_captain_goals %>" required>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_assists_p1" name="home_lieutenant_assists_p1" placeholder="0" value="<%= home_lieutenant_assists_p1 %>" required>
                                     <% } else { %>
-                                        <input type="text" class="form-control text-center" id="away_captain_goals" name="away_captain_goals" placeholder="0" required>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_assists_p1" name="home_lieutenant_assists_p1" placeholder="0" required>
                                     <% } %>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_assists_p2" name="home_lieutenant_assists_p2" placeholder="0" value="<%= home_lieutenant_assists_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_assists_p2" name="home_lieutenant_assists_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_assists_p3" name="home_lieutenant_assists_p3" placeholder="0" value="<%= home_lieutenant_assists_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_assists_p3" name="home_lieutenant_assists_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_assists_ot" name="home_lieutenant_assists_ot" placeholder="0" value="<%= home_lieutenant_assists_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_lieutenant_assists_ot" name="home_lieutenant_assists_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Fajter</p>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_shots_ot" name="home_shots_ot" placeholder="0" value="<%= home_shots_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_shots_ot" name="home_shots_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <!-- END home lieutenant -->
+                            <!-- START home team -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="text-uppercase"><i class="fa fa-group hidden-xs"></i> <strong>Laget</strong></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Skott</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_shots_p1" name="home_shots_p1" placeholder="0" value="<%= home_shots_p1 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_shots_p1" name="home_shots_p1" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_shots_p2" name="home_shots_p2" placeholder="0" value="<%= home_shots_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_shots_p2" name="home_shots_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_shots_p3" name="home_shots_p3" placeholder="0" value="<%= home_shots_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_shots_p3" name="home_shots_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_shots_ot" name="home_shots_ot" placeholder="0" value="<%= home_shots_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_shots_ot" name="home_shots_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Tekningar</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_faceoffs_p1" name="home_faceoffs_p1" placeholder="0" value="<%= home_faceoffs_p1 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_faceoffs_p1" name="home_faceoffs_p1" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_faceoffs_p2" name="home_faceoffs_p2" placeholder="0" value="<%= home_faceoffs_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_faceoffs_p2" name="home_faceoffs_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_faceoffs_p3" name="home_faceoffs_p3" placeholder="0" value="<%= home_faceoffs_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_faceoffs_p3" name="home_faceoffs_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="home_faceoffs_ot" name="home_faceoffs_ot" placeholder="0" value="<%= home_faceoffs_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="home_faceoffs_ot" name="home_faceoffs_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <!-- END home team -->
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading" style="padding-bottom:0;">
+                            <h6 class="text-uppercase" style="margin-bottom:0;">
+                                <img src="<%= away_logo_url %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;">
+                                <span>
+                                    <strong>
+                                        <%= away_team_name %> <small style="color: #34495E;">Borta</small>
+                                    </strong>
+                                </span>
+                            </h6>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p style="margin-bottom: 0;"><small><strong>Statistik</strong></small></p>
+                                </div>
+                                <div class="col-md-2 col-xs-2">
+                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>1</strong></small></p>
+                                </div>
+                                <div class="col-md-2 col-xs-2">
+                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>2</strong></small></p>
+                                </div>
+                                <div class="col-md-2 col-xs-2">
+                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>3</strong></small></p>
+                                </div>
+                                <div class="col-md-2 col-xs-2">
+                                    <p class="text-center" style="margin-bottom: 0;"><small><strong>OT</strong></small></p>
+                                </div>
+                            </div>
+                            <hr style="margin-bottom: 10px; margin-top: 10px;">
+                            <!-- START away CAPTAIN -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <strong><%= getFirstname(away_captain_name) %></strong></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Mål</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_goals_p1" name="away_captain_goals_p1" placeholder="0" value="<%= away_captain_goals_p1 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_captain_goals_p1" name="away_captain_goals_p1" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_goals_p2" name="away_captain_goals_p2" placeholder="0" value="<%= away_captain_goals_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_captain_goals_p2" name="away_captain_goals_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_goals_p3" name="away_captain_goals_p3" placeholder="0" value="<%= away_captain_goals_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_captain_goals_p3" name="away_captain_goals_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_goals_ot" name="away_captain_goals_ot" placeholder="0" value="<%= away_captain_goals_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_captain_goals_ot" name="away_captain_goals_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Assist</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_assists_p1" name="away_captain_assists_p1" placeholder="0" value="<%= away_captain_assists_p1 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_captain_assists_p1" name="away_captain_assists_p1" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_assists_p2" name="away_captain_assists_p2" placeholder="0" value="<%= away_captain_assists_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_captain_assists_p2" name="away_captain_assists_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_assists_p3" name="away_captain_assists_p3" placeholder="0" value="<%= away_captain_assists_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_captain_assists_p3" name="away_captain_assists_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_captain_assists_ot" name="away_captain_assists_ot" placeholder="0" value="<%= away_captain_assists_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_captain_assists_ot" name="away_captain_assists_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Fajter</p>
+                                </div>
+                                <div class="form-group col-md-8">
                                     <% if(played){ %>
                                         <input type="text" class="form-control text-center" id="away_captain_fights" name="away_captain_fights" placeholder="0" value="<%= away_captain_fights %>" required>
                                     <% } else { %>
@@ -340,29 +729,168 @@
                                     <% } %>
                                 </div>
                             </div>
+                            <!-- END away CAPTAIN -->
+                            <!-- START away lieutenant -->
                             <div class="row">
-                                <div class="col-md-5 col-xs-4">
-                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <%= getFirstname(away_lieutenant_name) %></p>
+                                <div class="col-md-12">
+                                    <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <strong><%= getFirstname(away_lieutenant_name) %></strong></p>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Mål</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
                                     <% if(played){ %>
-                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals" name="away_lieutenant_goals" placeholder="0" value="<%= away_lieutenant_goals %>" required>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals_p1" name="away_lieutenant_goals_p1" placeholder="0" value="<%= away_lieutenant_goals_p1 %>" required>
                                     <% } else { %>
-                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals" name="away_lieutenant_goals" placeholder="0" required>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals_p1" name="away_lieutenant_goals_p1" placeholder="0" required>
                                     <% } %>
                                 </div>
-                                <div class="form-group col-md-2 col-xs-4">
+                                <div class="form-group col-md-2 col-xs-2">
                                     <% if(played){ %>
-                                        <input type="text" class="form-control text-center" id="away_lieutenant_fights" name="away_lieutenant_fights" placeholder="0" value="<%= away_lieutenant_fights %>" required>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals_p2" name="away_lieutenant_goals_p2" placeholder="0" value="<%= away_lieutenant_goals_p2 %>" required>
                                     <% } else { %>
-                                        <input type="text" class="form-control text-center" id="away_lieutenant_fights" name="away_lieutenant_fights" placeholder="0" required>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals_p2" name="away_lieutenant_goals_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals_p3" name="away_lieutenant_goals_p3" placeholder="0" value="<%= away_lieutenant_goals_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals_p3" name="away_lieutenant_goals_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals_ot" name="away_lieutenant_goals_ot" placeholder="0" value="<%= away_lieutenant_goals_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_goals_ot" name="away_lieutenant_goals_ot" placeholder="0" required>
                                     <% } %>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Assist</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_assists_p1" name="away_lieutenant_assists_p1" placeholder="0" value="<%= away_lieutenant_assists_p1 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_assists_p1" name="away_lieutenant_assists_p1" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_assists_p2" name="away_lieutenant_assists_p2" placeholder="0" value="<%= away_lieutenant_assists_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_assists_p2" name="away_lieutenant_assists_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_assists_p3" name="away_lieutenant_assists_p3" placeholder="0" value="<%= away_lieutenant_assists_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_assists_p3" name="away_lieutenant_assists_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_assists_ot" name="away_lieutenant_assists_ot" placeholder="0" value="<%= away_lieutenant_assists_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_lieutenant_assists_ot" name="away_lieutenant_assists_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Fajter</p>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_shots_ot" name="away_shots_ot" placeholder="0" value="<%= away_shots_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_shots_ot" name="away_shots_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <!-- END away lieutenant -->
+                            <!-- START away team -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="text-uppercase"><i class="fa fa-group hidden-xs"></i> <strong>Laget</strong></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Skott</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_shots_p1" name="away_shots_p1" placeholder="0" value="<%= away_shots_p1 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_shots_p1" name="away_shots_p1" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_shots_p2" name="away_shots_p2" placeholder="0" value="<%= away_shots_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_shots_p2" name="away_shots_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_shots_p3" name="away_shots_p3" placeholder="0" value="<%= away_shots_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_shots_p3" name="away_shots_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_shots_ot" name="away_shots_ot" placeholder="0" value="<%= away_shots_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_shots_ot" name="away_shots_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                    <p>Tekningar</p>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_faceoffs_p1" name="away_faceoffs_p1" placeholder="0" value="<%= away_faceoffs_p1 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_faceoffs_p1" name="away_faceoffs_p1" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_faceoffs_p2" name="away_faceoffs_p2" placeholder="0" value="<%= away_faceoffs_p2 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_faceoffs_p2" name="away_faceoffs_p2" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_faceoffs_p3" name="away_faceoffs_p3" placeholder="0" value="<%= away_faceoffs_p3 %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_faceoffs_p3" name="away_faceoffs_p3" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                                <div class="form-group col-md-2 col-xs-2">
+                                    <% if(played){ %>
+                                        <input type="text" class="form-control text-center" id="away_faceoffs_ot" name="away_faceoffs_ot" placeholder="0" value="<%= away_faceoffs_ot %>" required>
+                                    <% } else { %>
+                                        <input type="text" class="form-control text-center" id="away_faceoffs_ot" name="away_faceoffs_ot" placeholder="0" required>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <!-- END away team -->
                         </div>
-                        <!-- /.panel-body -->
                     </div>
-                    <!-- /.panel -->
+
                     <div class="panel">
                         <div class="panel-body">
                             <div class="row">
@@ -428,9 +956,26 @@
     <script type="text/javascript">
         $(document).ready(function(){
 
-            $('#home_captain_goals').on('input', function() {
-                var temp_home_captain_goals = $('#home_captain_goals').val();
-                var temp_home_lieutenant_goals = $('#home_lieutenant_goals').val();
+            $('#home_captain_goals_p1').on('input', function() {
+                var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+                var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+                var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+                var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+                var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+                                                parseInt(temp_home_captain_goals_p2) + 
+                                                parseInt(temp_home_captain_goals_p3) + 
+                                                parseInt(temp_home_captain_goals_ot);
+
+                var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+                var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+                var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+                var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+                var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+                                                    parseInt(temp_home_lieutenant_goals_p2) + 
+                                                    parseInt(temp_home_lieutenant_goals_p3) + 
+                                                    parseInt(temp_home_lieutenant_goals_ot);
 
                 var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
                 //alert("temp_home_goals_total: " + temp_home_goals_total);
@@ -438,9 +983,26 @@
                 $('#home_goals').val(String(temp_home_goals_total));
             });
 
-            $('#home_lieutenant_goals').on('input', function() {
-                var temp_home_captain_goals = $('#home_captain_goals').val();
-                var temp_home_lieutenant_goals = $('#home_lieutenant_goals').val();
+            $('#home_captain_goals_p2').on('input', function() {
+                var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+                var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+                var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+                var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+                var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+                                                parseInt(temp_home_captain_goals_p2) + 
+                                                parseInt(temp_home_captain_goals_p3) + 
+                                                parseInt(temp_home_captain_goals_ot);
+
+                var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+                var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+                var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+                var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+                var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+                                                    parseInt(temp_home_lieutenant_goals_p2) + 
+                                                    parseInt(temp_home_lieutenant_goals_p3) + 
+                                                    parseInt(temp_home_lieutenant_goals_ot);
 
                 var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
                 //alert("temp_home_goals_total: " + temp_home_goals_total);
@@ -448,9 +1010,188 @@
                 $('#home_goals').val(String(temp_home_goals_total));
             });
 
-            $('#away_captain_goals').on('input', function() {
-                var temp_away_captain_goals = $('#away_captain_goals').val();
-                var temp_away_lieutenant_goals = $('#away_lieutenant_goals').val();
+            $('#home_captain_goals_p3').on('input', function() {
+                var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+                var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+                var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+                var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+                var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+                                                parseInt(temp_home_captain_goals_p2) + 
+                                                parseInt(temp_home_captain_goals_p3) + 
+                                                parseInt(temp_home_captain_goals_ot);
+
+                var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+                var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+                var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+                var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+                var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+                                                    parseInt(temp_home_lieutenant_goals_p2) + 
+                                                    parseInt(temp_home_lieutenant_goals_p3) + 
+                                                    parseInt(temp_home_lieutenant_goals_ot);
+
+                var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
+                //alert("temp_home_goals_total: " + temp_home_goals_total);
+
+                $('#home_goals').val(String(temp_home_goals_total));
+            });
+
+            $('#home_captain_goals_ot').on('input', function() {
+                var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+                var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+                var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+                var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+                var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+                                                parseInt(temp_home_captain_goals_p2) + 
+                                                parseInt(temp_home_captain_goals_p3) + 
+                                                parseInt(temp_home_captain_goals_ot);
+
+                var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+                var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+                var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+                var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+                var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+                                                    parseInt(temp_home_lieutenant_goals_p2) + 
+                                                    parseInt(temp_home_lieutenant_goals_p3) + 
+                                                    parseInt(temp_home_lieutenant_goals_ot);
+
+                var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
+                //alert("temp_home_goals_total: " + temp_home_goals_total);
+
+                $('#home_goals').val(String(temp_home_goals_total));
+            });
+
+            $('#home_lieutenant_goals_p1').on('input', function() {
+               var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+                var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+                var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+                var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+                var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+                                                parseInt(temp_home_captain_goals_p2) + 
+                                                parseInt(temp_home_captain_goals_p3) + 
+                                                parseInt(temp_home_captain_goals_ot);
+
+                var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+                var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+                var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+                var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+                var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+                                                    parseInt(temp_home_lieutenant_goals_p2) + 
+                                                    parseInt(temp_home_lieutenant_goals_p3) + 
+                                                    parseInt(temp_home_lieutenant_goals_ot);
+
+                var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
+                //alert("temp_home_goals_total: " + temp_home_goals_total);
+
+                $('#home_goals').val(String(temp_home_goals_total));
+            });
+
+            $('#home_lieutenant_goals_p2').on('input', function() {
+               var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+                var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+                var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+                var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+                var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+                                                parseInt(temp_home_captain_goals_p2) + 
+                                                parseInt(temp_home_captain_goals_p3) + 
+                                                parseInt(temp_home_captain_goals_ot);
+
+                var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+                var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+                var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+                var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+                var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+                                                    parseInt(temp_home_lieutenant_goals_p2) + 
+                                                    parseInt(temp_home_lieutenant_goals_p3) + 
+                                                    parseInt(temp_home_lieutenant_goals_ot);
+
+                var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
+                //alert("temp_home_goals_total: " + temp_home_goals_total);
+
+                $('#home_goals').val(String(temp_home_goals_total));
+            });
+
+            $('#home_lieutenant_goals_p3').on('input', function() {
+               var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+                var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+                var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+                var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+                var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+                                                parseInt(temp_home_captain_goals_p2) + 
+                                                parseInt(temp_home_captain_goals_p3) + 
+                                                parseInt(temp_home_captain_goals_ot);
+
+                var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+                var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+                var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+                var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+                var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+                                                    parseInt(temp_home_lieutenant_goals_p2) + 
+                                                    parseInt(temp_home_lieutenant_goals_p3) + 
+                                                    parseInt(temp_home_lieutenant_goals_ot);
+
+                var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
+                //alert("temp_home_goals_total: " + temp_home_goals_total);
+
+                $('#home_goals').val(String(temp_home_goals_total));
+            });
+
+            $('#home_lieutenant_goals_ot').on('input', function() {
+               var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+                var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+                var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+                var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+                var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+                                                parseInt(temp_home_captain_goals_p2) + 
+                                                parseInt(temp_home_captain_goals_p3) + 
+                                                parseInt(temp_home_captain_goals_ot);
+
+                var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+                var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+                var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+                var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+                var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+                                                    parseInt(temp_home_lieutenant_goals_p2) + 
+                                                    parseInt(temp_home_lieutenant_goals_p3) + 
+                                                    parseInt(temp_home_lieutenant_goals_ot);
+
+                var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
+                //alert("temp_home_goals_total: " + temp_home_goals_total);
+
+                $('#home_goals').val(String(temp_home_goals_total));
+            });
+
+            $('#away_captain_goals_p1').on('input', function() {
+                var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+                var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+                var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+                var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+                var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+                                                parseInt(temp_away_captain_goals_p2) + 
+                                                parseInt(temp_away_captain_goals_p3) + 
+                                                parseInt(temp_away_captain_goals_ot);
+
+                var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+                var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+                var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+                var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+                var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
+                                                    parseInt(temp_away_lieutenant_goals_p2) + 
+                                                    parseInt(temp_away_lieutenant_goals_p3) + 
+                                                    parseInt(temp_away_lieutenant_goals_ot);
 
                 var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
                 //alert("temp_away_goals_total: " + temp_away_goals_total);
@@ -458,12 +1199,191 @@
                 $('#away_goals').val(String(temp_away_goals_total));
             });
 
-            $('#away_lieutenant_goals').on('input', function() {
-                var temp_away_captain_goals = $('#away_captain_goals').val();
-                var temp_away_lieutenant_goals = $('#away_lieutenant_goals').val();
+            $('#away_captain_goals_p2').on('input', function() {
+                var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+                var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+                var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+                var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+                var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+                                                parseInt(temp_away_captain_goals_p2) + 
+                                                parseInt(temp_away_captain_goals_p3) + 
+                                                parseInt(temp_away_captain_goals_ot);
+
+                var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+                var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+                var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+                var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+                var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
+                                                    parseInt(temp_away_lieutenant_goals_p2) + 
+                                                    parseInt(temp_away_lieutenant_goals_p3) + 
+                                                    parseInt(temp_away_lieutenant_goals_ot);
 
                 var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
                 //alert("temp_away_goals_total: " + temp_away_goals_total);
+
+                $('#away_goals').val(String(temp_away_goals_total));
+            });
+
+            $('#away_captain_goals_p3').on('input', function() {
+                var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+                var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+                var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+                var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+                var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+                                                parseInt(temp_away_captain_goals_p2) + 
+                                                parseInt(temp_away_captain_goals_p3) + 
+                                                parseInt(temp_away_captain_goals_ot);
+
+                var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+                var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+                var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+                var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+                var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
+                                                    parseInt(temp_away_lieutenant_goals_p2) + 
+                                                    parseInt(temp_away_lieutenant_goals_p3) + 
+                                                    parseInt(temp_away_lieutenant_goals_ot);
+
+                var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
+                //alert("temp_away_goals_total: " + temp_away_goals_total);
+
+                $('#away_goals').val(String(temp_away_goals_total));
+            });
+
+            $('#away_captain_goals_ot').on('input', function() {
+                var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+                var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+                var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+                var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+                var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+                                                parseInt(temp_away_captain_goals_p2) + 
+                                                parseInt(temp_away_captain_goals_p3) + 
+                                                parseInt(temp_away_captain_goals_ot);
+
+                var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+                var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+                var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+                var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+                var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
+                                                    parseInt(temp_away_lieutenant_goals_p2) + 
+                                                    parseInt(temp_away_lieutenant_goals_p3) + 
+                                                    parseInt(temp_away_lieutenant_goals_ot);
+
+                var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
+                //alert("temp_away_goals_total: " + temp_away_goals_total);
+
+                $('#away_goals').val(String(temp_away_goals_total));
+            });
+
+            $('#away_lieutenant_goals_p1').on('input', function() {
+                var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+                var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+                var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+                var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+                var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+                                                parseInt(temp_away_captain_goals_p2) + 
+                                                parseInt(temp_away_captain_goals_p3) + 
+                                                parseInt(temp_away_captain_goals_ot);
+
+                var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+                var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+                var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+                var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+                var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
+                                                    parseInt(temp_away_lieutenant_goals_p2) + 
+                                                    parseInt(temp_away_lieutenant_goals_p3) + 
+                                                    parseInt(temp_away_lieutenant_goals_ot);
+
+                var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
+                //alert("temp_away_goals_total: " + temp_away_goals_total);
+
+                $('#away_goals').val(String(temp_away_goals_total));
+            });
+
+            $('#away_lieutenant_goals_p2').on('input', function() {
+                var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+                var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+                var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+                var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+                var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+                                                parseInt(temp_away_captain_goals_p2) + 
+                                                parseInt(temp_away_captain_goals_p3) + 
+                                                parseInt(temp_away_captain_goals_ot);
+
+                var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+                var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+                var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+                var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+                var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
+                                                    parseInt(temp_away_lieutenant_goals_p2) + 
+                                                    parseInt(temp_away_lieutenant_goals_p3) + 
+                                                    parseInt(temp_away_lieutenant_goals_ot);
+
+                var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
+                //alert("temp_away_goals_total: " + temp_away_goals_total);
+
+                $('#away_goals').val(String(temp_away_goals_total));
+            });
+
+            $('#away_lieutenant_goals_p3').on('input', function() {
+                var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+                var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+                var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+                var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+                var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+                                                parseInt(temp_away_captain_goals_p2) + 
+                                                parseInt(temp_away_captain_goals_p3) + 
+                                                parseInt(temp_away_captain_goals_ot);
+
+                var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+                var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+                var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+                var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+                var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
+                                                    parseInt(temp_away_lieutenant_goals_p2) + 
+                                                    parseInt(temp_away_lieutenant_goals_p3) + 
+                                                    parseInt(temp_away_lieutenant_goals_ot);
+
+                var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
+                ////alert("temp_away_goals_total: " + temp_away_goals_total);
+
+                $('#away_goals').val(String(temp_away_goals_total));
+            });
+
+            $('#away_lieutenant_goals_ot').on('input', function() {
+                var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+                var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+                var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+                var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+                var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+                                                parseInt(temp_away_captain_goals_p2) + 
+                                                parseInt(temp_away_captain_goals_p3) + 
+                                                parseInt(temp_away_captain_goals_ot);
+
+                var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+                var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+                var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+                var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+                var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
+                                                    parseInt(temp_away_lieutenant_goals_p2) + 
+                                                    parseInt(temp_away_lieutenant_goals_p3) + 
+                                                    parseInt(temp_away_lieutenant_goals_ot);
+
+                var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
+                ////alert("temp_away_goals_total: " + temp_away_goals_total);
 
                 $('#away_goals').val(String(temp_away_goals_total));
             });
