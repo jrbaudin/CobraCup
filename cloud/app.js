@@ -38,7 +38,7 @@ app.locals.formatTime = function(time) {
 };
 
 app.locals.formatDateAndTime = function(time6) {
-  return momentSWE(time6).locale('sv').format('dddd, MMMM D, YYYY, HH:mm');
+  return momentSWE(time6).add(1, 'hours').locale('sv').format('dddd, MMMM D, YYYY, HH:mm');
 };
 
 app.locals.justTime = function(time2) {

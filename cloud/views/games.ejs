@@ -82,16 +82,43 @@
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/1'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
                     <hr>
-                    <% if(typeof(teams) !== 'undefined'){
-                        teams.forEach(function(team) {
+                    <% if(typeof(games) !== 'undefined'){
+                        var size = _.size(games);
+                        if (size > 0) {
+                            games.forEach(function loop(game) { 
+                                if(loop.stop){ return; } %>
+                                <% if(_.isEqual(game.get("group"), 1)){ %>
+                                    <a href="/stat/game/<%= game.get("game_id") %>" style="color: rgb(241,102,57);">
+                                        <div class="row" style="margin-bottom: 0;">
+                                            <p class="text-center text-uppercase" style="margin-bottom: 5px;"><strong>Nästa match</strong></p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4 col-md-2" style="padding-right: 5px;">
+                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                            </div>
+                                            <div class="col-xs-4 col-md-8">
+                                                <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;">Runda <strong><%= game.get("round") %></strong></p>
+                                                <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;"><small><%= game.get("home").get("nickname") %> vs. <%= game.get("away").get("nickname") %></small></p>
+                                            </div>
+                                            <div class="col-xs-4 col-md-2" style="padding-left: 5px;">
+                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <% loop.stop = true;
+                                }
+                            }) %>
+                            <hr> 
+                        <% } %>
+                    <% } %>
+                    <% if(typeof(teams) !== 'undefined'){ %>
+                        <p class="text-center text-uppercase" style="margin-bottom: 10px;"><strong>Lag i gruppen</strong></p>
+                        <% teams.forEach(function(team) {
                             if(_.isEqual(team.get("group"), "1")){ %>
                                 <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
                             <% }
-                        })
-                    %>
-
+                        }) %>
                     <% } %>
-                    
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -111,8 +138,38 @@
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/2'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
                     <hr>
-                    <% if(typeof(teams) !== 'undefined'){
-                        teams.forEach(function(team) {
+                    <% if(typeof(games) !== 'undefined'){
+                        var size = _.size(games);
+                        if (size > 0) {
+                            games.forEach(function loop(game) { 
+                                if(loop.stop){ return; } %>
+                                <% if(_.isEqual(game.get("group"), 2)){ %>
+                                    <a href="/stat/game/<%= game.get("game_id") %>" style="color: rgb(241,102,57);">
+                                        <div class="row" style="margin-bottom: 0;">
+                                            <p class="text-center text-uppercase" style="margin-bottom: 5px;"><strong>Nästa match</strong></p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4 col-md-2" style="padding-right: 5px;">
+                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                            </div>
+                                            <div class="col-xs-4 col-md-8">
+                                                <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;">Runda <strong><%= game.get("round") %></strong></p>
+                                                <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;"><small><%= game.get("home").get("nickname") %> vs. <%= game.get("away").get("nickname") %></small></p>
+                                            </div>
+                                            <div class="col-xs-4 col-md-2" style="padding-left: 5px;">
+                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <% loop.stop = true;
+                                }
+                            }) %>
+                            <hr> 
+                        <% } %>
+                    <% } %>
+                    <% if(typeof(teams) !== 'undefined'){ %>
+                        <p class="text-center text-uppercase" style="margin-bottom: 10px;"><strong>Lag i gruppen</strong></p>
+                        <% teams.forEach(function(team) {
                             if(_.isEqual(team.get("group"), "2")){ %>
                                 <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
                             <% }
@@ -139,8 +196,38 @@
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/3'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
                     <hr>
-                    <% if(typeof(teams) !== 'undefined'){
-                        teams.forEach(function(team) {
+                    <% if(typeof(games) !== 'undefined'){
+                        var size = _.size(games);
+                        if (size > 0) {
+                            games.forEach(function loop(game) { 
+                                if(loop.stop){ return; } %>
+                                <% if(_.isEqual(game.get("group"), 3)){ %>
+                                    <a href="/stat/game/<%= game.get("game_id") %>" style="color: rgb(241,102,57);">
+                                        <div class="row" style="margin-bottom: 0;">
+                                            <p class="text-center text-uppercase" style="margin-bottom: 5px;"><strong>Nästa match</strong></p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4 col-md-2" style="padding-right: 5px;">
+                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                            </div>
+                                            <div class="col-xs-4 col-md-8">
+                                                <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;">Runda <strong><%= game.get("round") %></strong></p>
+                                                <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;"><small><%= game.get("home").get("nickname") %> vs. <%= game.get("away").get("nickname") %></small></p>
+                                            </div>
+                                            <div class="col-xs-4 col-md-2" style="padding-left: 5px;">
+                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <% loop.stop = true;
+                                }
+                            }) %>
+                            <hr> 
+                        <% } %>
+                    <% } %>
+                    <% if(typeof(teams) !== 'undefined'){%>
+                        <p class="text-center text-uppercase" style="margin-bottom: 10px;"><strong>Lag i gruppen</strong></p>
+                        <% teams.forEach(function(team) { 
                             if(_.isEqual(team.get("group"), "3")){ %>
                                 <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
                             <% }
@@ -167,8 +254,38 @@
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/4'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
                     <hr>
-                    <% if(typeof(teams) !== 'undefined'){
-                        teams.forEach(function(team) {
+                    <% if(typeof(games) !== 'undefined'){
+                        var size = _.size(games);
+                        if (size > 0) {
+                            games.forEach(function loop(game) { 
+                                if(loop.stop){ return; } %>
+                                <% if(_.isEqual(game.get("group"), 4)){ %>
+                                    <a href="/stat/game/<%= game.get("game_id") %>" style="color: rgb(241,102,57);">
+                                        <div class="row" style="margin-bottom: 0;">
+                                            <p class="text-center text-uppercase" style="margin-bottom: 5px;"><strong>Nästa match</strong></p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4 col-md-2" style="padding-right: 5px;">
+                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                            </div>
+                                            <div class="col-xs-4 col-md-8">
+                                                <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;">Runda <strong><%= game.get("round") %></strong></p>
+                                                <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;"><small><%= game.get("home").get("nickname") %> vs. <%= game.get("away").get("nickname") %></small></p>
+                                            </div>
+                                            <div class="col-xs-4 col-md-2" style="padding-left: 5px;">
+                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <% loop.stop = true;
+                                }
+                            }) %>
+                            <hr> 
+                        <% } %>
+                    <% } %>
+                    <% if(typeof(teams) !== 'undefined'){ %>
+                        <p class="text-center text-uppercase" style="margin-bottom: 10px;"><strong>Lag i gruppen</strong></p>
+                        <% teams.forEach(function(team) {
                             if(_.isEqual(team.get("group"), "4")){ %>
                                 <p class="text-uppercase text-center"><a href="/team/<%= team.get("team_id") %>"><%= team.get("team_name") %></a></p>
                             <% }

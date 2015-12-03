@@ -994,13 +994,27 @@ exports.saveMatchResult = function(req, res) {
 **/
 
 exports.loadGames = function(req, res) {
+  var teams = "";
+
   var Team = Parse.Object.extend('Team');
   var teamQuery = new Parse.Query(Team);
   teamQuery.ascending('group');
   teamQuery.include('nhlTeam');
   teamQuery.find().then(function(results) {
+    teams = results;
+    var Game = Parse.Object.extend('Game');
+    var gameQuery = new Parse.Query(Game);
+    gameQuery.ascending('round,group');
+    gameQuery.equalTo('played', false);
+    gameQuery.include(['home.nhlTeam','away.nhlTeam']);
+    gameQuery.include(['home.captain','home.lieutenant']);
+    gameQuery.include(['away.captain','away.lieutenant']);
+
+    return gameQuery.find();
+  }).then(function(result){
     res.render('games', {
-      teams: results
+      teams: teams,
+      games: result
     });
   }, function(error) {
     log.error("Couldn't load teams. Rendering Games page anyway.");
