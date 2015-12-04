@@ -16,6 +16,7 @@ var playerController = require('cloud/controllers/player.js');
 var adminController = require('cloud/controllers/admin.js');
 var statController = require('cloud/controllers/stat.js');
 var storeController = require('cloud/controllers/store.js');
+var playoffsController = require('cloud/controllers/playoffs.js');
 
 var requireUser = require('cloud/require-user');
  
@@ -103,6 +104,8 @@ app.put('/player/edit/:playerid', playerController.updatePlayer);
 //app.del('/player/:playerid', playerController.deletePlayer);
 
 app.get('/payed', playerController.getListForParticipantFees);
+
+app.get('/playoffs', playoffsController.loadPOGames);
 
 app.get('/stat/league', statController.showLeague);
 app.get('/stat/divisions', statController.showDivisions);

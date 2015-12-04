@@ -1,0 +1,35 @@
+html,
+body {
+  background-color: #2C3E50 !important;
+  /* color: #ECF0F1 !important; */
+}
+
+a {
+    color: #2C3E50;
+}
+
+a:hover {
+    color: #2980B9;
+}
+
+.colormewhite {
+	color: #ECF0F1 !important;
+}
+
+.colormedark {
+	color: #34495E !important;
+}
+
+.gamepanel {
+	background-color: #2C3E50 !important;
+	color: #ECF0F1 !important;
+	word-wrap: break-word;
+}
+
+.givemesomespace-right {
+	margin-right: 10px;
+}
+
+.lowopacity {
+	opacity: 0.7;
+}

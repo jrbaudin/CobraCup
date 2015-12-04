@@ -211,8 +211,27 @@ exports.loadMatchReporter = function(request, response) {
       flashInfo: passedInfoVariable
     });
   }, function(error){
+    var error_msg = "Problem när den önskade matchen med id '" + request.params.gameid + "' skulle hämtas. Sannolikt finns det ingen match med det id't";
     console.log("Getting Game with id '" + request.params.gameid + "' failed with error.code " + error.code + " error.message " + error.message);
-    response.render('reporter', {flashError: 'Problem när den önskade matchen skulle hämtas'});
+    response.render('reporter', {
+      flashError: error_msg
+    });
+
+    /*
+    if((typeof(error.code) !== 'undefined') || (typeof(error.message) !== 'undefined')){
+      console.log("Getting Game with id '" + request.params.gameid + "' failed with error.code " + error.code + " error.message " + error.message);
+    } else {
+      console.log("Getting Game with id '" + request.params.gameid + "' failed with error.message: " + error);
+    }
+
+    if (_.isEqual(error, 404)) {
+      response.status(404);
+      response.render('404');
+    } else {
+      response.status(500).send({ error: error });
+    }
+    */
+
   });
 };
 
