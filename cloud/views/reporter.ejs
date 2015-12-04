@@ -1847,6 +1847,34 @@
             return status;
         };
 
+        function isOvertimeGoalsMoreThanOne () {
+            var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+            var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+            var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+            var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+            if (typeof(temp_home_captain_goals_ot) === 'undefined' || isEmpty(String(temp_home_captain_goals_ot))) {
+                temp_home_captain_goals_ot = 0;
+            }
+            if (typeof(temp_home_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_ot))) {
+                temp_home_lieutenant_goals_ot = 0;
+            }
+            if (typeof(temp_away_captain_goals_ot) === 'undefined' || isEmpty(String(temp_away_captain_goals_ot))) {
+                temp_away_captain_goals_ot = 0;
+            }
+            if (typeof(temp_away_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_ot))) {
+                temp_away_lieutenant_goals_ot = 0;
+            }
+
+            var temp_overtime_goals =     parseInt(temp_home_captain_goals_ot) + 
+                                          parseInt(temp_home_lieutenant_goals_ot) + 
+                                          parseInt(temp_away_captain_goals_ot) + 
+                                          parseInt(temp_away_lieutenant_goals_ot);                        
+            var overtime_goals_status = temp_overtime_goals > 1;
+            return overtime_goals_status;
+        };
+
         /** HOME CAPTAIN GOALS AND ASSISTS **/
         $('#home_captain_goals_p1').on('input', function() {
             $('#home_captain_goals_sum').text(String(getHomeCaptainGoals()));
@@ -1928,6 +1956,15 @@
             } else {
                 $('#overtime-label').hide();
             }
+            /*
+            if (isOvertimeGoalsMoreThanOne()) {
+                $('#home_lieutenant_assists_sum').addClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#home_lieutenant_assists_sum').removeClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "OK");
+            }
+            */
             if (getIsHomeLieutenantAssistsCorrect()) {
                 $('#home_lieutenant_assists_sum').addClass("error-stat");
                 $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
