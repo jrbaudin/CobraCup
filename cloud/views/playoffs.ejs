@@ -77,6 +77,9 @@
                                                                     <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Home Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
                                                                 </a>
                                                                 <h4 class="text-center"><%= game.get("home").get("nickname") %></h4>
+                                                                <% if (game.get("played") && _.isEqual(game.get("winner").id,game.get("home").id)) { %>
+                                                                  <span class="label label-success">Vinnare</span>
+                                                                <% } %>
                                                             </div>
                                                             <div class="col-md-2 text-center">
                                                                 <% if (game.get("played")) { %>
@@ -84,16 +87,15 @@
                                                                   <h6 class="lowopacity" title="Skott"><%= game.get("home_shots_total") %></h6>
                                                                 <% } else { %>
                                                                   <h1 title="Mål"><strong>0</strong></h1>
-                                                                  <h6 class="lowopacity" title="Skott">0</h6>
                                                                 <% } %>
                                                             </div>
                                                             <div class="col-md-4 text-center">
                                                                 <h2><strong>VS.</strong></h2>
                                                                 <% if (game.get("played")) { %>
-                                                                    <span class="label label-success givemesomespace-right">Spelad</span>
+                                                                    <strong class="givemesomespace-right">Spelad</strong>
                                                                     <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning colormedark"><i class="fa fa-lock"></i> Se Matchrapport</button>
                                                                 <% } else { %>
-                                                                    <span class="label label-primary givemesomespace-right">Ej Spelad</span>
+                                                                    <strong class="givemesomespace-right">Ej Spelad</strong>
                                                                     <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success colormedark"><i class="fa fa-pencil"></i> Rapportera</button>
                                                                 <% } %>
                                                             </div>
@@ -103,7 +105,6 @@
                                                                   <h6 class="lowopacity" title="Skott"><%= game.get("away_shots_total") %></h6>
                                                                 <% } else { %>
                                                                   <h1 title="Mål"><strong>0</strong></h1>
-                                                                  <h6 class="lowopacity" title="Skott">0</h6>
                                                                 <% } %>
                                                             </div>
                                                             <div class="col-md-2 text-center">
@@ -111,6 +112,9 @@
                                                                     <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Away Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
                                                                 </a>
                                                                 <h4 class="text-center"><%= game.get("away").get("nickname") %></h4>
+                                                                <% if (game.get("played") && _.isEqual(game.get("winner").id,game.get("away").id)) { %>
+                                                                  <span class="label label-success">Vinnare</span>
+                                                                <% } %>
                                                             </div>
                                                         </div>
                                                       </div>
@@ -133,56 +137,60 @@
                                 if (_.size(games) > 0) {
                                     games.forEach(function loop(game) { %>
                                         <% if(_.isEqual(game.get("round"), 2)){ %>
-                                          <div class="row">
-                                              <div class="col-md-12">
-                                                  <div class="panel panel-default gamepanel">
-                                                    <div class="panel-body">
-                                                      <div class="row">
-                                                          <div class="col-md-2 text-center">
-                                                              <a href="/team/<%= game.get("home").get("team_id") %>" target="_blank">
-                                                                  <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Home Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
-                                                              </a>
-                                                              <h4 class="text-center"><%= game.get("home").get("nickname") %></h4>
-                                                          </div>
-                                                          <div class="col-md-2 text-center">
-                                                              <% if (game.get("played")) { %>
-                                                                <h2><strong><%= game.get("home_goals_total") %></strong></h2>
-                                                                <h6><%= game.get("home_shots_total") %></h6>
-                                                              <% } else { %>
-                                                                <h2><strong>0</strong></h2>
-                                                                <h6>0</h6>
-                                                              <% } %>
-                                                          </div>
-                                                          <div class="col-md-4 text-center">
-                                                              <h2><strong>VS.</strong></h2>
-                                                              <% if (game.get("played")) { %>
-                                                                  <span class="label label-sucess givemesomespace-right">Spelad</span>
-                                                                  <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning"><i class="fa fa-lock"></i> Se Matchrapport</button>
-                                                              <% } else { %>
-                                                                  <span class="label label-primary givemesomespace-right">Ej Spelad</span>
-                                                                  <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i> Rapportera</button>
-                                                              <% } %>
-                                                          </div>
-                                                          <div class="col-md-2 text-center">
-                                                              <% if (game.get("played")) { %>
-                                                                <h2><strong><%= game.get("away_goals_total") %></strong></h2>
-                                                                <h6><%= game.get("away_shots_total") %></h6>
-                                                              <% } else { %>
-                                                                <h2><strong>0</strong></h2>
-                                                                <h6>0</h6>
-                                                              <% } %>
-                                                          </div>
-                                                          <div class="col-md-2 text-center">
-                                                              <a href="/team/<%= game.get("away").get("team_id") %>" target="_blank">
-                                                                  <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Away Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
-                                                              </a>
-                                                              <h4 class="text-center"><%= game.get("away").get("nickname") %></h4>
-                                                          </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="panel panel-default gamepanel">
+                                                      <div class="panel-body">
+                                                        <div class="row">
+                                                            <div class="col-md-2 text-center">
+                                                                <a href="/team/<%= game.get("home").get("team_id") %>" target="_blank">
+                                                                    <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Home Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
+                                                                </a>
+                                                                <h4 class="text-center"><%= game.get("home").get("nickname") %></h4>
+                                                                <% if (game.get("played") && _.isEqual(game.get("winner").id,game.get("home").id)) { %>
+                                                                  <span class="label label-success">Vinnare</span>
+                                                                <% } %>
+                                                            </div>
+                                                            <div class="col-md-2 text-center">
+                                                                <% if (game.get("played")) { %>
+                                                                  <h1 title="Mål"><strong><%= game.get("home_goals_total") %></strong></h1>
+                                                                  <h6 class="lowopacity" title="Skott"><%= game.get("home_shots_total") %></h6>
+                                                                <% } else { %>
+                                                                  <h1 title="Mål"><strong>0</strong></h1>
+                                                                <% } %>
+                                                            </div>
+                                                            <div class="col-md-4 text-center">
+                                                                <h2><strong>VS.</strong></h2>
+                                                                <% if (game.get("played")) { %>
+                                                                    <strong class="givemesomespace-right">Spelad</strong>
+                                                                    <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning colormedark"><i class="fa fa-lock"></i> Se Matchrapport</button>
+                                                                <% } else { %>
+                                                                    <strong class="givemesomespace-right">Ej Spelad</strong>
+                                                                    <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success colormedark"><i class="fa fa-pencil"></i> Rapportera</button>
+                                                                <% } %>
+                                                            </div>
+                                                            <div class="col-md-2 text-center">
+                                                                <% if (game.get("played")) { %>
+                                                                  <h1 title="Mål"><strong><%= game.get("away_goals_total") %></strong></h1>
+                                                                  <h6 class="lowopacity" title="Skott"><%= game.get("away_shots_total") %></h6>
+                                                                <% } else { %>
+                                                                  <h1 title="Mål"><strong>0</strong></h1>
+                                                                <% } %>
+                                                            </div>
+                                                            <div class="col-md-2 text-center">
+                                                                <a href="/team/<%= game.get("away").get("team_id") %>" target="_blank">
+                                                                    <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Away Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
+                                                                </a>
+                                                                <h4 class="text-center"><%= game.get("away").get("nickname") %></h4>
+                                                                <% if (game.get("played") && _.isEqual(game.get("winner").id,game.get("away").id)) { %>
+                                                                  <span class="label label-success">Vinnare</span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
                                                       </div>
                                                     </div>
-                                                  </div>
-                                              </div>
-                                          </div>
+                                                </div>
+                                            </div>
                                         <% }
                                     }) %>
                                 <% } else { %>
@@ -199,44 +207,60 @@
                                 if (_.size(games) > 0) {
                                     games.forEach(function loop(game) { %>
                                       <% if(_.isEqual(game.get("round"), 3)){ %>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="panel panel-default gamepanel">
-                                                  <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-md-2 text-center">
-                                                            <a href="/team/<%= game.get("home").get("team_id") %>" target="_blank">
-                                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Home Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
-                                                            </a>
-                                                            <h4 class="text-center"><%= game.get("home").get("nickname") %></h4>
-                                                        </div>
-                                                        <div class="col-md-2 text-center">
-                                                            <h2><strong>0</strong></h2>
-                                                        </div>
-                                                        <div class="col-md-4 text-center">
-                                                            <h2><strong>VS.</strong></h2>
-                                                            <% if (game.get("played")) { %>
-                                                                <span class="label label-sucess givemesomespace-right">Spelad</span>
-                                                                <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning"><i class="fa fa-lock"></i> Se Matchrapport</button>
-                                                            <% } else { %>
-                                                                <span class="label label-primary givemesomespace-right">Ej Spelad</span>
-                                                                <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i> Rapportera</button>
-                                                            <% } %>
-                                                        </div>
-                                                        <div class="col-md-2 text-center">
-                                                            <h2><strong>0</strong></h2>
-                                                        </div>
-                                                        <div class="col-md-2 text-center">
-                                                            <a href="/team/<%= game.get("away").get("team_id") %>" target="_blank">
-                                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Away Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
-                                                            </a>
-                                                            <h4 class="text-center"><%= game.get("away").get("nickname") %></h4>
-                                                        </div>
+                                          <div class="row">
+                                              <div class="col-md-12">
+                                                  <div class="panel panel-default gamepanel">
+                                                    <div class="panel-body">
+                                                      <div class="row">
+                                                          <div class="col-md-2 text-center">
+                                                              <a href="/team/<%= game.get("home").get("team_id") %>" target="_blank">
+                                                                  <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Home Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
+                                                              </a>
+                                                              <h4 class="text-center"><%= game.get("home").get("nickname") %></h4>
+                                                              <% if (game.get("played") && _.isEqual(game.get("winner").id,game.get("home").id)) { %>
+                                                                <span class="label label-success">Vinnare</span>
+                                                              <% } %>
+                                                          </div>
+                                                          <div class="col-md-2 text-center">
+                                                              <% if (game.get("played")) { %>
+                                                                <h1 title="Mål"><strong><%= game.get("home_goals_total") %></strong></h1>
+                                                                <h6 class="lowopacity" title="Skott"><%= game.get("home_shots_total") %></h6>
+                                                              <% } else { %>
+                                                                <h1 title="Mål"><strong>0</strong></h1>
+                                                              <% } %>
+                                                          </div>
+                                                          <div class="col-md-4 text-center">
+                                                              <h2><strong>VS.</strong></h2>
+                                                              <% if (game.get("played")) { %>
+                                                                  <strong class="givemesomespace-right">Spelad</strong>
+                                                                  <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-warning colormedark"><i class="fa fa-lock"></i> Se Matchrapport</button>
+                                                              <% } else { %>
+                                                                  <strong class="givemesomespace-right">Ej Spelad</strong>
+                                                                  <button  onclick="window.location.href='/playoffs/game/<%= game.get("game_id") %>'" class="btn btn-xs btn-success colormedark"><i class="fa fa-pencil"></i> Rapportera</button>
+                                                              <% } %>
+                                                          </div>
+                                                          <div class="col-md-2 text-center">
+                                                              <% if (game.get("played")) { %>
+                                                                <h1 title="Mål"><strong><%= game.get("away_goals_total") %></strong></h1>
+                                                                <h6 class="lowopacity" title="Skott"><%= game.get("away_shots_total") %></h6>
+                                                              <% } else { %>
+                                                                <h1 title="Mål"><strong>0</strong></h1>
+                                                              <% } %>
+                                                          </div>
+                                                          <div class="col-md-2 text-center">
+                                                              <a href="/team/<%= game.get("away").get("team_id") %>" target="_blank">
+                                                                  <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail center-block" alt="Away Team Logo" style="min-height:75px;height:75px; margin: 0 auto;">
+                                                              </a>
+                                                              <h4 class="text-center"><%= game.get("away").get("nickname") %></h4>
+                                                              <% if (game.get("played") && _.isEqual(game.get("winner").id,game.get("away").id)) { %>
+                                                                <span class="label label-success">Vinnare</span>
+                                                              <% } %>
+                                                          </div>
+                                                      </div>
                                                     </div>
                                                   </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                              </div>
+                                          </div>
                                       <% }
                                     }) %>
                                 <% } else { %>
@@ -251,7 +275,7 @@
     </div>
     <!-- /.container -->
 
-    <p class="text-center hidden-xs colormeblue" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
+    <p class="text-center hidden-xs colormewhite" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
     <p class="text-center hidden-xs">
         <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>

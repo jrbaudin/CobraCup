@@ -102,22 +102,20 @@ a:focus {
 }
 
 .colormedark {
-  color: #2C3E50 !important;
+  color: #ECF0F1 !important;
 }
 
 .colormybackground {
-  background-color: #ECF0F1 !important;
+  background-color: #F39C12 !important;
 }
 
 .givesomespace-top {
   padding-top: 10px;
-  margin-top: 10px;
-  border-top: 1px;
+  margin-top: 15px;
   border-top-style: solid;
 }
 .givesomespace-bottom {
   padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px;
+  margin-bottom: 15px;
   border-bottom-style: solid;
 }

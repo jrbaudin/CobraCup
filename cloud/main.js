@@ -868,7 +868,7 @@ Parse.Cloud.define("getGroupGames", function(request, response) {
 Parse.Cloud.define("getPlayoffGames", function(request, response) {
     var POGame = Parse.Object.extend('POGame');
     var gameQuery = new Parse.Query(POGame);
-    gameQuery.descending('round');
+    gameQuery.descending('played,round');
     gameQuery.include(['home.nhlTeam','away.nhlTeam']);
     gameQuery.include(['home.captain','home.lieutenant']);
     gameQuery.include(['away.captain','away.lieutenant']);

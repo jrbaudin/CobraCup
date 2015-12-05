@@ -106,6 +106,8 @@ app.put('/player/edit/:playerid', playerController.updatePlayer);
 app.get('/payed', playerController.getListForParticipantFees);
 
 app.get('/playoffs', playoffsController.loadPOGames);
+app.get('/playoffs/game/:gameid', playoffsController.loadPOGameReporter);
+app.put('/playoffs/game/:gameid', playoffsController.savePOGameResult);
 
 app.get('/stat/league', statController.showLeague);
 app.get('/stat/divisions', statController.showDivisions);

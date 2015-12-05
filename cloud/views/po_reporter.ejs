@@ -1,0 +1,2888 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include header section which holds imports for shared elements -->
+    <% include _header %>
+
+    <title>Rapportera Slutspelsmatch</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="../../dist/css/vendor/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="../../dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="../../stylesheets/style.css">
+    <link rel="stylesheet" href="../../stylesheets/playoffs.css">
+
+    <script>
+       !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+           arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+       d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+       insertBefore(d,q)}(window,document,'script','_gs');
+
+       _gs('GSN-270173-J');
+   </script>
+</head>
+
+<body>
+    <% include _navigation %>
+<div class="container">
+    <% if(typeof(flashInfo) !== 'undefined'){ %>
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <%= flashInfo %>
+        </div>
+    <% } %>
+    <% if(typeof(flashError) !== 'undefined'){ %>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <strong>Fel!</strong> <%= flashError %>.
+        </div>
+    <% } %>
+    <% if(typeof(flashErrorGame) !== 'undefined'){ %>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <strong>Fel!</strong> <%= flashErrorGame %>
+        </div>
+    <% } %>
+    <div class="alert alert-warning alert-dismissible" role="alert" style="display:none;" id="missing-value-msg" name="missing-value-msg">
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <i class="fa fa-exclamation-triangle"></i> Ett eller flera fält saknar värde eller är inkorrekt.
+        <p id="error-msg" name="error-msg"></p>
+    </div>
+<% if(typeof(game) !== 'undefined'){
+
+    var round = "";
+    if(typeof(game[0].get("round")) !== 'undefined'){
+        round = game[0].get("round");
+    }
+
+    var group = "";
+    if(typeof(game[0].get("group")) !== 'undefined'){
+        group = game[0].get("group");
+    }
+
+    var played = false;
+    if( typeof(game[0].get("played")) !== 'undefined' && _.isEqual(game[0].get("played"), true) ){
+        played = true;
+    }
+
+    var home_team_name = "";
+    if( typeof(game[0].get("home").get("team_name")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("team_name")) ){
+        home_team_name = game[0].get("home").get("team_name");
+    }
+
+    var home_goals_total = 0;
+    if(typeof(game[0].get("home_goals_total")) !== 'undefined'){
+        home_goals_total = game[0].get("home_goals_total");
+    }
+
+    var home_logo_url = "";
+    if( typeof(game[0].get("home").get("nhlTeam").get("logo").url()) !== 'undefined' && !_.isEmpty(game[0].get("home").get("nhlTeam").get("logo").url()) ){
+        home_logo_url = game[0].get("home").get("nhlTeam").get("logo").url();
+    }
+
+    var home_captain_name = "";
+    if( typeof(game[0].get("home").get("captain").get("name")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("captain").get("name")) ){
+        home_captain_name = game[0].get("home").get("captain").get("name");
+    }
+
+    var home_captain_id = "";
+    if( typeof(game[0].get("home").get("captain").get("player_id")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("captain").get("player_id")) ){
+        home_captain_id = game[0].get("home").get("captain").get("player_id");
+    }
+
+    var home_lieutenant_name = "";
+    if( typeof(game[0].get("home").get("lieutenant").get("name")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("lieutenant").get("name")) ){
+        home_lieutenant_name = game[0].get("home").get("lieutenant").get("name");
+    }
+
+    var home_lieutenant_id = "";
+    if( typeof(game[0].get("home").get("lieutenant").get("player_id")) !== 'undefined' && !_.isEmpty(game[0].get("home").get("lieutenant").get("player_id")) ){
+        home_lieutenant_id = game[0].get("home").get("lieutenant").get("player_id");
+    }
+
+    var home_shots_p1 = 0;
+    var home_shots_p2 = 0;
+    var home_shots_p3 = 0;
+    var home_shots_ot = 0;
+
+    var home_faceoffs_p1 = 0;
+    var home_faceoffs_p2 = 0;
+    var home_faceoffs_p3 = 0;
+    var home_faceoffs_ot = 0;
+
+    var home_captain_fights = 0;
+
+    var home_captain_goals_p1 = 0;
+    var home_captain_goals_p2 = 0;
+    var home_captain_goals_p3 = 0;
+    var home_captain_goals_ot = 0;
+    var home_captain_goals_so = 0;
+
+    var home_captain_assists_p1 = 0;
+    var home_captain_assists_p2 = 0;
+    var home_captain_assists_p3 = 0;
+    var home_captain_assists_ot = 0;
+
+    var home_lieutenant_fights = 0;
+
+    var home_lieutenant_goals_p1 = 0;
+    var home_lieutenant_goals_p2 = 0;
+    var home_lieutenant_goals_p3 = 0;
+    var home_lieutenant_goals_ot = 0;
+    var home_lieutenant_goals_so = 0;
+
+    var home_lieutenant_assists_p1 = 0;
+    var home_lieutenant_assists_p2 = 0;
+    var home_lieutenant_assists_p3 = 0;
+    var home_lieutenant_assists_ot = 0;
+
+    var away_team_name = "";
+    if( typeof(game[0].get("away").get("team_name")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("team_name")) ){
+        away_team_name = game[0].get("away").get("team_name");
+    }
+
+    var away_goals_total = 0;
+    if(typeof(game[0].get("away_goals_total")) !== 'undefined'){
+        away_goals_total = game[0].get("away_goals_total");
+    }
+
+    var away_logo_url = "";
+    if( typeof(game[0].get("away").get("nhlTeam").get("logo").url()) !== 'undefined' && !_.isEmpty(game[0].get("away").get("nhlTeam").get("logo").url()) ){
+        away_logo_url = game[0].get("away").get("nhlTeam").get("logo").url();
+    }
+
+    var away_captain_name = "";
+    if( typeof(game[0].get("away").get("captain").get("name")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("captain").get("name")) ){
+        away_captain_name = game[0].get("away").get("captain").get("name");
+    }
+
+    var away_captain_id = "";
+    if( typeof(game[0].get("away").get("captain").get("player_id")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("captain").get("player_id")) ){
+        away_captain_id = game[0].get("away").get("captain").get("player_id");
+    }
+
+    var away_lieutenant_name = "";
+    if( typeof(game[0].get("away").get("lieutenant").get("name")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("lieutenant").get("name")) ){
+        away_lieutenant_name = game[0].get("away").get("lieutenant").get("name");
+    }
+
+    var away_lieutenant_id = "";
+    if( typeof(game[0].get("away").get("lieutenant").get("player_id")) !== 'undefined' && !_.isEmpty(game[0].get("away").get("lieutenant").get("player_id")) ){
+        away_lieutenant_id = game[0].get("away").get("lieutenant").get("player_id");
+    }
+
+    var away_shots_p1 = 0;
+    var away_shots_p2 = 0;
+    var away_shots_p3 = 0;
+    var away_shots_ot = 0;
+
+    var away_faceoffs_p1 = 0;
+    var away_faceoffs_p2 = 0;
+    var away_faceoffs_p3 = 0;
+    var away_faceoffs_ot = 0;
+
+    var away_captain_fights = 0;
+
+    var away_captain_goals_p1 = 0;
+    var away_captain_goals_p2 = 0;
+    var away_captain_goals_p3 = 0;
+    var away_captain_goals_ot = 0;
+    var away_captain_goals_so = 0;
+
+    var away_captain_assists_p1 = 0;
+    var away_captain_assists_p2 = 0;
+    var away_captain_assists_p3 = 0;
+    var away_captain_assists_ot = 0;
+
+    var away_lieutenant_fights = 0;
+
+    var away_lieutenant_goals_p1 = 0;
+    var away_lieutenant_goals_p2 = 0;
+    var away_lieutenant_goals_p3 = 0;
+    var away_lieutenant_goals_ot = 0;
+    var away_lieutenant_goals_so = 0;
+
+    var away_lieutenant_assists_p1 = 0;
+    var away_lieutenant_assists_p2 = 0;
+    var away_lieutenant_assists_p3 = 0;
+    var away_lieutenant_assists_ot = 0;
+
+    var overtime = false;
+
+    if (game[0].get("played")) {
+        var home_stats = game[0].get("home_stats");
+
+        home_shots_p1 = home_stats.shots_p1;
+        home_shots_p2 = home_stats.shots_p2;
+        home_shots_p3 = home_stats.shots_p3;
+        home_shots_ot = home_stats.shots_ot;
+
+        home_faceoffs_p1 = home_stats.faceoffs_p1;
+        home_faceoffs_p2 = home_stats.faceoffs_p2;
+        home_faceoffs_p3 = home_stats.faceoffs_p3;
+        home_faceoffs_ot = home_stats.faceoffs_ot;
+
+        home_captain_goals_p1 = home_stats.captain_goals_p1;
+        home_captain_goals_p2 = home_stats.captain_goals_p2;
+        home_captain_goals_p3 = home_stats.captain_goals_p3;
+        home_captain_goals_ot = home_stats.captain_goals_ot;
+        home_captain_goals_so = home_stats.captain_goals_so;
+
+        home_captain_assists_p1 = home_stats.captain_assists_p1;
+        home_captain_assists_p2 = home_stats.captain_assists_p2;
+        home_captain_assists_p3 = home_stats.captain_assists_p3;
+        home_captain_assists_ot = home_stats.captain_assists_ot;
+
+        home_captain_fights = home_stats.captain_fights;
+
+        home_lieutenant_goals_p1 = home_stats.lieutenant_goals_p1;
+        home_lieutenant_goals_p2 = home_stats.lieutenant_goals_p2;
+        home_lieutenant_goals_p3 = home_stats.lieutenant_goals_p3;
+        home_lieutenant_goals_ot = home_stats.lieutenant_goals_ot;
+        home_lieutenant_goals_so = home_stats.lieutenant_goals_so;
+
+        home_lieutenant_assists_p1 = home_stats.lieutenant_assists_p1;
+        home_lieutenant_assists_p2 = home_stats.lieutenant_assists_p2;
+        home_lieutenant_assists_p3 = home_stats.lieutenant_assists_p3;
+        home_lieutenant_assists_ot = home_stats.lieutenant_assists_ot;
+
+        home_lieutenant_fights = home_stats.lieutenant_fights;
+
+        var away_stats = game[0].get("away_stats");
+
+        away_shots_p1 = away_stats.shots_p1;
+        away_shots_p2 = away_stats.shots_p2;
+        away_shots_p3 = away_stats.shots_p3;
+        away_shots_ot = away_stats.shots_ot;
+
+        away_faceoffs_p1 = away_stats.faceoffs_p1;
+        away_faceoffs_p2 = away_stats.faceoffs_p2;
+        away_faceoffs_p3 = away_stats.faceoffs_p3;
+        away_faceoffs_ot = away_stats.faceoffs_ot;
+
+        away_captain_goals_p1 = away_stats.captain_goals_p1;
+        away_captain_goals_p2 = away_stats.captain_goals_p2;
+        away_captain_goals_p3 = away_stats.captain_goals_p3;
+        away_captain_goals_ot = away_stats.captain_goals_ot;
+        away_captain_goals_so = away_stats.captain_goals_so;
+
+        away_captain_assists_p1 = away_stats.captain_assists_p1;
+        away_captain_assists_p2 = away_stats.captain_assists_p2;
+        away_captain_assists_p3 = away_stats.captain_assists_p3;
+        away_captain_assists_ot = away_stats.captain_assists_ot;
+
+        away_captain_fights = away_stats.captain_fights;
+
+        away_lieutenant_goals_p1 = away_stats.lieutenant_goals_p1;
+        away_lieutenant_goals_p2 = away_stats.lieutenant_goals_p2;
+        away_lieutenant_goals_p3 = away_stats.lieutenant_goals_p3;
+        away_lieutenant_goals_ot = away_stats.lieutenant_goals_ot;
+        away_lieutenant_goals_so = away_stats.lieutenant_goals_so;
+
+        away_lieutenant_assists_p1 = away_stats.lieutenant_assists_p1;
+        away_lieutenant_assists_p2 = away_stats.lieutenant_assists_p2;
+        away_lieutenant_assists_p3 = away_stats.lieutenant_assists_p3;
+        away_lieutenant_assists_ot = away_stats.lieutenant_assists_ot;
+
+        away_lieutenant_fights = away_stats.lieutenant_fights;
+
+        overtime = _.isEqual(game[0].get("overtime"), true);
+    }
+
+    var round_name = "";
+    if (_.isEqual(round, 3)) {
+        round_name = "Final";
+    } else if (_.isEqual(round, 2)) {
+        round_name = "Semifinal";
+    } else {
+        round_name = "Kvartsfinal";
+    }
+
+    %>
+    <div class="col-md-12">
+        <h2 class="text-center text-uppercase colormered"><%= home_team_name %> <span style="color: #F39C12;">vs.</span> <%= away_team_name %></h2>
+    </div>
+    <div class="col-md-8 col-md-offset-2">
+        <p class="text-center colormered"><small><strong><%= round_name %></strong></small></p>
+        <form id="gameform" class="form" role="form" method="post">
+            <div class="panel">
+                <div class="panel-body" style="margin-bottom: 0; padding-bottom: 0;">
+                    <div class="col-md-6 col-md-offset-3 col-xs-12" style="margin-bottom: 0;">
+                        <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
+                            <% if(played){ %>
+                            <input style="color: #34495E;" type="text" class="form-control text-center input-hg" id="home_goals" name="home_goals" placeholder="0" value="<%= home_goals_total %>" style="font-weight: bold;" readonly>
+                            <% } else { %>
+                            <input style="color: #34495E;" type="text" class="form-control text-center input-hg" id="home_goals" name="home_goals" placeholder="0" style="font-weight: bold;" readonly>
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 col-xs-2" style="margin-bottom: 0;">
+                            <p class="lead text-uppercase text-center">-</p>
+                        </div>
+                        <div class="form-group col-md-5 col-xs-5" style="margin-bottom: 0;">
+                            <% if(played){ %>
+                            <input style="color: #34495E;" type="text" class="form-control text-center input-hg" id="away_goals" name="away_goals" placeholder="0" value="<%= away_goals_total %>" style="font-weight: bold;" readonly>
+                            <% } else { %>
+                            <input style="color: #34495E;" type="text" class="form-control text-center input-hg" id="away_goals" name="away_goals" placeholder="0" style="font-weight: bold;" readonly>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="col-md-3 hidden-xs">
+                        <span class="label label-primary" style="display:none;" id="overtime-label" name="overtime-label">Overtime</span>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading" style="padding-bottom:0;">
+                    <h6 class="text-uppercase" style="margin-bottom:0;">
+                        <img src="<%= home_logo_url %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;">
+                        <span>
+                            <strong>
+                                <%= home_team_name %> <small style="color: #34495E;">Hemma</small>
+                            </strong>
+                        </span>
+                    </h6>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2 hidden-xs">
+                            <p style="margin-bottom: 0;"><small><strong>Statistik</strong></small></p>
+                        </div>
+                        <div class="col-md-2 hidden-xs">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>1</strong></small></p>
+                        </div>
+                        <div class="col-md-2 hidden-xs">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>2</strong></small></p>
+                        </div>
+                        <div class="col-md-2 hidden-xs">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>3</strong></small></p>
+                        </div>
+                        <div class="col-md-2 hidden-xs">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>OT</strong></small></p>
+                        </div>
+                        <div class="col-md-2 hidden-xs">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>SO</strong></small></p>
+                        </div>
+                    </div>
+                    <hr style="margin-bottom: 10px; margin-top: 10px;">
+                    <!-- START home CAPTAIN -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <strong><%= getFirstname(home_captain_name) %></strong></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Mål <span style="margin-left: 10px; font-weight:bold;" id="home_captain_goals_sum" name="home_captain_goals_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_captain_goals_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_captain_goals_p1" name="home_captain_goals_p1" placeholder="0" value="<%= home_captain_goals_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_goals_p1" name="home_captain_goals_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_captain_goals_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_captain_goals_p2" name="home_captain_goals_p2" placeholder="0" value="<%= home_captain_goals_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_goals_p2" name="home_captain_goals_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_captain_goals_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_captain_goals_p3" name="home_captain_goals_p3" placeholder="0" value="<%= home_captain_goals_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_goals_p3" name="home_captain_goals_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9"  id="fc_home_captain_goals_ot">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_captain_goals_ot" name="home_captain_goals_ot" placeholder="0" value="<%= home_captain_goals_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_goals_ot" name="home_captain_goals_ot">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>SO</small></span>
+                        <div class="form-group col-md-2 col-xs-9"  id="fc_home_captain_goals_so">
+                            <% if(played){ %>
+                                <input type="text" class="form-control text-center readonlycolor" id="home_captain_goals_so" name="home_captain_goals_so" placeholder="0" value="<%= home_captain_goals_so %>" readonly>
+                            <% } else { %>
+                                <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_goals_so" name="home_captain_goals_so">
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Assist <span style="margin-left: 10px; font-weight:bold;" id="home_captain_assists_sum" name="home_captain_assists_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3" id="p_home_captain_assists_p1" name="p_home_captain_assists_p1"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_captain_assists_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_captain_assists_p1" name="home_captain_assists_p1" placeholder="0" value="<%= home_captain_assists_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_assists_p1" name="home_captain_assists_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_captain_assists_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_captain_assists_p2" name="home_captain_assists_p2" placeholder="0" value="<%= home_captain_assists_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_assists_p2" name="home_captain_assists_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_captain_assists_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_captain_assists_p3" name="home_captain_assists_p3" placeholder="0" value="<%= home_captain_assists_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_assists_p3" name="home_captain_assists_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="p_home_captain_assists_ot" name="p_home_captain_assists_ot">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_captain_assists_ot" name="home_captain_assists_ot" placeholder="0" value="<%= home_captain_assists_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_assists_ot" name="home_captain_assists_ot">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Fajter</p>
+                        </div>
+                        <div class="form-group col-md-8 col-xs-12" id="fc_home_captain_fights">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_captain_fights" name="home_captain_fights" placeholder="0" value="<%= home_captain_fights %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_captain_fights" name="home_captain_fights">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <!-- END home CAPTAIN -->
+                    <!-- START home lieutenant -->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <strong><%= getFirstname(home_lieutenant_name) %></strong></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Mål <span style="margin-left: 10px; font-weight:bold;" id="home_lieutenant_goals_sum" name="home_lieutenant_goals_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_lieutenant_goals_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_goals_p1" name="home_lieutenant_goals_p1" placeholder="0" value="<%= home_lieutenant_goals_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_goals_p1" name="home_lieutenant_goals_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_lieutenant_goals_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_goals_p2" name="home_lieutenant_goals_p2" placeholder="0" value="<%= home_lieutenant_goals_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_goals_p2" name="home_lieutenant_goals_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_lieutenant_goals_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_goals_p3" name="home_lieutenant_goals_p3" placeholder="0" value="<%= home_lieutenant_goals_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_goals_p3" name="home_lieutenant_goals_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_lieutenant_goals_ot">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_goals_ot" name="home_lieutenant_goals_ot" placeholder="0" value="<%= home_lieutenant_goals_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_goals_ot" name="home_lieutenant_goals_ot">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>SO</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_lieutenant_goals_so">
+                            <% if(played){ %>
+                                <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_goals_so" name="home_lieutenant_goals_so" placeholder="0" value="<%= home_lieutenant_goals_so %>" readonly>
+                            <% } else { %>
+                                <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_goals_so" name="home_lieutenant_goals_so">
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Assist <span style="margin-left: 10px; font-weight:bold;" id="home_lieutenant_assists_sum" name="home_lieutenant_assists_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_lieutenant_assists_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_assists_p1" name="home_lieutenant_assists_p1" placeholder="0" value="<%= home_lieutenant_assists_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_assists_p1" name="home_lieutenant_assists_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_lieutenant_assists_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_assists_p2" name="home_lieutenant_assists_p2" placeholder="0" value="<%= home_lieutenant_assists_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_assists_p2" name="home_lieutenant_assists_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_lieutenant_assists_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_assists_p3" name="home_lieutenant_assists_p3" placeholder="0" value="<%= home_lieutenant_assists_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_assists_p3" name="home_lieutenant_assists_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_assists_ot" name="home_lieutenant_assists_ot" placeholder="0" value="<%= home_lieutenant_assists_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_assists_ot" name="home_lieutenant_assists_ot">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Fajter</p>
+                        </div>
+                        <div class="form-group col-md-8 col-xs-12" id="fc_home_lieutenant_fights">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_fights" name="home_lieutenant_fights" placeholder="0" value="<%= home_lieutenant_fights %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_lieutenant_fights" name="home_lieutenant_fights">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <!-- END home lieutenant -->
+                    <!-- START home team -->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <p class="text-uppercase"><i class="fa fa-group hidden-xs"></i> <strong>Laget</strong></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Skott <span style="margin-left: 10px; font-weight:bold;" id="home_shots_sum" name="home_shots_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_shots_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_shots_p1" name="home_shots_p1" placeholder="0" value="<%= home_shots_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_shots_p1" name="home_shots_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_shots_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_shots_p2" name="home_shots_p2" placeholder="0" value="<%= home_shots_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_shots_p2" name="home_shots_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_shots_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_shots_p3" name="home_shots_p3" placeholder="0" value="<%= home_shots_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_shots_p3" name="home_shots_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_shots_ot">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_shots_ot" name="home_shots_ot" placeholder="0" value="<%= home_shots_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_shots_ot" name="home_shots_ot">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Tekningar <span style="margin-left: 10px; font-weight:bold;" id="home_faceoffs_sum" name="home_faceoffs_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_faceoffs_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_faceoffs_p1" name="home_faceoffs_p1" placeholder="0" value="<%= home_faceoffs_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_faceoffs_p1" name="home_faceoffs_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_faceoffs_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_faceoffs_p2" name="home_faceoffs_p2" placeholder="0" value="<%= home_faceoffs_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_faceoffs_p2" name="home_faceoffs_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_faceoffs_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_faceoffs_p3" name="home_faceoffs_p3" placeholder="0" value="<%= home_faceoffs_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_faceoffs_p3" name="home_faceoffs_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_faceoffs_ot">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="home_faceoffs_ot" name="home_faceoffs_ot" placeholder="0" value="<%= home_faceoffs_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="home_faceoffs_ot" name="home_faceoffs_ot">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <!-- END home team -->
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading" style="padding-bottom:0;">
+                    <h6 class="text-uppercase" style="margin-bottom:0;">
+                        <img src="<%= away_logo_url %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:25px;height:25px; float:left; margin-right:10px;">
+                        <span>
+                            <strong>
+                                <%= away_team_name %> <small style="color: #34495E;">Borta</small>
+                            </strong>
+                        </span>
+                    </h6>
+                </div>
+                <div class="panel-body">
+                    <div class="row hidden-xs">
+                        <div class="col-md-2 col-xs-4">
+                            <p style="margin-bottom: 0;"><small><strong>Statistik</strong></small></p>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>1</strong></small></p>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>2</strong></small></p>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>3</strong></small></p>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>OT</strong></small></p>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            <p class="text-center" style="margin-bottom: 0;"><small><strong>SO</strong></small></p>
+                        </div>
+                    </div>
+                    <hr style="margin-bottom: 10px; margin-top: 10px;">
+                    <!-- START away CAPTAIN -->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <strong><%= getFirstname(away_captain_name) %></strong></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Mål <span style="margin-left: 10px; font-weight:bold;" id="away_captain_goals_sum" name="away_captain_goals_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_captain_goals_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_captain_goals_p1" name="away_captain_goals_p1" placeholder="0" value="<%= away_captain_goals_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_goals_p1" name="away_captain_goals_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_captain_goals_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_captain_goals_p2" name="away_captain_goals_p2" placeholder="0" value="<%= away_captain_goals_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_goals_p2" name="away_captain_goals_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_captain_goals_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_captain_goals_p3" name="away_captain_goals_p3" placeholder="0" value="<%= away_captain_goals_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_goals_p3" name="away_captain_goals_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_captain_goals_ot">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_captain_goals_ot" name="away_captain_goals_ot" placeholder="0" value="<%= away_captain_goals_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_goals_ot" name="away_captain_goals_ot">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>SO</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_captain_goals_so">
+                            <% if(played){ %>
+                                <input type="text" class="form-control text-center readonlycolor" id="away_captain_goals_so" name="away_captain_goals_so" placeholder="0" value="<%= away_captain_goals_so %>" readonly>
+                            <% } else { %>
+                                <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_goals_so" name="away_captain_goals_so">
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Assist <span style="margin-left: 10px; font-weight:bold;" id="away_captain_assists_sum" name="away_captain_assists_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_captain_assists_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_captain_assists_p1" name="away_captain_assists_p1" placeholder="0" value="<%= away_captain_assists_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_assists_p1" name="away_captain_assists_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_captain_assists_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_captain_assists_p2" name="away_captain_assists_p2" placeholder="0" value="<%= away_captain_assists_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_assists_p2" name="away_captain_assists_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_captain_assists_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_captain_assists_p3" name="away_captain_assists_p3" placeholder="0" value="<%= away_captain_assists_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_assists_p3" name="away_captain_assists_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_captain_assists_ot" name="away_captain_assists_ot" placeholder="0" value="<%= away_captain_assists_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_assists_ot" name="away_captain_assists_ot">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Fajter</p>
+                        </div>
+                        <div class="form-group col-md-8 col-xs-12" id="fc_away_captain_fights">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_captain_fights" name="away_captain_fights" placeholder="0" value="<%= away_captain_fights %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_captain_fights" name="away_captain_fights">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <!-- END away CAPTAIN -->
+                    <!-- START away lieutenant -->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <p class="text-uppercase"><i class="fa fa-user hidden-xs"></i> <strong><%= getFirstname(away_lieutenant_name) %></strong></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Mål <span style="margin-left: 10px; font-weight:bold;" id="away_lieutenant_goals_sum" name="away_lieutenant_goals_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_lieutenant_goals_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_goals_p1" name="away_lieutenant_goals_p1" placeholder="0" value="<%= away_lieutenant_goals_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_goals_p1" name="away_lieutenant_goals_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_lieutenant_goals_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_goals_p2" name="away_lieutenant_goals_p2" placeholder="0" value="<%= away_lieutenant_goals_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_goals_p2" name="away_lieutenant_goals_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_lieutenant_goals_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_goals_p3" name="away_lieutenant_goals_p3" placeholder="0" value="<%= away_lieutenant_goals_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_goals_p3" name="away_lieutenant_goals_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_lieutenant_goals_ot">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_goals_ot" name="away_lieutenant_goals_ot" placeholder="0" value="<%= away_lieutenant_goals_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_goals_ot" name="away_lieutenant_goals_ot">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>SO</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_lieutenant_goals_so">
+                            <% if(played){ %>
+                                <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_goals_so" name="away_lieutenant_goals_so" placeholder="0" value="<%= away_lieutenant_goals_so %>" readonly>
+                            <% } else { %>
+                                <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_goals_so" name="away_lieutenant_goals_so">
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Assist <span style="margin-left: 10px; font-weight:bold;" id="away_lieutenant_assists_sum" name="away_lieutenant_assists_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_lieutenant_assists_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_assists_p1" name="away_lieutenant_assists_p1" placeholder="0" value="<%= away_lieutenant_assists_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_assists_p1" name="away_lieutenant_assists_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_lieutenant_assists_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_assists_p2" name="away_lieutenant_assists_p2" placeholder="0" value="<%= away_lieutenant_assists_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_assists_p2" name="away_lieutenant_assists_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_lieutenant_assists_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_assists_p3" name="away_lieutenant_assists_p3" placeholder="0" value="<%= away_lieutenant_assists_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_assists_p3" name="away_lieutenant_assists_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_assists_ot" name="away_lieutenant_assists_ot" placeholder="0" value="<%= away_lieutenant_assists_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_assists_ot" name="away_lieutenant_assists_ot">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Fajter</p>
+                        </div>
+                        <div class="form-group col-md-8 col-xs-12" id="fc_away_lieutenant_fights">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_fights" name="away_lieutenant_fights" placeholder="0" value="<%= away_lieutenant_fights %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_lieutenant_fights" name="away_lieutenant_fights">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <!-- END away lieutenant -->
+                    <!-- START away team -->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <p class="text-uppercase"><i class="fa fa-group hidden-xs"></i> <strong>Laget</strong></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Skott  <span style="margin-left: 10px; font-weight:bold;" id="away_shots_sum" name="away_shots_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_shots_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_shots_p1" name="away_shots_p1" placeholder="0" value="<%= away_shots_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_shots_p1" name="away_shots_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_shots_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_shots_p2" name="away_shots_p2" placeholder="0" value="<%= away_shots_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_shots_p2" name="away_shots_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_shots_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_shots_p3" name="away_shots_p3" placeholder="0" value="<%= away_shots_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_shots_p3" name="away_shots_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_shots_ot">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_shots_ot" name="away_shots_ot" placeholder="0" value="<%= away_shots_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_shots_ot" name="away_shots_ot">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <p>Tekningar <span style="margin-left: 10px; font-weight:bold;" id="away_faceoffs_sum" name="away_faceoffs_sum"></span></p>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P1</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_faceoffs_p1">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_faceoffs_p1" name="away_faceoffs_p1" placeholder="0" value="<%= away_faceoffs_p1 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_faceoffs_p1" name="away_faceoffs_p1">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P2</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_faceoffs_p2">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_faceoffs_p2" name="away_faceoffs_p2" placeholder="0" value="<%= away_faceoffs_p2 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_faceoffs_p2" name="away_faceoffs_p2">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>P3</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_faceoffs_p3">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_faceoffs_p3" name="away_faceoffs_p3" placeholder="0" value="<%= away_faceoffs_p3 %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_faceoffs_p3" name="away_faceoffs_p3">
+                            <% } %>
+                        </div>
+                        <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_faceoffs_ot">
+                            <% if(played){ %>
+                            <input type="text" class="form-control text-center readonlycolor" id="away_faceoffs_ot" name="away_faceoffs_ot" placeholder="0" value="<%= away_faceoffs_ot %>" readonly>
+                            <% } else { %>
+                            <input type="number" range="2" min="0" max="99" class="form-control text-center" id="away_faceoffs_ot" name="away_faceoffs_ot">
+                            <% } %>
+                        </div>
+                        <div class="col-md-2 hidden-xs text-center">
+                            <strong>-</strong>
+                        </div>
+                    </div>
+                    <!-- END away team -->
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="text-center">
+                                <% if(played) { %>
+                                Resultat för denna match uppdaterades
+                                <br>
+                                <span class="text-capitalize"><strong><%= formatDateAndTime(game[0].get("updatedAt")) %></strong></span>
+                                <% } else { %>
+                                Denna match har inte rapporterats ännu
+                                <% } %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <input type='hidden' name='_method' value='put' />
+                        <% if(played) { %>
+                        <button type="submit" class="btn btn-hg btn-warning btn-wide btn-block text-uppercase" disabled>
+                            <i class="fa fa-lock"></i> Matchresulat rapporterat
+                        </button>
+                        <p class="text-center" style="margin-bottom:0;">
+                            <small><em><strong>Kontakta admin för att uppdatera resultat</strong></em></small>
+                        </p>
+                        <% } else { %>
+                        <button type="submit" class="btn btn-hg btn-wide btn-block btn-primary">
+                           <i id="spinnericon" class="fa fa-refresh fa-spin" style="display:none;"></i> Rapportera match
+                       </button>
+                       <% } %>
+                   </div>
+               </div>
+               <!-- /.panel-body -->
+           </div>
+           <!-- /.panel -->
+       </form>
+   </div>
+   <% } %>
+   <!-- /.col-lg-12 -->
+</div>
+<!-- /.container -->
+
+<p class="text-center hidden-xs colormewhite" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
+<p class="text-center hidden-xs">
+    <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</p>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="../../dist/js/vendor/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../../dist/js/flat-ui.min.js"></script>
+
+<!-- jQuery Version 1.11.0 -->
+<!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+
+<!-- Latest compiled and minified JavaScript -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var msg_array = [];
+
+        $( "#gameform" ).submit(function( event ) {
+            //alert( "Handler for .submit() called." );
+            $('#spinnericon').show();
+            if (!validateFields()) {
+                var str_message = "";
+                var i = 1;
+                msg_array.forEach(function(message){
+                    str_message = str_message + i + ": " + message + ". ";
+                    i = i+1;
+                });
+                $('#error-msg').text(str_message);
+                $('#missing-value-msg').show();
+                $('#spinnericon').hide();
+                event.preventDefault();
+            }
+            //$( "#gameform" ).submit();
+        });
+
+        function isEmpty(str) {
+            return (!str || 0 === str.length);
+        }
+
+        function isFieldOK (val) {
+            return (val && 0 !== val.length);;
+        };
+
+        function validateFields () {
+            var formOK = true;
+
+            /** HOME **/
+            if (!isFieldOK($('#home_shots_p1').val())) {
+                $('#fc_home_shots_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_shots_p2').val())) {
+                $('#fc_home_shots_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_shots_p3').val())) {
+                $('#fc_home_shots_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#home_faceoffs_p1').val())) {
+                $('#fc_home_faceoffs_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_faceoffs_p2').val())) {
+                $('#fc_home_faceoffs_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_faceoffs_p3').val())) {
+                $('#fc_home_faceoffs_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#home_captain_goals_p1').val())) {
+                $('#fc_home_captain_goals_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_captain_goals_p2').val())) {
+                $('#fc_home_captain_goals_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_captain_goals_p3').val())) {
+                $('#fc_home_captain_goals_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#home_captain_assists_p1').val())) {
+                $('#fc_home_captain_assists_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_captain_assists_p2').val())) {
+                $('#fc_home_captain_assists_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_captain_assists_p3').val())) {
+                $('#fc_home_captain_assists_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#home_captain_fights').val())) {
+                $('#fc_home_captain_fights').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#home_lieutenant_goals_p1').val())) {
+                $('#fc_home_lieutenant_goals_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_lieutenant_goals_p2').val())) {
+                $('#fc_home_lieutenant_goals_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_lieutenant_goals_p3').val())) {
+                $('#fc_home_lieutenant_goals_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#home_lieutenant_assists_p1').val())) {
+                $('#fc_home_lieutenant_assists_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_lieutenant_assists_p2').val())) {
+                $('#fc_home_lieutenant_assists_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#home_lieutenant_assists_p3').val())) {
+                $('#fc_home_lieutenant_assists_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#home_lieutenant_fights').val())) {
+                $('#fc_home_lieutenant_fights').addClass("has-error");
+                formOK = false;
+            }
+
+             /** AWAY **/
+            if (!isFieldOK($('#away_shots_p1').val())) {
+                $('#fc_away_shots_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_shots_p2').val())) {
+                $('#fc_away_shots_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_shots_p3').val())) {
+                $('#fc_away_shots_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#away_faceoffs_p1').val())) {
+                $('#fc_away_faceoffs_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_faceoffs_p2').val())) {
+                $('#fc_away_faceoffs_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_faceoffs_p3').val())) {
+                $('#fc_away_faceoffs_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#away_captain_goals_p1').val())) {
+                $('#fc_away_captain_goals_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_captain_goals_p2').val())) {
+                $('#fc_away_captain_goals_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_captain_goals_p3').val())) {
+                $('#fc_away_captain_goals_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#away_captain_assists_p1').val())) {
+                $('#fc_away_captain_assists_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_captain_assists_p2').val())) {
+                $('#fc_away_captain_assists_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_captain_assists_p3').val())) {
+                $('#fc_away_captain_assists_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#away_captain_fights').val())) {
+                $('#fc_away_captain_fights').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#away_lieutenant_goals_p1').val())) {
+                $('#fc_away_lieutenant_goals_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_lieutenant_goals_p2').val())) {
+                $('#fc_away_lieutenant_goals_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_lieutenant_goals_p3').val())) {
+                $('#fc_away_lieutenant_goals_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#away_lieutenant_assists_p1').val())) {
+                $('#fc_away_lieutenant_assists_p1').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_lieutenant_assists_p2').val())) {
+                $('#fc_away_lieutenant_assists_p2').addClass("has-error");
+                formOK = false;
+            }
+            if (!isFieldOK($('#away_lieutenant_assists_p3').val())) {
+                $('#fc_away_lieutenant_assists_p3').addClass("has-error");
+                formOK = false;
+            }
+
+            if (!isFieldOK($('#away_lieutenant_fights').val())) {
+                $('#fc_away_lieutenant_fights').addClass("has-error");
+                formOK = false;
+            }
+
+            if (isOvertimeGoalsMoreThanOne()) {
+                formOK = false;
+                msg_array.push("Det är fler än ett övertidsmål rapporterat");
+            }
+
+            if (!isShotsOK()) {
+                formOK = false;
+                msg_array.push("Det är färre skott än mål rapporterat");
+            }
+
+            return formOK;
+        };
+
+        function getHomeGoals () {
+          var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+          var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+          var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+          var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+          var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+          var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+          var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+          var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+          if (typeof(temp_home_captain_goals_p1) === 'undefined' || isEmpty(String(temp_home_captain_goals_p1))) {
+              temp_home_captain_goals_p1 = 0;
+          }
+          if (typeof(temp_home_captain_goals_p2) === 'undefined' || isEmpty(String(temp_home_captain_goals_p2))) {
+              temp_home_captain_goals_p2 = 0;
+          }
+          if (typeof(temp_home_captain_goals_p3) === 'undefined' || isEmpty(String(temp_home_captain_goals_p3))) {
+              temp_home_captain_goals_p3 = 0;
+          }
+          if (typeof(temp_home_captain_goals_ot) === 'undefined' || isEmpty(String(temp_home_captain_goals_ot))) {
+              temp_home_captain_goals_ot = 0;
+          }
+
+          if (typeof(temp_home_lieutenant_goals_p1) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_p1))) {
+              temp_home_lieutenant_goals_p1 = 0;
+          }
+          if (typeof(temp_home_lieutenant_goals_p2) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_p2))) {
+              temp_home_lieutenant_goals_p2 = 0;
+          }
+          if (typeof(temp_home_lieutenant_goals_p3) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_p3))) {
+              temp_home_lieutenant_goals_p3 = 0;
+          }
+          if (typeof(temp_home_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_ot))) {
+              temp_home_lieutenant_goals_ot = 0;
+          }
+
+          var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+          parseInt(temp_home_captain_goals_p2) + 
+          parseInt(temp_home_captain_goals_p3) + 
+          parseInt(temp_home_captain_goals_ot);
+
+          var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+          parseInt(temp_home_lieutenant_goals_p2) + 
+          parseInt(temp_home_lieutenant_goals_p3) + 
+          parseInt(temp_home_lieutenant_goals_ot);
+
+          var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
+
+          return temp_home_goals_total;
+        };
+
+        function getHomeCaptainGoals () {
+          var temp_home_captain_goals_p1 = $('#home_captain_goals_p1').val();
+          var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
+          var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
+          var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+
+          if (typeof(temp_home_captain_goals_p1) === 'undefined' || isEmpty(String(temp_home_captain_goals_p1))) {
+              temp_home_captain_goals_p1 = 0;
+          }
+          if (typeof(temp_home_captain_goals_p2) === 'undefined' || isEmpty(String(temp_home_captain_goals_p2))) {
+              temp_home_captain_goals_p2 = 0;
+          }
+          if (typeof(temp_home_captain_goals_p3) === 'undefined' || isEmpty(String(temp_home_captain_goals_p3))) {
+              temp_home_captain_goals_p3 = 0;
+          }
+          if (typeof(temp_home_captain_goals_ot) === 'undefined' || isEmpty(String(temp_home_captain_goals_ot))) {
+              temp_home_captain_goals_ot = 0;
+          }
+
+          var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+          parseInt(temp_home_captain_goals_p2) + 
+          parseInt(temp_home_captain_goals_p3) + 
+          parseInt(temp_home_captain_goals_ot);
+
+          if (temp_home_captain_goals === 0) {
+              temp_home_captain_goals = "";
+          }
+
+          return temp_home_captain_goals;
+        };
+
+        function getHomeCaptainAssists () {
+          var temp_home_captain_assists_p1 = $('#home_captain_assists_p1').val();
+          var temp_home_captain_assists_p2 = $('#home_captain_assists_p2').val();
+          var temp_home_captain_assists_p3 = $('#home_captain_assists_p3').val();
+          var temp_home_captain_assists_ot = $('#home_captain_assists_ot').val();
+
+          if (typeof(temp_home_captain_assists_p1) === 'undefined' || isEmpty(String(temp_home_captain_assists_p1))) {
+              temp_home_captain_assists_p1 = 0;
+          }
+          if (typeof(temp_home_captain_assists_p2) === 'undefined' || isEmpty(String(temp_home_captain_assists_p2))) {
+              temp_home_captain_assists_p2 = 0;
+          }
+          if (typeof(temp_home_captain_assists_p3) === 'undefined' || isEmpty(String(temp_home_captain_assists_p3))) {
+              temp_home_captain_assists_p3 = 0;
+          }
+          if (typeof(temp_home_captain_assists_ot) === 'undefined' || isEmpty(String(temp_home_captain_assists_ot))) {
+              temp_home_captain_assists_ot = 0;
+          }
+
+          var temp_home_captain_assists =   parseInt(temp_home_captain_assists_p1) + 
+          parseInt(temp_home_captain_assists_p2) + 
+          parseInt(temp_home_captain_assists_p3) + 
+          parseInt(temp_home_captain_assists_ot);
+
+          if (temp_home_captain_assists === 0) {
+              temp_home_captain_assists = "";
+          }
+
+          return temp_home_captain_assists;
+        };
+
+        function getHomeLieutenantGoals () {
+          var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+          var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+          var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+          var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+          if (typeof(temp_home_lieutenant_goals_p1) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_p1))) {
+              temp_home_lieutenant_goals_p1 = 0;
+          }
+          if (typeof(temp_home_lieutenant_goals_p2) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_p2))) {
+              temp_home_lieutenant_goals_p2 = 0;
+          }
+          if (typeof(temp_home_lieutenant_goals_p3) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_p3))) {
+              temp_home_lieutenant_goals_p3 = 0;
+          }
+          if (typeof(temp_home_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_ot))) {
+              temp_home_lieutenant_goals_ot = 0;
+          }
+
+          var temp_home_lieutenant_goals =   parseInt(temp_home_lieutenant_goals_p1) + 
+          parseInt(temp_home_lieutenant_goals_p2) + 
+          parseInt(temp_home_lieutenant_goals_p3) + 
+          parseInt(temp_home_lieutenant_goals_ot);
+
+          if (temp_home_lieutenant_goals === 0) {
+              temp_home_lieutenant_goals = "";
+          }
+
+          return temp_home_lieutenant_goals;
+        };
+
+        function getHomeLieutenantAssists () {
+          var temp_home_lieutenant_assists_p1 = $('#home_lieutenant_assists_p1').val();
+          var temp_home_lieutenant_assists_p2 = $('#home_lieutenant_assists_p2').val();
+          var temp_home_lieutenant_assists_p3 = $('#home_lieutenant_assists_p3').val();
+          var temp_home_lieutenant_assists_ot = $('#home_lieutenant_assists_ot').val();
+
+          if (typeof(temp_home_lieutenant_assists_p1) === 'undefined' || isEmpty(String(temp_home_lieutenant_assists_p1))) {
+              temp_home_lieutenant_assists_p1 = 0;
+          }
+          if (typeof(temp_home_lieutenant_assists_p2) === 'undefined' || isEmpty(String(temp_home_lieutenant_assists_p2))) {
+              temp_home_lieutenant_assists_p2 = 0;
+          }
+          if (typeof(temp_home_lieutenant_assists_p3) === 'undefined' || isEmpty(String(temp_home_lieutenant_assists_p3))) {
+              temp_home_lieutenant_assists_p3 = 0;
+          }
+          if (typeof(temp_home_lieutenant_assists_ot) === 'undefined' || isEmpty(String(temp_home_lieutenant_assists_ot))) {
+              temp_home_lieutenant_assists_ot = 0;
+          }
+
+          var temp_home_lieutenant_assists =   parseInt(temp_home_lieutenant_assists_p1) + 
+          parseInt(temp_home_lieutenant_assists_p2) + 
+          parseInt(temp_home_lieutenant_assists_p3) + 
+          parseInt(temp_home_lieutenant_assists_ot);
+
+          if (temp_home_lieutenant_assists === 0) {
+              temp_home_lieutenant_assists = "";
+          }
+
+          return temp_home_lieutenant_assists;
+        };
+
+        function getHomeShots () {
+          var temp_home_shots_p1 = $('#home_shots_p1').val();
+          var temp_home_shots_p2 = $('#home_shots_p2').val();
+          var temp_home_shots_p3 = $('#home_shots_p3').val();
+          var temp_home_shots_ot = $('#home_shots_ot').val();
+
+          if (typeof(temp_home_shots_p1) === 'undefined' || isEmpty(String(temp_home_shots_p1))) {
+              temp_home_shots_p1 = 0;
+          }
+          if (typeof(temp_home_shots_p2) === 'undefined' || isEmpty(String(temp_home_shots_p2))) {
+              temp_home_shots_p2 = 0;
+          }
+          if (typeof(temp_home_shots_p3) === 'undefined' || isEmpty(String(temp_home_shots_p3))) {
+              temp_home_shots_p3 = 0;
+          }
+          if (typeof(temp_home_shots_ot) === 'undefined' || isEmpty(String(temp_home_shots_ot))) {
+              temp_home_shots_ot = 0;
+          }
+
+          var temp_home_shots =   parseInt(temp_home_shots_p1) + 
+          parseInt(temp_home_shots_p2) + 
+          parseInt(temp_home_shots_p3) + 
+          parseInt(temp_home_shots_ot);
+          if (temp_home_shots === 0) {
+              temp_home_shots = "";
+          }
+
+          return temp_home_shots;
+        };
+
+        function getHomeFaceoffs () {
+            var temp_home_faceoffs_p1 = $('#home_faceoffs_p1').val();
+            var temp_home_faceoffs_p2 = $('#home_faceoffs_p2').val();
+            var temp_home_faceoffs_p3 = $('#home_faceoffs_p3').val();
+            var temp_home_faceoffs_ot = $('#home_faceoffs_ot').val();
+
+            if (typeof(temp_home_faceoffs_p1) === 'undefined' || isEmpty(String(temp_home_faceoffs_p1))) {
+              temp_home_faceoffs_p1 = 0;
+            }
+            if (typeof(temp_home_faceoffs_p2) === 'undefined' || isEmpty(String(temp_home_faceoffs_p2))) {
+              temp_home_faceoffs_p2 = 0;
+            }
+            if (typeof(temp_home_faceoffs_p3) === 'undefined' || isEmpty(String(temp_home_faceoffs_p3))) {
+              temp_home_faceoffs_p3 = 0;
+            }
+            if (typeof(temp_home_faceoffs_ot) === 'undefined' || isEmpty(String(temp_home_faceoffs_ot))) {
+              temp_home_faceoffs_ot = 0;
+            }
+
+            var temp_home_faceoffs =   parseInt(temp_home_faceoffs_p1) + 
+            parseInt(temp_home_faceoffs_p2) + 
+            parseInt(temp_home_faceoffs_p3) + 
+            parseInt(temp_home_faceoffs_ot);
+
+            if (temp_home_faceoffs === 0) {
+                temp_home_faceoffs = "";
+            }
+
+            return temp_home_faceoffs;
+        };
+
+        function getAwayGoals () {
+          var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+          var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+          var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+          var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+          var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+          var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+          var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+          var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+          if (typeof(temp_away_captain_goals_p1) === 'undefined' || isEmpty(String(temp_away_captain_goals_p1))) {
+              temp_away_captain_goals_p1 = 0;
+          }
+          if (typeof(temp_away_captain_goals_p2) === 'undefined' || isEmpty(String(temp_away_captain_goals_p2))) {
+              temp_away_captain_goals_p2 = 0;
+          }
+          if (typeof(temp_away_captain_goals_p3) === 'undefined' || isEmpty(String(temp_away_captain_goals_p3))) {
+              temp_away_captain_goals_p3 = 0;
+          }
+          if (typeof(temp_away_captain_goals_ot) === 'undefined' || isEmpty(String(temp_away_captain_goals_ot))) {
+              temp_away_captain_goals_ot = 0;
+          }
+
+          if (typeof(temp_away_lieutenant_goals_p1) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_p1))) {
+              temp_away_lieutenant_goals_p1 = 0;
+          }
+          if (typeof(temp_away_lieutenant_goals_p2) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_p2))) {
+              temp_away_lieutenant_goals_p2 = 0;
+          }
+          if (typeof(temp_away_lieutenant_goals_p3) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_p3))) {
+              temp_away_lieutenant_goals_p3 = 0;
+          }
+          if (typeof(temp_away_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_ot))) {
+              temp_away_lieutenant_goals_ot = 0;
+          }
+
+          var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+          parseInt(temp_away_captain_goals_p2) + 
+          parseInt(temp_away_captain_goals_p3) + 
+          parseInt(temp_away_captain_goals_ot);
+
+          var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
+          parseInt(temp_away_lieutenant_goals_p2) + 
+          parseInt(temp_away_lieutenant_goals_p3) + 
+          parseInt(temp_away_lieutenant_goals_ot);
+
+          var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
+
+          return temp_away_goals_total;
+        };
+
+        function getAwayCaptainGoals () {
+          var temp_away_captain_goals_p1 = $('#away_captain_goals_p1').val();
+          var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
+          var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
+          var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+
+          if (typeof(temp_away_captain_goals_p1) === 'undefined' || isEmpty(String(temp_away_captain_goals_p1))) {
+              temp_away_captain_goals_p1 = 0;
+          }
+          if (typeof(temp_away_captain_goals_p2) === 'undefined' || isEmpty(String(temp_away_captain_goals_p2))) {
+              temp_away_captain_goals_p2 = 0;
+          }
+          if (typeof(temp_away_captain_goals_p3) === 'undefined' || isEmpty(String(temp_away_captain_goals_p3))) {
+              temp_away_captain_goals_p3 = 0;
+          }
+          if (typeof(temp_away_captain_goals_ot) === 'undefined' || isEmpty(String(temp_away_captain_goals_ot))) {
+              temp_away_captain_goals_ot = 0;
+          }
+
+          var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
+          parseInt(temp_away_captain_goals_p2) + 
+          parseInt(temp_away_captain_goals_p3) + 
+          parseInt(temp_away_captain_goals_ot);
+
+          if (temp_away_captain_goals === 0) {
+              temp_away_captain_goals = "";
+          }
+
+          return temp_away_captain_goals;
+        };
+
+        function getAwayCaptainAssists () {
+          var temp_away_captain_assists_p1 = $('#away_captain_assists_p1').val();
+          var temp_away_captain_assists_p2 = $('#away_captain_assists_p2').val();
+          var temp_away_captain_assists_p3 = $('#away_captain_assists_p3').val();
+          var temp_away_captain_assists_ot = $('#away_captain_assists_ot').val();
+
+          if (typeof(temp_away_captain_assists_p1) === 'undefined' || isEmpty(String(temp_away_captain_assists_p1))) {
+              temp_away_captain_assists_p1 = 0;
+          }
+          if (typeof(temp_away_captain_assists_p2) === 'undefined' || isEmpty(String(temp_away_captain_assists_p2))) {
+              temp_away_captain_assists_p2 = 0;
+          }
+          if (typeof(temp_away_captain_assists_p3) === 'undefined' || isEmpty(String(temp_away_captain_assists_p3))) {
+              temp_away_captain_assists_p3 = 0;
+          }
+          if (typeof(temp_away_captain_assists_ot) === 'undefined' || isEmpty(String(temp_away_captain_assists_ot))) {
+              temp_away_captain_assists_ot = 0;
+          }
+
+          var temp_away_captain_assists =   parseInt(temp_away_captain_assists_p1) + 
+          parseInt(temp_away_captain_assists_p2) + 
+          parseInt(temp_away_captain_assists_p3) + 
+          parseInt(temp_away_captain_assists_ot);
+
+          if (temp_away_captain_assists === 0) {
+              temp_away_captain_assists = "";
+          }
+
+          return temp_away_captain_assists;
+        };
+
+        function getAwayLieutenantGoals () {
+          var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
+          var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
+          var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
+          var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+          if (typeof(temp_away_lieutenant_goals_p1) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_p1))) {
+              temp_away_lieutenant_goals_p1 = 0;
+          }
+          if (typeof(temp_away_lieutenant_goals_p2) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_p2))) {
+              temp_away_lieutenant_goals_p2 = 0;
+          }
+          if (typeof(temp_away_lieutenant_goals_p3) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_p3))) {
+              temp_away_lieutenant_goals_p3 = 0;
+          }
+          if (typeof(temp_away_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_ot))) {
+              temp_away_lieutenant_goals_ot = 0;
+          }
+
+          var temp_away_lieutenant_goals =   parseInt(temp_away_lieutenant_goals_p1) + 
+          parseInt(temp_away_lieutenant_goals_p2) + 
+          parseInt(temp_away_lieutenant_goals_p3) + 
+          parseInt(temp_away_lieutenant_goals_ot);
+
+          if (temp_away_lieutenant_goals === 0) {
+              temp_away_lieutenant_goals = "";
+          }
+
+          return temp_away_lieutenant_goals;
+        };
+
+        function getAwayLieutenantAssists () {
+          var temp_away_lieutenant_assists_p1 = $('#away_lieutenant_assists_p1').val();
+          var temp_away_lieutenant_assists_p2 = $('#away_lieutenant_assists_p2').val();
+          var temp_away_lieutenant_assists_p3 = $('#away_lieutenant_assists_p3').val();
+          var temp_away_lieutenant_assists_ot = $('#away_lieutenant_assists_ot').val();
+
+          if (typeof(temp_away_lieutenant_assists_p1) === 'undefined' || isEmpty(String(temp_away_lieutenant_assists_p1))) {
+              temp_away_lieutenant_assists_p1 = 0;
+          }
+          if (typeof(temp_away_lieutenant_assists_p2) === 'undefined' || isEmpty(String(temp_away_lieutenant_assists_p2))) {
+              temp_away_lieutenant_assists_p2 = 0;
+          }
+          if (typeof(temp_away_lieutenant_assists_p3) === 'undefined' || isEmpty(String(temp_away_lieutenant_assists_p3))) {
+              temp_away_lieutenant_assists_p3 = 0;
+          }
+          if (typeof(temp_away_lieutenant_assists_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_assists_ot))) {
+              temp_away_lieutenant_assists_ot = 0;
+          }
+
+          var temp_away_lieutenant_assists =   parseInt(temp_away_lieutenant_assists_p1) + 
+          parseInt(temp_away_lieutenant_assists_p2) + 
+          parseInt(temp_away_lieutenant_assists_p3) + 
+          parseInt(temp_away_lieutenant_assists_ot);
+
+          if (temp_away_lieutenant_assists === 0) {
+              temp_away_lieutenant_assists = "";
+          }
+
+          return temp_away_lieutenant_assists;
+        };
+
+        function getAwayShots () {
+            var temp_away_shots_p1 = $('#away_shots_p1').val();
+            var temp_away_shots_p2 = $('#away_shots_p2').val();
+            var temp_away_shots_p3 = $('#away_shots_p3').val();
+            var temp_away_shots_ot = $('#away_shots_ot').val();
+
+            if (typeof(temp_away_shots_p1) === 'undefined' || isEmpty(String(temp_away_shots_p1))) {
+                temp_away_shots_p1 = 0;
+            }
+            if (typeof(temp_away_shots_p2) === 'undefined' || isEmpty(String(temp_away_shots_p2))) {
+                temp_away_shots_p2 = 0;
+            }
+            if (typeof(temp_away_shots_p3) === 'undefined' || isEmpty(String(temp_away_shots_p3))) {
+                temp_away_shots_p3 = 0;
+            }
+            if (typeof(temp_away_shots_ot) === 'undefined' || isEmpty(String(temp_away_shots_ot))) {
+                temp_away_shots_ot = 0;
+            }
+
+            var temp_away_shots =   parseInt(temp_away_shots_p1) + 
+            parseInt(temp_away_shots_p2) + 
+            parseInt(temp_away_shots_p3) + 
+            parseInt(temp_away_shots_ot);
+            if (temp_away_shots === 0) {
+                temp_away_shots = "";
+            }
+            return temp_away_shots;
+        };
+
+        function getAwayFaceoffs () {
+            var temp_away_faceoffs_p1 = $('#away_faceoffs_p1').val();
+            var temp_away_faceoffs_p2 = $('#away_faceoffs_p2').val();
+            var temp_away_faceoffs_p3 = $('#away_faceoffs_p3').val();
+            var temp_away_faceoffs_ot = $('#away_faceoffs_ot').val();
+
+            if (typeof(temp_away_faceoffs_p1) === 'undefined' || isEmpty(String(temp_away_faceoffs_p1))) {
+                temp_away_faceoffs_p1 = 0;
+            }
+            if (typeof(temp_away_faceoffs_p2) === 'undefined' || isEmpty(String(temp_away_faceoffs_p2))) {
+                temp_away_faceoffs_p2 = 0;
+            }
+            if (typeof(temp_away_faceoffs_p3) === 'undefined' || isEmpty(String(temp_away_faceoffs_p3))) {
+                temp_away_faceoffs_p3 = 0;
+            }
+            if (typeof(temp_away_faceoffs_ot) === 'undefined' || isEmpty(String(temp_away_faceoffs_ot))) {
+                temp_away_faceoffs_ot = 0;
+            }
+
+            var temp_away_faceoffs =   parseInt(temp_away_faceoffs_p1) + 
+            parseInt(temp_away_faceoffs_p2) + 
+            parseInt(temp_away_faceoffs_p3) + 
+            parseInt(temp_away_faceoffs_ot);
+            if (temp_away_faceoffs === 0) {
+                temp_away_faceoffs = "";
+            }                                
+            return temp_away_faceoffs;
+        };
+
+        function getIsOvertime () {
+          var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+          var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+          var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+          var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+          if (typeof(temp_home_captain_goals_ot) === 'undefined' || isEmpty(String(temp_home_captain_goals_ot))) {
+              temp_home_captain_goals_ot = 0;
+          }
+          if (typeof(temp_home_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_ot))) {
+              temp_home_lieutenant_goals_ot = 0;
+          }
+          if (typeof(temp_away_captain_goals_ot) === 'undefined' || isEmpty(String(temp_away_captain_goals_ot))) {
+              temp_away_captain_goals_ot = 0;
+          }
+          if (typeof(temp_away_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_ot))) {
+              temp_away_lieutenant_goals_ot = 0;
+          }
+
+          var temp_overtime_goals =     parseInt(temp_home_captain_goals_ot) + 
+                                        parseInt(temp_home_lieutenant_goals_ot) + 
+                                        parseInt(temp_away_captain_goals_ot) + 
+                                        parseInt(temp_away_lieutenant_goals_ot);
+          var overtime_status = temp_overtime_goals > 0;
+
+          return overtime_status;
+        };
+
+        function getIsHomeCaptainAssistsCorrect () {
+            var temp_home_captain_assists = getHomeCaptainAssists();
+            var temp_home_lieutenant_goals = getHomeLieutenantGoals();
+
+            if (typeof(temp_home_captain_assists) === 'undefined' || isEmpty(String(temp_home_captain_assists))) {
+                temp_home_captain_assists = 0;
+            }
+            if (typeof(temp_home_lieutenant_goals) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals))) {
+                temp_home_lieutenant_goals = 0;
+            }
+
+            var assistsOk = parseInt(temp_home_captain_assists) > parseInt(temp_home_lieutenant_goals);
+            return assistsOk;
+        };
+
+        function getIsHomeLieutenantAssistsCorrect () {
+            var temp_home_lieutenant_assists = getHomeLieutenantAssists();
+            var temp_home_captain_goals = getHomeCaptainGoals();
+
+            if (typeof(temp_home_lieutenant_assists) === 'undefined' || isEmpty(String(temp_home_lieutenant_assists))) {
+                temp_home_lieutenant_assists = 0;
+            }
+            if (typeof(temp_home_captain_goals) === 'undefined' || isEmpty(String(temp_home_captain_goals))) {
+                temp_home_captain_goals = 0;
+            }
+
+            var assistsNotOk = parseInt(temp_home_lieutenant_assists) > parseInt(temp_home_captain_goals);
+            return assistsNotOk;
+        };
+
+        function getIsAwayCaptainAssistsCorrect () {
+            var temp_away_captain_assists = getAwayCaptainAssists();
+            var temp_away_lieutenant_goals = getAwayLieutenantGoals();
+
+            if (typeof(temp_away_captain_assists) === 'undefined' || isEmpty(String(temp_away_captain_assists))) {
+                temp_away_captain_assists = 0;
+            }
+            if (typeof(temp_away_lieutenant_goals) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals))) {
+                temp_away_lieutenant_goals = 0;
+            }
+
+            var assistsOk = parseInt(temp_away_captain_assists) > parseInt(temp_away_lieutenant_goals);
+            return assistsOk;
+        };
+
+        function getIsAwayLieutenantAssistsCorrect () {
+            var temp_away_lieutenant_assists = getAwayLieutenantAssists();
+            var temp_away_captain_goals = getAwayCaptainGoals();
+
+            if (typeof(temp_away_lieutenant_assists) === 'undefined' || isEmpty(String(temp_away_lieutenant_assists))) {
+                temp_away_lieutenant_assists = 0;
+            }
+            if (typeof(temp_away_captain_goals) === 'undefined' || isEmpty(String(temp_away_captain_goals))) {
+                temp_away_captain_goals = 0;
+            }
+
+            var assistsNotOk = parseInt(temp_away_lieutenant_assists) > parseInt(temp_away_captain_goals);
+            return assistsNotOk;
+        };
+
+        function getIsHomeShotsCorrect () {
+            var temp_home_shots = getHomeShots();
+            var temp_home_goals = getHomeGoals();
+
+            if (typeof(temp_home_shots) === 'undefined' || isEmpty(String(temp_home_shots))) {
+                temp_home_shots = 0;
+            }
+            if (typeof(temp_home_goals) === 'undefined' || isEmpty(String(temp_home_goals))) {
+                temp_home_goals = 0;
+            }
+
+            var shotsOk = parseInt(temp_home_shots) >= parseInt(temp_home_goals);
+            return shotsOk;
+        };
+
+        function getIsAwayShotsCorrect () {
+            var temp_away_shots = getAwayShots();
+            var temp_away_goals = getAwayGoals();
+
+            if (typeof(temp_away_shots) === 'undefined' || isEmpty(String(temp_away_shots))) {
+                temp_away_shots = 0;
+            }
+            if (typeof(temp_away_goals) === 'undefined' || isEmpty(String(temp_away_goals))) {
+                temp_away_goals = 0;
+            }
+
+            var shotsOk = parseInt(temp_away_shots) >= parseInt(temp_away_goals);
+            return shotsOk;
+        };
+
+        function isHomeOvertimeStatsOK () {
+            /*
+            alert(getIsOvertime());
+            alert(isEmpty($('#home_shots_ot').val()));
+            alert(isEmpty($('#home_faceoffs_ot').val()));
+            */
+            var status = true;
+            if (!getIsOvertime() && ( !isEmpty($('#home_shots_ot').val()) || !isEmpty($('#home_faceoffs_ot').val()) )) {
+                //alert("HOME test");
+                status = false;
+            }
+            return status;
+        };
+
+        function isAwayOvertimeStatsOK () {
+            /*
+            alert(getIsOvertime());
+            alert(isEmpty($('#away_shots_ot').val()));
+            alert(isEmpty($('#away_faceoffs_ot').val()));
+            */
+            var status = true;
+            if (!getIsOvertime() && ( !isEmpty($('#away_shots_ot').val()) || !isEmpty($('#away_faceoffs_ot').val()) )) {
+                //alert("AWAY test");
+                status = false;
+            }
+            return status;
+        };
+
+        function isOvertimeGoalsMoreThanOne () {
+            var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+            var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+
+            var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+            var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+            if (typeof(temp_home_captain_goals_ot) === 'undefined' || isEmpty(String(temp_home_captain_goals_ot))) {
+                temp_home_captain_goals_ot = 0;
+            }
+            if (typeof(temp_home_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_ot))) {
+                temp_home_lieutenant_goals_ot = 0;
+            }
+            if (typeof(temp_away_captain_goals_ot) === 'undefined' || isEmpty(String(temp_away_captain_goals_ot))) {
+                temp_away_captain_goals_ot = 0;
+            }
+            if (typeof(temp_away_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_ot))) {
+                temp_away_lieutenant_goals_ot = 0;
+            }
+
+            var temp_overtime_goals =     parseInt(temp_home_captain_goals_ot) + 
+                                          parseInt(temp_home_lieutenant_goals_ot) + 
+                                          parseInt(temp_away_captain_goals_ot) + 
+                                          parseInt(temp_away_lieutenant_goals_ot);
+
+            var status = temp_overtime_goals > 1;
+
+            if (status) {
+                $('#fc_home_captain_goals_ot').addClass("has-error");
+                $('#fc_home_captain_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_home_lieutenant_goals_ot').addClass("has-error");
+                $('#fc_home_lieutenant_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_away_captain_goals_ot').addClass("has-error");
+                $('#fc_away_captain_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_away_lieutenant_goals_ot').addClass("has-error");
+                $('#fc_away_lieutenant_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+            } else {
+                $('#fc_home_captain_goals_ot').removeClass("has-error");
+                $('#fc_home_captain_goals_ot').attr("title", "OK");
+                $('#fc_home_lieutenant_goals_ot').removeClass("has-error");
+                $('#fc_home_lieutenant_goals_ot').attr("title", "OK");
+                $('#fc_away_captain_goals_ot').removeClass("has-error");
+                $('#fc_away_captain_goals_ot').attr("title", "OK");
+                $('#fc_away_lieutenant_goals_ot').removeClass("has-error");
+                $('#fc_away_lieutenant_goals_ot').attr("title", "OK");
+            }
+
+            return status;
+        };
+
+        function isShotsOK() {
+            var status = true; 
+            var home_status = getIsHomeShotsCorrect();
+            var away_status = getIsAwayShotsCorrect();
+
+            if (!home_status || !away_status) {
+                status = false;
+            }
+
+            if (!home_status) {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+
+            if (!away_status) {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+
+            return status;
+        };
+
+        /** HOME CAPTAIN GOALS AND ASSISTS **/
+        $('#home_captain_goals_p1').on('input', function() {
+            $('#home_captain_goals_sum').text(String(getHomeCaptainGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsHomeLieutenantAssistsCorrect()) {
+                $('#home_lieutenant_assists_sum').addClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#home_lieutenant_assists_sum').removeClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#home_captain_goals_p1').val())) {
+                $('#fc_home_captain_goals_p1').removeClass("has-error");
+            } else {
+                $('#fc_home_captain_goals_p1').addClass("has-error");
+            }
+        });
+
+        $('#home_captain_goals_p2').on('input', function() {
+            $('#home_captain_goals_sum').text(String(getHomeCaptainGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsHomeLieutenantAssistsCorrect()) {
+                $('#home_lieutenant_assists_sum').addClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#home_lieutenant_assists_sum').removeClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#home_captain_goals_p2').val())) {
+                $('#fc_home_captain_goals_p2').removeClass("has-error");
+            } else {
+                $('#fc_home_captain_goals_p2').addClass("has-error");
+            }
+        });
+
+        $('#home_captain_goals_p3').on('input', function() {
+            $('#home_captain_goals_sum').text(String(getHomeCaptainGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsHomeLieutenantAssistsCorrect()) {
+                $('#home_lieutenant_assists_sum').addClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#home_lieutenant_assists_sum').removeClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#home_captain_goals_p3').val())) {
+                $('#fc_home_captain_goals_p3').removeClass("has-error");
+            } else {
+                $('#fc_home_captain_goals_p3').addClass("has-error");
+            }
+        });
+
+        $('#home_captain_goals_ot').on('input', function() {
+            $('#home_captain_goals_sum').text(String(getHomeCaptainGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsOvertime()) {
+                $('#overtime-label').show();
+            } else {
+                $('#overtime-label').hide();
+            }
+            
+            isOvertimeGoalsMoreThanOne();
+            
+            if (getIsHomeLieutenantAssistsCorrect()) {
+                $('#home_lieutenant_assists_sum').addClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#home_lieutenant_assists_sum').removeClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+        });
+        $('#home_captain_assists_p1').on('input', function() {
+            $('#home_captain_assists_sum').text(String(getHomeCaptainAssists()));
+            if (getIsHomeCaptainAssistsCorrect()) {
+                $('#home_captain_assists_sum').addClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#home_captain_assists_sum').removeClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#home_captain_assists_p1').val())) {
+                $('#fc_home_captain_assists_p1').removeClass("has-error");
+            } else {
+                $('#fc_home_captain_assists_p1').addClass("has-error");
+            }
+        });
+
+        $('#home_captain_assists_p2').on('input', function() {
+            $('#home_captain_assists_sum').text(String(getHomeCaptainAssists()));
+            if (getIsHomeCaptainAssistsCorrect()) {
+                $('#home_captain_assists_sum').addClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#home_captain_assists_sum').removeClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#home_captain_assists_p2').val())) {
+                $('#fc_home_captain_assists_p2').removeClass("has-error");
+            } else {
+                $('#fc_home_captain_assists_p2').addClass("has-error");
+            }
+        });
+
+        $('#home_captain_assists_p3').on('input', function() {
+            $('#home_captain_assists_sum').text(String(getHomeCaptainAssists()));
+            if (getIsHomeCaptainAssistsCorrect()) {
+                $('#home_captain_assists_sum').addClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#home_captain_assists_sum').removeClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#home_captain_assists_p3').val())) {
+                $('#fc_home_captain_assists_p3').removeClass("has-error");
+            } else {
+                $('#fc_home_captain_assists_p3').addClass("has-error");
+            }
+        });
+
+        $('#home_captain_assists_ot').on('input', function() {
+            $('#home_captain_assists_sum').text(String(getHomeCaptainAssists()));
+            if (getIsHomeCaptainAssistsCorrect()) {
+                $('#home_captain_assists_sum').addClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#home_captain_assists_sum').removeClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "OK");
+            }
+        });
+
+        $('#home_captain_fights').on('input', function() {
+            if (isFieldOK($('#home_captain_fights').val())) {
+                $('#fc_home_captain_fights').removeClass("has-error");
+            } else {
+                $('#fc_home_captain_fights').addClass("has-error");
+            }
+        });
+
+        /** HOME LIEUTENANT GOALS AND ASSISTS **/
+        $('#home_lieutenant_goals_p1').on('input', function() {
+            $('#home_lieutenant_goals_sum').text(String(getHomeLieutenantGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsHomeCaptainAssistsCorrect()) {
+                $('#home_captain_assists_sum').addClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#home_captain_assists_sum').removeClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "OK");
+            }
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#home_lieutenant_goals_p1').val())) {
+                $('#fc_home_lieutenant_goals_p1').removeClass("has-error");
+            } else {
+                $('#fc_home_lieutenant_goals_p1').addClass("has-error");
+            }
+        });
+
+        $('#home_lieutenant_goals_p2').on('input', function() {
+            $('#home_lieutenant_goals_sum').text(String(getHomeLieutenantGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsHomeCaptainAssistsCorrect()) {
+                $('#home_captain_assists_sum').addClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#home_captain_assists_sum').removeClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "OK");
+            }
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#home_lieutenant_goals_p2').val())) {
+                $('#fc_home_lieutenant_goals_p2').removeClass("has-error");
+            } else {
+                $('#fc_home_lieutenant_goals_p2').addClass("has-error");
+            }
+        });
+
+        $('#home_lieutenant_goals_p3').on('input', function() {
+            $('#home_lieutenant_goals_sum').text(String(getHomeLieutenantGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsHomeCaptainAssistsCorrect()) {
+                $('#home_captain_assists_sum').addClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#home_captain_assists_sum').removeClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "OK");
+            }
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#home_lieutenant_goals_p3').val())) {
+                $('#fc_home_lieutenant_goals_p3').removeClass("has-error");
+            } else {
+                $('#fc_home_lieutenant_goals_p3').addClass("has-error");
+            }
+        });
+
+        $('#home_lieutenant_goals_ot').on('input', function() {
+            $('#home_lieutenant_goals_sum').text(String(getHomeLieutenantGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsOvertime()) {
+                $('#overtime-label').show();
+            } else {
+                $('#overtime-label').hide();
+            }
+
+            isOvertimeGoalsMoreThanOne();
+
+            if (getIsHomeCaptainAssistsCorrect()) {
+                $('#home_captain_assists_sum').addClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#home_captain_assists_sum').removeClass("error-stat");
+                $('#home_captain_assists_sum').attr("title", "OK");
+            }
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+        });
+
+        $('#home_lieutenant_assists_p1').on('input', function() {
+            $('#home_lieutenant_assists_sum').text(String(getHomeLieutenantAssists()));
+            if (getIsHomeLieutenantAssistsCorrect()) {
+                $('#home_lieutenant_assists_sum').addClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#home_lieutenant_assists_sum').removeClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#home_lieutenant_assists_p1').val())) {
+                $('#fc_home_lieutenant_assists_p1').removeClass("has-error");
+            } else {
+                $('#fc_home_lieutenant_assists_p1').addClass("has-error");
+            }
+        });
+
+        $('#home_lieutenant_assists_p2').on('input', function() {
+            $('#home_lieutenant_assists_sum').text(String(getHomeLieutenantAssists()));
+            if (getIsHomeLieutenantAssistsCorrect()) {
+                $('#home_lieutenant_assists_sum').addClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#home_lieutenant_assists_sum').removeClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#home_lieutenant_assists_p2').val())) {
+                $('#fc_home_lieutenant_assists_p2').removeClass("has-error");
+            } else {
+                $('#fc_home_lieutenant_assists_p2').addClass("has-error");
+            }
+        });
+
+        $('#home_lieutenant_assists_p3').on('input', function() {
+            $('#home_lieutenant_assists_sum').text(String(getHomeLieutenantAssists()));
+            if (getIsHomeLieutenantAssistsCorrect()) {
+                $('#home_lieutenant_assists_sum').addClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#home_lieutenant_assists_sum').removeClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#home_lieutenant_assists_p3').val())) {
+                $('#fc_home_lieutenant_assists_p3').removeClass("has-error");
+            } else {
+                $('#fc_home_lieutenant_assists_p3').addClass("has-error");
+            }
+        });
+
+        $('#home_lieutenant_assists_ot').on('input', function() {
+            $('#home_lieutenant_assists_sum').text(String(getHomeLieutenantAssists()));
+            if (getIsHomeLieutenantAssistsCorrect()) {
+                $('#home_lieutenant_assists_sum').addClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#home_lieutenant_assists_sum').removeClass("error-stat");
+                $('#home_lieutenant_assists_sum').attr("title", "OK");
+            }
+        });
+
+        $('#home_lieutenant_fights').on('input', function() {
+            if (isFieldOK($('#home_lieutenant_fights').val())) {
+                $('#fc_home_lieutenant_fights').removeClass("has-error");
+            } else {
+                $('#fc_home_lieutenant_fights').addClass("has-error");
+            }
+        });
+
+        /** AWAY CAPTAIN GOALS AND ASSISTS **/
+        $('#away_captain_goals_p1').on('input', function() {
+            $('#away_captain_goals_sum').text(String(getAwayCaptainGoals()));
+            $('#away_goals').val(String(getAwayGoals()));
+            if (getIsAwayLieutenantAssistsCorrect()) {
+                $('#away_lieutenant_assists_sum').addClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#away_lieutenant_assists_sum').removeClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#away_captain_goals_p1').val())) {
+                $('#fc_away_captain_goals_p1').removeClass("has-error");
+            } else {
+                $('#fc_away_captain_goals_p1').addClass("has-error");
+            }
+        });
+
+        $('#away_captain_goals_p2').on('input', function() {
+            $('#away_captain_goals_sum').text(String(getAwayCaptainGoals()));
+            $('#away_goals').val(String(getAwayGoals()));
+            if (getIsAwayLieutenantAssistsCorrect()) {
+                $('#away_lieutenant_assists_sum').addClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#away_lieutenant_assists_sum').removeClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#away_captain_goals_p2').val())) {
+                $('#fc_away_captain_goals_p2').removeClass("has-error");
+            } else {
+                $('#fc_away_captain_goals_p2').addClass("has-error");
+            }
+        });
+
+        $('#away_captain_goals_p3').on('input', function() {
+            $('#away_captain_goals_sum').text(String(getAwayCaptainGoals()));
+            $('#away_goals').val(String(getAwayGoals()));
+            if (getIsAwayLieutenantAssistsCorrect()) {
+                $('#away_lieutenant_assists_sum').addClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#away_lieutenant_assists_sum').removeClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#away_captain_goals_p3').val())) {
+                $('#fc_away_captain_goals_p3').removeClass("has-error");
+            } else {
+                $('#fc_away_captain_goals_p3').addClass("has-error");
+            }
+        });
+
+        $('#away_captain_goals_ot').on('input', function() {
+            $('#away_captain_goals_sum').text(String(getAwayCaptainGoals()));
+            $('#away_goals').val(String(getAwayGoals()));
+            if (getIsOvertime()) {
+                $('#overtime-label').show();
+            } else {
+                $('#overtime-label').hide();
+            }
+
+            isOvertimeGoalsMoreThanOne();
+
+            if (getIsAwayLieutenantAssistsCorrect()) {
+                $('#away_lieutenant_assists_sum').addClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#away_lieutenant_assists_sum').removeClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+        });
+
+        $('#away_captain_assists_p1').on('input', function() {
+            $('#away_captain_assists_sum').text(String(getAwayCaptainAssists()));
+            if (getIsAwayCaptainAssistsCorrect()) {
+                $('#away_captain_assists_sum').addClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#away_captain_assists_sum').removeClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#away_captain_assists_p1').val())) {
+                $('#fc_away_captain_assists_p1').removeClass("has-error");
+            } else {
+                $('#fc_away_captain_assists_p1').addClass("has-error");
+            }
+        });
+
+        $('#away_captain_assists_p2').on('input', function() {
+            $('#away_captain_assists_sum').text(String(getAwayCaptainAssists()));
+            if (getIsAwayCaptainAssistsCorrect()) {
+                $('#away_captain_assists_sum').addClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#away_captain_assists_sum').removeClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#away_captain_assists_p2').val())) {
+                $('#fc_away_captain_assists_p2').removeClass("has-error");
+            } else {
+                $('#fc_away_captain_assists_p2').addClass("has-error");
+            }
+        });
+
+        $('#away_captain_assists_p3').on('input', function() {
+            $('#away_captain_assists_sum').text(String(getAwayCaptainAssists()));
+            if (getIsAwayCaptainAssistsCorrect()) {
+                $('#away_captain_assists_sum').addClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#away_captain_assists_sum').removeClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#away_captain_assists_p3').val())) {
+                $('#fc_away_captain_assists_p3').removeClass("has-error");
+            } else {
+                $('#fc_away_captain_assists_p3').addClass("has-error");
+            }
+        });
+
+        $('#away_captain_assists_ot').on('input', function() {
+            $('#away_captain_assists_sum').text(String(getAwayCaptainAssists()));
+            if (getIsAwayCaptainAssistsCorrect()) {
+                $('#away_captain_assists_sum').addClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#away_captain_assists_sum').removeClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "OK");
+            }
+        });
+
+        $('#away_captain_fights').on('input', function() {
+            if (isFieldOK($('#away_captain_fights').val())) {
+                $('#fc_away_captain_fights').removeClass("has-error");
+            } else {
+                $('#fc_away_captain_fights').addClass("has-error");
+            }
+        });
+
+        /** AWAY LIEUTENANT GOALS AND ASSISTS **/
+        $('#away_lieutenant_goals_p1').on('input', function() {
+            $('#away_lieutenant_goals_sum').text(String(getAwayLieutenantGoals()));
+            $('#away_goals').val(String(getAwayGoals()));
+            if (getIsAwayCaptainAssistsCorrect()) {
+                $('#away_captain_assists_sum').addClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#away_captain_assists_sum').removeClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "OK");
+            }
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#away_lieutenant_goals_p1').val())) {
+                $('#fc_away_lieutenant_goals_p1').removeClass("has-error");
+            } else {
+                $('#fc_away_lieutenant_goals_p1').addClass("has-error");
+            }
+        });
+
+        $('#away_lieutenant_goals_p2').on('input', function() {
+            $('#away_lieutenant_goals_sum').text(String(getAwayLieutenantGoals()));
+            $('#away_goals').val(String(getAwayGoals()));
+            if (getIsAwayCaptainAssistsCorrect()) {
+                $('#away_captain_assists_sum').addClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#away_captain_assists_sum').removeClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "OK");
+            }
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#away_lieutenant_goals_p2').val())) {
+                $('#fc_away_lieutenant_goals_p2').removeClass("has-error");
+            } else {
+                $('#fc_away_lieutenant_goals_p2').addClass("has-error");
+            }
+        });
+
+        $('#away_lieutenant_goals_p3').on('input', function() {
+            $('#away_lieutenant_goals_sum').text(String(getAwayLieutenantGoals()));
+            $('#away_goals').val(String(getAwayGoals()));
+            if (getIsAwayCaptainAssistsCorrect()) {
+                $('#away_captain_assists_sum').addClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#away_captain_assists_sum').removeClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "OK");
+            }
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#away_lieutenant_goals_p3').val())) {
+                $('#fc_away_lieutenant_goals_p3').removeClass("has-error");
+            } else {
+                $('#fc_away_lieutenant_goals_p3').addClass("has-error");
+            }
+        });
+
+        $('#away_lieutenant_goals_ot').on('input', function() {
+            $('#away_lieutenant_goals_sum').text(String(getAwayLieutenantGoals()));
+            $('#away_goals').val(String(getAwayGoals()));
+            if (getIsOvertime()) {
+                $('#overtime-label').show();
+            } else {
+                $('#overtime-label').hide();
+            }
+
+            isOvertimeGoalsMoreThanOne();
+
+            if (getIsAwayCaptainAssistsCorrect()) {
+                $('#away_captain_assists_sum').addClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
+            } else {
+                $('#away_captain_assists_sum').removeClass("error-stat");
+                $('#away_captain_assists_sum').attr("title", "OK");
+            }
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+        });
+
+        $('#away_lieutenant_assists_p1').on('input', function() {
+            $('#away_lieutenant_assists_sum').text(String(getAwayLieutenantAssists()));
+            if (getIsAwayLieutenantAssistsCorrect()) {
+                $('#away_lieutenant_assists_sum').addClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#away_lieutenant_assists_sum').removeClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#away_lieutenant_assists_p1').val())) {
+                $('#fc_away_lieutenant_assists_p1').removeClass("has-error");
+            } else {
+                $('#fc_away_lieutenant_assists_p1').addClass("has-error");
+            }
+        });
+
+        $('#away_lieutenant_assists_p2').on('input', function() {
+            $('#away_lieutenant_assists_sum').text(String(getAwayLieutenantAssists()));
+            if (getIsAwayLieutenantAssistsCorrect()) {
+                $('#away_lieutenant_assists_sum').addClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#away_lieutenant_assists_sum').removeClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#away_lieutenant_assists_p2').val())) {
+                $('#fc_away_lieutenant_assists_p2').removeClass("has-error");
+            } else {
+                $('#fc_away_lieutenant_assists_p2').addClass("has-error");
+            }
+        });
+
+        $('#away_lieutenant_assists_p3').on('input', function() {
+            $('#away_lieutenant_assists_sum').text(String(getAwayLieutenantAssists()));
+            if (getIsAwayLieutenantAssistsCorrect()) {
+                $('#away_lieutenant_assists_sum').addClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#away_lieutenant_assists_sum').removeClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "OK");
+            }
+            if (isFieldOK($('#away_lieutenant_assists_p3').val())) {
+                $('#fc_away_lieutenant_assists_p3').removeClass("has-error");
+            } else {
+                $('#fc_away_lieutenant_assists_p3').addClass("has-error");
+            }
+        });
+
+        $('#away_lieutenant_assists_ot').on('input', function() {
+            $('#away_lieutenant_assists_sum').text(String(getAwayLieutenantAssists()));
+            if (getIsAwayLieutenantAssistsCorrect()) {
+                $('#away_lieutenant_assists_sum').addClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
+            } else {
+                $('#away_lieutenant_assists_sum').removeClass("error-stat");
+                $('#away_lieutenant_assists_sum').attr("title", "OK");
+            }
+        });
+
+        $('#away_lieutenant_fights').on('input', function() {
+            if (isFieldOK($('#away_lieutenant_fights').val())) {
+                $('#fc_away_lieutenant_fights').removeClass("has-error");
+            } else {
+                $('#fc_away_lieutenant_fights').addClass("has-error");
+            }
+        });
+
+        /** HOME SHOTS **/
+        $('#home_shots_p1').on('input', function() {
+            $('#home_shots_sum').text(String(getHomeShots()));
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#home_shots_p1').val())) {
+                $('#fc_home_shots_p1').removeClass("has-error");
+            } else {
+                $('#fc_home_shots_p1').addClass("has-error");
+            }
+        });
+        $('#home_shots_p2').on('input', function() {
+            $('#home_shots_sum').text(String(getHomeShots()));
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#home_shots_p2').val())) {
+                $('#fc_home_shots_p2').removeClass("has-error");
+            } else {
+                $('#fc_home_shots_p2').addClass("has-error");
+            }
+        });
+        $('#home_shots_p3').on('input', function() {
+            $('#home_shots_sum').text(String(getHomeShots()));
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#home_shots_p3').val())) {
+                $('#fc_home_shots_p3').removeClass("has-error");
+            } else {
+                $('#fc_home_shots_p3').addClass("has-error");
+            }
+        });
+        $('#home_shots_ot').on('input', function() {
+            $('#home_shots_sum').text(String(getHomeShots()));
+            if (getIsHomeShotsCorrect()) {
+                $('#home_shots_sum').removeClass("error-stat");
+                $('#home_shots_sum').attr("title", "OK");
+            } else {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isHomeOvertimeStatsOK()) {
+                $('#fc_home_shots_ot').removeClass("has-warning");
+                $('#home_shots_ot').attr("title", "OK");
+            } else {
+                $('#fc_home_shots_ot').addClass("has-warning");
+                $('#home_shots_ot').attr("title", "Skott kan inte ha skjutits om det inte är några övertidsmål gjorda");
+            }
+        });
+
+        /** HOME FACEOFFS **/
+        $('#home_faceoffs_p1').on('input', function() {
+            $('#home_faceoffs_sum').text(String(getHomeFaceoffs()));
+            if (isFieldOK($('#home_faceoffs_p1').val())) {
+                $('#fc_home_faceoffs_p1').removeClass("has-error");
+            } else {
+                $('#fc_home_faceoffs_p1').addClass("has-error");
+            }
+        });
+        $('#home_faceoffs_p2').on('input', function() {
+            $('#home_faceoffs_sum').text(String(getHomeFaceoffs()));
+            if (isFieldOK($('#home_faceoffs_p2').val())) {
+                $('#fc_home_faceoffs_p2').removeClass("has-error");
+            } else {
+                $('#fc_home_faceoffs_p2').addClass("has-error");
+            }
+        });
+        $('#home_faceoffs_p3').on('input', function() {
+            $('#home_faceoffs_sum').text(String(getHomeFaceoffs()));
+            if (isFieldOK($('#home_faceoffs_p3').val())) {
+                $('#fc_home_faceoffs_p3').removeClass("has-error");
+            } else {
+                $('#fc_home_faceoffs_p3').addClass("has-error");
+            }
+        });
+        $('#home_faceoffs_ot').on('input', function() {
+            $('#home_faceoffs_sum').text(String(getHomeFaceoffs()));
+            if (isHomeOvertimeStatsOK()) {
+                $('#fc_home_faceoffs_ot').removeClass("has-warning");
+                $('#home_faceoffs_ot').attr("title", "OK");
+            } else {
+                $('#fc_home_faceoffs_ot').addClass("has-warning");
+                $('#home_faceoffs_ot').attr("title", "Inga tekningar kan ha vunnits om det inte är några övertidsmål gjorda");
+            }
+        });
+
+        /** AWAY SHOTS **/
+        $('#away_shots_p1').on('input', function() {
+            $('#away_shots_sum').text(String(getAwayShots()));
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#away_shots_p1').val())) {
+                $('#fc_away_shots_p1').removeClass("has-error");
+            } else {
+                $('#fc_away_shots_p1').addClass("has-error");
+            }
+        });
+        $('#away_shots_p2').on('input', function() {
+            $('#away_shots_sum').text(String(getAwayShots()));
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#away_shots_p2').val())) {
+                $('#fc_away_shots_p2').removeClass("has-error");
+            } else {
+                $('#fc_away_shots_p2').addClass("has-error");
+            }
+        });
+        $('#away_shots_p3').on('input', function() {
+            $('#away_shots_sum').text(String(getAwayShots()));
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isFieldOK($('#away_shots_p3').val())) {
+                $('#fc_away_shots_p3').removeClass("has-error");
+            } else {
+                $('#fc_away_shots_p3').addClass("has-error");
+            }
+        });
+        $('#away_shots_ot').on('input', function() {
+            $('#away_shots_sum').text(String(getAwayShots()));
+            if (getIsAwayShotsCorrect()) {
+                $('#away_shots_sum').removeClass("error-stat");
+                $('#away_shots_sum').attr("title", "OK");
+            } else {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+            if (isAwayOvertimeStatsOK()) {
+                $('#fc_away_shots_ot').removeClass("has-warning");
+                $('#away_shots_ot').attr("title", "OK");
+            } else {
+                $('#fc_away_shots_ot').addClass("has-warning");
+                $('#away_shots_ot').attr("title", "Skott kan inte ha skjutits om det inte är några övertidsmål gjorda");
+            }
+        });
+
+        /** AWAY FACEOFFS **/
+        $('#away_faceoffs_p1').on('input', function() {
+            $('#away_faceoffs_sum').text(String(getAwayFaceoffs()));
+            if (isFieldOK($('#away_faceoffs_p1').val())) {
+                $('#fc_away_faceoffs_p1').removeClass("has-error");
+            } else {
+                $('#fc_away_faceoffs_p1').addClass("has-error");
+            }
+        });
+        $('#away_faceoffs_p2').on('input', function() {
+            $('#away_faceoffs_sum').text(String(getAwayFaceoffs()));
+            if (isFieldOK($('#away_faceoffs_p2').val())) {
+                $('#fc_away_faceoffs_p2').removeClass("has-error");
+            } else {
+                $('#fc_away_faceoffs_p2').addClass("has-error");
+            }
+        });
+        $('#away_faceoffs_p3').on('input', function() {
+            $('#away_faceoffs_sum').text(String(getAwayFaceoffs()));
+            if (isFieldOK($('#away_faceoffs_p3').val())) {
+                $('#fc_away_faceoffs_p3').removeClass("has-error");
+            } else {
+                $('#fc_away_faceoffs_p3').addClass("has-error");
+            }
+        });
+        $('#away_faceoffs_ot').on('input', function() {
+            $('#away_faceoffs_sum').text(String(getAwayFaceoffs()));
+            if (isAwayOvertimeStatsOK()) {
+                $('#fc_away_faceoffs_ot').removeClass("has-warning");
+                $('#away_faceoffs_ot').attr("title", "OK");
+            } else {
+                $('#fc_away_faceoffs_ot').addClass("has-warning");
+                $('#away_faceoffs_ot').attr("title", "Inga tekningar kan ha vunnits om det inte är några övertidsmål gjorda");
+            }
+        });
+
+        $('input').on('input', function() {
+            if (isHomeOvertimeStatsOK()) {
+                $('#fc_home_shots_ot').removeClass("has-warning");
+                $('#home_shots_ot').attr("title", "OK");
+                $('#fc_home_faceoffs_ot').removeClass("has-warning");
+                $('#home_faceoffs_ot').attr("title", "OK");
+            }
+            if (isAwayOvertimeStatsOK()) {
+                $('#fc_away_shots_ot').removeClass("has-warning");
+                $('#away_shots_ot').attr("title", "OK");
+                $('#fc_away_faceoffs_ot').removeClass("has-warning");
+                $('#away_faceoffs_ot').attr("title", "OK");
+            }
+        });
+    })
+</script>
+</body>
+
+</html>

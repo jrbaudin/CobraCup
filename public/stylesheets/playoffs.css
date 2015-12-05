@@ -20,6 +20,10 @@ a:hover {
 	color: #34495E !important;
 }
 
+.colormered {
+	color: #E74C3C;
+}
+
 .gamepanel {
 	background-color: #2C3E50 !important;
 	color: #ECF0F1 !important;
