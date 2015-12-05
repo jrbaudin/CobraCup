@@ -25,40 +25,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="/"><i class="fa fa-cube"></i> Hub <span style="font-family: 'Kaushan Script', cursive;">2016</span></a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
-                <li><a href="/">Lag</a></li>
-                <li><a href="/signup">Anmäl lag</a></li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a href="/stat/league">Ligan</a></li>
-                    <li class="active"><a href="/stat/divisions">Divisioner</a></li>
-                    <li><a href="/stat/playerstats">Spelarstatistik</a></li>
-                  </ul>
-                </li>
-                <li><a href="/stat/history">Statistik</a></li>
-                <li class="active"><a href="/games">Matcher</a></li>
-                <li><a href="/feed"><mark>Live</mark></a></li>
-                <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
-              </ul>
-              <% if(typeof(count) !== 'undefined'){ %>
-                <p class="navbar-text navbar-right"><strong><%= count %>/16 lag</strong></p>
-              <% } %>
-            </div><!--/.nav-collapse -->
-        </div>
-    </nav>
+    <% include _navigation %>
     <div class="container-fluid">
         <% if(typeof(flash) !== 'undefined'){ %>
             <div class="alert alert-danger alert-dismissible" role="alert">
@@ -81,34 +48,32 @@
                 </div>
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/1'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
-                    <hr>
                     <% if(typeof(games) !== 'undefined'){
                         var size = _.size(games);
                         if (size > 0) {
                             games.forEach(function loop(game) { 
                                 if(loop.stop){ return; } %>
                                 <% if(_.isEqual(game.get("group"), 1)){ %>
-                                    <a href="/stat/game/<%= game.get("game_id") %>" style="color: rgb(241,102,57);">
-                                        <div class="row" style="margin-bottom: 0;">
+                                    <a href="/stat/game/<%= game.get("game_id") %>" class="colormedark">
+                                        <div class="row colormybackground givesomespace-top" style="margin-bottom: 0;">
                                             <p class="text-center text-uppercase" style="margin-bottom: 5px;"><strong>Nästa match</strong></p>
                                         </div>
-                                        <div class="row">
+                                        <div class="row colormybackground givesomespace-bottom">
                                             <div class="col-xs-4 col-md-2" style="padding-right: 5px;">
-                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
                                             </div>
                                             <div class="col-xs-4 col-md-8">
                                                 <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;">Runda <strong><%= game.get("round") %></strong></p>
                                                 <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;"><small><%= game.get("home").get("nickname") %> vs. <%= game.get("away").get("nickname") %></small></p>
                                             </div>
                                             <div class="col-xs-4 col-md-2" style="padding-left: 5px;">
-                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
                                             </div>
                                         </div>
                                     </a>
                                     <% loop.stop = true;
                                 }
                             }) %>
-                            <hr> 
                         <% } %>
                     <% } %>
                     <% if(typeof(teams) !== 'undefined'){ %>
@@ -137,34 +102,32 @@
                 </div>
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/2'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
-                    <hr>
                     <% if(typeof(games) !== 'undefined'){
                         var size = _.size(games);
                         if (size > 0) {
                             games.forEach(function loop(game) { 
                                 if(loop.stop){ return; } %>
                                 <% if(_.isEqual(game.get("group"), 2)){ %>
-                                    <a href="/stat/game/<%= game.get("game_id") %>" style="color: rgb(241,102,57);">
-                                        <div class="row" style="margin-bottom: 0;">
+                                    <a href="/stat/game/<%= game.get("game_id") %>" class="colormedark">
+                                        <div class="row colormybackground givesomespace-top" style="margin-bottom: 0;">
                                             <p class="text-center text-uppercase" style="margin-bottom: 5px;"><strong>Nästa match</strong></p>
                                         </div>
-                                        <div class="row">
+                                        <div class="row colormybackground givesomespace-bottom">
                                             <div class="col-xs-4 col-md-2" style="padding-right: 5px;">
-                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
                                             </div>
                                             <div class="col-xs-4 col-md-8">
                                                 <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;">Runda <strong><%= game.get("round") %></strong></p>
                                                 <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;"><small><%= game.get("home").get("nickname") %> vs. <%= game.get("away").get("nickname") %></small></p>
                                             </div>
                                             <div class="col-xs-4 col-md-2" style="padding-left: 5px;">
-                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
                                             </div>
                                         </div>
                                     </a>
                                     <% loop.stop = true;
                                 }
                             }) %>
-                            <hr> 
                         <% } %>
                     <% } %>
                     <% if(typeof(teams) !== 'undefined'){ %>
@@ -195,34 +158,32 @@
                 </div>
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/3'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
-                    <hr>
                     <% if(typeof(games) !== 'undefined'){
                         var size = _.size(games);
                         if (size > 0) {
                             games.forEach(function loop(game) { 
                                 if(loop.stop){ return; } %>
                                 <% if(_.isEqual(game.get("group"), 3)){ %>
-                                    <a href="/stat/game/<%= game.get("game_id") %>" style="color: rgb(241,102,57);">
-                                        <div class="row" style="margin-bottom: 0;">
+                                    <a href="/stat/game/<%= game.get("game_id") %>" class="colormedark">
+                                        <div class="row colormybackground givesomespace-top" style="margin-bottom: 0;">
                                             <p class="text-center text-uppercase" style="margin-bottom: 5px;"><strong>Nästa match</strong></p>
                                         </div>
-                                        <div class="row">
+                                        <div class="row colormybackground givesomespace-bottom">
                                             <div class="col-xs-4 col-md-2" style="padding-right: 5px;">
-                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
                                             </div>
                                             <div class="col-xs-4 col-md-8">
                                                 <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;">Runda <strong><%= game.get("round") %></strong></p>
                                                 <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;"><small><%= game.get("home").get("nickname") %> vs. <%= game.get("away").get("nickname") %></small></p>
                                             </div>
                                             <div class="col-xs-4 col-md-2" style="padding-left: 5px;">
-                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
                                             </div>
                                         </div>
                                     </a>
                                     <% loop.stop = true;
                                 }
                             }) %>
-                            <hr> 
                         <% } %>
                     <% } %>
                     <% if(typeof(teams) !== 'undefined'){%>
@@ -253,34 +214,32 @@
                 </div>
                 <div class="panel-body">
                     <button  onclick="window.location.href='/games/group/4'" class="btn btn-hg btn-inverse btn-wide btn-block text-uppercase">Se matcher</button>
-                    <hr>
                     <% if(typeof(games) !== 'undefined'){
                         var size = _.size(games);
                         if (size > 0) {
                             games.forEach(function loop(game) { 
                                 if(loop.stop){ return; } %>
                                 <% if(_.isEqual(game.get("group"), 4)){ %>
-                                    <a href="/stat/game/<%= game.get("game_id") %>" style="color: rgb(241,102,57);">
-                                        <div class="row" style="margin-bottom: 0;">
+                                    <a href="/stat/game/<%= game.get("game_id") %>" class="colormedark">
+                                        <div class="row colormybackground givesomespace-top" style="margin-bottom: 0;">
                                             <p class="text-center text-uppercase" style="margin-bottom: 5px;"><strong>Nästa match</strong></p>
                                         </div>
-                                        <div class="row">
+                                        <div class="row colormybackground givesomespace-bottom">
                                             <div class="col-xs-4 col-md-2" style="padding-right: 5px;">
-                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                                <img src="<%= game.get("home").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail" alt="Home Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
                                             </div>
                                             <div class="col-xs-4 col-md-8">
                                                 <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;">Runda <strong><%= game.get("round") %></strong></p>
                                                 <p class="text-center text-uppercase" style="margin-bottom: 0; line-height: 1;"><small><%= game.get("home").get("nickname") %> vs. <%= game.get("away").get("nickname") %></small></p>
                                             </div>
                                             <div class="col-xs-4 col-md-2" style="padding-left: 5px;">
-                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
+                                                <img src="<%= game.get("away").get("nhlTeam").get("logo").url() %>" class="img-responsive img-thumbnail" alt="Away Team Logo" style="min-height:40px;height:40px; margin: 0 auto;">
                                             </div>
                                         </div>
                                     </a>
                                     <% loop.stop = true;
                                 }
                             }) %>
-                            <hr> 
                         <% } %>
                     <% } %>
                     <% if(typeof(teams) !== 'undefined'){ %>

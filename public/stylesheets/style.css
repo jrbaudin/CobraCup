@@ -100,3 +100,24 @@ a:focus {
     vertical-align: middle;
     float: none;
 }
+
+.colormedark {
+  color: #2C3E50 !important;
+}
+
+.colormybackground {
+  background-color: #ECF0F1 !important;
+}
+
+.givesomespace-top {
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px;
+  border-top-style: solid;
+}
+.givesomespace-bottom {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px;
+  border-bottom-style: solid;
+}

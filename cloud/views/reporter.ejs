@@ -26,37 +26,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/"><i class="fa fa-cube"></i> Hub <span style="font-family: 'Kaushan Script', cursive;">2016</span></a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="/">Lag</a></li>
-            <li><a href="/signup">Anmäl lag</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="/stat/league">Ligan</a></li>
-                <li><a href="/stat/divisions">Divisioner</a></li>
-                <li><a href="/stat/playerstats">Spelarstatistik</a></li>
-            </ul>
-        </li>
-        <li><a href="/stat/history">Statistik</a></li>
-        <li><a href="/games">Matcher</a></li>
-        <li><a href="/feed"><mark>Live</mark></a></li>
-        <li><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a></li>
-    </ul>
-</div>
-</div>
-</nav>
+    <% include _navigation %>
 <div class="container">
     <% if(typeof(flashInfo) !== 'undefined'){ %>
         <div class="alert alert-success alert-dismissible" role="alert">
@@ -90,7 +60,8 @@
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
-        <i class="fa fa-exclamation-triangle"></i> Ett eller flera fält saknar värde.
+        <i class="fa fa-exclamation-triangle"></i> Ett eller flera fält saknar värde eller är inkorrekt.
+        <p id="error-msg" name="error-msg"></p>
     </div>
 <% if(typeof(game) !== 'undefined'){
 
@@ -425,7 +396,7 @@
                             <% } %>
                         </div>
                         <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
-                        <div class="form-group col-md-2 col-xs-9">
+                        <div class="form-group col-md-2 col-xs-9"  id="fc_home_captain_goals_ot">
                             <% if(played){ %>
                             <input type="text" class="form-control text-center readonlycolor" id="home_captain_goals_ot" name="home_captain_goals_ot" placeholder="0" value="<%= home_captain_goals_ot %>" readonly>
                             <% } else { %>
@@ -518,7 +489,7 @@
                             <% } %>
                         </div>
                         <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
-                        <div class="form-group col-md-2 col-xs-9">
+                        <div class="form-group col-md-2 col-xs-9" id="fc_home_lieutenant_goals_ot">
                             <% if(played){ %>
                             <input type="text" class="form-control text-center readonlycolor" id="home_lieutenant_goals_ot" name="home_lieutenant_goals_ot" placeholder="0" value="<%= home_lieutenant_goals_ot %>" readonly>
                             <% } else { %>
@@ -725,7 +696,7 @@
                             <% } %>
                         </div>
                         <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
-                        <div class="form-group col-md-2 col-xs-9">
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_captain_goals_ot">
                             <% if(played){ %>
                             <input type="text" class="form-control text-center readonlycolor" id="away_captain_goals_ot" name="away_captain_goals_ot" placeholder="0" value="<%= away_captain_goals_ot %>" readonly>
                             <% } else { %>
@@ -818,7 +789,7 @@
                             <% } %>
                         </div>
                         <span class="hidden-md hidden-lg col-xs-3"><small>OT</small></span>
-                        <div class="form-group col-md-2 col-xs-9">
+                        <div class="form-group col-md-2 col-xs-9" id="fc_away_lieutenant_goals_ot">
                             <% if(played){ %>
                             <input type="text" class="form-control text-center readonlycolor" id="away_lieutenant_goals_ot" name="away_lieutenant_goals_ot" placeholder="0" value="<%= away_lieutenant_goals_ot %>" readonly>
                             <% } else { %>
@@ -1025,11 +996,19 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        var msg_array = [];
 
         $( "#gameform" ).submit(function( event ) {
             //alert( "Handler for .submit() called." );
             $('#spinnericon').show();
             if (!validateFields()) {
+                var str_message = "";
+                var i = 1;
+                msg_array.forEach(function(message){
+                    str_message = str_message + i + ": " + message + ". ";
+                    i = i+1;
+                });
+                $('#error-msg').text(str_message);
                 $('#missing-value-msg').show();
                 $('#spinnericon').hide();
                 event.preventDefault();
@@ -1224,6 +1203,16 @@
             if (!isFieldOK($('#away_lieutenant_fights').val())) {
                 $('#fc_away_lieutenant_fights').addClass("has-error");
                 formOK = false;
+            }
+
+            if (isOvertimeGoalsMoreThanOne()) {
+                formOK = false;
+                msg_array.push("Det är fler än ett övertidsmål rapporterat");
+            }
+
+            if (!isShotsOK()) {
+                formOK = false;
+                msg_array.push("Det är färre skott än mål rapporterat");
             }
 
             return formOK;
@@ -1870,9 +1859,53 @@
             var temp_overtime_goals =     parseInt(temp_home_captain_goals_ot) + 
                                           parseInt(temp_home_lieutenant_goals_ot) + 
                                           parseInt(temp_away_captain_goals_ot) + 
-                                          parseInt(temp_away_lieutenant_goals_ot);                        
-            var overtime_goals_status = temp_overtime_goals > 1;
-            return overtime_goals_status;
+                                          parseInt(temp_away_lieutenant_goals_ot);
+
+            var status = temp_overtime_goals > 1;
+
+            if (status) {
+                $('#fc_home_captain_goals_ot').addClass("has-error");
+                $('#fc_home_captain_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_home_lieutenant_goals_ot').addClass("has-error");
+                $('#fc_home_lieutenant_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_away_captain_goals_ot').addClass("has-error");
+                $('#fc_away_captain_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_away_lieutenant_goals_ot').addClass("has-error");
+                $('#fc_away_lieutenant_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+            } else {
+                $('#fc_home_captain_goals_ot').removeClass("has-error");
+                $('#fc_home_captain_goals_ot').attr("title", "OK");
+                $('#fc_home_lieutenant_goals_ot').removeClass("has-error");
+                $('#fc_home_lieutenant_goals_ot').attr("title", "OK");
+                $('#fc_away_captain_goals_ot').removeClass("has-error");
+                $('#fc_away_captain_goals_ot').attr("title", "OK");
+                $('#fc_away_lieutenant_goals_ot').removeClass("has-error");
+                $('#fc_away_lieutenant_goals_ot').attr("title", "OK");
+            }
+
+            return status;
+        };
+
+        function isShotsOK() {
+            var status = true; 
+            var home_status = getIsHomeShotsCorrect();
+            var away_status = getIsAwayShotsCorrect();
+
+            if (!home_status || !away_status) {
+                status = false;
+            }
+
+            if (!home_status) {
+                $('#home_shots_sum').addClass("error-stat");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+
+            if (!away_status) {
+                $('#away_shots_sum').addClass("error-stat");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+
+            return status;
         };
 
         /** HOME CAPTAIN GOALS AND ASSISTS **/
@@ -1891,7 +1924,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#home_captain_goals_p1').val())) {
                 $('#fc_home_captain_goals_p1').removeClass("has-error");
@@ -1915,7 +1948,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#home_captain_goals_p2').val())) {
                 $('#fc_home_captain_goals_p2').removeClass("has-error");
@@ -1939,7 +1972,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#home_captain_goals_p3').val())) {
                 $('#fc_home_captain_goals_p3').removeClass("has-error");
@@ -1956,15 +1989,9 @@
             } else {
                 $('#overtime-label').hide();
             }
-            /*
-            if (isOvertimeGoalsMoreThanOne()) {
-                $('#home_lieutenant_assists_sum').addClass("error-stat");
-                $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
-            } else {
-                $('#home_lieutenant_assists_sum').removeClass("error-stat");
-                $('#home_lieutenant_assists_sum').attr("title", "OK");
-            }
-            */
+            
+            isOvertimeGoalsMoreThanOne();
+            
             if (getIsHomeLieutenantAssistsCorrect()) {
                 $('#home_lieutenant_assists_sum').addClass("error-stat");
                 $('#home_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
@@ -1977,7 +2004,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
         });
         $('#home_captain_assists_p1').on('input', function() {
@@ -2063,7 +2090,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#home_lieutenant_goals_p1').val())) {
                 $('#fc_home_lieutenant_goals_p1').removeClass("has-error");
@@ -2087,7 +2114,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#home_lieutenant_goals_p2').val())) {
                 $('#fc_home_lieutenant_goals_p2').removeClass("has-error");
@@ -2111,7 +2138,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#home_lieutenant_goals_p3').val())) {
                 $('#fc_home_lieutenant_goals_p3').removeClass("has-error");
@@ -2128,6 +2155,9 @@
             } else {
                 $('#overtime-label').hide();
             }
+
+            isOvertimeGoalsMoreThanOne();
+
             if (getIsHomeCaptainAssistsCorrect()) {
                 $('#home_captain_assists_sum').addClass("error-stat");
                 $('#home_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
@@ -2140,7 +2170,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
         });
 
@@ -2227,7 +2257,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#away_captain_goals_p1').val())) {
                 $('#fc_away_captain_goals_p1').removeClass("has-error");
@@ -2251,7 +2281,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#away_captain_goals_p2').val())) {
                 $('#fc_away_captain_goals_p2').removeClass("has-error");
@@ -2275,7 +2305,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#away_captain_goals_p3').val())) {
                 $('#fc_away_captain_goals_p3').removeClass("has-error");
@@ -2292,6 +2322,9 @@
             } else {
                 $('#overtime-label').hide();
             }
+
+            isOvertimeGoalsMoreThanOne();
+
             if (getIsAwayLieutenantAssistsCorrect()) {
                 $('#away_lieutenant_assists_sum').addClass("error-stat");
                 $('#away_lieutenant_assists_sum').attr("title", "Fler assists för assisterande än kaptenens mål");
@@ -2304,7 +2337,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
         });
 
@@ -2391,7 +2424,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#away_lieutenant_goals_p1').val())) {
                 $('#fc_away_lieutenant_goals_p1').removeClass("has-error");
@@ -2415,7 +2448,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#away_lieutenant_goals_p2').val())) {
                 $('#fc_away_lieutenant_goals_p2').removeClass("has-error");
@@ -2439,7 +2472,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#away_lieutenant_goals_p3').val())) {
                 $('#fc_away_lieutenant_goals_p3').removeClass("has-error");
@@ -2456,6 +2489,9 @@
             } else {
                 $('#overtime-label').hide();
             }
+
+            isOvertimeGoalsMoreThanOne();
+
             if (getIsAwayCaptainAssistsCorrect()) {
                 $('#away_captain_assists_sum').addClass("error-stat");
                 $('#away_captain_assists_sum').attr("title", "Fler assists för kaptenen än assisterandes mål");
@@ -2468,7 +2504,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
         });
 
@@ -2547,7 +2583,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#home_shots_p1').val())) {
                 $('#fc_home_shots_p1').removeClass("has-error");
@@ -2562,7 +2598,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#home_shots_p2').val())) {
                 $('#fc_home_shots_p2').removeClass("has-error");
@@ -2577,7 +2613,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#home_shots_p3').val())) {
                 $('#fc_home_shots_p3').removeClass("has-error");
@@ -2592,7 +2628,7 @@
                 $('#home_shots_sum').attr("title", "OK");
             } else {
                 $('#home_shots_sum').addClass("error-stat");
-                $('#home_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isHomeOvertimeStatsOK()) {
                 $('#fc_home_shots_ot').removeClass("has-warning");
@@ -2647,7 +2683,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#away_shots_p1').val())) {
                 $('#fc_away_shots_p1').removeClass("has-error");
@@ -2662,7 +2698,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#away_shots_p2').val())) {
                 $('#fc_away_shots_p2').removeClass("has-error");
@@ -2677,7 +2713,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isFieldOK($('#away_shots_p3').val())) {
                 $('#fc_away_shots_p3').removeClass("has-error");
@@ -2692,7 +2728,7 @@
                 $('#away_shots_sum').attr("title", "OK");
             } else {
                 $('#away_shots_sum').addClass("error-stat");
-                $('#away_shots_sum').attr("title", "Fler skott än mål gjorda");
+                $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
             if (isAwayOvertimeStatsOK()) {
                 $('#fc_away_shots_ot').removeClass("has-warning");
