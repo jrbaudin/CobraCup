@@ -1029,11 +1029,11 @@
                         <div class="col-md-12">
                             <p class="text-center">
                                 <% if(played) { %>
-                                Resultat för denna match uppdaterades
-                                <br>
-                                <span class="text-capitalize"><strong><%= formatDateAndTime(game[0].get("updatedAt")) %></strong></span>
+                                    Resultat för denna match uppdaterades
+                                    <br>
+                                    <span class="text-capitalize"><strong><%= formatDateAndTime(game[0].get("updatedAt")) %></strong></span>
                                 <% } else { %>
-                                Denna match har inte rapporterats ännu
+                                    Denna match har inte rapporterats ännu
                                 <% } %>
                             </p>
                         </div>
@@ -1315,11 +1315,13 @@
           var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
           var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
           var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+          var temp_home_captain_goals_so = $('#home_captain_goals_so').val();
 
           var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
           var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
           var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
           var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+          var temp_home_lieutenant_goals_so = $('#home_lieutenant_goals_so').val();
 
           if (typeof(temp_home_captain_goals_p1) === 'undefined' || isEmpty(String(temp_home_captain_goals_p1))) {
               temp_home_captain_goals_p1 = 0;
@@ -1332,6 +1334,9 @@
           }
           if (typeof(temp_home_captain_goals_ot) === 'undefined' || isEmpty(String(temp_home_captain_goals_ot))) {
               temp_home_captain_goals_ot = 0;
+          }
+          if (typeof(temp_home_captain_goals_so) === 'undefined' || isEmpty(String(temp_home_captain_goals_so))) {
+              temp_home_captain_goals_so = 0;
           }
 
           if (typeof(temp_home_lieutenant_goals_p1) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_p1))) {
@@ -1346,16 +1351,21 @@
           if (typeof(temp_home_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_ot))) {
               temp_home_lieutenant_goals_ot = 0;
           }
+          if (typeof(temp_home_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_so))) {
+              temp_home_lieutenant_goals_so = 0;
+          }
 
-          var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
-          parseInt(temp_home_captain_goals_p2) + 
-          parseInt(temp_home_captain_goals_p3) + 
-          parseInt(temp_home_captain_goals_ot);
+            var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
+                                            parseInt(temp_home_captain_goals_p2) + 
+                                            parseInt(temp_home_captain_goals_p3) + 
+                                            parseInt(temp_home_captain_goals_ot) +
+                                            parseInt(temp_home_captain_goals_so);
 
-          var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
-          parseInt(temp_home_lieutenant_goals_p2) + 
-          parseInt(temp_home_lieutenant_goals_p3) + 
-          parseInt(temp_home_lieutenant_goals_ot);
+            var temp_home_lieutenant_goals =    parseInt(temp_home_lieutenant_goals_p1) + 
+                                                parseInt(temp_home_lieutenant_goals_p2) + 
+                                                parseInt(temp_home_lieutenant_goals_p3) + 
+                                                parseInt(temp_home_lieutenant_goals_ot) +
+                                                parseInt(temp_home_lieutenant_goals_so);
 
           var temp_home_goals_total = parseInt(temp_home_captain_goals) + parseInt(temp_home_lieutenant_goals);
 
@@ -1367,6 +1377,7 @@
           var temp_home_captain_goals_p2 = $('#home_captain_goals_p2').val();
           var temp_home_captain_goals_p3 = $('#home_captain_goals_p3').val();
           var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+          var temp_home_captain_goals_so = $('#home_captain_goals_so').val();
 
           if (typeof(temp_home_captain_goals_p1) === 'undefined' || isEmpty(String(temp_home_captain_goals_p1))) {
               temp_home_captain_goals_p1 = 0;
@@ -1380,11 +1391,15 @@
           if (typeof(temp_home_captain_goals_ot) === 'undefined' || isEmpty(String(temp_home_captain_goals_ot))) {
               temp_home_captain_goals_ot = 0;
           }
+          if (typeof(temp_home_captain_goals_so) === 'undefined' || isEmpty(String(temp_home_captain_goals_so))) {
+              temp_home_captain_goals_so = 0;
+          }
 
-          var temp_home_captain_goals =   parseInt(temp_home_captain_goals_p1) + 
-          parseInt(temp_home_captain_goals_p2) + 
-          parseInt(temp_home_captain_goals_p3) + 
-          parseInt(temp_home_captain_goals_ot);
+          var temp_home_captain_goals = parseInt(temp_home_captain_goals_p1) + 
+                                        parseInt(temp_home_captain_goals_p2) + 
+                                        parseInt(temp_home_captain_goals_p3) + 
+                                        parseInt(temp_home_captain_goals_ot) +
+                                        parseInt(temp_home_captain_goals_so);
 
           if (temp_home_captain_goals === 0) {
               temp_home_captain_goals = "";
@@ -1425,10 +1440,11 @@
         };
 
         function getHomeLieutenantGoals () {
-          var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
-          var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
-          var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
-          var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+            var temp_home_lieutenant_goals_p1 = $('#home_lieutenant_goals_p1').val();
+            var temp_home_lieutenant_goals_p2 = $('#home_lieutenant_goals_p2').val();
+            var temp_home_lieutenant_goals_p3 = $('#home_lieutenant_goals_p3').val();
+            var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+            var temp_home_lieutenant_goals_so = $('#home_lieutenant_goals_so').val();
 
           if (typeof(temp_home_lieutenant_goals_p1) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_p1))) {
               temp_home_lieutenant_goals_p1 = 0;
@@ -1442,11 +1458,15 @@
           if (typeof(temp_home_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_ot))) {
               temp_home_lieutenant_goals_ot = 0;
           }
+          if (typeof(temp_home_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_so))) {
+              temp_home_lieutenant_goals_so = 0;
+          }
 
-          var temp_home_lieutenant_goals =   parseInt(temp_home_lieutenant_goals_p1) + 
-          parseInt(temp_home_lieutenant_goals_p2) + 
-          parseInt(temp_home_lieutenant_goals_p3) + 
-          parseInt(temp_home_lieutenant_goals_ot);
+            var temp_home_lieutenant_goals =  parseInt(temp_home_lieutenant_goals_p1) + 
+                                              parseInt(temp_home_lieutenant_goals_p2) + 
+                                              parseInt(temp_home_lieutenant_goals_p3) + 
+                                              parseInt(temp_home_lieutenant_goals_ot) +
+                                              parseInt(temp_home_lieutenant_goals_so);
 
           if (temp_home_lieutenant_goals === 0) {
               temp_home_lieutenant_goals = "";
@@ -1505,10 +1525,24 @@
               temp_home_shots_ot = 0;
           }
 
-          var temp_home_shots =   parseInt(temp_home_shots_p1) + 
-          parseInt(temp_home_shots_p2) + 
-          parseInt(temp_home_shots_p3) + 
-          parseInt(temp_home_shots_ot);
+          var temp_home_shots = parseInt(temp_home_shots_p1) + 
+                                parseInt(temp_home_shots_p2) + 
+                                parseInt(temp_home_shots_p3) + 
+                                parseInt(temp_home_shots_ot);
+
+          var temp_home_captain_goals_so = $('#home_captain_goals_so').val();
+          var temp_home_lieutenant_goals_so = $('#home_lieutenant_goals_so').val();
+
+          if (typeof(temp_home_captain_goals_so) === 'undefined' || isEmpty(String(temp_home_captain_goals_so))) {
+              temp_home_captain_goals_so = 0;
+          }
+          if (typeof(temp_home_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_so))) {
+              temp_home_lieutenant_goals_so = 0;
+          }
+          if (temp_home_captain_goals_so > 0 || temp_home_lieutenant_goals_so > 0) {
+              temp_home_shots = temp_home_shots + 1;
+          }          
+
           if (temp_home_shots === 0) {
               temp_home_shots = "";
           }
@@ -1552,11 +1586,13 @@
           var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
           var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
           var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+          var temp_away_captain_goals_so = $('#away_captain_goals_so').val();
 
           var temp_away_lieutenant_goals_p1 = $('#away_lieutenant_goals_p1').val();
           var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
           var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
           var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+          var temp_away_lieutenant_goals_so = $('#away_lieutenant_goals_so').val();
 
           if (typeof(temp_away_captain_goals_p1) === 'undefined' || isEmpty(String(temp_away_captain_goals_p1))) {
               temp_away_captain_goals_p1 = 0;
@@ -1569,6 +1605,9 @@
           }
           if (typeof(temp_away_captain_goals_ot) === 'undefined' || isEmpty(String(temp_away_captain_goals_ot))) {
               temp_away_captain_goals_ot = 0;
+          }
+          if (typeof(temp_away_captain_goals_so) === 'undefined' || isEmpty(String(temp_away_captain_goals_so))) {
+              temp_away_captain_goals_so = 0;
           }
 
           if (typeof(temp_away_lieutenant_goals_p1) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_p1))) {
@@ -1583,16 +1622,21 @@
           if (typeof(temp_away_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_ot))) {
               temp_away_lieutenant_goals_ot = 0;
           }
+          if (typeof(temp_away_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_so))) {
+              temp_away_lieutenant_goals_so = 0;
+          }
 
           var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
           parseInt(temp_away_captain_goals_p2) + 
           parseInt(temp_away_captain_goals_p3) + 
-          parseInt(temp_away_captain_goals_ot);
+          parseInt(temp_away_captain_goals_ot) +
+          parseInt(temp_away_captain_goals_so);
 
           var temp_away_lieutenant_goals =    parseInt(temp_away_lieutenant_goals_p1) + 
           parseInt(temp_away_lieutenant_goals_p2) + 
           parseInt(temp_away_lieutenant_goals_p3) + 
-          parseInt(temp_away_lieutenant_goals_ot);
+          parseInt(temp_away_lieutenant_goals_ot) +
+          parseInt(temp_away_lieutenant_goals_so);
 
           var temp_away_goals_total = parseInt(temp_away_captain_goals) + parseInt(temp_away_lieutenant_goals);
 
@@ -1604,6 +1648,7 @@
           var temp_away_captain_goals_p2 = $('#away_captain_goals_p2').val();
           var temp_away_captain_goals_p3 = $('#away_captain_goals_p3').val();
           var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+          var temp_away_captain_goals_so = $('#away_captain_goals_so').val();
 
           if (typeof(temp_away_captain_goals_p1) === 'undefined' || isEmpty(String(temp_away_captain_goals_p1))) {
               temp_away_captain_goals_p1 = 0;
@@ -1617,11 +1662,15 @@
           if (typeof(temp_away_captain_goals_ot) === 'undefined' || isEmpty(String(temp_away_captain_goals_ot))) {
               temp_away_captain_goals_ot = 0;
           }
+          if (typeof(temp_away_captain_goals_so) === 'undefined' || isEmpty(String(temp_away_captain_goals_so))) {
+              temp_away_captain_goals_so = 0;
+          }
 
-          var temp_away_captain_goals =   parseInt(temp_away_captain_goals_p1) + 
-          parseInt(temp_away_captain_goals_p2) + 
-          parseInt(temp_away_captain_goals_p3) + 
-          parseInt(temp_away_captain_goals_ot);
+          var temp_away_captain_goals =     parseInt(temp_away_captain_goals_p1) + 
+                                            parseInt(temp_away_captain_goals_p2) + 
+                                            parseInt(temp_away_captain_goals_p3) + 
+                                            parseInt(temp_away_captain_goals_ot) +
+                                            parseInt(temp_away_captain_goals_so);
 
           if (temp_away_captain_goals === 0) {
               temp_away_captain_goals = "";
@@ -1649,10 +1698,10 @@
               temp_away_captain_assists_ot = 0;
           }
 
-          var temp_away_captain_assists =   parseInt(temp_away_captain_assists_p1) + 
-          parseInt(temp_away_captain_assists_p2) + 
-          parseInt(temp_away_captain_assists_p3) + 
-          parseInt(temp_away_captain_assists_ot);
+          var temp_away_captain_assists = parseInt(temp_away_captain_assists_p1) + 
+                                          parseInt(temp_away_captain_assists_p2) + 
+                                          parseInt(temp_away_captain_assists_p3) + 
+                                          parseInt(temp_away_captain_assists_ot);
 
           if (temp_away_captain_assists === 0) {
               temp_away_captain_assists = "";
@@ -1666,6 +1715,7 @@
           var temp_away_lieutenant_goals_p2 = $('#away_lieutenant_goals_p2').val();
           var temp_away_lieutenant_goals_p3 = $('#away_lieutenant_goals_p3').val();
           var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+          var temp_away_lieutenant_goals_so = $('#away_lieutenant_goals_so').val();
 
           if (typeof(temp_away_lieutenant_goals_p1) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_p1))) {
               temp_away_lieutenant_goals_p1 = 0;
@@ -1679,11 +1729,15 @@
           if (typeof(temp_away_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_ot))) {
               temp_away_lieutenant_goals_ot = 0;
           }
+          if (typeof(temp_away_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_so))) {
+              temp_away_lieutenant_goals_so = 0;
+          }
 
-          var temp_away_lieutenant_goals =   parseInt(temp_away_lieutenant_goals_p1) + 
-          parseInt(temp_away_lieutenant_goals_p2) + 
-          parseInt(temp_away_lieutenant_goals_p3) + 
-          parseInt(temp_away_lieutenant_goals_ot);
+          var temp_away_lieutenant_goals =  parseInt(temp_away_lieutenant_goals_p1) + 
+                                            parseInt(temp_away_lieutenant_goals_p2) + 
+                                            parseInt(temp_away_lieutenant_goals_p3) + 
+                                            parseInt(temp_away_lieutenant_goals_ot) +
+                                            parseInt(temp_away_lieutenant_goals_so);
 
           if (temp_away_lieutenant_goals === 0) {
               temp_away_lieutenant_goals = "";
@@ -1742,10 +1796,24 @@
                 temp_away_shots_ot = 0;
             }
 
-            var temp_away_shots =   parseInt(temp_away_shots_p1) + 
-            parseInt(temp_away_shots_p2) + 
-            parseInt(temp_away_shots_p3) + 
-            parseInt(temp_away_shots_ot);
+            var temp_away_captain_goals_so = $('#away_captain_goals_so').val();
+            var temp_away_lieutenant_goals_so = $('#away_lieutenant_goals_so').val();
+            if (typeof(temp_away_captain_goals_so) === 'undefined' || isEmpty(String(temp_away_captain_goals_so))) {
+                temp_away_captain_goals_so = 0;
+            }
+            if (typeof(temp_away_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_so))) {
+                temp_away_lieutenant_goals_so = 0;
+            }
+
+            var temp_away_shots = parseInt(temp_away_shots_p1) + 
+                                  parseInt(temp_away_shots_p2) + 
+                                  parseInt(temp_away_shots_p3) + 
+                                  parseInt(temp_away_shots_ot);
+
+            if (temp_away_captain_goals_so > 0 || temp_away_lieutenant_goals_so > 0) {
+                temp_away_shots = temp_away_shots + 1;
+            }
+
             if (temp_away_shots === 0) {
                 temp_away_shots = "";
             }
@@ -1785,8 +1853,14 @@
           var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
           var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
 
+          var temp_home_captain_goals_so = $('#home_captain_goals_so').val();
+          var temp_home_lieutenant_goals_so = $('#home_lieutenant_goals_so').val();
+
           var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
           var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+
+          var temp_away_captain_goals_so = $('#away_captain_goals_so').val();
+          var temp_away_lieutenant_goals_so = $('#away_lieutenant_goals_so').val();
 
           if (typeof(temp_home_captain_goals_ot) === 'undefined' || isEmpty(String(temp_home_captain_goals_ot))) {
               temp_home_captain_goals_ot = 0;
@@ -1800,11 +1874,27 @@
           if (typeof(temp_away_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_ot))) {
               temp_away_lieutenant_goals_ot = 0;
           }
+          if (typeof(temp_home_captain_goals_so) === 'undefined' || isEmpty(String(temp_home_captain_goals_so))) {
+              temp_home_captain_goals_so = 0;
+          }
+          if (typeof(temp_home_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_so))) {
+              temp_home_lieutenant_goals_so = 0;
+          }
+          if (typeof(temp_away_captain_goals_so) === 'undefined' || isEmpty(String(temp_away_captain_goals_so))) {
+              temp_away_captain_goals_so = 0;
+          }
+          if (typeof(temp_away_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_so))) {
+              temp_away_lieutenant_goals_so = 0;
+          }
 
           var temp_overtime_goals =     parseInt(temp_home_captain_goals_ot) + 
                                         parseInt(temp_home_lieutenant_goals_ot) + 
                                         parseInt(temp_away_captain_goals_ot) + 
-                                        parseInt(temp_away_lieutenant_goals_ot);
+                                        parseInt(temp_away_lieutenant_goals_ot) +
+                                        parseInt(temp_home_captain_goals_so) + 
+                                        parseInt(temp_home_lieutenant_goals_so) + 
+                                        parseInt(temp_away_captain_goals_so) + 
+                                        parseInt(temp_away_lieutenant_goals_so);
           var overtime_status = temp_overtime_goals > 0;
 
           return overtime_status;
@@ -1889,6 +1979,8 @@
             var temp_away_shots = getAwayShots();
             var temp_away_goals = getAwayGoals();
 
+            if (true) {};
+
             if (typeof(temp_away_shots) === 'undefined' || isEmpty(String(temp_away_shots))) {
                 temp_away_shots = 0;
             }
@@ -1930,28 +2022,48 @@
 
         function isOvertimeGoalsMoreThanOne () {
             var temp_home_captain_goals_ot = $('#home_captain_goals_ot').val();
+            var temp_home_captain_goals_so = $('#home_captain_goals_so').val();
             var temp_home_lieutenant_goals_ot = $('#home_lieutenant_goals_ot').val();
+            var temp_home_lieutenant_goals_so = $('#home_lieutenant_goals_so').val();
 
             var temp_away_captain_goals_ot = $('#away_captain_goals_ot').val();
+            var temp_away_captain_goals_so = $('#away_captain_goals_so').val();
             var temp_away_lieutenant_goals_ot = $('#away_lieutenant_goals_ot').val();
+            var temp_away_lieutenant_goals_so = $('#away_lieutenant_goals_so').val();
 
             if (typeof(temp_home_captain_goals_ot) === 'undefined' || isEmpty(String(temp_home_captain_goals_ot))) {
                 temp_home_captain_goals_ot = 0;
             }
+            if (typeof(temp_home_captain_goals_so) === 'undefined' || isEmpty(String(temp_home_captain_goals_so))) {
+                temp_home_captain_goals_so = 0;
+            }
             if (typeof(temp_home_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_ot))) {
                 temp_home_lieutenant_goals_ot = 0;
+            }
+            if (typeof(temp_home_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_home_lieutenant_goals_so))) {
+                temp_home_lieutenant_goals_so = 0;
             }
             if (typeof(temp_away_captain_goals_ot) === 'undefined' || isEmpty(String(temp_away_captain_goals_ot))) {
                 temp_away_captain_goals_ot = 0;
             }
+            if (typeof(temp_away_captain_goals_so) === 'undefined' || isEmpty(String(temp_away_captain_goals_so))) {
+                temp_away_captain_goals_so = 0;
+            }
             if (typeof(temp_away_lieutenant_goals_ot) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_ot))) {
                 temp_away_lieutenant_goals_ot = 0;
             }
+            if (typeof(temp_away_lieutenant_goals_so) === 'undefined' || isEmpty(String(temp_away_lieutenant_goals_so))) {
+                temp_away_lieutenant_goals_so = 0;
+            }
 
-            var temp_overtime_goals =     parseInt(temp_home_captain_goals_ot) + 
-                                          parseInt(temp_home_lieutenant_goals_ot) + 
-                                          parseInt(temp_away_captain_goals_ot) + 
-                                          parseInt(temp_away_lieutenant_goals_ot);
+            var temp_overtime_goals =   parseInt(temp_home_captain_goals_ot) +
+                                        parseInt(temp_home_captain_goals_so) + 
+                                        parseInt(temp_home_lieutenant_goals_ot) +
+                                        parseInt(temp_home_lieutenant_goals_so) +
+                                        parseInt(temp_away_captain_goals_ot) +
+                                        parseInt(temp_away_captain_goals_so) + 
+                                        parseInt(temp_away_lieutenant_goals_ot);
+                                        parseInt(temp_away_lieutenant_goals_so);
 
             var status = temp_overtime_goals > 1;
 
@@ -1964,6 +2076,14 @@
                 $('#fc_away_captain_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
                 $('#fc_away_lieutenant_goals_ot').addClass("has-error");
                 $('#fc_away_lieutenant_goals_ot').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_home_captain_goals_so').addClass("has-error");
+                $('#fc_home_captain_goals_so').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_home_lieutenant_goals_so').addClass("has-error");
+                $('#fc_home_lieutenant_goals_so').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_away_captain_goals_so').addClass("has-error");
+                $('#fc_away_captain_goals_so').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
+                $('#fc_away_lieutenant_goals_so').addClass("has-error");
+                $('#fc_away_lieutenant_goals_so').attr("title", "Det kan bara vara ett övertidsmål gjort i matchen");
             } else {
                 $('#fc_home_captain_goals_ot').removeClass("has-error");
                 $('#fc_home_captain_goals_ot').attr("title", "OK");
@@ -1973,6 +2093,14 @@
                 $('#fc_away_captain_goals_ot').attr("title", "OK");
                 $('#fc_away_lieutenant_goals_ot').removeClass("has-error");
                 $('#fc_away_lieutenant_goals_ot').attr("title", "OK");
+                $('#fc_home_captain_goals_so').removeClass("has-error");
+                $('#fc_home_captain_goals_so').attr("title", "OK");
+                $('#fc_home_lieutenant_goals_so').removeClass("has-error");
+                $('#fc_home_lieutenant_goals_so').attr("title", "OK");
+                $('#fc_away_captain_goals_so').removeClass("has-error");
+                $('#fc_away_captain_goals_so').attr("title", "OK");
+                $('#fc_away_lieutenant_goals_so').removeClass("has-error");
+                $('#fc_away_lieutenant_goals_so').attr("title", "OK");
             }
 
             return status;
@@ -2099,6 +2227,18 @@
                 $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
         });
+        $('#home_captain_goals_so').on('input', function() {
+            $('#home_captain_goals_sum').text(String(getHomeCaptainGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsOvertime()) {
+                $('#overtime-label').show();
+            } else {
+                $('#overtime-label').hide();
+            }
+            
+            isOvertimeGoalsMoreThanOne();
+        });
+
         $('#home_captain_assists_p1').on('input', function() {
             $('#home_captain_assists_sum').text(String(getHomeCaptainAssists()));
             if (getIsHomeCaptainAssistsCorrect()) {
@@ -2264,6 +2404,17 @@
                 $('#home_shots_sum').addClass("error-stat");
                 $('#home_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
+        });
+        $('#home_lieutenant_goals_so').on('input', function() {
+            $('#home_lieutenant_goals_sum').text(String(getHomeLieutenantGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsOvertime()) {
+                $('#overtime-label').show();
+            } else {
+                $('#overtime-label').hide();
+            }
+            
+            isOvertimeGoalsMoreThanOne();
         });
 
         $('#home_lieutenant_assists_p1').on('input', function() {
@@ -2432,6 +2583,18 @@
                 $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
         });
+        
+        $('#away_captain_goals_so').on('input', function() {
+            $('#away_captain_goals_sum').text(String(getAwayCaptainGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsOvertime()) {
+                $('#overtime-label').show();
+            } else {
+                $('#overtime-label').hide();
+            }
+            
+            isOvertimeGoalsMoreThanOne();
+        });
 
         $('#away_captain_assists_p1').on('input', function() {
             $('#away_captain_assists_sum').text(String(getAwayCaptainAssists()));
@@ -2598,6 +2761,18 @@
                 $('#away_shots_sum').addClass("error-stat");
                 $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
             }
+        });
+
+        $('#away_lieutenant_goals_so').on('input', function() {
+            $('#away_lieutenant_goals_sum').text(String(getAwayLieutenantGoals()));
+            $('#home_goals').val(String(getHomeGoals()));
+            if (getIsOvertime()) {
+                $('#overtime-label').show();
+            } else {
+                $('#overtime-label').hide();
+            }
+            
+            isOvertimeGoalsMoreThanOne();
         });
 
         $('#away_lieutenant_assists_p1').on('input', function() {
