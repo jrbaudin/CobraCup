@@ -2082,6 +2082,70 @@ Parse.Cloud.define("savePOGameResult", function(request, response) {
     return result[0].save();
 
   }).then(function(result){
+    console.log(result);
+
+    console.log("Updating Home Captain Playoff Stats ...");
+    //Home Captain
+    var h_c_id = home_stats.captain_id;
+    var h_c_goals = home_stats.captain_goals_total;
+    var h_c_assists = home_stats.captain_assists_total;
+    var h_c_fights = home_stats.captain_fights;
+
+    h_c_goals = h_c_goals.toString();
+    h_c_assists = h_c_assists.toString();
+    h_c_fights = h_c_fights.toString();
+
+    return Parse.Cloud.run('updatePlayoffPlayerStats', {player_id: h_c_id, goals: h_c_goals, assists: h_c_assists, fights: h_c_fights});
+
+  }).then(function(result){
+    console.log(result);
+
+    console.log("Updating Home Lieutenant Playoff Stats ...");
+    //Home Lieutenant
+    var h_l_id = home_stats.lieutenant_id;
+    var h_l_goals = home_stats.lieutenant_goals_total;
+    var h_l_assists = home_stats.lieutenant_assists_total;
+    var h_l_fights = home_stats.lieutenant_fights;
+
+    h_l_goals = h_l_goals.toString();
+    h_l_assists = h_l_assists.toString();
+    h_l_fights = h_l_fights.toString();
+
+    return Parse.Cloud.run('updatePlayoffPlayerStats', {player_id: h_l_id, goals: h_l_goals, assists: h_l_assists, fights: h_l_fights});
+
+  }).then(function(result){
+    console.log(result);
+
+    console.log("Updating Away Captain Playoff Stats ...");
+    //Away Captain
+    var a_c_id = away_stats.captain_id;
+    var a_c_goals = away_stats.captain_goals_total;
+    var a_c_assists = away_stats.captain_assists_total;
+    var a_c_fights = away_stats.captain_fights;
+
+    a_c_goals = a_c_goals.toString();
+    a_c_assists = a_c_assists.toString();
+    a_c_fights = a_c_fights.toString();
+
+    return Parse.Cloud.run('updatePlayoffPlayerStats', {player_id: a_c_id, goals: a_c_goals, assists: a_c_assists, fights: a_c_fights});
+
+  }).then(function(result){
+    console.log(result);
+
+    console.log("Updating Away Lieutenant Playoff Stats ...");
+    //Away Lieutenant
+    var a_l_id = away_stats.lieutenant_id;
+    var a_l_goals = away_stats.lieutenant_goals_total;
+    var a_l_assists = away_stats.lieutenant_assists_total;
+    var a_l_fights = away_stats.lieutenant_fights;
+
+    a_l_goals = a_l_goals.toString();
+    a_l_assists = a_l_assists.toString();
+    a_l_fights = a_l_fights.toString();
+
+    return Parse.Cloud.run('updatePlayoffPlayerStats', {player_id: a_l_id, goals: a_l_goals, assists: a_l_assists, fights: a_l_fights});
+
+  }).then(function(result){
     response.success("Saved result for Playoff Game with id '" + request.params.game_id + "'");
   }, function(error) {
     response.error("Saving result for Playoff Game with id '" + request.params.game_id + "' failed with error.code " + error.code + " error.message " + error.message);
@@ -2346,27 +2410,23 @@ Parse.Cloud.define("updatePlayoffPlayerStats", function(request, response) {
     if ((typeof(request.params.fights) !== 'undefined') && (!_.isEmpty(request.params.fights))) {
       fights = parseInt(request.params.fights);
     }
-    /*
-    console.log("goals = '" + goals + "'");
-    console.log("assists = '" + assists + "'");
-    console.log("fights = '" + fights + "'");
-    */
-    var db_po_goals = result[0].get("po_goals");
-    var db_po_assists = result[0].get("po_assists");
-    var db_po_fights = result[0].get("po_fights");
 
-    var db_po_points = result[0].get("po_points");
+    var db_goals = result[0].get("goals");
+    var db_assists = result[0].get("assists");
+    var db_fights = result[0].get("fights");
 
-    db_po_goals = db_po_goals + goals;
-    db_po_assists = db_po_assists + assists;
-    db_po_fights = db_po_fights + fights;
+    var db_points = result[0].get("points");
 
-    db_po_points = db_po_points + (goals + assists);
+    db_goals = db_goals + goals;
+    db_assists = db_assists + assists;
+    db_fights = db_fights + fights;
 
-    result[0].set('po_goals',db_po_goals);
-    result[0].set('po_assists',db_po_assists);
-    result[0].set('po_points',db_po_points);
-    result[0].set('po_fights',db_po_fights);
+    db_points = db_points + (goals + assists);
+
+    result[0].set('po_goals',db_goals);
+    result[0].set('po_assists',db_assists);
+    result[0].set('po_points',db_points);
+    result[0].set('po_fights',db_fights);
 
     return result[0].save();
 
