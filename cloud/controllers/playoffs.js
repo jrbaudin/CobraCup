@@ -379,3 +379,41 @@ exports.savePOGameResult = function(request, response) {
     response.redirect('/playoffs/game/' + game_id + '?error=' + error_msg);
   });
 };
+
+exports.loadPOPlayerStats = function(request, response) {
+  var objPlayers;
+  var objStandings;
+
+  var Player = Parse.Object.extend('Player');
+  var playersQuery = new Parse.Query(Player);
+  playersQuery.include("team.nhlTeam");
+
+  playersQuery.notEqualTo('po_goals', 666);
+  playersQuery.notEqualTo('po_assists', 666);
+  playersQuery.notEqualTo('po_fights', 666);
+  playersQuery.notEqualTo('po_points', 666);
+
+  playersQuery.find().then(function(players) {
+    objPlayers = players;
+
+    var Standings = Parse.Object.extend('Standings');
+    var standingsQuery = new Parse.Query(Standings);
+
+    return standingsQuery.find();
+
+  }).then(function(standings){
+    objStandings = standings;
+
+    response.render('po_playerstats', {
+      players: objPlayers,
+      standings: objStandings
+    });
+
+  }, function(error){
+    alert(error);
+    response.error("Getting Player Stats data failed with error.code " + error.code + " error.message " + error.message);
+    response.render('playerstats', {
+      flashError: ('Problem när den önskade datan skulle hämtas: ' + error.message)
+    });
+  });
+};

@@ -1,20 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Create an autocomplete input box with typeahead.js</title>
+  
+    <!-- Bootstrap CSS Toolkit styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/test.css">
+</head>
 
-    <head>
-    </head>
+<body>
+    <div class="container">
+        <p class="example-description">Prefetches data, stores it in localStorage, and searches it on the client: </p>
+        <input id="my-input" class="typeahead" type="text" placeholder="input a player name">
+    </div>
 
-    <body>
+    <!-- Load jQuery and the typeahead JS files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/typeahead.js"></script>
 
-        <div style="margin-left:15px;">
-            <h2>Test Area</h2>
-            <canvas id="myChart" width="400" height="400"></canvas>
-        </div>
+    <script type="text/javascript">
+        // Waiting for the DOM ready...
+        $(function(){
+            // applied typeahead to the text input box
+            $('#my-input').typeahead({
+                name: 'players',
 
-        <!-- <script src="js/Chart.js"></script> -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
-        
-        <script src="js/graph.js"></script>
-    </body>
+                // data source
+                prefetch: 'data/players.json',
 
+                // max item numbers list in the dropdown
+                limit: 10
+            });
+
+            /**
+            $('#search').typeahead({
+                source: function(query, process) {
+                    var $url = "/controller/function/list_users/?q="+query;
+                    var $datas = new Array;
+                    $datas = [""];
+                    $.ajax({
+                        url: $url,
+                        dataType: "json",
+                        type: "GET",
+                        success: function(data) {
+                            $.map(data, function(data){
+                                var group;
+                                group = {
+                                    id: data.id,
+                                    name: data.user_name,
+                                    toString: function () {
+                                        return JSON.stringify(this);
+                                        //return this.variable;
+                                    },
+                                    toLowerCase: function () {
+                                        return this.name.toLowerCase();
+                                    },
+                                    indexOf: function (string) {
+                                        return String.prototype.indexOf.apply(this.name, arguments);
+                                    },
+                                    replace: function (string) {
+                                        var value = '';
+                                        value += this.name;
+                                        if(typeof(this.name) != 'undefined') {
+                                            value += ' <span class="pull-right muted">';
+                                            //value += this.name;
+                                            value += '</span>';
+                                        }
+                                        return String.prototype.replace.apply('<div style="padding: 10px; font-size: 1em;">' + value + '</div>', arguments);
+                                    }
+                                };
+                                $datas.push(group);
+                            });
+                            process($datas);
+                        }
+                    });
+                },
+                property: 'user_name',
+                items: 10,
+                minLength: 2,
+                updater: function (item) {
+                    var item = JSON.parse(item);
+                    $('#hiddenId').val(item.id);
+                    $('#username').val(item.name);
+                    //you can perform your actions here
+                    //example</p>
+                    //location = '/controller/function/'+item.id+'/edit';
+                    //document.redirect = location;
+                }
+            });
+            **/
+        });
+  </script>
+</body> 
 </html>

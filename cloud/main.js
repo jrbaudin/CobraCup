@@ -2417,6 +2417,19 @@ Parse.Cloud.define("updatePlayoffPlayerStats", function(request, response) {
 
     var db_points = result[0].get("points");
 
+    if (db_goals === 666) {
+      db_goals = 0;
+    }
+    if (db_assists === 666) {
+      db_assists = 0;
+    }
+    if (db_fights === 666) {
+      db_fights = 0;
+    }
+    if (db_points === 666) {
+      db_points = 0;
+    }
+
     db_goals = db_goals + goals;
     db_assists = db_assists + assists;
     db_fights = db_fights + fights;
@@ -2483,6 +2496,31 @@ Parse.Cloud.define("cleanPlayerStats", function(request, response) {
    response.success("Player stats successfully cleaned");
   }, function(error) {
     response.error("Cleaning Player stats failed with error.code " + error.code + " error.message " + error.message);
+  });
+});
+
+Parse.Cloud.define("cleanPOPlayerStats", function(request, response) {
+  var Player = Parse.Object.extend('Player');
+  var playersQuery = new Parse.Query(Player);
+  playersQuery.find().then(function(results) {
+    var promise = Parse.Promise.as();
+    _.each(results, function(result) {
+      result.set('po_points', 666);
+      result.set('po_goals', 666);
+      result.set('po_assists', 666);
+      result.set('po_fights', 666);
+      promise = promise.then(function() {
+            // Return a promise that will be resolved when the save is finished.
+            return result.save();
+          });
+    });
+
+    return promise;
+
+  }).then(function() {
+   response.success("Player Playoff stats successfully cleaned");
+  }, function(error) {
+    response.error("Cleaning Player Playoff stats failed with error.code " + error.code + " error.message " + error.message);
   });
 });
 

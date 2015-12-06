@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include header section which holds imports for shared elements -->
+    <% include _header %>
+
+    <title>Spelarstatistik Slutspel</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="../dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="../stylesheets/style.css">
+
+    <link rel="stylesheet" href="../stylesheets/playoffs.css">
+    <script>
+     !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+     arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+     d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+     insertBefore(d,q)}(window,document,'script','_gs');
+
+     _gs('GSN-270173-J');
+    </script>
+</head>
+
+<body>
+    <% include _navigation %>
+    <div class="container-fluid">
+        <% if(typeof(flash) !== 'undefined'){ %>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Fel!</strong> <%= flash %>.
+            </div>
+        <% } %>
+        <% if(typeof(flashError) !== 'undefined'){ %>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <strong>Fel!</strong> <%= flashError %>
+            </div>
+        <% } %> 
+
+        <%  
+        var playerGoals;
+        var playerFights;
+        var playerAssists;
+        var playerPoints;
+        if(typeof(players) !== 'undefined'){
+            
+            playerGoals = _.sortBy(players, function(player){
+                return player.get("po_goals");
+            });
+            playerGoals = playerGoals.reverse();
+            
+            playerFights = _.sortBy(players, function(player){
+                return player.get("po_fights");
+            });
+            playerFights = playerFights.reverse();
+
+            playerAssists = _.sortBy(players, function(player){
+                return player.get("po_assists");
+            });
+            playerAssists = playerAssists.reverse();
+
+            playerPoints = _.sortBy(players, function(player){
+                return player.get("po_points");
+            });
+            playerPoints = playerPoints.reverse();
+        }
+        %>
+        <!-- <div class="row"> -->
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-balance-scale fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Poäng</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center text-uppercase">Lag</th>
+                                    <th class="text-uppercase">Namn</th>
+                                    <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                    <th class="text-center info" title="Points"><strong>P</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if(typeof(playerPoints) !== 'undefined'){
+                                    var i = 1;
+
+                                    playerPoints.forEach(function(player) {
+                                        var standing_team = null;
+                                        if(typeof(standings) !== 'undefined'){
+                                            standings.forEach(function(standing) {
+                                                if(_.isEqual(standing.get("team").id, player.get("team").id)){
+                                                    standing_team = standing;
+                                                }
+                                            })
+                                        }
+                                        %>
+                                        <tr>
+                                            <td class="text-center"><%= i %></td>
+                                            <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><img src="<%= player.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                            <td><%= player.get("name") %></td>
+                                            <% if(_.isNull(standing_team)) { %>
+                                                <td></td>
+                                            <% } else { %>
+                                                <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
+                                            <% } %>
+                                            <td class="text-center info"><strong><%= player.get("po_points") %></strong></td>
+                                        </tr>
+                                        <% i = i+1;
+                                    }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>P</strong>-Points</small>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-bullseye fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Mål</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center text-uppercase">Lag</th>
+                                    <th class="text-uppercase">Namn</th>
+                                    <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                    <th class="text-center info" title="Goals"><strong>G</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if(typeof(playerGoals) !== 'undefined'){
+                                    var i = 1;
+
+                                    playerGoals.forEach(function(player) {
+                                        var standing_team = null;
+                                        if(typeof(standings) !== 'undefined'){
+                                            standings.forEach(function(standing) {
+                                                if(_.isEqual(standing.get("team").id, player.get("team").id)){
+                                                    standing_team = standing;
+                                                }
+                                            })
+                                        }
+                                        %>
+                                        <tr>
+                                            <td class="text-center"><%= i %></td>
+                                            <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><img src="<%= player.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                            <td><%= player.get("name") %></td>
+                                            <% if(_.isNull(standing_team)) { %>
+                                                <td></td>
+                                            <% } else { %>
+                                                <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
+                                            <% } %>
+                                            <td class="text-center info"><strong><%= player.get("po_goals") %></strong></td>
+                                        </tr>
+                                        <% i = i+1;
+                                    }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals</small>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        <!-- </div> -->
+        <!-- <div class="row"> -->
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Assist</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center text-uppercase">Lag</th>
+                                    <th class="text-uppercase">Namn</th>
+                                    <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                    <th class="text-center info" title="Assists"><strong>A</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if(typeof(playerAssists) !== 'undefined'){
+                                    var i = 1;
+
+                                    playerGoals.forEach(function(player) {
+                                        var standing_team = null;
+                                        if(typeof(standings) !== 'undefined'){
+                                            standings.forEach(function(standing) {
+                                                if(_.isEqual(standing.get("team").id, player.get("team").id)){
+                                                    standing_team = standing;
+                                                }
+                                            })
+                                        } %>
+                                        <tr>
+                                            <td class="text-center"><%= i %></td>
+                                            <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><img src="<%= player.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                            <td><%= player.get("name") %></td>
+                                            <% if(_.isNull(standing_team)) { %>
+                                                <td></td>
+                                            <% } else { %>
+                                                <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
+                                            <% } %>
+                                            <td class="text-center info"><strong><%= player.get("po_assists") %></strong></td>
+                                        </tr>
+                                        <% i = i+1;
+                                    }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals</small>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-uppercase">
+                            <span class="fa-stack fa-lg">
+                              <i class="fa fa-circle fa-stack-2x"></i>
+                              <i class="fa fa-wheelchair fa-stack-1x fa-inverse"></i>
+                            </span> <strong>Slagsmål</strong>
+                        </h6>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-condensed table-striped" style="margin-bottom: 0;">
+                            <thead style="font-size: 13px;">
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center text-uppercase">Lag</th>
+                                    <th class="text-uppercase">Namn</th>
+                                    <th class="text-center text-uppercase" title="Games Played">GP</th>
+                                    <th class="text-center info" title="Fights"><strong>F</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">
+                                <% if(typeof(playerFights) !== 'undefined'){
+                                    var i = 1;
+                                    playerFights.forEach(function(player) {
+                                        var f_standing_team = null;
+                                        if(typeof(standings) !== 'undefined'){
+                                            standings.forEach(function(standing) {
+                                                if(_.isEqual(standing.get("team").id, player.get("team").id)){
+                                                    f_standing_team = standing;
+                                                }
+                                            })
+                                        } %>
+                                        <tr>
+                                            <td class="text-center"><%= i %></td>
+                                            <td><a href="/team/<%= player.get("team").get("team_id") %>" target="_blank"><img src="<%= player.get("team").get("nhlTeam").get("logo").url() %>" class="img-responsive img-circle" alt="Responsive image" style="min-height:15px;height:15px; margin: 0 auto;"></a></td>
+                                            <td><%= player.get("name") %></td>
+                                            <% if(_.isNull(f_standing_team)) { %>
+                                                <td></td>
+                                            <% } else { %>
+                                                <td class="text-center"><strong><%= f_standing_team.get("games_played") %></strong></td>
+                                            <% } %>
+                                            <td class="text-center info"><strong><%= player.get("po_fights") %></strong></td>
+                                        </tr>
+                                        <% i = i+1;
+                                    }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>F</strong>-Fights</small>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <p class="text-center hidden-xs colormewhite" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
+    <p class="text-center hidden-xs">
+        <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../dist/js/flat-ui.min.js"></script>
+</body>
+
+</html>

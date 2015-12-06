@@ -10,24 +10,31 @@
       <a class="navbar-brand" href="/"><i class="fa fa-cube"></i> Hub <span style="font-family: 'Kaushan Script', cursive;">2016</span></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav navbar-left">
         <li><a href="/">Lag</a></li>
         <!-- <li><a href="/signup">Anmäl lag</a></li> -->
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tabeller <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Gruppspel <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
+            <li><a href="/games">Matcher</a></li>
+            <li role="separator" class="divider"></li>
             <li><a href="/stat/league">Ligan</a></li>
             <li><a href="/stat/divisions">Divisioner</a></li>
             <li><a href="/stat/playerstats">Spelarstatistik</a></li>
           </ul>
         </li>
-        <li><a href="/playoffs">Slutspel</a></li>
-        <li><a href="/games">Matcher</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Slutspel <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/playoffs">Matcher</a></li>
+            <li><a href="/playoffs/players">Spelarstatistik</a></li>
+          </ul>
+        </li>
         <li><a href="/stat/history">Statistik</a></li>
-        <!--
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
         <li class="hidden-xs"><a href="/feed"><mark>Live</mark></a></li>
         <li class="hidden-xs"><a href="http://cobracup.se" target="_blank"><i class="fa fa-home"></i> cobracup.se</a>
-        -->
         </li>
       </ul>
     </div>
