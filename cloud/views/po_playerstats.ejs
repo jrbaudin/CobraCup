@@ -96,6 +96,8 @@
                                     <th class="text-uppercase">Namn</th>
                                     <th class="text-center text-uppercase" title="Games Played">GP</th>
                                     <th class="text-center info" title="Points"><strong>P</strong></th>
+                                    <th class="text-center" title="Goals"><strong>G</strong></th>
+                                    <th class="text-center" title="Assists"><strong>A</strong></th>
                                 </tr>
                             </thead>
                             <tbody style="font-size: 12px;">
@@ -122,13 +124,15 @@
                                                 <td class="text-center"><strong><%= standing_team.get("games_played") %></strong></td>
                                             <% } %>
                                             <td class="text-center info"><strong><%= player.get("po_points") %></strong></td>
+                                            <td class="text-center"><strong><%= player.get("po_goals") %></strong></td>
+                                            <td class="text-center"><strong><%= player.get("po_assists") %></strong></td>
                                         </tr>
                                         <% i = i+1;
                                     }) %>
                                 <% } %>
                             </tbody>
                         </table>
-                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>P</strong>-Points</small>
+                        <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>P</strong>-Points, <strong>G</strong>-Goals, <strong>A</strong>-Assists</small>
                     </div>
                     <!-- /.panel-body -->
                 </div>

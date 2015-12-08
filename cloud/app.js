@@ -142,6 +142,8 @@ app.put('/admin/final', adminController.createFinal);
 app.get('/feed', statController.loadFeed);
 
 app.get('/awards/vote', voteController.loadVoteForm);
+app.put('/awards/vote', voteController.saveVote);
+app.get('/awards', voteController.loadAwards);
 
 app.use(function(request, response) {
   response.status(400);

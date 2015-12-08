@@ -5,7 +5,7 @@
     <!-- Include header section which holds imports for shared elements -->
     <% include _header %>
 
-    <title>Cobra Cup Awards 2016</title>
+    <title>Rösta - Cobra Cup Awards 2016</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -15,24 +15,7 @@
     <link rel="stylesheet" href="../dist/css/flat-ui.css">
 
     <link rel="stylesheet" href="../stylesheets/style.css">
-
-    <style>
-        #project-label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 1em;
-        }
-        #project-icon {
-            float: left;
-            height: 32px;
-            width: 32px;
-        }
-        #project-description {
-            margin: 0;
-            padding: 0;
-        }
-    </style>
-
+  
     <script>
        !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
            arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
@@ -86,35 +69,119 @@
 
             <div class="panel">
                 <div class="panel-heading" style="padding-bottom:0;">
-                    <h6 class="text-uppercase" style="margin-bottom:0;">
-                        Cobra Cup Awards
-                    </h6>
+                    <h4 style="margin-bottom:0;">
+                        <span><i class="fa fa-trophy"></i> Cobra Cup Awards 2016</span> <small class="colormedark pull-right">Röstning stänger om <span id="countdown"></span></small>
+                    </h4>
                 </div>
+                <hr>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-3">Största Fuckup</div>
-                        <div class="form-group col-md-9" id="fg-stig-helmer">
-                            <label for="stig-helmer" class="control-label sr-only">Största Fuckup</label>
-                            <input type="text" class="form-control" id="stig-helmer">
-                            <input type="hidden" id="stig-helmer-id">
-                            <p id="stig-helmer-description"></p>
+                        <div class="col-md-2"><strong>Vem är du?</strong></div>
+                        <div class="form-group col-md-10" id="fg-voter">
+                            <label for="voter" class="control-label sr-only">Vem är du?</label>
+                            <input type="text" class="form-control" id="voter">
+                            <input type="hidden" id="voterid" name="voterid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h6 style="margin-bottom: 0;">Spelare</h6>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-1">
+                          <img src="../img/awards/gandalf.jpg" class="img-responsive img-rounded" alt="Gandalf The Grey Memorial Trophy" style="min-height:50px;height:50px; margin: 0 auto;">
+                        </div>
+                        <div class="col-md-4"><strong>Gandalf Memorial Trophy</strong> <small>Mest värdefulla spelaren</small></div>
+                        <div class="form-group col-md-7" id="fg-gandalf">
+                            <label for="gandalf" class="control-label sr-only">Mest värdefulla spelaren</label>
+                            <input type="text" class="form-control" id="gandalf">
+                            <input type="hidden" id="gandalfid" name="gandalfid">
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-3">Största Fuckup</div>
-                        <div class="form-group col-md-9" id="fg-tim-gunn">
-                            <label for="tim-gunn" class="control-label sr-only">Bäst klädda laget</label>
-                            <input type="text" class="form-control" id="tim-gunn">
-                            <input type="hidden" id="tim-gunn-id">
-                            <p id="tim-gunn-description"></p>
+                        <div class="col-md-1">
+                          <img src="../img/awards/joffrey.jpg" class="img-responsive img-rounded" alt="Joffrey Baratheon Trophy" style="min-height:50px;height:50px; margin: 0 auto;">
+                        </div>
+                        <div class="col-md-4"><strong>Joffrey Baratheon Trophy</strong> <small>Fulaste spelaren</small></div>
+                        <div class="form-group col-md-7" id="fg-joffrey">
+                            <label for="joffrey" class="control-label sr-only">Fulaste spelaren</label>
+                            <input type="text" class="form-control" id="joffrey">
+                            <input type="hidden" id="joffreyid" name="joffreyid">
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-1">
+                          <img src="../img/awards/skroder.jpg" class="img-responsive img-rounded" alt="Per Åge Skröder Trophy" style="min-height:50px;height:50px; margin: 0 auto;">
+                        </div>
+                        <div class="col-md-4"><strong>Per Åge Skröder Trophy</strong> <small>Sämsta vinnaren</small></div>
+                        <div class="form-group col-md-7" id="fg-skroder">
+                            <label for="skroder" class="control-label sr-only">Sämsta vinnaren</label>
+                            <input type="text" class="form-control" id="skroder">
+                            <input type="hidden" id="skroderid" name="skroderid">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1">
+                          <img src="../img/awards/hulk.jpg" class="img-responsive img-rounded" alt="Bruce Banner Trophy" style="min-height:50px;height:50px; margin: 0 auto;">
+                        </div>
+                        <div class="col-md-4"><strong>Bruce Banner Trophy</strong> <small>Sämsta förloraren</small></div>
+                        <div class="form-group col-md-7" id="fg-hulk">
+                            <label for="hulk" class="control-label sr-only">Sämsta förloraren</label>
+                            <input type="text" class="form-control" id="hulk">
+                            <input type="hidden" id="hulkid" name="hulkid">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1">
+                          <img src="../img/awards/stig.jpg" class="img-responsive img-rounded" alt="Stig Helmer Olsson Trophy" style="min-height:50px;height:50px; margin: 0 auto;">
+                        </div>
+                        <div class="col-md-4"><strong>Stig Helmer Olsson Trophy</strong> <small>Största Fuckup</small></div>
+                        <div class="form-group col-md-7" id="fg-stig-helmer">
+                            <label for="stig-helmer" class="control-label sr-only">Största Fuckup</label>
+                            <input type="text" class="form-control" id="stig-helmer">
+                            <input type="hidden" id="stighelmerid" name="stighelmerid">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h6 style="margin-bottom: 0;">Lag</h6>
+                      </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-1">
+                          <img src="../img/awards/tim.jpg" class="img-responsive img-rounded" alt="Tim Gunn Trophy" style="min-height:50px;height:50px; margin: 0 auto;">
+                        </div>
+                        <div class="col-md-4"><strong>Tim Gunn Trophy</strong> <small>Bäst klädda laget</small></div>
+                        <div class="form-group col-md-7" id="fg-tim-gunn">
+                            <label for="tim-gunn" class="control-label sr-only">Bäst klädda laget</label>
+                            <input type="text" class="form-control" id="tim-gunn">
+                            <input type="hidden" id="timgunnid" name="timgunnid">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-body">
                     <div class="form-group" style="margin-bottom: 0;">
                         <input type='hidden' name='_method' value='put' />
-                        <button type="submit" class="btn btn-hg btn-wide btn-block btn-primary">
-                            <i id="spinnericon" class="fa fa-refresh fa-spin" style="display:none;"></i> Rapportera match
+                        <button type="submit" class="btn btn-hg btn-wide btn-block btn-success">
+                            <i id="spinnericon" class="fa fa-refresh fa-spin" style="display:none;"></i> Rösta
                         </button>
                     </div>
                 </div>
@@ -135,8 +202,21 @@
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="../dist/js/flat-ui.min.js"></script>
+<script src="../js/jquery.countdown.js"></script>
 
-  <script type="text/javascript">
+<!-- Include MomentJS library -->
+<script src="../js/moment.js"></script>
+<script src="../js/moment-timezone-with-data.js"></script>
+
+<script type="text/javascript">
+  var votingCloses = moment.tz("2015-12-19 21:30", "Europe/Stockholm");
+  $('#countdown').countdown(votingCloses.toDate(), function(event) {
+    var totalHours = event.offset.totalDays * 24 + event.offset.hours;
+    $(this).html(event.strftime(totalHours + ' tim %M min %S sek'));
+  });
+</script>
+
+<script type="text/javascript">
       // Waiting for the DOM ready...
       var players = [];
       var playersObj = <%- JSON.stringify(allPlayers) %>
@@ -151,6 +231,26 @@
       }
 
       $(function() {
+          $( "#voter" ).autocomplete({
+            minLength: 0,
+            source: players,
+            focus: function( event, ui ) {
+              $( "#voter" ).val( ui.item.label );
+              return false;
+            },
+            select: function( event, ui ) {
+              $( "#voter" ).val( ui.item.label );
+              $( "#voterid" ).val( ui.item.value );
+       
+              return false;
+            }
+          })
+          .autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<a>" + item.label + "<br><small><i>" + item.team + "</i></small></a>" )
+              .appendTo( ul );
+          };
+
           $( "#stig-helmer" ).autocomplete({
             minLength: 0,
             source: players,
@@ -160,8 +260,7 @@
             },
             select: function( event, ui ) {
               $( "#stig-helmer" ).val( ui.item.label );
-              $( "#stig-helmer-id" ).val( ui.item.value );
-              $( "#stig-helmer-description" ).html( ui.item.value );
+              $( "#stighelmerid" ).val( ui.item.value );
        
               return false;
             }
@@ -181,8 +280,7 @@
             },
             select: function( event, ui ) {
               $( "#tim-gunn" ).val( ui.item.label );
-              $( "#tim-gunn-id" ).val( ui.item.value );
-              $( "#tim-gunn-description" ).html( ui.item.value );
+              $( "#timgunnid" ).val( ui.item.value );
           
               return false;
             }
@@ -190,6 +288,86 @@
           .autocomplete( "instance" )._renderItem = function( ul, item ) {
             return $( "<li>" )
               .append( "<a>" + item.label + "</a>" )
+              .appendTo( ul );
+          };
+
+          $( "#joffrey" ).autocomplete({
+            minLength: 0,
+            source: players,
+            focus: function( event, ui ) {
+              $( "#joffrey" ).val( ui.item.label );
+              return false;
+            },
+            select: function( event, ui ) {
+              $( "#joffrey" ).val( ui.item.label );
+              $( "#joffreyid" ).val( ui.item.value );
+          
+              return false;
+            }
+          })
+          .autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<a>" + item.label + "<br><small><i>" + item.team + "</i></small></a>" )
+              .appendTo( ul );
+          };
+
+          $( "#gandalf" ).autocomplete({
+            minLength: 0,
+            source: players,
+            focus: function( event, ui ) {
+              $( "#gandalf" ).val( ui.item.label );
+              return false;
+            },
+            select: function( event, ui ) {
+              $( "#gandalf" ).val( ui.item.label );
+              $( "#gandalfid" ).val( ui.item.value );
+          
+              return false;
+            }
+          })
+          .autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<a>" + item.label + "<br><small><i>" + item.team + "</i></small></a>" )
+              .appendTo( ul );
+          };
+
+          $( "#skroder" ).autocomplete({
+            minLength: 0,
+            source: players,
+            focus: function( event, ui ) {
+              $( "#skroder" ).val( ui.item.label );
+              return false;
+            },
+            select: function( event, ui ) {
+              $( "#skroder" ).val( ui.item.label );
+              $( "#skroderid" ).val( ui.item.value );
+          
+              return false;
+            }
+          })
+          .autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<a>" + item.label + "<br><small><i>" + item.team + "</i></small></a>" )
+              .appendTo( ul );
+          };
+
+          $( "#hulk" ).autocomplete({
+            minLength: 0,
+            source: players,
+            focus: function( event, ui ) {
+              $( "#hulk" ).val( ui.item.label );
+              return false;
+            },
+            select: function( event, ui ) {
+              $( "#hulk" ).val( ui.item.label );
+              $( "#hulkid" ).val( ui.item.value );
+          
+              return false;
+            }
+          })
+          .autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<a>" + item.label + "<br><small><i>" + item.team + "</i></small></a>" )
               .appendTo( ul );
           };
       });

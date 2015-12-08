@@ -128,7 +128,7 @@
                                 </tr>
                             </thead>
                             <tbody style="font-size: 12px;">
-                                <% if((typeof(games) !== 'undefined') && (typeof(teams) !== 'undefined')){
+                                <% if(typeof(games) !== 'undefined'){
                                     games.forEach(function(game) {
 
                                         var hometeam = game.get("home");
@@ -156,6 +156,9 @@
                                             <td class="text-center">
                                                 <% if(game.get("played")) { %>
                                                     <%= game.get("home_goals_total") %> - <%= game.get("away_goals_total") %>
+                                                    <% if(game.get("overtime")) { %>
+                                                        <span><strong> OT</strong></span>
+                                                    <% } %>
                                                 <% } else { %>
                                                     -
                                                 <% } %>

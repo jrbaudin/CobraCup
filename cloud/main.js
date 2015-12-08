@@ -984,7 +984,7 @@ Parse.Cloud.define("createGroupGame", function(request, response) {
     game.set('type', 1);
 
     game.save().then(function(result) {
-        response.success("Saved Game with id = '" + gameId + "'");
+        response.success("Saved Game with id = '" + gameId + "'. Round: '" + round + "' and Group: '" + group + "'");
     }, function(error) {
         response.error("Creating Game failed with error.code " + error.code + " error.message " + error.message);
     });
@@ -2524,6 +2524,43 @@ Parse.Cloud.define("cleanPOPlayerStats", function(request, response) {
   });
 });
 
+Parse.Cloud.define("createAllGroupGames", function(request, response) {
+  var group = request.params.group;
+  var team_1 = request.params.team_1;
+  var team_2 = request.params.team_2;
+  var team_3 = request.params.team_3;
+  var team_4 = request.params.team_4;
+
+  Parse.Cloud.run('createGroupGame', { round:"1", group:group, hometeam:team_1, awayteam:team_2 }).then(function(result) {
+    return Parse.Cloud.run('createGroupGame', { round:"2", group:group, hometeam:team_3, awayteam:team_4 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"3", group:group, hometeam:team_2, awayteam:team_4 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"4", group:group, hometeam:team_3, awayteam:team_1 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"5", group:group, hometeam:team_4, awayteam:team_1 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"6", group:group, hometeam:team_2, awayteam:team_3 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"7", group:group, hometeam:team_4, awayteam:team_2 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"8", group:group, hometeam:team_1, awayteam:team_3 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"9", group:group, hometeam:team_3, awayteam:team_2 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"10", group:group, hometeam:team_4, awayteam:team_3 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"11", group:group, hometeam:team_2, awayteam:team_1 });
+  }).then(function(result){
+    return Parse.Cloud.run('createGroupGame', { round:"12", group:group, hometeam:team_1, awayteam:team_4 });
+  }).then(function(result){
+    response.success("12 games created for Group '" + group + "'");
+  }, function(error){
+    response.error("Creating Games for Group '" + group + "' failed with error.code " + error.code + " error.message " + error.message);
+  });
+
+});
+
 Parse.Cloud.define("cleanStandings", function(request, response) {
 	var Standings = Parse.Object.extend('Standings');
 	var standingsQuery = new Parse.Query(Standings);
@@ -2715,3 +2752,50 @@ Parse.Cloud.define("placeOrder", function(request, response) {
         response.error("Saving Order failed with error.code " + error.code + " error.message " + error.message);
     });
 });
+
+Parse.Cloud.define("saveVote", function(request, response) {
+    var Vote = Parse.Object.extend("Vote");
+    var vote = new Vote();
+
+    var voter = request.params.voter;
+    var gandalf = request.params.gandalf;
+    var hulk = request.params.hulk;
+    var skroder = request.params.skroder;
+    var joffrey = request.params.joffrey;
+    var stig = request.params.stig;
+    var tim = request.params.tim;
+
+    if (
+        (typeof(voter) === 'undefined') || 
+        (typeof(gandalf) === 'undefined') || 
+        (typeof(hulk) === 'undefined') || 
+        (typeof(skroder) === 'undefined') || 
+        (typeof(joffrey) === 'undefined') ||
+        (typeof(stig) === 'undefined') ||
+        (typeof(tim) === 'undefined') ||
+        (_.isEmpty(voter)) ||
+        (_.isEmpty(gandalf)) ||
+        (_.isEmpty(hulk)) ||
+        (_.isEmpty(skroder)) ||
+        (_.isEmpty(joffrey)) ||
+        (_.isEmpty(stig)) ||
+        (_.isEmpty(tim))) 
+    {
+      response.error("One or more mandatory field was missing. Can't save Vote.");
+    }
+
+    vote.set('voter', voter);
+    vote.set('gandalf', gandalf);
+    vote.set('hulk', hulk);
+    vote.set('skroder', skroder);
+    vote.set('joffrey', joffrey);
+    vote.set('stig', stig);
+    vote.set('tim', tim);
+
+    vote.save().then(function(result) {
+        response.success("Saved the Vote with objectId = " + result.id);
+    }, function(error) {
+        response.error("Saving Vote failed with error.code " + error.code + " error.message " + error.message);
+    });
+});
+

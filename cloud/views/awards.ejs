@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include header section which holds imports for shared elements -->
+    <% include _header %>
+
+    <title>Cobra Cup Awards 2016</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="stylesheets/style.css">
+
+    <script>
+       !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+           arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+       d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+       insertBefore(d,q)}(window,document,'script','_gs');
+
+       _gs('GSN-270173-J');
+   </script>
+</head>
+
+<body>
+  <% include _navigation %>
+  <div class="container-fluid">
+      <% if(typeof(flashInfo) !== 'undefined'){ %>
+          <div class="alert alert-success alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span>
+              </button>
+              <%= flashInfo %>
+          </div>
+      <% } %>
+      <% if(typeof(flashError) !== 'undefined'){ %>
+          <div class="alert alert-danger alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span>
+              </button>
+              <strong>Fel!</strong> <%= flashError %>.
+          </div>
+      <% } %>
+      <% if(typeof(flashErrorGame) !== 'undefined'){ %>
+          <div class="alert alert-danger alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert">
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span>
+              </button>
+              <strong>Fel!</strong> <%= flashErrorGame %>
+          </div>
+      <% } %>
+
+      <%
+        var votes_size = 0;
+        var players_size = 0;
+        var teams_size = 0;
+
+        var arrGandalf = [];
+        var arrHulk = [];
+        var arrSkroder = [];
+        var arrJoffrey = [];
+        var arrStig = [];
+        var arrTim = [];
+
+        if(typeof(votes) !== 'undefined'){
+          votes_size = _.size(votes);
+        }
+
+        if(typeof(players) !== 'undefined'){
+          players_size = _.size(players);
+        }
+
+        if(typeof(teams) !== 'undefined'){
+          teams_size = _.size(teams);
+        }
+
+        if(typeof(gandalf) !== 'undefined'){
+          arrGandalf = gandalf;
+        }
+
+        if(typeof(hulk) !== 'undefined'){
+          arrHulk = hulk;
+        }
+
+        if(typeof(skroder) !== 'undefined'){
+          arrSkroder = skroder;
+        }
+
+        if(typeof(joffrey) !== 'undefined'){
+          arrJoffrey = joffrey;
+        }
+
+        if(typeof(stig) !== 'undefined'){
+          arrStig = stig;
+        }
+
+        if(typeof(tim) !== 'undefined'){
+          arrTim = tim;
+        }
+      %>
+      <div class="col-md-12">
+          <div class="panel">
+              <div class="panel-heading" style="padding-bottom:0;">
+                  <h3 style="margin-bottom:0;">
+                      <i class="fa fa-trophy"></i> Cobra Cup Awards 2016
+                  </h3>
+                  <p style="margin-bottom:0;"><small><strong><%= votes_size %></strong> röster är lagda och <span>röstningen stänger om <strong><span id="countdown"></span></strong></span></small></p>
+                  <a class="btn btn-sm btn-wide btn-success" href="/awards/vote"><i class="fa fa-pencil-square-o"></i> Rösta</a>
+              </div>
+              <hr>
+              <div class="panel-body">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <img src="img/awards/gandalf.jpg" class="img-responsive img-rounded" alt="Gandalf Memorial Trophy" style="min-height:50px;height:50px;">
+                        </div>
+                        <div class="col-md-10">
+                          <h6 style="margin-bottom: 0;">Gandalf Memorial Trophy</h6>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                          <div class="col-md-12">
+                            <ul class="list-group">
+                            <% 
+                            var i = 1;
+                            arrGandalf.forEach(function(player){ %>
+                              <% if(i <= 5) { %>
+                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                  <span style="margin-left: 10px;"><%= player.name %></span>
+                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                                </a>
+                              <% 
+                              i = i+1;
+                              } %>
+                            <% }); %>
+                            </ul>
+                          </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <img src="img/awards/skroder.jpg" class="img-responsive img-rounded" alt="Per Åge Skröder Trophy" style="min-height:50px;height:50px;">
+                        </div>
+                        <div class="col-md-10">
+                          <h6 style="margin-bottom: 0;">Per Åge Skröder Trophy</h6>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                          <div class="col-md-12">
+                            <ul class="list-group">
+                            <% 
+                            var i = 1;
+                            arrSkroder.forEach(function(player){ %>
+                              <% if(i <= 5) { %>
+                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                  <span style="margin-left: 10px;"><%= player.name %></span>
+                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                                </a>
+                              <% 
+                              i = i+1;
+                              } %>
+                            <% }); %>
+                            </ul>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <img src="img/awards/hulk.jpg" class="img-responsive img-rounded" alt="Bruce Banner Trophy" style="min-height:50px;height:50px;">
+                        </div>
+                        <div class="col-md-10">
+                          <h6 style="margin-bottom: 0;">Bruce Banner Trophy</h6>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                          <div class="col-md-12">
+                            <ul class="list-group">
+                            <% 
+                            var i = 1;
+                            arrHulk.forEach(function(player){ %>
+                              <% if(i <= 5) { %>
+                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                  <span style="margin-left: 10px;"><%= player.name %></span>
+                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                                </a>
+                              <% 
+                              i = i+1;
+                              } %>
+                            <% }); %>
+                            </ul>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <img src="img/awards/joffrey.jpg" class="img-responsive img-rounded" alt="Joffrey Baratheon Trophy" style="min-height:50px;height:50px;">
+                        </div>
+                        <div class="col-md-10">
+                          <h6 style="margin-bottom: 0;">Joffrey Baratheon Trophy</h6>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                          <div class="col-md-12">
+                            <ul class="list-group">
+                            <% 
+                            var i = 1;
+                            arrJoffrey.forEach(function(player){ %>
+                              <% if(i <= 5) { %>
+                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                  <span style="margin-left: 10px;"><%= player.name %></span>
+                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                                </a>
+                              <% 
+                              i = i+1;
+                              } %>
+                            <% }); %>
+                            </ul>
+                          </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <img src="img/awards/stig.jpg" class="img-responsive img-rounded" alt="Stig Helmer Olsson Trophy" style="min-height:50px;height:50px;">
+                        </div>
+                        <div class="col-md-10">
+                          <h6 style="margin-bottom: 0;">Stig Helmer Olsson Trophy</h6>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                          <div class="col-md-12">
+                            <ul class="list-group">
+                            <% 
+                            var i = 1;
+                            arrStig.forEach(function(player){ %>
+                              <% if(i <= 5) { %>
+                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                  <span style="margin-left: 10px;"><%= player.name %></span>
+                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                                </a>
+                              <% 
+                              i = i+1;
+                              } %>
+                            <% }); %>
+                            </ul>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <img src="img/awards/tim.jpg" class="img-responsive img-rounded" alt="Tim Gunn Trophy" style="min-height:50px;height:50px;">
+                        </div>
+                        <div class="col-md-10">
+                          <h6 style="margin-bottom: 0;">Tim Gunn Trophy</h6>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                          <div class="col-md-12">
+                            <ul class="list-group">
+                            <% 
+                            var i = 1;
+                            arrTim.forEach(function(team){ %>
+                              <% if(i <= 5) { %>
+                                <a class="list-group-item" href="/team/<%= team.id %>" target="_blank">
+                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                  <img src="<%= team.image %>" class="img-responsive img-thumbnail" alt="<%= team.name %> Image" style="min-height:35px;height:35px;">
+                                  <span style="margin-left: 10px;"><%= team.name %></span>
+                                  <span class="pull-right" style="font-size: 24px;"><strong><%= team.votes %></strong></span>
+                                </a>
+                              <% 
+                              i = i+1;
+                              } %>
+                            <% }); %>
+                            </ul>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+     </div>
+  </div>
+
+<p class="text-center hidden-xs" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
+<p class="text-center hidden-xs">
+    <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</p>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="dist/js/flat-ui.min.js"></script>
+
+<script src="js/jquery.countdown.js"></script>
+
+<!-- Include MomentJS library -->
+<script src="js/moment.js"></script>
+<script src="js/moment-timezone-with-data.js"></script>
+
+<script type="text/javascript">
+  var votingCloses = moment.tz("2015-12-19 21:30", "Europe/Stockholm");
+  $('#countdown').countdown(votingCloses.toDate(), function(event) {
+    var totalHours = event.offset.totalDays * 24 + event.offset.hours;
+    $(this).html(event.strftime(totalHours + ' tim %M min %S sek'));
+  });
+</script>
+
+</body>
+
+</html>

@@ -102,7 +102,7 @@ a:focus {
 }
 
 .colormedark {
-  color: #ECF0F1 !important;
+  color: #34495E !important;
 }
 
 .colormybackground {
@@ -118,4 +118,11 @@ a:focus {
   padding-bottom: 10px;
   margin-bottom: 15px;
   border-bottom-style: solid;
+}
+
+.givesomespace-left {
+  margin-left: 15px;
+}
+.givesomespace-right {
+  margin-right: 15px;
 }

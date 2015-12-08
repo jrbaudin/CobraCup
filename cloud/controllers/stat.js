@@ -1055,7 +1055,9 @@ exports.loadGroupGames = function(req, res) {
   console.log("group id: " + req.params.groupid);
   gameQuery.equalTo('group', groupIdentity);
   gameQuery.ascending('round');
-  gameQuery.include('result');
+  gameQuery.include(['home.nhlTeam','away.nhlTeam']);
+  gameQuery.include(['home.captain','home.lieutenant']);
+  gameQuery.include(['away.captain','away.lieutenant']);
   gameQuery.find().then(function(games) {
     if (games) {
       console.log("Gotten the games...");
