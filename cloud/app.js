@@ -17,6 +17,7 @@ var adminController = require('cloud/controllers/admin.js');
 var statController = require('cloud/controllers/stat.js');
 var storeController = require('cloud/controllers/store.js');
 var playoffsController = require('cloud/controllers/playoffs.js');
+var voteController = require('cloud/controllers/vote.js');
 
 var requireUser = require('cloud/require-user');
  
@@ -139,6 +140,8 @@ app.get('/admin/final', adminController.loadFinalCreator);
 app.put('/admin/final', adminController.createFinal);
 
 app.get('/feed', statController.loadFeed);
+
+app.get('/awards/vote', voteController.loadVoteForm);
 
 app.use(function(request, response) {
   response.status(400);

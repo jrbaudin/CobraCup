@@ -6,90 +6,68 @@
   
     <!-- Bootstrap CSS Toolkit styles -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    
     <link rel="stylesheet" href="stylesheets/test.css">
+    
+    <style>
+      #project-label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 1em;
+      }
+      #project-icon {
+        float: left;
+        height: 32px;
+        width: 32px;
+      }
+      #project-description {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <p class="example-description">Prefetches data, stores it in localStorage, and searches it on the client: </p>
-        <input id="my-input" class="typeahead" type="text" placeholder="input a player name">
-    </div>
+    <div id="project-label">Select a project (type "j" for a start):</div>
+    <input id="project">
+    <input type="hidden" id="project-id">
+    <p id="project-description"></p>
 
     <!-- Load jQuery and the typeahead JS files -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/typeahead.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <!-- <script src="js/typeahead.js"></script> -->
 
     <script type="text/javascript">
         // Waiting for the DOM ready...
-        $(function(){
-            // applied typeahead to the text input box
-            $('#my-input').typeahead({
-                name: 'players',
+        var players = [];
+        var playersObj = <%- JSON.stringify(allPlayers) %>
+        if (typeof(playersObj) !== 'undefined') {
+            players = playersObj;
+        }
 
-                // data source
-                prefetch: 'data/players.json',
-
-                // max item numbers list in the dropdown
-                limit: 10
-            });
-
-            /**
-            $('#search').typeahead({
-                source: function(query, process) {
-                    var $url = "/controller/function/list_users/?q="+query;
-                    var $datas = new Array;
-                    $datas = [""];
-                    $.ajax({
-                        url: $url,
-                        dataType: "json",
-                        type: "GET",
-                        success: function(data) {
-                            $.map(data, function(data){
-                                var group;
-                                group = {
-                                    id: data.id,
-                                    name: data.user_name,
-                                    toString: function () {
-                                        return JSON.stringify(this);
-                                        //return this.variable;
-                                    },
-                                    toLowerCase: function () {
-                                        return this.name.toLowerCase();
-                                    },
-                                    indexOf: function (string) {
-                                        return String.prototype.indexOf.apply(this.name, arguments);
-                                    },
-                                    replace: function (string) {
-                                        var value = '';
-                                        value += this.name;
-                                        if(typeof(this.name) != 'undefined') {
-                                            value += ' <span class="pull-right muted">';
-                                            //value += this.name;
-                                            value += '</span>';
-                                        }
-                                        return String.prototype.replace.apply('<div style="padding: 10px; font-size: 1em;">' + value + '</div>', arguments);
-                                    }
-                                };
-                                $datas.push(group);
-                            });
-                            process($datas);
-                        }
-                    });
-                },
-                property: 'user_name',
-                items: 10,
-                minLength: 2,
-                updater: function (item) {
-                    var item = JSON.parse(item);
-                    $('#hiddenId').val(item.id);
-                    $('#username').val(item.name);
-                    //you can perform your actions here
-                    //example</p>
-                    //location = '/controller/function/'+item.id+'/edit';
-                    //document.redirect = location;
-                }
-            });
-            **/
+        $(function() {
+            $( "#project" ).autocomplete({
+              minLength: 0,
+              source: players,
+              focus: function( event, ui ) {
+                $( "#project" ).val( ui.item.label );
+                return false;
+              },
+              select: function( event, ui ) {
+                $( "#project" ).val( ui.item.label );
+                $( "#project-id" ).val( ui.item.value );
+                $( "#project-description" ).html( ui.item.value );
+         
+                return false;
+              }
+            })
+            .autocomplete( "instance" )._renderItem = function( ul, item ) {
+              return $( "<li>" )
+                .append( "<a>" + item.label + "<br><small><i>" + item.team + "</i></small></a>" )
+                .appendTo( ul );
+            };
         });
   </script>
 </body> 

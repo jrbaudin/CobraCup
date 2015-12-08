@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include header section which holds imports for shared elements -->
+    <% include _header %>
+
+    <title>Cobra Cup Awards 2016</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="../dist/css/flat-ui.css">
+
+    <link rel="stylesheet" href="../stylesheets/style.css">
+
+    <style>
+        #project-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 1em;
+        }
+        #project-icon {
+            float: left;
+            height: 32px;
+            width: 32px;
+        }
+        #project-description {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <script>
+       !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+           arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+       d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+       insertBefore(d,q)}(window,document,'script','_gs');
+
+       _gs('GSN-270173-J');
+   </script>
+</head>
+
+<body>
+    <% include _navigation %>
+<div class="container">
+    <% if(typeof(flashInfo) !== 'undefined'){ %>
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <%= flashInfo %>
+        </div>
+    <% } %>
+    <% if(typeof(flashError) !== 'undefined'){ %>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <strong>Fel!</strong> <%= flashError %>.
+        </div>
+    <% } %>
+    <% if(typeof(flashErrorGame) !== 'undefined'){ %>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <strong>Fel!</strong> <%= flashErrorGame %>
+        </div>
+    <% } %>
+    <div class="alert alert-warning alert-dismissible" role="alert" style="display:none;" id="missing-value-msg" name="missing-value-msg">
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <i class="fa fa-exclamation-triangle"></i> Ett eller flera fält saknar värde eller är inkorrekt.
+        <p id="error-msg" name="error-msg"></p>
+    </div>
+    <div class="col-md-12">
+        <form id="voteform" class="form" role="form" method="post">
+
+            <div class="panel">
+                <div class="panel-heading" style="padding-bottom:0;">
+                    <h6 class="text-uppercase" style="margin-bottom:0;">
+                        Cobra Cup Awards
+                    </h6>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">Största Fuckup</div>
+                        <div class="form-group col-md-9" id="fg-stig-helmer">
+                            <label for="stig-helmer" class="control-label sr-only">Största Fuckup</label>
+                            <input type="text" class="form-control" id="stig-helmer">
+                            <input type="hidden" id="stig-helmer-id">
+                            <p id="stig-helmer-description"></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">Största Fuckup</div>
+                        <div class="form-group col-md-9" id="fg-tim-gunn">
+                            <label for="tim-gunn" class="control-label sr-only">Bäst klädda laget</label>
+                            <input type="text" class="form-control" id="tim-gunn">
+                            <input type="hidden" id="tim-gunn-id">
+                            <p id="tim-gunn-description"></p>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <input type='hidden' name='_method' value='put' />
+                        <button type="submit" class="btn btn-hg btn-wide btn-block btn-primary">
+                            <i id="spinnericon" class="fa fa-refresh fa-spin" style="display:none;"></i> Rapportera match
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+       </form>
+   </div>
+</div>
+
+<p class="text-center hidden-xs" style="margin-top: 2.5em;"><small>&copy; 2015 Copyright The Cobra Cup</small></p>
+<p class="text-center hidden-xs">
+    <a href="https://twitter.com/CobraCup" class="twitter-follow-button" data-show-count="false" data-lang="sv">Följ @CobraCup</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</p>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../dist/js/flat-ui.min.js"></script>
+
+  <script type="text/javascript">
+      // Waiting for the DOM ready...
+      var players = [];
+      var playersObj = <%- JSON.stringify(allPlayers) %>
+      if (typeof(playersObj) !== 'undefined') {
+          players = playersObj;
+      }
+
+      var teams = [];
+      var teamsObj = <%- JSON.stringify(allTeams) %>
+      if (typeof(teamsObj) !== 'undefined') {
+          teams = teamsObj;
+      }
+
+      $(function() {
+          $( "#stig-helmer" ).autocomplete({
+            minLength: 0,
+            source: players,
+            focus: function( event, ui ) {
+              $( "#stig-helmer" ).val( ui.item.label );
+              return false;
+            },
+            select: function( event, ui ) {
+              $( "#stig-helmer" ).val( ui.item.label );
+              $( "#stig-helmer-id" ).val( ui.item.value );
+              $( "#stig-helmer-description" ).html( ui.item.value );
+       
+              return false;
+            }
+          })
+          .autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<a>" + item.label + "<br><small><i>" + item.team + "</i></small></a>" )
+              .appendTo( ul );
+          };
+
+          $( "#tim-gunn" ).autocomplete({
+            minLength: 0,
+            source: teams,
+            focus: function( event, ui ) {
+              $( "#tim-gunn" ).val( ui.item.label );
+              return false;
+            },
+            select: function( event, ui ) {
+              $( "#tim-gunn" ).val( ui.item.label );
+              $( "#tim-gunn-id" ).val( ui.item.value );
+              $( "#tim-gunn-description" ).html( ui.item.value );
+          
+              return false;
+            }
+          })
+          .autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<a>" + item.label + "</a>" )
+              .appendTo( ul );
+          };
+      });
+</script>
+
+</body>
+
+</html>
