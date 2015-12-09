@@ -69,12 +69,37 @@
         var arrStig = [];
         var arrTim = [];
 
+        var playerGoals;
+        var playerFights;
+        var playerAssists;
+        var playerPoints;
+
         if(typeof(votes) !== 'undefined'){
           votes_size = _.size(votes);
         }
 
         if(typeof(players) !== 'undefined'){
           players_size = _.size(players);
+
+          playerGoals = _.sortBy(players, function(player){
+              return player.get("goals");
+          });
+          playerGoals = playerGoals.reverse();
+          
+          playerFights = _.sortBy(players, function(player){
+              return player.get("fights");
+          });
+          playerFights = playerFights.reverse();
+
+          playerAssists = _.sortBy(players, function(player){
+              return player.get("assists");
+          });
+          playerAssists = playerAssists.reverse();
+
+          playerPoints = _.sortBy(players, function(player){
+              return player.get("points");
+          });
+          playerPoints = playerPoints.reverse();
         }
 
         if(typeof(teams) !== 'undefined'){
@@ -107,210 +132,359 @@
       %>
       <div class="col-md-12">
           <div class="panel">
-              <div class="panel-heading" style="padding-bottom:0;">
+              <div class="panel-heading">
                   <h3 style="margin-bottom:0;">
                       <i class="fa fa-trophy"></i> Cobra Cup Awards 2016
                   </h3>
                   <p style="margin-bottom:0;"><small><strong><%= votes_size %></strong> röster är lagda och <span>röstningen stänger om <strong><span id="countdown"></span></strong></span></small></p>
                   <a class="btn btn-sm btn-wide btn-success" href="/awards/vote"><i class="fa fa-pencil-square-o"></i> Rösta</a>
               </div>
-              <hr>
-              <div class="panel-body">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="row">
-                        <div class="col-md-2">
-                          <img src="img/awards/gandalf.jpg" class="img-responsive img-rounded" alt="Gandalf Memorial Trophy" style="min-height:50px;height:50px;">
-                        </div>
-                        <div class="col-md-10">
-                          <h6 style="margin-bottom: 0;">Gandalf Memorial Trophy</h6>
-                        </div>
+          </div>
+          <div class="panel">
+            <div class="panel-heading" style="padding-bottom:0;">
+                <h3>
+                    Framröstade priser
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/gandalf.jpg" class="img-responsive img-rounded" alt="Gandalf Memorial Trophy" style="min-height:50px;height:50px;">
                       </div>
-                      <hr>
-                      <div class="row">
-                          <div class="col-md-12">
-                            <ul class="list-group">
-                            <% 
-                            var i = 1;
-                            arrGandalf.forEach(function(player){ %>
-                              <% if(i <= 5) { %>
-                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
-                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
-                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
-                                  <span style="margin-left: 10px;"><%= player.name %></span>
-                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
-                                </a>
-                              <% 
-                              i = i+1;
-                              } %>
-                            <% }); %>
-                            </ul>
-                          </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;">Gandalf Memorial Trophy <small class="colormedark">Mest värdefulla spelaren</small></h6>
                       </div>
                     </div>
-                    
-                    <div class="col-md-4">
-                      <div class="row">
-                        <div class="col-md-2">
-                          <img src="img/awards/skroder.jpg" class="img-responsive img-rounded" alt="Per Åge Skröder Trophy" style="min-height:50px;height:50px;">
-                        </div>
-                        <div class="col-md-10">
-                          <h6 style="margin-bottom: 0;">Per Åge Skröder Trophy</h6>
-                        </div>
-                      </div>
-                      <hr>
-                      <div class="row">
-                          <div class="col-md-12">
-                            <ul class="list-group">
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          arrGandalf.forEach(function(player){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= player.name %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                              </a>
                             <% 
-                            var i = 1;
-                            arrSkroder.forEach(function(player){ %>
-                              <% if(i <= 5) { %>
-                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
-                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
-                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
-                                  <span style="margin-left: 10px;"><%= player.name %></span>
-                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
-                                </a>
-                              <% 
-                              i = i+1;
-                              } %>
-                            <% }); %>
-                            </ul>
-                          </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-4">
-                      <div class="row">
-                        <div class="col-md-2">
-                          <img src="img/awards/hulk.jpg" class="img-responsive img-rounded" alt="Bruce Banner Trophy" style="min-height:50px;height:50px;">
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
                         </div>
-                        <div class="col-md-10">
-                          <h6 style="margin-bottom: 0;">Bruce Banner Trophy</h6>
-                        </div>
-                      </div>
-                      <hr>
-                      <div class="row">
-                          <div class="col-md-12">
-                            <ul class="list-group">
-                            <% 
-                            var i = 1;
-                            arrHulk.forEach(function(player){ %>
-                              <% if(i <= 5) { %>
-                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
-                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
-                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
-                                  <span style="margin-left: 10px;"><%= player.name %></span>
-                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
-                                </a>
-                              <% 
-                              i = i+1;
-                              } %>
-                            <% }); %>
-                            </ul>
-                          </div>
-                      </div>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="row">
-                        <div class="col-md-2">
-                          <img src="img/awards/joffrey.jpg" class="img-responsive img-rounded" alt="Joffrey Baratheon Trophy" style="min-height:50px;height:50px;">
-                        </div>
-                        <div class="col-md-10">
-                          <h6 style="margin-bottom: 0;">Joffrey Baratheon Trophy</h6>
-                        </div>
+                  
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/skroder.jpg" class="img-responsive img-rounded" alt="Per Åge Skröder Trophy" style="min-height:50px;height:50px;">
                       </div>
-                      <hr>
-                      <div class="row">
-                          <div class="col-md-12">
-                            <ul class="list-group">
-                            <% 
-                            var i = 1;
-                            arrJoffrey.forEach(function(player){ %>
-                              <% if(i <= 5) { %>
-                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
-                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
-                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
-                                  <span style="margin-left: 10px;"><%= player.name %></span>
-                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
-                                </a>
-                              <% 
-                              i = i+1;
-                              } %>
-                            <% }); %>
-                            </ul>
-                          </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;">Per Åge Skröder Trophy <small class="colormedark">Sämsta vinnaren</small></h6>
                       </div>
                     </div>
-                    
-                    <div class="col-md-4">
-                      <div class="row">
-                        <div class="col-md-2">
-                          <img src="img/awards/stig.jpg" class="img-responsive img-rounded" alt="Stig Helmer Olsson Trophy" style="min-height:50px;height:50px;">
-                        </div>
-                        <div class="col-md-10">
-                          <h6 style="margin-bottom: 0;">Stig Helmer Olsson Trophy</h6>
-                        </div>
-                      </div>
-                      <hr>
-                      <div class="row">
-                          <div class="col-md-12">
-                            <ul class="list-group">
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          arrSkroder.forEach(function(player){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= player.name %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                              </a>
                             <% 
-                            var i = 1;
-                            arrStig.forEach(function(player){ %>
-                              <% if(i <= 5) { %>
-                                <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
-                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
-                                  <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
-                                  <span style="margin-left: 10px;"><%= player.name %></span>
-                                  <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
-                                </a>
-                              <% 
-                              i = i+1;
-                              } %>
-                            <% }); %>
-                            </ul>
-                          </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-4">
-                      <div class="row">
-                        <div class="col-md-2">
-                          <img src="img/awards/tim.jpg" class="img-responsive img-rounded" alt="Tim Gunn Trophy" style="min-height:50px;height:50px;">
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
                         </div>
-                        <div class="col-md-10">
-                          <h6 style="margin-bottom: 0;">Tim Gunn Trophy</h6>
-                        </div>
-                      </div>
-                      <hr>
-                      <div class="row">
-                          <div class="col-md-12">
-                            <ul class="list-group">
-                            <% 
-                            var i = 1;
-                            arrTim.forEach(function(team){ %>
-                              <% if(i <= 5) { %>
-                                <a class="list-group-item" href="/team/<%= team.id %>" target="_blank">
-                                  <span style="margin-right: 10px;"><strong><%= i %></strong></span>
-                                  <img src="<%= team.image %>" class="img-responsive img-thumbnail" alt="<%= team.name %> Image" style="min-height:35px;height:35px;">
-                                  <span style="margin-left: 10px;"><%= team.name %></span>
-                                  <span class="pull-right" style="font-size: 24px;"><strong><%= team.votes %></strong></span>
-                                </a>
-                              <% 
-                              i = i+1;
-                              } %>
-                            <% }); %>
-                            </ul>
-                          </div>
-                      </div>
                     </div>
                   </div>
-              </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/hulk.jpg" class="img-responsive img-rounded" alt="Bruce Banner Trophy" style="min-height:50px;height:50px;">
+                      </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;">Bruce Banner Trophy <small class="colormedark">Sämsta förloraren</small></h6>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          arrHulk.forEach(function(player){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= player.name %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                              </a>
+                            <% 
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/joffrey.jpg" class="img-responsive img-rounded" alt="Joffrey Baratheon Trophy" style="min-height:50px;height:50px;">
+                      </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;">Joffrey Baratheon Trophy <small class="colormedark">Fulaste spelaren</small></h6>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          arrJoffrey.forEach(function(player){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= player.name %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                              </a>
+                            <% 
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/stig.jpg" class="img-responsive img-rounded" alt="Stig Helmer Olsson Trophy" style="min-height:50px;height:50px;">
+                      </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;">Stig Helmer Olsson Trophy <small class="colormedark">Största Fuckup</small></h6>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          arrStig.forEach(function(player){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/player/<%= player.id %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= player.image %>" class="img-responsive img-thumbnail" alt="<%= player.name %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= player.name %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= player.votes %></strong></span>
+                              </a>
+                            <% 
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/tim.jpg" class="img-responsive img-rounded" alt="Tim Gunn Trophy" style="min-height:50px;height:50px;">
+                      </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;">Tim Gunn Trophy <small class="colormedark">Bäst klädda laget</small></h6>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          arrTim.forEach(function(team){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/team/<%= team.id %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= team.image %>" class="img-responsive img-thumbnail" alt="<%= team.name %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= team.name %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= team.votes %></strong></span>
+                              </a>
+                            <% 
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-heading" style="padding-bottom:0;">
+                <h3>
+                    Priser baserat på statistik
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                  
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/peter.jpg" class="img-responsive img-rounded" alt="Peter Forsberg Trophy" style="min-height:50px;height:50px;">
+                      </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;" title="Jean Claude Van Damme Trophy">Peter Forsberg Trophy <small class="colormedark">Flest totala poäng</small></h6>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          playerPoints.forEach(function(player){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/player/<%= player.get("player_id") %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= player.get("avatar").url() %>" class="img-responsive img-thumbnail" alt="<%= player.get("name") %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= player.get("name") %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= player.get("points") %></strong></span>
+                              </a>
+                            <% 
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/rick.jpg" class="img-responsive img-rounded" alt="Rick Grimes Trophy" style="min-height:50px;height:50px;">
+                      </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;">Rick Grimes Trophy <small class="colormedark">Flest mål</small></h6>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          playerGoals.forEach(function(player){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/player/<%= player.get("player_id") %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= player.get("avatar").url() %>" class="img-responsive img-thumbnail" alt="<%= player.get("name") %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= player.get("name") %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= player.get("goals") %></strong></span>
+                              </a>
+                            <% 
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/sam.jpg" class="img-responsive img-rounded" alt="Samwise Gamgee Trophy" style="min-height:50px;height:50px;">
+                      </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;">Samwise Gamgee Trophy <small class="colormedark">Flest assist</small></h6>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          playerAssists.forEach(function(player){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/player/<%= player.get("player_ud") %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= player.get("avatar").url() %>" class="img-responsive img-thumbnail" alt="<%= player.get("name") %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= player.get("name") %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= player.get("assists") %></strong></span>
+                              </a>
+                            <% 
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row">
+                  
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="img/awards/jean.jpg" class="img-responsive img-rounded" alt="Jean Claude Van Damme Trophy" style="min-height:50px;height:50px;">
+                      </div>
+                      <div class="col-md-10">
+                        <h6 style="margin-bottom: 0;" title="Jean Claude Van Damme Trophy">Jean Claude Trophy <small class="colormedark">Flest vunna fajter</small></h6>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group">
+                          <% 
+                          var i = 1;
+                          playerFights.forEach(function(player){ %>
+                            <% if(i <= 5) { %>
+                              <a class="list-group-item" href="/player/<%= player.get("player_id") %>" target="_blank">
+                                <span style="margin-right: 10px;"><strong><%= i %></strong></span>
+                                <img src="<%= player.get("avatar").url() %>" class="img-responsive img-thumbnail" alt="<%= player.get("name") %> Image" style="min-height:35px;height:35px;">
+                                <span style="margin-left: 10px;"><%= player.get("name") %></span>
+                                <span class="pull-right" style="font-size: 24px;"><strong><%= player.get("fights") %></strong></span>
+                              </a>
+                            <% 
+                            i = i+1;
+                            } %>
+                          <% }); %>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+
+                </div>
+            </div>
           </div>
      </div>
   </div>
