@@ -224,6 +224,7 @@ exports.loadVoteForm = function(request, response) {
   	var passedInfoVariable = request.query.info;
 
 	var arrPlayers = [];
+	var arrTeams = [];
 
 	var Player = Parse.Object.extend('Player');
 	var playersQuery = new Parse.Query(Player);
@@ -247,7 +248,6 @@ exports.loadVoteForm = function(request, response) {
 
 	}).then(function(teams){
 
-		var arrTeams = [];
 		teams.forEach(function(team){
 	    	var temp = {
 	    		value: team.get("team_id"),
@@ -256,9 +256,17 @@ exports.loadVoteForm = function(request, response) {
 	    	arrTeams.push(temp);
 		});
 
+		var Vote = Parse.Object.extend('Vote');
+		var votesQuery = new Parse.Query(Vote);
+
+		return votesQuery.find();
+
+	}).then(function(votes){
+
 		response.render('vote', {
 	  		allPlayers: arrPlayers,
 	  		allTeams: arrTeams,
+	  		votes: votes,
 	  		flashError: passedErrorVariable,
       		flashInfo: passedInfoVariable
 		});

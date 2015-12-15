@@ -61,7 +61,7 @@
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
-        <i class="fa fa-exclamation-triangle"></i> Ett eller flera fält saknar värde eller är inkorrekt.
+        <i class="fa fa-exclamation-triangle"></i> Ett fel har uppstått.
         <p id="error-msg" name="error-msg"></p>
     </div>
     <div class="col-md-12">
@@ -229,6 +229,38 @@
       if (typeof(teamsObj) !== 'undefined') {
           teams = teamsObj;
       }
+
+      var current_votes;
+      var votesObj = <%- JSON.stringify(votes) %>
+      if (typeof(votesObj) !== 'undefined') {
+          current_votes = votesObj;
+      }
+
+      $( "#voteform" ).submit(function( event ) {
+          //alert( "Handler for .submit() called." );
+          $('#spinnericon').show();
+          if (!validateFields()) {
+              var str_message = "Den valda användaren har redan lagt sin röst.";
+              $('#error-msg').text(str_message);
+              $('#missing-value-msg').show();
+              $('#spinnericon').hide();
+              event.preventDefault();
+          }
+      });
+
+      function validateFields () {
+          var formOK = true;
+
+          if(typeof(current_votes) !== 'undefined') {
+            var voter = $('#voterid').val()
+            current_votes.forEach(function(vote){
+              if(voter === vote.voter){
+                formOK = false;
+              }
+            });
+          }
+          return formOK;
+      };
 
       $(function() {
           $( "#voter" ).autocomplete({
