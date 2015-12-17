@@ -2591,6 +2591,76 @@ Parse.Cloud.define("cleanStandings", function(request, response) {
    });
 });
 
+Parse.Cloud.define("cleanGameResults", function(request, response) {
+  var Game = Parse.Object.extend('Game');
+  var gameQuery = new Parse.Query(Game);
+  gameQuery.find().then(function(results) {
+    var promise = Parse.Promise.as();
+    _.each(results, function(result) {
+        // For each item, extend the promise with a function to save it.
+        result.set('home_goals_total',0);
+        result.set('home_shots_total',0);
+        result.set('home_faceoffs_total',0);
+        result.set('away_goals_total',0);
+        result.set('away_shots_total',0);
+        result.set('away_faceoffs_total',0);
+        result.set('home_stats',{});
+        result.set('away_stats',{});
+        result.set('overtime',false);
+        result.set('played',false);
+        result.set('winner',undefined);
+        promise = promise.then(function() {
+            // Return a promise that will be resolved when the save is finished.
+            return result.save();
+          });
+      });
+
+    return promise;
+
+  }).then(function() {
+    response.success("Game Result Stats are cleaned");
+      // Every object is updated.
+  }, function(error){
+    response.error("Cleaning Game Result Stats failed with error.code " + error.code + " error.message " + error.message);
+  });
+});
+
+Parse.Cloud.job("cleanGameResults", function(request, response) {
+  Parse.Cloud.useMasterKey();
+  
+  var Game = Parse.Object.extend('Game');
+  var gameQuery = new Parse.Query(Game);
+  gameQuery.find().then(function(results) {
+    var promise = Parse.Promise.as();
+    _.each(results, function(result) {
+        // For each item, extend the promise with a function to save it.
+        result.set('home_goals_total',0);
+        result.set('home_shots_total',0);
+        result.set('home_faceoffs_total',0);
+        result.set('away_goals_total',0);
+        result.set('away_shots_total',0);
+        result.set('away_faceoffs_total',0);
+        result.set('home_stats',{});
+        result.set('away_stats',{});
+        result.set('overtime',false);
+        result.set('played',false);
+        result.set('winner',undefined);
+        promise = promise.then(function() {
+            // Return a promise that will be resolved when the save is finished.
+            return result.save();
+          });
+      });
+
+    return promise;
+
+  }).then(function() {
+    response.success("Game Result Stats are cleaned");
+      // Every object is updated.
+  }, function(error){
+    response.error("Cleaning Game Result Stats failed with error.code " + error.code + " error.message " + error.message);
+  });
+});
+
 Parse.Cloud.define("migratePlayers", function(request, response) {
   	var Team = Parse.Object.extend('Team');
   	var teamQuery = new Parse.Query(Team);

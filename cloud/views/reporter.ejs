@@ -1212,6 +1212,16 @@
                 msg_array.push("Det är färre skott än mål rapporterat");
             }
 
+            if (!isHomeGoalsWithinReason()) {
+                formOK = false;
+                msg_array.push("Du har rapporterat att hemmalaget gjort mer än 99 mål");
+            }
+
+            if (!isAwayGoalsWithinReason()) {
+                formOK = false;
+                msg_array.push("Du har rapporterat att bortalaget gjort mer än 99 mål");
+            }
+
             return formOK;
         };
 
@@ -1900,6 +1910,28 @@
             if (!away_status) {
                 $('#away_shots_sum').addClass("error-stat");
                 $('#away_shots_sum').attr("title", "Färre skott än mål gjorda");
+            }
+
+            return status;
+        };
+
+        function isHomeGoalsWithinReason() {
+            var status = true; 
+            var home_goals = getHomeGoals();
+
+            if (home_goals > 99) {
+                status = false;
+            }
+
+            return status;
+        };
+
+        function isAwayGoalsWithinReason() {
+            var status = true; 
+            var away_goals = getAwayGoals();
+
+            if (away_goals > 99) {
+                status = false;
             }
 
             return status;
