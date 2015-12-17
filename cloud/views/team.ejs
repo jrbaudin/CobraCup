@@ -72,6 +72,20 @@
             </div>
         <% } %>
         <% if(typeof(teamObj) !== 'undefined'){ %>
+
+            <%
+                var group = teamObj.get("group");
+                var groupName = "-";
+                if(_.isEqual(group, "1")){
+                    groupName = "Atlantic";
+                } else if(_.isEqual(group, "2")){
+                    groupName = "Metropolitan";
+                } else if(_.isEqual(group, "3")){
+                    groupName = "Central";
+                } else if(_.isEqual(group, "4")){
+                    groupName = "Pacific";
+                }
+            %>
                 
             <div class="col-md-8 col-md-push-4">
                 <div class="panel">
@@ -292,7 +306,7 @@
                                     <div id="collapseOne" class="panel-collapse collapse in">
                                         <div class="panel-body">
                                             <div class="col-md-12">
-                                                <a href="/stat/game/<%= lastPlayedGame.get("game_id") %>" style="color: rgb(241,102,57);"><p class="text-center text-uppercase" style="margin-bottom: 0; font-weight: bold;">Grupp <%= lastPlayedGame.get("group") %>, Runda <%= lastPlayedGame.get("round") %></p></a>
+                                                <a href="/stat/game/<%= lastPlayedGame.get("game_id") %>" style="color: rgb(241,102,57);"><p class="text-center text-uppercase" style="margin-bottom: 0; font-weight: bold;">Runda <%= lastPlayedGame.get("round") %></p></a>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-4 col-md-4">
@@ -469,19 +483,6 @@
                             <div class="panel-group" id="accordionStat">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <%
-                                            var group = teamObj.get("group");
-                                            var groupName = "-";
-                                            if(_.isEqual(group, "1")){
-                                                groupName = "Atlantic";
-                                            } else if(_.isEqual(group, "2")){
-                                                groupName = "Metropolitan";
-                                            } else if(_.isEqual(group, "3")){
-                                                groupName = "Central";
-                                            } else if(_.isEqual(group, "4")){
-                                                groupName = "Pacific";
-                                            }
-                                        %>
                                         <h6 class="panel-title text-uppercase">
                                             <a data-toggle="collapse" data-parent="#accordionStat" href="#collapseOneStat"><span class="fui-triangle-down"></span> Tabell</a>
                                         </h6>
@@ -551,6 +552,7 @@
                                                         <th>Spelare:</th>
                                                         <th></th>
                                                         <th class="text-center" title="Games Played">GP</th>
+                                                        <th class="text-center" title="Total Points">TP</th>
                                                         <th class="text-center" title="Goals">G</th>
                                                         <th class="text-center" title="Assists">A</th>
                                                         <th class="text-center" title="Fights">F</th>
@@ -561,6 +563,7 @@
                                                         <td><%= teamObj.get("captain").get("name") %></td>
                                                         <td class="text-center" title="Kapten"><strong>C</strong></td>
                                                         <td class="text-center"><%= teamStanding.get("games_played") %></td>
+                                                        <td class="text-center"><%= teamObj.get("captain").get("points") %></td>
                                                         <td class="text-center"><%= teamObj.get("captain").get("goals") %></td>
                                                         <td class="text-center"><%= teamObj.get("captain").get("assists") %></td>
                                                         <td class="text-center"><%= teamObj.get("captain").get("fights") %></td>
@@ -569,13 +572,14 @@
                                                         <td><%= teamObj.get("lieutenant").get("name") %></td>
                                                         <td class="text-center" title="Assisterande"><strong>A</strong></td>
                                                         <td class="text-center"><%= teamStanding.get("games_played") %></td>
+                                                        <td class="text-center"><%= teamObj.get("lieutenant").get("points") %></td>
                                                         <td class="text-center"><%= teamObj.get("lieutenant").get("goals") %></td>
                                                         <td class="text-center"><%= teamObj.get("lieutenant").get("assists") %></td>
                                                         <td class="text-center"><%= teamObj.get("lieutenant").get("fights") %></td>
                                                       </tr>
                                                   </tbody>
                                               </table>
-                                              <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>G</strong>-Goals, <strong>A</strong>-Assists, <strong>F</strong>-Fights</small>
+                                              <small style="font-size: 10px;"><strong>GP</strong>-Games Played, <strong>TP</strong>-Total Points, <strong>G</strong>-Goals, <strong>A</strong>-Assists, <strong>F</strong>-Fights</small>
                                             <% } %>
                                         </div>
                                     </div>
