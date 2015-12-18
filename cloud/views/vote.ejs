@@ -62,7 +62,8 @@
             <span class="sr-only">Close</span>
         </button>
         <i class="fa fa-exclamation-triangle"></i> Ett fel har uppstått.
-        <p id="error-msg" name="error-msg"></p>
+        <p id="error-msg-1" name="error-msg-1"></p>
+        <p id="error-msg-2" name="error-msg-2"></p>
     </div>
     <div class="col-md-12">
         <form id="voteform" class="form" role="form" method="post">
@@ -236,29 +237,77 @@
           current_votes = votesObj;
       }
 
+      var formOK = true;
+      var user_already_voted = false;
+      var missing_values = false;
+
       $( "#voteform" ).submit(function( event ) {
           //alert( "Handler for .submit() called." );
           $('#spinnericon').show();
           if (!validateFields()) {
+            if (user_already_voted) {
               var str_message = "Den valda användaren har redan lagt sin röst.";
-              $('#error-msg').text(str_message);
-              $('#missing-value-msg').show();
-              $('#spinnericon').hide();
-              event.preventDefault();
+              $('#error-msg-1').text(str_message);
+            }
+            if (missing_values) {
+              var str_message_2 = "Ett eller flera fält saknar värde. Se till att du valt en spelare för varje pris.";
+              $('#error-msg-2').text(str_message_2);
+            }
+              
+            $('#missing-value-msg').show();
+            $('#spinnericon').hide();
+            formOK = true;
+            event.preventDefault();
           }
       });
 
-      function validateFields () {
-          var formOK = true;
+      function isEmpty(str) {
+        return (!str || 0 === str.length);
+      }
 
+      function validateFields () {
           if(typeof(current_votes) !== 'undefined') {
-            var voter = $('#voterid').val()
+            var voter = $('#voterid').val();
             current_votes.forEach(function(vote){
               if(voter === vote.voter){
+                user_already_voted = true;
                 formOK = false;
               }
             });
           }
+
+          var stighelmerid = $('#stighelmerid').val();
+          var timgunnid = $('#timgunnid').val();
+          var joffreyid = $('#joffreyid').val();
+          var gandalfid = $('#gandalfid').val();
+          var skroderid = $('#skroderid').val();
+          var hulkid = $('#hulkid').val();
+
+          if (isEmpty(stighelmerid)) {
+            formOK = false;
+            missing_values = true;
+          }
+          if (isEmpty(timgunnid)) {
+            formOK = false;
+            missing_values = true;
+          }
+          if (isEmpty(joffreyid)) {
+            formOK = false;
+            missing_values = true;
+          }
+          if (isEmpty(gandalfid)) {
+            formOK = false;
+            missing_values = true;
+          }
+          if (isEmpty(skroderid)) {
+            formOK = false;
+            missing_values = true;
+          }
+          if (isEmpty(hulkid)) {
+            formOK = false;
+            missing_values = true;
+          }
+
           return formOK;
       };
 
