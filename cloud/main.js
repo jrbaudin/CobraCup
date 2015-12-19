@@ -1003,6 +1003,11 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
 
   var to_overtime;
 
+  var home_team_name = "";
+  var away_team_name = "";
+
+  var group_id = "";
+
   var Game = Parse.Object.extend('Game');
   var gameQuery = new Parse.Query(Game);
   gameQuery.equalTo('game_id', request.params.game_id);
@@ -1021,6 +1026,11 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
 
     away_captain_id = result[0].get("away").get("captain").get("player_id");
     away_lieutenant_id = result[0].get("away").get("lieutenant").get("player_id");
+
+    home_team_name = result[0].get("home").get("team_name");
+    away_team_name = result[0].get("away").get("team_name");
+
+    group_id = result[0].get("group");
 
     /*
     console.log("home_captain_id: " + home_captain_id);
@@ -1502,6 +1512,13 @@ Parse.Cloud.define("saveGroupGameResult", function(request, response) {
 
     return Parse.Cloud.run('updatePlayerStats', {player_id: a_l_id, goals: a_l_goals, assists: a_l_assists, fights: a_l_fights});
   }).then(function(result){
+    var strMessage = "Match slut i grupp " + group_id + " :: " + home_goals_total + " - " + away_goals_total + " " + home_team_name + " vs. " + away_team_name + " #CobraCup";
+    Parse.Cloud.run('sendTweet', { "status": strMessage}).then(function(result){
+      console.log("successfully sent out Tweet with Game Result!");
+    }, function(error){
+      console.log("Sending out Tweet for Group Game with id '" + request.params.game_id + "' failed with error.code " + error.code + " error.message " + error.message);
+    });
+
     response.success("Saved result for Group Game with id '" + request.params.game_id + "'");
   }, function(error) {
     response.error("Saving result for Group Game with id '" + request.params.game_id + "' failed with error.code " + error.code + " error.message " + error.message);
