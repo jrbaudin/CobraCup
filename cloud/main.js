@@ -893,6 +893,38 @@ Parse.Cloud.define("getGameWithId", function(request, response) {
       response.error("Fetching Game with id '" + request.params.game_id + "' failed with error.code " + error.code + " error.message " + error.message);
     });
 });
+/*
+Parse.Cloud.beforeSave("Game", function(request, response) {
+  var round = request.object.get("round");
+  var group = request.object.get("group");
+  var type = request.object.get("type");
+  var played = request.object.get("played");
+
+  if ((typeof(round) !== 'undefined') && ((round < 1) || (round > 12))){
+    response.error("Round '" + round + "' is not valid. There's only 12 rounds in the group phase of Cobra Cup");
+  } else if ((typeof(group) !== 'undefined') && ((group < 1) || (group > 4))){
+    response.error("Group '" + group + "' is not valid. We have 4 groups in Cobra Cup so it can't be less or more than that");
+  } else if ((typeof(type) !== 'undefined') && ((type < 1) || (type > 2))){
+    response.error("Type '" + type + "' is not valid. There's only two types of games in Cobra Cup Group (1) or Playoff (2)");
+  } else if (played){
+    var home_goals_total = request.object.get("home_goals_total");
+    var away_goals_total = request.object.get("away_goals_total");
+    var away_stats = request.object.get("away_stats");
+    var home_stats = request.object.get("home_stats");
+
+    var home_player_goals = home_stats.captain_goals_total + home_stats.lieutenant_goals_total;
+    var away_player_goals = away_stats.captain_goals_total + away_stats.lieutenant_goals_total;
+    if (home_goals_total === away_goals_total){
+      response.error("If the goals for the home team and away team are the same we can't determine a winner. home_goals_total: '" + home_goals_total + "' and away_goals_total: '" + away_goals_total + "'");
+    } else {
+      response.success();
+    }
+  } else {
+    response.success();
+  }
+});
+*/
+
 
 Parse.Cloud.beforeSave("Game", function(request, response) {
   var round = request.object.get("round");
@@ -927,6 +959,7 @@ Parse.Cloud.beforeSave("Game", function(request, response) {
     response.success();
   }
 });
+
 
 Parse.Cloud.define("createGroupGame", function(request, response) {
     var Game = Parse.Object.extend("Game");

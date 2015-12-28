@@ -118,7 +118,7 @@ exports.showHistory = function(request, response) {
 exports.showLeague = function(req, res) {
   var Standings = Parse.Object.extend('Standings');
   var standingsQuery = new Parse.Query(Standings);
-  standingsQuery.descending('points,difference,goals_for,games_played');
+  standingsQuery.descending('points,goals_for,difference,games_played');
   standingsQuery.include(["team.nhlTeam"]);
   standingsQuery.find().then(function(standings) {
     if (standings) {
